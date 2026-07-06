@@ -210,6 +210,7 @@ body {
 }
 
 /* --- components --- */
+/* --- abstract --- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -278,10 +279,20 @@ body {
 }
 
 .btn--google {
-  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3.2remrem;
+  min-height: 5.8rem;
   background-color: transparent;
-  border: 1px solid #2a3b4e;
+  border: 0.1rem solid #2a3b4e;
   color: #f5f7fa;
+  transition: all 0.3s ease 0s;
+}
+.btn--google img {
+  height: 2.4rem;
+  width: auto;
 }
 .btn--google:hover {
   background-color: rgba(76, 143, 234, 0.08);
