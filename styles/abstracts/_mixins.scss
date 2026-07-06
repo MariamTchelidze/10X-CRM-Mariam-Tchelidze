@@ -1,0 +1,105 @@
+/* --- clamp calculator for texts: font-size: clamp-rem(16, 2.5, 32); --- */
+@function clamp-rem($min, $preferred, $max) {
+  @return clamp(#{calc($min / 10)}rem, #{$preferred}vw, #{calc($max / 10)}rem);
+}
+
+/* --- Display flex mixin --- */
+@mixin flex($direction: null, $justify: null, $align: null, $gap: null, $wrap: null) {
+  display: flex;
+
+  @if $direction != null {
+    flex-direction: $direction;
+  }
+
+  @if $justify != null {
+    justify-content: $justify;
+  }
+
+  @if $align != null {
+    align-items: $align;
+  }
+
+  @if $gap != null {
+    gap: rem($gap);
+  }
+
+  @if $wrap != null {
+    flex-wrap: $wrap;
+  }
+}
+
+/* --- Display grid mixin --- */
+
+@mixin grid($columns: null, $gap: null, $rows: null, $justify: null, $align: null) {
+  display: grid;
+
+  @if $columns != null {
+    grid-template-columns: repeat($columns, 1fr);
+  }
+
+  @if $rows != null {
+    grid-template-rows: $rows;
+  }
+
+  @if $gap != null {
+    gap: rem($gap);
+  }
+
+  @if $justify != null {
+    justify-items: $justify;
+  }
+
+  @if $align != null {
+    align-items: $align;
+  }
+}
+
+/* --- Element positioning mixin relative/absolute/fixed and etc --- */
+
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+  position: $position;
+
+  @if $top != null {
+    top: rem($top);
+  }
+
+  @if $right != null {
+    right: rem($right);
+  }
+
+  @if $bottom != null {
+    bottom: rem($bottom);
+  }
+
+  @if $left != null {
+    left: rem($left);
+  }
+}
+
+/* --- Transitions for animations --- */
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease, $delay: 0s) {
+  transition: $property $duration $timing $delay;
+}
+
+/* --- Responsive layout --- */
+
+@mixin media($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: $mobile) {
+      @content;
+    }
+  } @else if $breakpoint == tablet {
+    @media (max-width: $tablet) {
+      @content;
+    }
+  } @else if $breakpoint == laptop {
+    @media (max-width: $laptop) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (max-width: $desktop) {
+      @content;
+    }
+  }
+}

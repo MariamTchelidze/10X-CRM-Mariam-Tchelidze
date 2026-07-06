@@ -1,0 +1,119 @@
+/* Box sizing */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin & padding */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Root */
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+/* Body */
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+/* Media */
+
+img,
+picture,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+/* Forms */
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* Buttons */
+
+button {
+  cursor: pointer;
+}
+
+/* Links */
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Lists */
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* Tables */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Text */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  overflow-wrap: break-word;
+}
+
+/* Textarea */
+
+textarea {
+  resize: vertical;
+}
+
+/* Disabled */
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+}
+
+/* Selection */
+
+::selection {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Focus */
+
+:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
