@@ -1,11 +1,120 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Login | 10X CRM</title>
+
+    <link rel="icon" type="image/svg+xml" href="./assets/images/logo/favicon.svg" />
+
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+
+  <body>
+    <main class="auth">
+      <div class="auth__container">
+        <section class="auth__content">
+          <!-- Logo -->
+
+          <!-- <div class="auth-logo">
+            <a href="./dashboard.html" class="auth-logo__link">
+              <img src="./assets/icons/Logo-light-theme.svg" alt="10X CRM Logo" class="auth-logo__image" />
+            </a>
+          </div> -->
+
+          <!-- Header -->
+
+          <header class="auth-header">
+            <div class="auth-header__heading">
+              <h1 class="auth-header__title">Welcome Back</h1>
+
+              <img src="./assets/icons/welcome-back.svg" alt="" aria-hidden="true" class="auth-header__icon" />
+            </div>
+
+            <p class="auth-header__subtitle">Sign in to continue managing your clients, projects and daily workflow.</p>
+          </header>
+
+          <!-- Login Form -->
+
+          <form class="auth-form js-login-form" autocomplete="on">
+            <!-- Email -->
+
+            <div class="auth-form__group">
+              <label for="email" class="auth-form__label"> Email Address </label>
+
+              <input
+                type="email"
+                id="email"
+                class="input js-email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <!-- Password -->
+
+            <div class="auth-form__group">
+              <label for="password" class="auth-form__label"> Password </label>
+
+              <div class="password-field">
+                <input
+                  type="password"
+                  id="password"
+                  class="input js-password"
+                  placeholder="Enter your password"
+                  autocomplete="current-password"
+                  required
+                />
+
+                <button type="button" class="password-field__toggle js-password-toggle" aria-label="Show password">
+                  <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
+                </button>
+              </div>
+            </div>
+
+            <!-- Remember -->
+
+            <div class="auth-form__options">
+              <label class="checkbox">
+                <input type="checkbox" class="checkbox__input js-remember" />
+
+                <span class="checkbox__box"></span>
+
+                <span class="checkbox__label"> Remember me </span>
+              </label>
+
+              <a href="#" class="auth-form__forgot"> Forgot Password? </a>
+            </div>
+
+            <!-- Submit -->
+
+            <button type="submit" class="btn btn--primary btn--full js-login-btn">Sign In</button>
+          </form>
+
+          <!-- Divider -->
+
+          <div class="auth-divider">
+            <span class="auth-divider__text"> OR </span>
+          </div>
+
+          <!-- Social Login -->
+
+          <section class="social-login">
+            <button type="button" class="btn btn--google">Google</button>
+          </section>
+          <footer class="auth-footer">
+            <p class="auth-footer__text">
+              Don't have an account?
+
+              <a href="./signup.html" class="auth-footer__link"> Sign Up </a>
+            </p>
+          </footer>
+        </section>
+        <aside class="auth__visual"></aside>
+      </div>
+    </main>
+    <script src="./js/auth/login.js"></script>
+  </body>
 </html>

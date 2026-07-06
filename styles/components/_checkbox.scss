@@ -1,0 +1,68 @@
+@use "../abstracts/variables" as *;
+@use "../base/typography" as *;
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.checkbox {
+  @include flex(row, center, flex-start);
+
+  gap: $space-sm;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.checkbox__input {
+  display: none;
+}
+
+.checkbox__box {
+  width: 1.8rem;
+  height: 1.8rem;
+  position: relative;
+  border: 0.2rem solid $dark-border;
+  border-radius: 0.4rem;
+  background: transparent;
+  @include transition;
+  &:hover {
+    border-color: $accent-orange;
+  }
+}
+
+.checkbox__label {
+  font-size: 1.4rem;
+  font-weight: $fw-medium;
+
+  color: $dark-text-secondary;
+}
+
+.checkbox__box::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 45%;
+
+  width: 0.5rem;
+  height: 1rem;
+
+  border-right: 0.2rem solid transparent;
+  border-bottom: 0.2rem solid transparent;
+
+  transform: translate(-50%, -50%) rotate(45deg);
+
+  @include transition;
+}
+.checkbox__input:checked + .checkbox__box {
+  background: $soft-green;
+  border-color: $accent-orange;
+}
+.checkbox__input:checked + .checkbox__box::after {
+  border-color: $success;
+}
+.checkbox__input:focus-visible + .checkbox__box {
+  outline: 0.2rem solid rgba($accent-orange, 0.4);
+  outline-offset: 0.3rem;
+}

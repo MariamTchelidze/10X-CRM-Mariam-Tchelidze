@@ -1,6 +1,7 @@
+@use "./variables" as *;
 /* --- clamp calculator for texts: font-size: clamp-rem(16, 2.5, 32); --- */
 @function clamp-rem($min, $preferred, $max) {
-  @return clamp(#{calc($min / 10)}rem, #{$preferred}vw, #{calc($max / 10)}rem);
+  @return clamp(#{$min / 10}rem, #{$preferred}vw, #{$max / 10}rem);
 }
 
 /* --- Display flex mixin --- */
@@ -20,7 +21,7 @@
   }
 
   @if $gap != null {
-    gap: rem($gap);
+    gap: #{$gap}rem;
   }
 
   @if $wrap != null {
@@ -42,7 +43,7 @@
   }
 
   @if $gap != null {
-    gap: rem($gap);
+    gap: #{$gap}rem;
   }
 
   @if $justify != null {
@@ -56,26 +57,14 @@
 
 /* --- Element positioning mixin relative/absolute/fixed and etc --- */
 
-@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+@mixin position($position, $top: auto, $right: auto, $bottom: auto, $left: auto) {
   position: $position;
 
-  @if $top != null {
-    top: rem($top);
-  }
-
-  @if $right != null {
-    right: rem($right);
-  }
-
-  @if $bottom != null {
-    bottom: rem($bottom);
-  }
-
-  @if $left != null {
-    left: rem($left);
-  }
+  top: if($top == auto, auto, #{$top}rem);
+  right: if($right == auto, auto, #{$right}rem);
+  bottom: if($bottom == auto, auto, #{$bottom}rem);
+  left: if($left == auto, auto, #{$left}rem);
 }
-
 /* --- Transitions for animations --- */
 
 @mixin transition($property: all, $duration: 0.3s, $timing: ease, $delay: 0s) {

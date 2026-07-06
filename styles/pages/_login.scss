@@ -1,0 +1,164 @@
+@use "../abstracts/mixins" as *;
+@use "../abstracts/variables" as *;
+
+/* ==========================================
+   LOGIN PAGE
+========================================== */
+
+.auth {
+  min-height: 100vh;
+
+  @include flex(row, center, center);
+
+  padding: $space-2xl;
+
+  background-color: $dark-bg-body;
+}
+
+/* ==========================================
+   CONTAINER
+========================================== */
+
+.auth__container {
+  @include grid(2, 0);
+
+  width: 100%;
+  max-width: 140rem;
+  min-height: 80rem;
+
+  overflow: hidden;
+
+  background-color: $dark-bg-surface;
+
+  border: 0.1rem solid $dark-border;
+  border-radius: $radius-2xl;
+
+  box-shadow: $shadow-lg;
+}
+
+/* ==========================================
+   CONTENT
+========================================== */
+
+.auth__content {
+  @include flex(column, center);
+  order: 2;
+  padding: $space-2xl;
+}
+
+/* ==========================================
+   VISUAL
+========================================== */
+
+.auth__visual {
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(circle at top left, rgba($primary, 0.18), transparent 40%),
+    radial-gradient(circle at bottom right, rgba($secondary, 0.22), transparent 45%), $dark-bg-body;
+}
+
+/* ==========================================
+   ABSTRACT SHAPE 1
+========================================== */
+
+.auth__visual::before {
+  content: "";
+
+  @include position(absolute, -8rem, -8rem);
+
+  width: 40rem;
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  background: rgba($primary, 0.22);
+
+  filter: blur(10rem);
+}
+
+/* ==========================================
+   ABSTRACT SHAPE 2
+========================================== */
+
+.auth__visual::after {
+  content: "";
+
+  position: absolute;
+
+  bottom: -10rem;
+  left: -8rem;
+
+  width: 35rem;
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  background: rgba($secondary, 0.18);
+
+  filter: blur(8rem);
+}
+
+/* ==========================================
+   LAPTOP
+========================================== */
+
+@include media(laptop) {
+  .auth__container {
+    max-width: 120rem;
+  }
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@include media(tablet) {
+  .auth__container {
+    grid-template-columns: 1fr;
+  }
+
+  .auth__visual {
+    display: none;
+  }
+
+  .auth__content {
+    padding: $space-xl;
+  }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@include media(mobile) {
+  .auth {
+    padding: $space-md;
+  }
+
+  .auth__container {
+    min-height: auto;
+
+    border-radius: $radius-xl;
+  }
+
+  .auth__content {
+    padding: $space-xl;
+  }
+}
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@include media(mobile-sm) {
+  .auth {
+    padding: $space-sm;
+  }
+
+  .auth__content {
+    padding: $space-lg;
+  }
+}

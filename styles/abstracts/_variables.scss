@@ -4,6 +4,7 @@ $primary-hover: #ff8338;
 $primary-active: #e95a00;
 $primary-light: #fff2e8;
 $primary-dark: #c64a00;
+$secondary-active: #3b7ed8;
 
 /* --- Secondary --- */
 $secondary: #4c8fea;
@@ -93,8 +94,10 @@ $status-inactive: #9ca7b5;
 $status-blocked: #ee5c4c;
 $status-new: #61a6f8;
 
-/* --- Soft accent colors --- */
+/* ---  accent colors --- */
+$accent-orange: #ff6b1a;
 
+/* --- Soft accent colors --- */
 $soft-orange: #fff2e8;
 $soft-blue: #eef6ff;
 $soft-green: #ecfaf1;
@@ -138,3 +141,48 @@ $container-padding: 2rem;
 /* --- transition --- */
 
 $transition: 0.3s ease;
+
+/* --- Border Radius --- */
+
+$radius-sm: 0.4rem;
+$radius-md: 0.8rem;
+$radius-lg: 1.2rem;
+$radius-xl: 1.6rem;
+$radius-2xl: 2rem;
+$radius-full: 9999px;
+
+/* --- Shadows --- */
+
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+$shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.18);
+
+/* --- Glass Effect --- */
+
+$glass-bg: rgba(255, 255, 255, 0.06);
+$glass-border: rgba(255, 255, 255, 0.08);
+$glass-blur: blur(20px);
+
+/* --- Spacing --- */
+
+$space-xs: 0.4rem;
+$space-sm: 0.8rem;
+$space-md: 1.2rem;
+$space-lg: 1.6rem;
+$space-xl: 2.4rem;
+$space-2xl: 3.2rem;
+$space-3xl: 4.8rem;
+
+/* --- Font Weight --- */
+
+$fw-regular: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+/* --- Z-index --- */
+
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-modal: 500;
+$z-toast: 1000;

@@ -1,10 +1,4 @@
 /* --- abstract --- */
-/* --- clamp calculator for texts: font-size: clamp-rem(16, 2.5, 32); --- */
-/* --- Display flex mixin --- */
-/* --- Display grid mixin --- */
-/* --- Element positioning mixin relative/absolute/fixed and etc --- */
-/* --- Transitions for animations --- */
-/* --- Responsive layout --- */
 /* ---  Brand Colors ---*/
 /* --- Secondary --- */
 /* --- Status --- */
@@ -12,11 +6,24 @@
 /* --- DARK THEME (default theme) --- */
 /* --- charts --- */
 /* --- Status Bar  --- */
+/* ---  accent colors --- */
 /* --- Soft accent colors --- */
 /* --- LNeutral accent colors --- */
 /* --- Breakpoints --- */
 /* --- containers --- */
 /* --- transition --- */
+/* --- Border Radius --- */
+/* --- Shadows --- */
+/* --- Glass Effect --- */
+/* --- Spacing --- */
+/* --- Font Weight --- */
+/* --- Z-index --- */
+/* --- clamp calculator for texts: font-size: clamp-rem(16, 2.5, 32); --- */
+/* --- Display flex mixin --- */
+/* --- Display grid mixin --- */
+/* --- Element positioning mixin relative/absolute/fixed and etc --- */
+/* --- Transitions for animations --- */
+/* --- Responsive layout --- */
 /* --- base --- */
 /* Box sizing */
 *,
@@ -203,8 +210,689 @@ body {
 }
 
 /* --- components --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.2rem 2rem;
+  border: none;
+  border-radius: 1.2rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  user-select: none;
+}
+.btn:focus-visible {
+  outline: 3px solid rgba(255, 107, 26, 0.25);
+  outline-offset: 4px;
+}
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* ==========================================
+   FULL WIDTH
+========================================== */
+.btn--full {
+  width: 100%;
+}
+
+/* ==========================================
+   PRIMARY BUTTON
+========================================== */
+.btn--primary {
+  background-color: #ff6b1a;
+  color: #eef6ff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+.btn--primary:hover {
+  background-color: #ff8338;
+  transform: translateY(-2px);
+}
+.btn--primary:active {
+  background-color: #e95a00;
+  transform: translateY(0);
+}
+
+/* ==========================================
+   SECONDARY BUTTON
+========================================== */
+.btn--secondary {
+  background-color: #4c8fea;
+  color: #eef6ff;
+}
+.btn--secondary:hover {
+  background-color: #67a3f0;
+  transform: translateY(-2px);
+}
+.btn--secondary:active {
+  background-color: #3b7ed8;
+  transform: translateY(0);
+}
+
+/* ==========================================
+   OUTLINE BUTTON
+========================================== */
+.btn--outline {
+  background: transparent;
+  border: 1px solid #2a3b4e;
+  color: #f5f7fa;
+}
+.btn--outline:hover {
+  border-color: #ff6b1a;
+  color: #ff6b1a;
+}
+
+/* ==========================================
+   GOOGLE BUTTON
+========================================== */
+.btn--google {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #2a3b4e;
+  color: #f5f7fa;
+}
+.btn--google:hover {
+  background-color: rgba(76, 143, 234, 0.08);
+  border-color: #4c8fea;
+}
+.btn--google:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================
+   ICON BUTTON
+========================================== */
+.btn--icon {
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border-radius: 50%;
+}
+
+/* ==========================================
+   SMALL
+========================================== */
+.btn--sm {
+  padding: 0.9rem 1.6rem;
+  font-size: 1.4rem;
+}
+
+/* ==========================================
+   LARGE
+========================================== */
+.btn--lg {
+  padding: 1.5rem 2.4rem;
+  font-size: 1.8rem;
+}
+
+/* ==========================================
+   DANGER
+========================================== */
+.btn--danger {
+  background: #ee5c4c;
+  color: #eef6ff;
+}
+.btn--danger:hover {
+  filter: brightness(0.92);
+}
+
+/* ==========================================
+   SUCCESS
+========================================== */
+.btn--success {
+  background: #55b975;
+  color: #eef6ff;
+}
+.btn--success:hover {
+  filter: brightness(0.92);
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+.btn--loading {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+  .btn {
+    font-size: 1.5rem;
+    padding: 1.1rem 1.8rem;
+  }
+}
+@media (max-width: 480px) {
+  .btn {
+    width: 100%;
+  }
+}
+/* --- abstract --- */
+/* ==========================================
+   AUTH FORM
+========================================== */
+.auth-form {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+/* ==========================================
+   FORM GROUP
+========================================== */
+.auth-form__group {
+  display: flex;
+  flex-direction: column;
+  justify-content: 1.5rem;
+}
+
+/* ==========================================
+   LABEL
+========================================== */
+.auth-form__label {
+  margin-bottom: 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #bec8d3;
+}
+
+/* ==========================================
+   FORM OPTIONS
+========================================== */
+.auth-form__options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+/* ==========================================
+   FORGOT PASSWORD
+========================================== */
+.auth-form__forgot {
+  color: #4c8fea;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.auth-form__forgot:hover {
+  color: #ff6b1a;
+}
+.auth-form__forgot:focus-visible {
+  outline: none;
+  color: #ff6b1a;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+  .auth-form__options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .auth-form__forgot {
+    align-self: flex-end;
+  }
+}
+@media (max-width: 480px) {
+  .auth-form {
+    gap: 1.2rem;
+  }
+  .auth-form__label {
+    font-size: 1.3rem;
+  }
+}
+/* --- abstract --- */
+.input {
+  width: 100%;
+  min-height: 5.8rem;
+  padding: 0.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.2rem;
+  background-color: #1e2b39;
+  color: #f5f7fa;
+  font-size: 1.6rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.input::placeholder {
+  color: #8692a0;
+}
+.input:hover {
+  border-color: #4c8fea;
+}
+.input:focus {
+  outline: none;
+  border-color: #ff6b1a;
+  box-shadow: 0 0 0 0.3rem rgba(255, 107, 26, 0.15);
+}
+.input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field__toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 3rem;
+  right: 2rem;
+  bottom: auto;
+  left: auto;
+  transform: translateY(-50%);
+  width: 4rem;
+  height: 4rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+
+.password-field__toggle:hover .password-field__icon {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ==========================================
+   INPUT ERROR
+========================================== */
+.input--error {
+  border-color: #ee5c4c;
+}
+.input--error:focus {
+  border-color: #ee5c4c;
+  box-shadow: 0 0 0 0.3rem rgba(238, 92, 76, 0.15);
+}
+
+/* ==========================================
+   INPUT SUCCESS
+========================================== */
+.input--success {
+  border-color: #55b975;
+}
+.input--success:focus {
+  border-color: #55b975;
+  box-shadow: 0 0 0 0.3rem rgba(85, 185, 117, 0.15);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+  .input {
+    font-size: 1.4rem;
+    padding: 1.3rem 1.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .password-field__toggle {
+    right: 1.2rem;
+  }
+}
+/* --- abstract --- */
+/* ==========================================
+   AUTH LOGO
+========================================== */
+.auth-logo {
+  margin-bottom: 3.2rem;
+}
+
+.auth-logo__link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.auth-logo__image {
+  display: block;
+  width: 18rem;
+  height: auto;
+}
+
+/* ==========================================
+   AUTH HEADER
+========================================== */
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2remrem;
+  margin-bottom: 4.8rem;
+  text-align: center;
+}
+.auth-header .auth-header__heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+}
+.auth-header .auth-header__heading .auth-header__icon {
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+}
+
+.auth-header__title {
+  font-size: clamp(4rem, 4.5vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #f5f7fa;
+  letter-spacing: -0.03em;
+}
+
+.auth-header__subtitle {
+  max-width: 45rem;
+  color: #bec8d3;
+  font-size: 1.6rem;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   DIVIDER
+========================================== */
+.auth-divider {
+  position: relative;
+  margin: 3.2rem 0;
+  text-align: center;
+}
+
+.auth-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 0.1rem;
+  background-color: #2a3b4e;
+}
+
+.auth-divider__text {
+  position: relative;
+  padding: 0 1.2rem;
+  background-color: #101923;
+  color: #8692a0;
+  font-size: 1.3rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/* ==========================================
+   SOCIAL LOGIN
+========================================== */
+.social-login {
+  width: 100%;
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+/* ==========================================
+   AUTH FOOTER
+========================================== */
+.auth-footer {
+  margin-top: 3.2rem;
+  text-align: center;
+}
+
+.auth-footer__text {
+  color: #bec8d3;
+  font-size: 1.5rem;
+}
+
+.auth-footer__link {
+  margin-left: 0.4rem;
+  color: #ff6b1a;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.auth-footer__link:hover {
+  color: #ff8338;
+}
+.auth-footer__link:focus-visible {
+  outline: none;
+  color: #ff8338;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+@media (max-width: 768px) {
+  .auth-logo {
+    margin-bottom: 2.4rem;
+    text-align: center;
+  }
+  .auth-header {
+    margin-bottom: 2.4rem;
+    text-align: center;
+  }
+  .auth-header__title {
+    font-size: 2.8rem;
+  }
+  .auth-header__subtitle {
+    margin: 0 auto;
+  }
+}
+@media (max-width: 480px) {
+  .auth-logo__image {
+    width: 15rem;
+  }
+  .auth-header__title {
+    font-size: 2.4rem;
+  }
+  .auth-header__subtitle {
+    font-size: 1.5rem;
+  }
+}
+/* --- abstract --- */
+.checkbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox__input {
+  display: none;
+}
+
+.checkbox__box {
+  width: 1.8rem;
+  height: 1.8rem;
+  position: relative;
+  border: 0.2rem solid #2a3b4e;
+  border-radius: 0.4rem;
+  background: transparent;
+  transition: all 0.3s ease 0s;
+}
+.checkbox__box:hover {
+  border-color: #ff6b1a;
+}
+
+.checkbox__label {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #bec8d3;
+}
+
+.checkbox__box::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 0.5rem;
+  height: 1rem;
+  border-right: 0.2rem solid transparent;
+  border-bottom: 0.2rem solid transparent;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: all 0.3s ease 0s;
+}
+
+.checkbox__input:checked + .checkbox__box {
+  background: #ecfaf1;
+  border-color: #ff6b1a;
+}
+
+.checkbox__input:checked + .checkbox__box::after {
+  border-color: #55b975;
+}
+
+.checkbox__input:focus-visible + .checkbox__box {
+  outline: 0.2rem solid rgba(255, 107, 26, 0.4);
+  outline-offset: 0.3rem;
+}
+
 /* --- layout --- */
 /* --- pages --- */
+/* --- abstract --- */
+/* ==========================================
+   LOGIN PAGE
+========================================== */
+.auth {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 3.2rem;
+  background-color: #101923;
+}
+
+/* ==========================================
+   CONTAINER
+========================================== */
+.auth__container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0rem;
+  width: 100%;
+  max-width: 140rem;
+  min-height: 80rem;
+  overflow: hidden;
+  background-color: #16212e;
+  border: 0.1rem solid #2a3b4e;
+  border-radius: 2rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* ==========================================
+   CONTENT
+========================================== */
+.auth__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  order: 2;
+  padding: 3.2rem;
+}
+
+/* ==========================================
+   VISUAL
+========================================== */
+.auth__visual {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at top left, rgba(255, 107, 26, 0.18), transparent 40%), radial-gradient(circle at bottom right, rgba(76, 143, 234, 0.22), transparent 45%), #101923;
+}
+
+/* ==========================================
+   ABSTRACT SHAPE 1
+========================================== */
+.auth__visual::before {
+  content: "";
+  position: absolute;
+  top: -8remrem;
+  right: -8remrem;
+  bottom: auto;
+  left: auto;
+  width: 40rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 107, 26, 0.22);
+  filter: blur(10rem);
+}
+
+/* ==========================================
+   ABSTRACT SHAPE 2
+========================================== */
+.auth__visual::after {
+  content: "";
+  position: absolute;
+  bottom: -10rem;
+  left: -8rem;
+  width: 35rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(76, 143, 234, 0.18);
+  filter: blur(8rem);
+}
+
+/* ==========================================
+   LAPTOP
+========================================== */
+@media (max-width: 1024px) {
+  .auth__container {
+    max-width: 120rem;
+  }
+}
+/* ==========================================
+   TABLET
+========================================== */
+@media (max-width: 768px) {
+  .auth__container {
+    grid-template-columns: 1fr;
+  }
+  .auth__visual {
+    display: none;
+  }
+  .auth__content {
+    padding: 2.4rem;
+  }
+}
+/* ==========================================
+   MOBILE
+========================================== */
+@media (max-width: 480px) {
+  .auth {
+    padding: 1.2rem;
+  }
+  .auth__container {
+    min-height: auto;
+    border-radius: 1.6rem;
+  }
+  .auth__content {
+    padding: 2.4rem;
+  }
+}
+/* ==========================================
+   SMALL MOBILE
+========================================== */
 /* --- themes --- */
 
 /*# sourceMappingURL=main.css.map */

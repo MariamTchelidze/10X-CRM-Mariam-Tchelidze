@@ -1,0 +1,210 @@
+@use "../abstracts/variables" as *;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+
+  padding: 1.2rem 2rem;
+
+  border: none;
+  border-radius: $radius-lg;
+
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: $fw-semibold;
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  user-select: none;
+
+  &:focus-visible {
+    outline: 3px solid rgba($primary, 0.25);
+    outline-offset: 4px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+/* ==========================================
+   FULL WIDTH
+========================================== */
+
+.btn--full {
+  width: 100%;
+}
+
+/* ==========================================
+   PRIMARY BUTTON
+========================================== */
+
+.btn--primary {
+  background-color: $primary;
+  color: $soft-blue;
+
+  box-shadow: $shadow-md;
+
+  &:hover {
+    background-color: $primary-hover;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background-color: $primary-active;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   SECONDARY BUTTON
+========================================== */
+
+.btn--secondary {
+  background-color: $secondary;
+  color: $soft-blue;
+
+  &:hover {
+    background-color: $secondary-hover;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    background-color: $secondary-active;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   OUTLINE BUTTON
+========================================== */
+
+.btn--outline {
+  background: transparent;
+
+  border: 1px solid $dark-border;
+
+  color: $dark-text-primary;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+/* ==========================================
+   GOOGLE BUTTON
+========================================== */
+
+.btn--google {
+  width: 100%;
+
+  background-color: transparent;
+
+  border: 1px solid $dark-border;
+
+  color: $dark-text-primary;
+
+  &:hover {
+    background-color: rgba($secondary, 0.08);
+    border-color: $secondary;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* ==========================================
+   ICON BUTTON
+========================================== */
+
+.btn--icon {
+  width: 4.4rem;
+  height: 4.4rem;
+
+  padding: 0;
+
+  border-radius: 50%;
+}
+
+/* ==========================================
+   SMALL
+========================================== */
+
+.btn--sm {
+  padding: 0.9rem 1.6rem;
+  font-size: 1.4rem;
+}
+
+/* ==========================================
+   LARGE
+========================================== */
+
+.btn--lg {
+  padding: 1.5rem 2.4rem;
+  font-size: 1.8rem;
+}
+
+/* ==========================================
+   DANGER
+========================================== */
+
+.btn--danger {
+  background: $status-blocked;
+  color: $soft-blue;
+
+  &:hover {
+    filter: brightness(0.92);
+  }
+}
+
+/* ==========================================
+   SUCCESS
+========================================== */
+
+.btn--success {
+  background: $success;
+  color: $soft-blue;
+
+  &:hover {
+    filter: brightness(0.92);
+  }
+}
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.btn--loading {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+  .btn {
+    font-size: 1.5rem;
+    padding: 1.1rem 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    width: 100%;
+  }
+}
