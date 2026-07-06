@@ -236,16 +236,10 @@ body {
   opacity: 0.55;
 }
 
-/* ==========================================
-   FULL WIDTH
-========================================== */
 .btn--full {
   width: 100%;
 }
 
-/* ==========================================
-   PRIMARY BUTTON
-========================================== */
 .btn--primary {
   background-color: #ff6b1a;
   color: #eef6ff;
@@ -260,9 +254,6 @@ body {
   transform: translateY(0);
 }
 
-/* ==========================================
-   SECONDARY BUTTON
-========================================== */
 .btn--secondary {
   background-color: #4c8fea;
   color: #eef6ff;
@@ -276,9 +267,6 @@ body {
   transform: translateY(0);
 }
 
-/* ==========================================
-   OUTLINE BUTTON
-========================================== */
 .btn--outline {
   background: transparent;
   border: 1px solid #2a3b4e;
@@ -289,9 +277,6 @@ body {
   color: #ff6b1a;
 }
 
-/* ==========================================
-   GOOGLE BUTTON
-========================================== */
 .btn--google {
   width: 100%;
   background-color: transparent;
@@ -306,9 +291,6 @@ body {
   transform: scale(0.98);
 }
 
-/* ==========================================
-   ICON BUTTON
-========================================== */
 .btn--icon {
   width: 4.4rem;
   height: 4.4rem;
@@ -316,25 +298,16 @@ body {
   border-radius: 50%;
 }
 
-/* ==========================================
-   SMALL
-========================================== */
 .btn--sm {
   padding: 0.9rem 1.6rem;
   font-size: 1.4rem;
 }
 
-/* ==========================================
-   LARGE
-========================================== */
 .btn--lg {
   padding: 1.5rem 2.4rem;
   font-size: 1.8rem;
 }
 
-/* ==========================================
-   DANGER
-========================================== */
 .btn--danger {
   background: #ee5c4c;
   color: #eef6ff;
@@ -343,9 +316,6 @@ body {
   filter: brightness(0.92);
 }
 
-/* ==========================================
-   SUCCESS
-========================================== */
 .btn--success {
   background: #55b975;
   color: #eef6ff;
@@ -354,17 +324,12 @@ body {
   filter: brightness(0.92);
 }
 
-/* ==========================================
-   LOADING
-========================================== */
 .btn--loading {
   pointer-events: none;
   opacity: 0.75;
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .btn {
     font-size: 1.5rem;
@@ -377,9 +342,6 @@ body {
   }
 }
 /* --- abstract --- */
-/* ==========================================
-   AUTH FORM
-========================================== */
 .auth-form {
   width: 100%;
   max-width: 48rem;
@@ -389,18 +351,12 @@ body {
   gap: 2.4rem;
 }
 
-/* ==========================================
-   FORM GROUP
-========================================== */
 .auth-form__group {
   display: flex;
   flex-direction: column;
   justify-content: 1.5rem;
 }
 
-/* ==========================================
-   LABEL
-========================================== */
 .auth-form__label {
   margin-bottom: 0.4rem;
   font-size: 1.4rem;
@@ -408,9 +364,6 @@ body {
   color: #bec8d3;
 }
 
-/* ==========================================
-   FORM OPTIONS
-========================================== */
 .auth-form__options {
   display: flex;
   align-items: center;
@@ -420,9 +373,6 @@ body {
   margin-bottom: 0.8rem;
 }
 
-/* ==========================================
-   FORGOT PASSWORD
-========================================== */
 .auth-form__forgot {
   color: #4c8fea;
   font-size: 1.4rem;
@@ -438,9 +388,6 @@ body {
   color: #ff6b1a;
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
 @media (max-width: 768px) {
   .auth-form__options {
     flex-direction: column;
@@ -515,9 +462,7 @@ body {
   transform: scale(1.05);
 }
 
-/* ==========================================
-   INPUT ERROR
-========================================== */
+/* ---------------- INPUT ERROR ---------------- */
 .input--error {
   border-color: #ee5c4c;
 }
@@ -526,9 +471,7 @@ body {
   box-shadow: 0 0 0 0.3rem rgba(238, 92, 76, 0.15);
 }
 
-/* ==========================================
-   INPUT SUCCESS
-========================================== */
+/* ---------------- INPUT SUCCESS ---------------- */
 .input--success {
   border-color: #55b975;
 }
@@ -537,9 +480,7 @@ body {
   box-shadow: 0 0 0 0.3rem rgba(85, 185, 117, 0.15);
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+/* ---------------- RESPONSIVE ---------------- */
 @media (max-width: 768px) {
   .input {
     font-size: 1.4rem;
@@ -552,28 +493,6 @@ body {
   }
 }
 /* --- abstract --- */
-/* ==========================================
-   AUTH LOGO
-========================================== */
-.auth-logo {
-  margin-bottom: 3.2rem;
-}
-
-.auth-logo__link {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.auth-logo__image {
-  display: block;
-  width: 18rem;
-  height: auto;
-}
-
-/* ==========================================
-   AUTH HEADER
-========================================== */
 .auth-header {
   display: flex;
   flex-direction: column;
@@ -611,9 +530,6 @@ body {
   line-height: 1.6;
 }
 
-/* ==========================================
-   DIVIDER
-========================================== */
 .auth-divider {
   position: relative;
   margin: 3.2rem 0;
@@ -640,18 +556,12 @@ body {
   text-transform: uppercase;
 }
 
-/* ==========================================
-   SOCIAL LOGIN
-========================================== */
 .social-login {
   width: 100%;
   max-width: 48rem;
   margin-inline: auto;
 }
 
-/* ==========================================
-   AUTH FOOTER
-========================================== */
 .auth-footer {
   margin-top: 3.2rem;
   text-align: center;
@@ -677,9 +587,7 @@ body {
   color: #ff8338;
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+/* ----------------- RESPONSIVE ----------------- */
 @media (max-width: 768px) {
   .auth-logo {
     margin-bottom: 2.4rem;
@@ -771,9 +679,6 @@ body {
 /* --- layout --- */
 /* --- pages --- */
 /* --- abstract --- */
-/* ==========================================
-   LOGIN PAGE
-========================================== */
 .auth {
   min-height: 100vh;
   display: flex;
@@ -784,9 +689,6 @@ body {
   background-color: #101923;
 }
 
-/* ==========================================
-   CONTAINER
-========================================== */
 .auth__container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -801,9 +703,6 @@ body {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
 }
 
-/* ==========================================
-   CONTENT
-========================================== */
 .auth__content {
   display: flex;
   flex-direction: column;
@@ -812,18 +711,12 @@ body {
   padding: 3.2rem;
 }
 
-/* ==========================================
-   VISUAL
-========================================== */
 .auth__visual {
   position: relative;
   overflow: hidden;
   background: radial-gradient(circle at top left, rgba(255, 107, 26, 0.18), transparent 40%), radial-gradient(circle at bottom right, rgba(76, 143, 234, 0.22), transparent 45%), #101923;
 }
 
-/* ==========================================
-   ABSTRACT SHAPE 1
-========================================== */
 .auth__visual::before {
   content: "";
   position: absolute;
@@ -838,9 +731,6 @@ body {
   filter: blur(10rem);
 }
 
-/* ==========================================
-   ABSTRACT SHAPE 2
-========================================== */
 .auth__visual::after {
   content: "";
   position: absolute;
@@ -853,17 +743,12 @@ body {
   filter: blur(8rem);
 }
 
-/* ==========================================
-   LAPTOP
-========================================== */
+/* resopnsive */
 @media (max-width: 1024px) {
   .auth__container {
     max-width: 120rem;
   }
 }
-/* ==========================================
-   TABLET
-========================================== */
 @media (max-width: 768px) {
   .auth__container {
     grid-template-columns: 1fr;
@@ -875,9 +760,6 @@ body {
     padding: 2.4rem;
   }
 }
-/* ==========================================
-   MOBILE
-========================================== */
 @media (max-width: 480px) {
   .auth {
     padding: 1.2rem;
@@ -890,9 +772,6 @@ body {
     padding: 2.4rem;
   }
 }
-/* ==========================================
-   SMALL MOBILE
-========================================== */
 /* --- themes --- */
 
 /*# sourceMappingURL=main.css.map */

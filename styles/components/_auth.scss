@@ -2,28 +2,6 @@
 @use "../base/typography" as *;
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
-/* ==========================================
-   AUTH LOGO
-========================================== */
-.auth-logo {
-  margin-bottom: $space-2xl;
-}
-
-.auth-logo__link {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.auth-logo__image {
-  display: block;
-  width: 18rem;
-  height: auto;
-}
-
-/* ==========================================
-   AUTH HEADER
-========================================== */
 
 .auth-header {
   @include flex(column, center, center, $space-md);
@@ -63,10 +41,6 @@
   line-height: 1.6;
 }
 
-/* ==========================================
-   DIVIDER
-========================================== */
-
 .auth-divider {
   position: relative;
 
@@ -102,19 +76,11 @@
   text-transform: uppercase;
 }
 
-/* ==========================================
-   SOCIAL LOGIN
-========================================== */
-
 .social-login {
   width: 100%;
   max-width: 48rem;
   margin-inline: auto;
 }
-
-/* ==========================================
-   AUTH FOOTER
-========================================== */
 
 .auth-footer {
   margin-top: $space-2xl;
@@ -148,9 +114,7 @@
   }
 }
 
-/* ==========================================
-   RESPONSIVE
-========================================== */
+/* ----------------- RESPONSIVE ----------------- */
 
 @media (max-width: 768px) {
   .auth-logo {

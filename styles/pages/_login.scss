@@ -1,10 +1,6 @@
 @use "../abstracts/mixins" as *;
 @use "../abstracts/variables" as *;
 
-/* ==========================================
-   LOGIN PAGE
-========================================== */
-
 .auth {
   min-height: 100vh;
 
@@ -14,10 +10,6 @@
 
   background-color: $dark-bg-body;
 }
-
-/* ==========================================
-   CONTAINER
-========================================== */
 
 .auth__container {
   @include grid(2, 0);
@@ -36,19 +28,11 @@
   box-shadow: $shadow-lg;
 }
 
-/* ==========================================
-   CONTENT
-========================================== */
-
 .auth__content {
   @include flex(column, center);
   order: 2;
   padding: $space-2xl;
 }
-
-/* ==========================================
-   VISUAL
-========================================== */
 
 .auth__visual {
   position: relative;
@@ -59,10 +43,6 @@
     radial-gradient(circle at top left, rgba($primary, 0.18), transparent 40%),
     radial-gradient(circle at bottom right, rgba($secondary, 0.22), transparent 45%), $dark-bg-body;
 }
-
-/* ==========================================
-   ABSTRACT SHAPE 1
-========================================== */
 
 .auth__visual::before {
   content: "";
@@ -78,10 +58,6 @@
 
   filter: blur(10rem);
 }
-
-/* ==========================================
-   ABSTRACT SHAPE 2
-========================================== */
 
 .auth__visual::after {
   content: "";
@@ -101,19 +77,13 @@
   filter: blur(8rem);
 }
 
-/* ==========================================
-   LAPTOP
-========================================== */
+/* resopnsive */
 
 @include media(laptop) {
   .auth__container {
     max-width: 120rem;
   }
 }
-
-/* ==========================================
-   TABLET
-========================================== */
 
 @include media(tablet) {
   .auth__container {
@@ -128,10 +98,6 @@
     padding: $space-xl;
   }
 }
-
-/* ==========================================
-   MOBILE
-========================================== */
 
 @include media(mobile) {
   .auth {
@@ -148,10 +114,6 @@
     padding: $space-xl;
   }
 }
-
-/* ==========================================
-   SMALL MOBILE
-========================================== */
 
 @include media(mobile-sm) {
   .auth {

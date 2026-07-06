@@ -2,9 +2,6 @@
 @use "../base/typography" as *;
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
-/* ==========================================
-   AUTH FORM
-========================================== */
 
 .auth-form {
   width: 100%;
@@ -16,17 +13,9 @@
   gap: $space-xl;
 }
 
-/* ==========================================
-   FORM GROUP
-========================================== */
-
 .auth-form__group {
   @include flex(column, 1.5rem);
 }
-
-/* ==========================================
-   LABEL
-========================================== */
 
 .auth-form__label {
   margin-bottom: $space-xs;
@@ -37,10 +26,6 @@
   color: $dark-text-secondary;
 }
 
-/* ==========================================
-   FORM OPTIONS
-========================================== */
-
 .auth-form__options {
   display: flex;
   align-items: center;
@@ -50,10 +35,6 @@
   margin-top: $space-xs;
   margin-bottom: $space-sm;
 }
-
-/* ==========================================
-   FORGOT PASSWORD
-========================================== */
 
 .auth-form__forgot {
   color: $secondary;
@@ -72,10 +53,6 @@
     color: $primary;
   }
 }
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
 
 @media (max-width: 768px) {
   .auth-form__options {
