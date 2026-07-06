@@ -1,0 +1,157 @@
+/* Primary Brand */
+$color-primary: #FF7A1A;
+$color-primary-hover: #FF8F3D;
+$color-primary-active: #E86200;
+$color-primary-light: #FFF1E7;
+$color-primary-dark: #C94F00;
+
+/* Secondary */
+$color-secondary: #4F91D9;
+$color-secondary-hover: #66A4E7;
+$color-secondary-light: #EDF5FF;
+
+/* Success */
+$color-success: #5DAF76;
+$color-success-light: #EAF7EF;
+
+/* Warning */
+$color-warning: #F2A93B;
+$color-warning-light: #FFF7E6;
+
+/* Danger */
+$color-danger: #E55A4F;
+$color-danger-light: #FFEDEC;
+
+/* Info */
+$color-info: #5D9CEC;
+$color-info-light: #EEF6FF;
+
+
+
+/*--------------------------------- LIGHT THEME ---------------------------------*/
+
+$light-body: #FFF8F1;
+$light-surface: #FFFFFF;
+$light-sidebar: #FFFFFF;
+$light-card: #FFFFFF;
+
+$light-border: #EFE4D8;
+$light-divider: #F4EBDD;
+
+$light-shadow: rgba(0, 0, 0, .06);
+
+/* Typography */
+
+$light-text: #2D2A26;
+$light-text-secondary: #5E5A55;
+$light-text-muted: #98928A;
+$light-text-disabled: #C2BBB2;
+
+/* Icons */
+
+$light-icon: #69635B;
+$light-icon-active: $color-primary;
+
+/* Navigation */
+
+$light-nav-hover: #FFF1E7;
+$light-nav-active: #FF7A1A;
+$light-nav-text: #4B4640;
+
+/* Inputs */
+
+$light-input-bg: #FFFFFF;
+$light-input-border: #E6DDD2;
+$light-input-focus: #FF7A1A;
+
+/* Charts */
+
+$light-chart-grid: #EEE5D9;
+$light-chart-line: #FF7A1A;
+
+/*--------------------------------- LIGHT THEME ---------------------------------*/
+$dark-body: #121A24;
+$dark-surface: #192431;
+$dark-sidebar: #16212D;
+$dark-card: #1B2836;
+
+$dark-border: #2C3C4D;
+$dark-divider: #263544;
+
+$dark-shadow: rgba(0,0,0,.45);
+
+/* Typography */
+
+$dark-text: #F8F7F3;
+$dark-text-secondary: #C5CBD2;
+$dark-text-muted: #87929D;
+$dark-text-disabled: #5D6976;
+
+/* Icons */
+
+$dark-icon: #AEB8C3;
+$dark-icon-active: #FF7A1A;
+
+/* Navigation */
+
+$dark-nav-hover: #243445;
+$dark-nav-active: #FF7A1A;
+$dark-nav-text: #F4F5F7;
+
+/* Inputs */
+
+$dark-input-bg: #1F2B38;
+$dark-input-border: #344556;
+$dark-input-focus: #FF7A1A;
+
+/* Charts */
+
+$dark-chart-grid: #2D3C4D;
+$dark-chart-line: #FF8A28;
+
+
+/* --------------------------------- STATUS COLORS --------------------------------- */
+
+
+$status-success: #57C271;
+$status-warning: #F4B740;
+$status-danger: #E45757;
+$status-info: #5DA4F6;
+
+/* Badges */
+
+$status-success-bg: #E8F8ED;
+$status-warning-bg: #FFF6E2;
+$status-danger-bg: #FFECEC;
+$status-info-bg: #EDF6FF;
+
+
+$status-success-bg-dark: rgba(87,194,113,.18);
+$status-warning-bg-dark: rgba(244,183,64,.18);
+$status-danger-bg-dark: rgba(228,87,87,.18);
+$status-info-bg-dark: rgba(93,164,246,.18);
+
+/* --------------------------------- charts--------------------------------- */
+
+
+$chart-orange: #FF7A1A;
+$chart-blue: #4F91D9;
+$chart-green: #5DAF76;
+$chart-red: #E55A4F;
+$chart-yellow: #F2A93B;
+$chart-purple: #8E6BD8;
+
+
+/* --------------------------------- Background-helpers --------------------------------- */
+
+$bg-soft-orange: #FFF7F2;
+$bg-soft-blue: #F2F8FF;
+$bg-soft-green: #EFFAF3;
+$bg-soft-red: #FFF3F2;
+$bg-soft-yellow: #FFF8EA;
+
+$bg-dark-orange: rgba(255,122,26,.12);
+$bg-dark-blue: rgba(79,145,217,.12);
+$bg-dark-green: rgba(93,175,118,.12);
+$bg-dark-red: rgba(229,90,79,.12);
+$bg-dark-yellow: rgba(242,169,59,.12);
