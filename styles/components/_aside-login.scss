@@ -1,0 +1,36 @@
+@use "../abstracts/variables" as *;
+@use "../base/typography" as *;
+@use "../abstracts/mixins" as *;
+
+.auth__visual {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: $radius-2xl;
+  background: $dark-bg-surface;
+  @include flex(column, center, center);
+  padding: $space-3xl;
+
+  @include media($tablet-lg) {
+    display: none;
+  }
+}
+
+.auth-visual__gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 12% 12%, $shape-primary 0%, transparent 28%),
+    radial-gradient(circle at 88% 82%, $shape-secondary 0%, transparent 26%),
+    linear-gradient(180deg, $dark-bg-surface 0%, $dark-bg-body 100%);
+}
+
+.auth__visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.15));
+  pointer-events: none;
+}

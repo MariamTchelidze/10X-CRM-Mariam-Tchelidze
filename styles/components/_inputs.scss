@@ -18,7 +18,7 @@
   }
 
   &:hover {
-    border-color: lighten($dark-border, 10%);
+    border-color: $dark-border-light;
   }
 
   &:focus {

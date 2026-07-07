@@ -9,13 +9,14 @@
 
 /* --- components --- */
 @use "./components/buttons";
-@use "./components/cards";
 @use "./components/forms";
 @use "./components/inputs";
 @use "./components/modals";
 @use "./components/auth";
 @use "./components/checkbox";
-@use "./components/visualPanel";
+@use "./components/aside-login";
+@use "./components/workspace-preview";
+
 /* --- layout --- */
 @use "./layout/footer";
 @use "./layout/header";

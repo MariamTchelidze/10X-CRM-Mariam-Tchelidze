@@ -30,28 +30,22 @@
 .checkbox__label {
   font-size: 1.5rem;
   font-weight: $fw-medium;
-
   color: $dark-text-secondary;
 }
 
 .checkbox__box::after {
   content: "";
-
   position: absolute;
-
   left: 50%;
   top: 45%;
-
   width: 0.5rem;
   height: 1rem;
-
   border-right: 0.2rem solid transparent;
   border-bottom: 0.2rem solid transparent;
-
   transform: translate(-50%, -50%) rotate(45deg);
-
   @include transition;
 }
+
 .checkbox__input:checked + .checkbox__box {
   background: $soft-green;
   border-color: $accent-orange;

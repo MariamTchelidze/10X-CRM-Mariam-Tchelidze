@@ -60,6 +60,7 @@ $dark-bg-animation: #182230bf;
 $animation-icon-bg: #ffffff0d;
 
 $dark-border: #2a3b4e;
+$dark-border-light: #3a4f6c;
 $dark-divider: #233241;
 
 $dark-text-primary: #f5f7fa;
@@ -128,10 +129,11 @@ $gray-700: #4b535c;
 $gray-800: #2d343d;
 $gray-900: #181d24;
 
-/* --- Breakpoints --- */
+/* --- responsive Breakpoints --- */
 
 $mobile: 480px;
 $tablet: 768px;
+$tablet-lg: 930px;
 $laptop: 1024px;
 $desktop: 1280px;
 $desktop-lg: 1440px;
@@ -162,6 +164,9 @@ $radius-full: 9999px;
 $shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
 $shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
 $shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.18);
+$card-box-shadow-login:
+  0 2rem 5rem rgba(0, 0, 0, 0.3),
+  inset 0 0.1rem 0 rgba(255, 255, 255, 0.05);
 
 /* --- Glass Effect --- */
 
