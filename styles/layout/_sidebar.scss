@@ -1,0 +1,197 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+/* ==========================================================
+   Sidebar
+========================================================== */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  left: 0;
+
+  width: 26rem;
+  height: 100vh;
+
+  flex-shrink: 0;
+
+  padding: $space-xl;
+
+  background-color: $dark-bg-surface;
+  border-right: 1px solid $dark-border;
+
+  @include flex(column);
+
+  @include transition(transform);
+
+  z-index: 1000;
+
+  /* ==========================
+       Brand
+    ========================== */
+
+  &__brand {
+    @include flex(row, flex-start, center, 1);
+
+    margin-bottom: $space-3xl;
+
+    color: $dark-text-primary;
+    text-decoration: none;
+  }
+
+  &__logo {
+    @include flex(center, center);
+
+    width: 4.2rem;
+    height: 4.2rem;
+
+    border-radius: $radius-md;
+
+    background-color: $primary;
+
+    color: $dark-text-primary;
+    font-weight: 700;
+  }
+
+  &__title {
+    font-size: $fs-xl;
+    font-weight: 700;
+  }
+
+  /* ==========================
+       Navigation
+    ========================== */
+
+  &__navigation {
+    flex: 1;
+  }
+
+  &__menu {
+    @include flex(column);
+
+    list-style: none;
+  }
+
+  &__item {
+    width: 100%;
+  }
+
+  &__link {
+    @include flex(row, flex-start, center, 1.2);
+
+    width: 100%;
+
+    padding: 1.4rem 1.6rem;
+
+    border-radius: $radius-md;
+
+    color: $dark-text-secondary;
+    text-decoration: none;
+
+    @include transition;
+
+    &:hover {
+      background-color: $dark-nav-hover;
+      color: $dark-text-primary;
+    }
+
+    &--active {
+      background-color: $primary;
+      color: $dark-text-primary;
+    }
+  }
+
+  /* ==========================
+       Footer
+    ========================== */
+
+  &__footer {
+    @include flex(column, null, stretch, 1.2);
+
+    padding-top: $space-xl;
+
+    border-top: 1px solid $dark-border;
+  }
+
+  &__logout {
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   Sidebar Toggle
+========================================================== */
+
+.sidebar-toggle {
+  display: none;
+
+  width: 4.4rem;
+  height: 4.4rem;
+
+  border: none;
+
+  border-radius: $radius-md;
+
+  background: transparent;
+
+  color: $dark-text-primary;
+
+  cursor: pointer;
+}
+
+/* ==========================================================
+   Overlay
+========================================================== */
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  opacity: 0;
+  visibility: hidden;
+
+  @include transition;
+
+  z-index: 900;
+
+  &--show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* ==========================================================
+   Tablet
+========================================================== */
+
+@include media(tablet-lg) {
+  .sidebar {
+    position: fixed;
+
+    transform: translateX(-100%);
+
+    box-shadow: $shadow-lg;
+
+    &--open {
+      transform: translateX(0);
+    }
+  }
+
+  .sidebar-toggle {
+    @include flex(center, center);
+  }
+}
+
+/* ==========================================================
+   Mobile
+========================================================== */
+
+@include media(mobile) {
+  .sidebar {
+    width: 24rem;
+
+    padding: $space-lg;
+  }
+}

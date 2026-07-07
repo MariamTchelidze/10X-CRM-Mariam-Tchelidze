@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard | 10X CRM</title>
+
+    <link rel="icon" type="image/svg+xml" href="./assets/icons/Logo-dark-theme.svg" />
+
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+
+  <body class="theme-dark">
+    <!-- =========================================================
+         Toast Notifications
+    ========================================================== -->
+
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- =========================================================
+         Dashboard Layout
+    ========================================================== -->
+
+    <div class="dashboard-layout">
+      <!-- ===========================================
+             Sidebar
+        ============================================ -->
+
+      <aside class="sidebar">
+        <!-- Brand -->
+
+        <a href="dashboard.html" class="sidebar__brand">
+          <span class="sidebar__logo"> 10X </span>
+
+          <span class="sidebar__title"> CRM </span>
+        </a>
+
+        <!-- Navigation -->
+
+        <nav class="sidebar__navigation" aria-label="Main Navigation">
+          <ul class="sidebar__menu">
+            <li class="sidebar__item">
+              <a
+                href="dashboard.html"
+                class="sidebar__link sidebar__link--active"
+                data-nav="dashboard"
+                aria-current="page"
+              >
+                Dashboard
+              </a>
+            </li>
+
+            <li class="sidebar__item">
+              <a href="clients.html" class="sidebar__link" data-nav="clients"> Clients </a>
+            </li>
+
+            <li class="sidebar__item">
+              <a href="profile.html" class="sidebar__link" data-nav="profile"> Profile </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+
+        <div class="sidebar__footer">
+          <button class="theme-switch" id="theme-toggle" type="button" aria-label="Toggle theme">Dark Mode</button>
+
+          <button class="button button--ghost sidebar__logout" id="logout-btn" type="button">Logout</button>
+        </div>
+      </aside>
+      <!-- Mobile sidebar -->
+      <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+      <!-- ===========================================
+             Main Content
+        ============================================ -->
+
+      <main class="dashboard">
+        <div class="dashboard__container">
+          <!-- =========================================================
+             Dashboard Header
+        ========================================================== -->
+
+          <header class="dashboard-header">
+            <div class="dashboard-header__content">
+              <div class="dashboard-header__title-group">
+                <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Open navigation">
+                  ☰
+                </button>
+
+                <h1 class="dashboard-header__title">Dashboard</h1>
+              </div>
+
+              <div class="dashboard-header__actions">
+                <div class="dashboard-header__datetime" aria-live="polite">
+                  <span class="dashboard-header__date" id="dashboard-date"> July 07, 2026 </span>
+
+                  <span class="dashboard-header__clock" id="dashboard-clock"> 19:34:25 </span>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <!-- =========================================================
+             Welcome
+        ========================================================== -->
+
+          <section class="welcome" aria-labelledby="welcome-title">
+            <div class="welcome__content">
+              <p class="welcome__subtitle">Welcome back,</p>
+
+              <h2 class="welcome__title" id="welcome-title">
+                <span id="dashboard-greeting"> Mariam </span>
+
+                👋
+              </h2>
+
+              <p class="welcome__description">Here's an overview of your CRM today.</p>
+            </div>
+          </section>
+
+          <!-- =========================================================
+             Statistics
+        ========================================================== -->
+
+          <section class="dashboard-stats" aria-label="Dashboard Statistics">
+            <!-- Total Clients -->
+
+            <article class="stats-card" data-stat="clients">
+              <div class="stats-card__content">
+                <div class="stats-card__icon">
+                  <!-- Icon -->
+                </div>
+
+                <p class="stats-card__label">Total Clients</p>
+
+                <h3 class="stats-card__value" id="stats-total">0</h3>
+              </div>
+            </article>
+
+            <!-- Active Deals -->
+
+            <article class="stats-card" data-stat="active">
+              <div class="stats-card__content">
+                <div class="stats-card__icon">
+                  <!-- Icon -->
+                </div>
+
+                <p class="stats-card__label">Active Deals</p>
+
+                <h3 class="stats-card__value" id="stats-active">0</h3>
+              </div>
+            </article>
+
+            <!-- Won Revenue -->
+
+            <article class="stats-card" data-stat="revenue">
+              <div class="stats-card__content">
+                <div class="stats-card__icon">
+                  <!-- Icon -->
+                </div>
+
+                <p class="stats-card__label">Won Revenue</p>
+
+                <h3 class="stats-card__value" id="stats-revenue">$0</h3>
+              </div>
+            </article>
+
+            <!-- New This Week -->
+
+            <article class="stats-card" data-stat="weekly">
+              <div class="stats-card__content">
+                <div class="stats-card__icon">
+                  <!-- Icon -->
+                </div>
+
+                <p class="stats-card__label">New This Week</p>
+
+                <h3 class="stats-card__value" id="stats-week">0</h3>
+              </div>
+            </article>
+          </section>
+
+          <!-- =========================================================
+             Dashboard Widgets
+        ========================================================== -->
+
+          <section class="dashboard-widgets">
+            <!-- ===========================================
+                 Pipeline Overview
+            ============================================ -->
+
+            <article class="card pipeline" aria-labelledby="pipeline-title">
+              <header class="card__header">
+                <h2 class="card__title" id="pipeline-title">Pipeline Overview</h2>
+              </header>
+
+              <div class="card__body" id="pipeline-overview">
+                <!-- Lead -->
+
+                <div class="pipeline__item" data-status="lead">
+                  <div class="pipeline__info">
+                    <span class="pipeline__label"> Lead </span>
+
+                    <span class="pipeline__count" id="pipeline-lead"> 0 </span>
+                  </div>
+
+                  <div class="pipeline__progress">
+                    <div class="pipeline__fill" id="pipeline-lead-fill"></div>
+                  </div>
+                </div>
+
+                <!-- Contacted -->
+
+                <div class="pipeline__item" data-status="contacted">
+                  <div class="pipeline__info">
+                    <span class="pipeline__label"> Contacted </span>
+
+                    <span class="pipeline__count" id="pipeline-contacted"> 0 </span>
+                  </div>
+
+                  <div class="pipeline__progress">
+                    <div class="pipeline__fill" id="pipeline-contacted-fill"></div>
+                  </div>
+                </div>
+
+                <!-- Won -->
+
+                <div class="pipeline__item" data-status="won">
+                  <div class="pipeline__info">
+                    <span class="pipeline__label"> Won </span>
+
+                    <span class="pipeline__count" id="pipeline-won"> 0 </span>
+                  </div>
+
+                  <div class="pipeline__progress">
+                    <div class="pipeline__fill" id="pipeline-won-fill"></div>
+                  </div>
+                </div>
+
+                <!-- Lost -->
+
+                <div class="pipeline__item" data-status="lost">
+                  <div class="pipeline__info">
+                    <span class="pipeline__label"> Lost </span>
+
+                    <span class="pipeline__count" id="pipeline-lost"> 0 </span>
+                  </div>
+
+                  <div class="pipeline__progress">
+                    <div class="pipeline__fill" id="pipeline-lost-fill"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- ===========================================
+                 Recent Clients
+            ============================================ -->
+
+            <article class="card recent-clients" aria-labelledby="recent-clients-title">
+              <header class="card__header">
+                <h2 class="card__title" id="recent-clients-title">Recent Clients</h2>
+              </header>
+
+              <div class="card__body">
+                <div class="recent-clients__list" id="recent-clients-list">
+                  <!-- Client cards rendered by JavaScript -->
+                </div>
+              </div>
+
+              <footer class="card__footer">
+                <a href="clients.html" class="card__link" id="view-all-clients"> View All Clients → </a>
+              </footer>
+            </article>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

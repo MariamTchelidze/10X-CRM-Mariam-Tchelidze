@@ -6,6 +6,7 @@
 @use "./base/reset";
 @use "./base/typography";
 @use "./base/global";
+@use "./base/fonts";
 
 /* --- components --- */
 @use "./components/buttons";
@@ -17,6 +18,12 @@
 @use "./components/aside-login";
 @use "./components/workspace-preview";
 @use "./components/pageSwap";
+@use "./components/cards";
+@use "./components/badges";
+@use "./components/toast";
+@use "./components/loaders";
+@use "./components/annimations";
+@use "./components/utilities";
 /* --- layout --- */
 @use "./layout/footer";
 @use "./layout/header";

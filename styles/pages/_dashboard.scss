@@ -1,0 +1,242 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+/* ==========================================================
+   Dashboard Layout
+========================================================== */
+
+.dashboard-layout {
+  @include flex;
+  min-height: 100vh;
+  background-color: $dark-bg-body;
+}
+
+.dashboard {
+  flex: 1;
+  min-width: 0;
+  background-color: $dark-bg-body;
+
+  &__container {
+    width: 100%;
+    max-width: 160rem;
+    margin-inline: auto;
+    padding: $space-2xl;
+
+    @include flex(column, null, null, $space-2xl);
+  }
+}
+
+/* ==========================================================
+   Dashboard Header
+========================================================== */
+
+.dashboard-header {
+  &__content {
+    @include flex(row, space-between, center);
+  }
+
+  &__datetime {
+    @include flex(column, center, flex-end, $space-xs);
+  }
+
+  &__date,
+  &__clock {
+    color: $dark-text-secondary;
+  }
+}
+
+/* ==========================================================
+   Welcome
+========================================================== */
+
+.welcome {
+  &__content {
+    @include flex(column, null, flex-start, $space-sm);
+  }
+
+  &__subtitle {
+    color: $dark-text-muted;
+  }
+
+  &__title {
+    color: $dark-text-primary;
+  }
+
+  &__description {
+    max-width: 60rem;
+    color: $dark-text-secondary;
+    line-height: 1.6;
+  }
+}
+
+/* ==========================================================
+   Statistics
+========================================================== */
+
+.dashboard-stats {
+  @include grid(4, $space-lg);
+}
+
+/* ==========================================================
+   Pipeline
+========================================================== */
+
+.pipeline {
+  &__item {
+    @include flex(column, null, null, $space-sm);
+
+    &:not(:last-child) {
+      margin-bottom: $space-lg;
+    }
+  }
+
+  &__info {
+    @include flex(row, space-between, center);
+  }
+
+  &__label {
+    color: $dark-text-secondary;
+  }
+
+  &__count {
+    color: $dark-text-primary;
+    font-weight: $fw-semibold;
+  }
+
+  &__progress {
+    width: 100%;
+    height: 0.8rem;
+
+    overflow: hidden;
+
+    border-radius: $radius-full;
+    background-color: $dark-divider;
+  }
+
+  &__fill {
+    width: 0;
+    height: 100%;
+
+    border-radius: inherit;
+    background-color: $primary;
+
+    @include transition;
+  }
+}
+
+/* ==========================================================
+   Recent Clients
+========================================================== */
+
+.recent-clients {
+  &__list {
+    @include flex(column);
+
+    min-height: 20rem;
+  }
+}
+
+.recent-client {
+  @include flex(row, space-between, center);
+
+  padding-block: $space-md;
+
+  &:not(:last-child) {
+    border-bottom: 0.1rem solid $dark-divider;
+  }
+
+  &__left {
+    @include flex(row, null, center, $space-md);
+  }
+
+  &__avatar {
+    width: 4.8rem;
+    height: 4.8rem;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    @include flex(column, null, flex-start, 0.4rem);
+  }
+
+  &__name {
+    color: $dark-text-primary;
+    font-weight: $fw-medium;
+  }
+
+  &__company {
+    color: $dark-text-muted;
+  }
+
+  &__right {
+    @include flex(column, center, flex-end, 0.4rem);
+  }
+
+  &__date {
+    color: $dark-text-muted;
+  }
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@include media(laptop) {
+  .dashboard-stats {
+    @include grid(2, $space-lg);
+  }
+}
+
+@include media(tablet-lg) {
+  .dashboard-grid {
+    @include grid(1, $space-xl);
+  }
+}
+
+@include media(tablet) {
+  .dashboard {
+    &__container {
+      padding: $space-xl;
+    }
+  }
+}
+
+@include media(mobile) {
+  .dashboard {
+    &__container {
+      padding: $space-lg;
+    }
+  }
+
+  .dashboard-header {
+    &__content {
+      @include flex(column, null, flex-start, $space-md);
+    }
+
+    &__datetime {
+      align-items: flex-start;
+    }
+  }
+
+  .dashboard-stats {
+    @include grid(1, $space-md);
+  }
+
+  .recent-client {
+    @include flex(column, null, flex-start, $space-md);
+
+    &__right {
+      align-items: flex-start;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 @use "./variables" as *;
 @use "sass:math";
+@use "sass:map";
 /* --- clamp calculator for texts: font-size: clamp-rem(16, 2.5, 32); --- */
 
 @function clamp-rem($min, $preferred, $max) {
@@ -75,26 +76,20 @@
 
 /* --- Responsive layout --- */
 
+$breakpoints: (
+  mobile: $mobile,
+  tablet: $tablet,
+  tablet-lg: $tablet-lg,
+  laptop: $laptop,
+  desktop: $desktop,
+);
+
 @mixin media($breakpoint) {
-  @if $breakpoint == mobile {
-    @media (max-width: $mobile) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (max-width: #{map.get($breakpoints, $breakpoint)}) {
       @content;
     }
-  } @else if $breakpoint == tablet {
-    @media (max-width: $tablet) {
-      @content;
-    }
-  } @else if $breakpoint == tablet-lg {
-    @media (max-width: $tablet-lg) {
-      @content;
-    }
-  } @else if $breakpoint == laptop {
-    @media (max-width: $laptop) {
-      @content;
-    }
-  } @else if $breakpoint == desktop {
-    @media (max-width: $desktop) {
-      @content;
-    }
+  } @else {
+    @warn "Unknown breakpoint: #{$breakpoint}";
   }
 }

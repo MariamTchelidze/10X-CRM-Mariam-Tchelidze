@@ -1,0 +1,133 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+/* ==========================================================
+   Card
+========================================================== */
+
+.card {
+  background-color: $dark-bg-card;
+  border: 0.1rem solid $dark-border;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-sm;
+
+  overflow: hidden;
+
+  @include transition;
+
+  &:hover {
+    border-color: $dark-border-light;
+    box-shadow: $shadow-md;
+  }
+
+  &__header {
+    padding: $space-xl;
+
+    border-bottom: 0.1rem solid $dark-divider;
+  }
+
+  &__body {
+    padding: $space-xl;
+  }
+
+  &__footer {
+    padding: $space-xl;
+
+    border-top: 0.1rem solid $dark-divider;
+  }
+
+  &__title {
+    color: $dark-text-primary;
+    font-weight: $fw-semibold;
+  }
+
+  &__link {
+    color: $primary;
+    text-decoration: none;
+
+    @include transition;
+
+    &:hover {
+      color: $primary-hover;
+    }
+  }
+}
+
+/* ==========================================================
+   Statistics Card
+========================================================== */
+
+.stats-card {
+  background-color: $dark-bg-card;
+  border: 0.1rem solid $dark-border;
+
+  border-radius: $radius-xl;
+
+  box-shadow: $shadow-sm;
+
+  @include transition;
+
+  &:hover {
+    border-color: $dark-border-light;
+    box-shadow: $shadow-md;
+  }
+
+  &__content {
+    padding: $space-xl;
+
+    @include flex(column, null, flex-start, $space-sm);
+  }
+
+  &__icon {
+    @include flex(center, center);
+
+    width: 4.8rem;
+    height: 4.8rem;
+
+    border-radius: $radius-lg;
+
+    background-color: $animation-icon-bg;
+
+    color: $primary;
+  }
+
+  &__label {
+    color: $dark-text-secondary;
+    font-weight: $fw-medium;
+  }
+
+  &__value {
+    color: $dark-text-primary;
+    font-weight: $fw-bold;
+  }
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@include media(tablet) {
+  .card {
+    &__header,
+    &__body,
+    &__footer {
+      padding: $space-lg;
+    }
+  }
+
+  .stats-card {
+    &__content {
+      padding: $space-lg;
+    }
+  }
+}
+
+@include media(mobile) {
+  .card {
+    border-radius: $radius-lg;
+  }
+
+  .stats-card {
+    border-radius: $radius-lg;
+  }
+}
