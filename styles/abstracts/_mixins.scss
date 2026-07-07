@@ -84,6 +84,10 @@
     @media (max-width: $tablet) {
       @content;
     }
+  } @else if $breakpoint == tablet-lg {
+    @media (max-width: $tablet-lg) {
+      @content;
+    }
   } @else if $breakpoint == laptop {
     @media (max-width: $laptop) {
       @content;

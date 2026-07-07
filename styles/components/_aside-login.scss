@@ -11,8 +11,12 @@
   @include flex(column, center, center);
   padding: $space-3xl;
 
-  @include media($tablet-lg) {
-    display: none;
+  @include media(laptop) {
+    padding: $space-2xl;
+  }
+
+  @include media(tablet-lg) {
+    padding: $space-xl;
   }
 }
 
