@@ -1,0 +1,69 @@
+@use "../abstracts/variables" as *;
+
+/* ==========================================================
+   AUTH PAGE SWAP
+========================================================== */
+
+/* ---------- Base ---------- */
+
+.auth {
+  overflow: hidden;
+}
+
+.auth__content,
+.auth__visual {
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================
+   PAGE ENTER
+========================================================== */
+
+.auth__content {
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.auth__visual {
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================
+   PAGE LEAVE
+========================================================== */
+
+body.is-page-leaving {
+  pointer-events: none;
+
+  .auth__content {
+    transform: translate3d(-110%, 0, 0);
+  }
+
+  .auth__visual {
+    transform: translate3d(110%, 0, 0);
+  }
+}
+
+/* ==========================================================
+   KEYFRAMES
+========================================================== */
+
+@keyframes auth-content-enter {
+  from {
+    transform: translate3d(-8rem, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes auth-visual-enter {
+  from {
+    transform: translate3d(8rem, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}

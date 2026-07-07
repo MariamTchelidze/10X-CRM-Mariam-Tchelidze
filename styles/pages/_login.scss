@@ -3,11 +3,8 @@
 
 .auth {
   min-height: 100vh;
-
   @include flex(row, center, center);
-
-  padding: $space-2xl;
-
+  padding: $space-lg;
   background-color: $dark-bg-body;
 }
 
@@ -16,15 +13,10 @@
 
   width: 100%;
   max-width: 140rem;
-  min-height: 80rem;
-
   overflow: hidden;
-
   background-color: $dark-bg-surface;
-
   border: 0.1rem solid $dark-border;
   border-radius: $radius-2xl;
-
   box-shadow: $shadow-lg;
 }
 
