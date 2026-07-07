@@ -5,42 +5,33 @@
 .input {
   width: 100%;
   min-height: 5.8rem;
-
-  padding: 0.2rem;
-
-  border: 1px solid $glass-border;
-  border-radius: $radius-lg;
-
-  background-color: $dark-input-bg;
+  padding: 0 2rem;
+  border: 0.1rem solid $dark-border;
+  border-radius: $radius-xl;
+  background: $dark-bg-surface;
   color: $dark-text-primary;
-
-  font-size: 1.6rem;
-  font-family: inherit;
-
-  transition:
-    border-color $transition,
-    background-color $transition,
-    box-shadow $transition;
-
+  @include transition;
   &::placeholder {
+    font-size: 1.5rem;
     color: $dark-text-muted;
+    opacity: 1;
   }
 
   &:hover {
-    border-color: $secondary;
+    border-color: lighten($dark-border, 10%);
   }
 
   &:focus {
     outline: none;
-
     border-color: $primary;
-
     box-shadow: 0 0 0 0.3rem rgba($primary, 0.15);
+  }
+  &:focus::placeholder {
+    opacity: 0.55;
   }
 
   &:disabled {
     cursor: not-allowed;
-
     opacity: 0.6;
   }
 }
@@ -48,6 +39,10 @@
 // password:
 .password-field {
   position: relative;
+
+  & .input {
+    padding-right: 5rem;
+  }
 }
 
 .password-field__toggle {
@@ -69,10 +64,8 @@
 
 .input--error {
   border-color: $danger;
-
   &:focus {
     border-color: $danger;
-
     box-shadow: 0 0 0 0.3rem rgba($danger, 0.15);
   }
 }
@@ -81,10 +74,8 @@
 
 .input--success {
   border-color: $success;
-
   &:focus {
     border-color: $success;
-
     box-shadow: 0 0 0 0.3rem rgba($success, 0.15);
   }
 }

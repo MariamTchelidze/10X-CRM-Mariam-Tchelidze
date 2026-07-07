@@ -1,0 +1,50 @@
+@use "../abstracts/variables" as *;
+@use "../base/typography" as *;
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.auth__visual {
+  position: relative;
+  overflow: hidden;
+  @include flex(column, center, center);
+  background: $dark-bg-surface;
+  border-radius: $radius-2xl;
+}
+.auth-visual__gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 122, 0, 0.18), transparent 45%),
+    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.18), transparent 45%),
+    linear-gradient(160deg, $dark-bg-surface, $dark-bg-body);
+
+  z-index: 1;
+}
+.auth-visual__shape {
+  position: absolute;
+  border-radius: 50%;
+  backdrop-filter: blur(12px);
+  opacity: 0.4;
+  z-index: 2;
+}
+.auth-visual__shape--one {
+  width: 18rem;
+  height: 18rem;
+  top: 8%;
+  left: -4%;
+  background: $shape-primary;
+}
+.auth-visual__shape--two {
+  width: 12rem;
+  height: 12rem;
+  bottom: 18%;
+  right: 10%;
+  background: $shape-secondary;
+}
+.auth-visual__shape--three {
+  width: 8rem;
+  height: 8rem;
+  top: 60%;
+  left: 18%;
+  background: $shape-animation;
+}

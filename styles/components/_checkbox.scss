@@ -5,11 +5,8 @@
 
 .checkbox {
   @include flex(row, center, flex-start);
-
   gap: $space-sm;
-
   cursor: pointer;
-
   user-select: none;
 }
 
@@ -31,7 +28,7 @@
 }
 
 .checkbox__label {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: $fw-medium;
 
   color: $dark-text-secondary;

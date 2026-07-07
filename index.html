@@ -102,10 +102,12 @@
           <!-- Social Login -->
 
           <section class="social-login">
-            <button type="button" class="btn btn--google btn--full">
-              <img src="./assets/icons/google.svg" alt="" aria-hidden="true" class="btn__icon" />
+            <button type="button" class="btn btn--google">
+              <span class="btn__content">
+                <img src="./assets/icons/google.svg" alt="" class="btn__icon" />
 
-              <span class="btn__text"> Continue with Google </span>
+                <span>Continue with Google</span>
+              </span>
             </button>
           </section>
           <footer class="auth-footer">
@@ -116,7 +118,62 @@
             </p>
           </footer>
         </section>
-        <aside class="auth__visual"></aside>
+        <aside class="auth__visual">
+          <!-- Background Layer -->
+          <div class="auth-visual__gradient"></div>
+
+          <!-- Floating Shapes -->
+          <div class="auth-visual__shape auth-visual__shape--one"></div>
+
+          <div class="auth-visual__shape auth-visual__shape--two"></div>
+
+          <div class="auth-visual__shape auth-visual__shape--three"></div>
+
+          <!-- Glass CRM Preview Card -->
+          <article class="crm-card">
+            <header class="crm-card__header">
+              <p class="crm-card__subtitle">Today's Overview</p>
+
+              <h2 class="crm-card__title">
+                Your CRM is working
+                <br />
+                while you focus.
+              </h2>
+            </header>
+
+            <div class="crm-card__stats">
+              <div class="crm-card__stat">
+                <span class="crm-card__value">128</span>
+
+                <span class="crm-card__label">Active Clients</span>
+              </div>
+
+              <div class="crm-card__stat">
+                <span class="crm-card__value">24</span>
+
+                <span class="crm-card__label">Open Projects</span>
+              </div>
+
+              <div class="crm-card__stat">
+                <span class="crm-card__value">18</span>
+
+                <span class="crm-card__label">Meetings Today</span>
+              </div>
+            </div>
+
+            <div class="crm-card__progress">
+              <div class="crm-card__progress-header">
+                <span>Team Performance</span>
+
+                <span>96%</span>
+              </div>
+
+              <div class="crm-card__progress-bar">
+                <span class="crm-card__progress-fill"></span>
+              </div>
+            </div>
+          </article>
+        </aside>
       </div>
     </main>
     <script src="./js/auth/login.js"></script>

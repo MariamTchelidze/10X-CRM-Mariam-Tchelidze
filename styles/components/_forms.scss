@@ -7,9 +7,7 @@
   width: 100%;
   max-width: 48rem;
   margin-inline: auto;
-
   @include flex(column);
-
   gap: $space-xl;
 }
 
@@ -19,10 +17,8 @@
 
 .auth-form__label {
   margin-bottom: $space-xs;
-
   font-size: 1.4rem;
   font-weight: $fw-medium;
-
   color: $dark-text-secondary;
 }
 
@@ -31,17 +27,15 @@
   align-items: center;
   justify-content: space-between;
   gap: $space-md;
-
   margin-top: $space-xs;
   margin-bottom: $space-sm;
 }
 
 .auth-form__forgot {
   color: $secondary;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: $fw-medium;
   text-decoration: none;
-
   transition: color $transition;
 
   &:hover {

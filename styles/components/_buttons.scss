@@ -9,27 +9,21 @@
   align-items: center;
   justify-content: center;
   gap: $space-sm;
-
   padding: 1.2rem 2rem;
-
   border: none;
   border-radius: $radius-lg;
-
   cursor: pointer;
-
   font-family: inherit;
   font-size: 1.6rem;
   font-weight: $fw-semibold;
   text-decoration: none;
   white-space: nowrap;
-
   transition:
     background-color 0.25s ease,
     color 0.25s ease,
     border-color 0.25s ease,
     transform 0.25s ease,
     box-shadow 0.25s ease;
-
   user-select: none;
 
   &:focus-visible {
@@ -50,7 +44,6 @@
 .btn--primary {
   background-color: $primary;
   color: $soft-blue;
-
   box-shadow: $shadow-md;
 
   &:hover {
@@ -81,11 +74,8 @@
 
 .btn--outline {
   background: transparent;
-
   border: 1px solid $dark-border;
-
   color: $dark-text-primary;
-
   &:hover {
     border-color: $primary;
     color: $primary;
@@ -94,6 +84,7 @@
 
 .btn--google {
   @include flex(row, center, center, $space-2xl);
+  width: 100%;
   min-height: 5.8rem;
   background-color: transparent;
   border: 0.1rem solid $dark-border;
@@ -104,17 +95,22 @@
     width: auto;
   }
   &:hover {
-    background-color: rgba($secondary, 0.08);
-    border-color: $secondary;
+    border-color: $primary;
+    background: rgba($primary, 0.05);
+    transform: translateY(-2px);
   }
   &:active {
-    transform: scale(0.98);
+    transform: translateY(0);
   }
 }
-
+.btn__content {
+  @include flex(row, center, center);
+  width: 100%;
+  gap: $space-sm;
+}
 .btn--icon {
-  width: 4.4rem;
-  height: 4.4rem;
+  width: 2.2rem;
+  height: 2.2rem;
   padding: 0;
   border-radius: 50%;
 }
@@ -132,7 +128,6 @@
 .btn--danger {
   background: $status-blocked;
   color: $soft-blue;
-
   &:hover {
     filter: brightness(0.92);
   }
@@ -141,7 +136,6 @@
 .btn--success {
   background: $success;
   color: $soft-blue;
-
   &:hover {
     filter: brightness(0.92);
   }
