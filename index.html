@@ -119,45 +119,63 @@
           </footer>
         </section>
         <aside class="auth__visual">
-          <!-- Background Layer -->
+          <!-- Gradient -->
           <div class="auth-visual__gradient"></div>
 
           <!-- Floating Shapes -->
           <div class="auth-visual__shape auth-visual__shape--one"></div>
-
           <div class="auth-visual__shape auth-visual__shape--two"></div>
-
           <div class="auth-visual__shape auth-visual__shape--three"></div>
 
-          <!-- Glass CRM Preview Card -->
+          <!-- CRM Preview Card -->
           <article class="crm-card">
             <header class="crm-card__header">
-              <p class="crm-card__subtitle">Today's Overview</p>
+              <p class="crm-card__eyebrow">Today's Overview</p>
 
               <h2 class="crm-card__title">
-                Your CRM is working
-                <br />
-                while you focus.
+                Everything you need,<br />
+                all in one workspace.
               </h2>
             </header>
 
             <div class="crm-card__stats">
+              <!-- Clients -->
               <div class="crm-card__stat">
-                <span class="crm-card__value">128</span>
+                <div class="crm-card__icon">
+                  <img src="./assets/icons/users.svg" alt="" />
+                </div>
 
-                <span class="crm-card__label">Active Clients</span>
+                <div class="crm-card__info">
+                  <span class="crm-card__value">128</span>
+                  <span class="crm-card__label">Active Clients</span>
+                  <span class="crm-card__meta">+12 this week</span>
+                </div>
               </div>
 
+              <!-- Projects -->
               <div class="crm-card__stat">
-                <span class="crm-card__value">24</span>
+                <div class="crm-card__icon">
+                  <img src="./assets/icons/folder.svg" alt="" />
+                </div>
 
-                <span class="crm-card__label">Open Projects</span>
+                <div class="crm-card__info">
+                  <span class="crm-card__value">24</span>
+                  <span class="crm-card__label">Open Projects</span>
+                  <span class="crm-card__meta">3 due today</span>
+                </div>
               </div>
 
+              <!-- Meetings -->
               <div class="crm-card__stat">
-                <span class="crm-card__value">18</span>
+                <div class="crm-card__icon">
+                  <img src="./assets/icons/calendar.svg" alt="" />
+                </div>
 
-                <span class="crm-card__label">Meetings Today</span>
+                <div class="crm-card__info">
+                  <span class="crm-card__value">18</span>
+                  <span class="crm-card__label">Meetings Today</span>
+                  <span class="crm-card__meta">Next at 14:30</span>
+                </div>
               </div>
             </div>
 
@@ -171,6 +189,11 @@
               <div class="crm-card__progress-bar">
                 <span class="crm-card__progress-fill"></span>
               </div>
+            </div>
+            <div class="crm-card__status">
+              <span class="crm-card__status-dot"></span>
+
+              <span class="crm-card__status-text"> All systems operational </span>
             </div>
           </article>
         </aside>

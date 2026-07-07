@@ -364,6 +364,183 @@ body {
   }
 }
 /* --- abstract --- */
+.crm-card {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 36rem;
+  padding: 3rem;
+  border: 0.1rem solid rgba(255, 255, 255, 0.08);
+  border-radius: 2rem;
+  background: rgba(22, 31, 44, 0.72);
+  backdrop-filter: blur(2.4rem);
+  -webkit-backdrop-filter: blur(2.4rem);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.3), inset 0 0.1rem 0 rgba(255, 255, 255, 0.05);
+  animation: float-card 12s ease-in-out infinite;
+}
+
+.crm-card__header {
+  margin-bottom: 3rem;
+}
+
+.crm-card__eyebrow {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  color: #ff6b1a;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.crm-card__title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #f5f7fa;
+}
+
+.crm-card__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.crm-card__stat {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1.6rem;
+}
+
+.crm-card__icon {
+  width: 5rem;
+  height: 5rem;
+  flex-shrink: 0;
+  border-radius: 1.6rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.1rem solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.crm-card__icon img {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.crm-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.crm-card__value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f5f7fa;
+}
+
+.crm-card__label {
+  font-size: 1.4rem;
+  color: #bec8d3;
+}
+
+.crm-card__meta {
+  font-size: 1.2rem;
+  color: #ff6b1a;
+}
+
+.crm-card__progress {
+  margin-bottom: 2.8rem;
+}
+
+.crm-card__progress-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  color: #bec8d3;
+}
+
+.crm-card__progress-bar {
+  width: 100%;
+  height: 0.8rem;
+  overflow: hidden;
+  border-radius: 999rem;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.crm-card__progress-fill {
+  display: block;
+  width: 96%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ff6b1a, #ff6b1a);
+  animation: progress-fill 2.5s ease-out;
+}
+
+.crm-card__status {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.crm-card__status-dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #55b975;
+  box-shadow: 0 0 1rem rgba(61, 220, 132, 0.6);
+  animation: pulse 2s infinite;
+}
+
+.crm-card__status-text {
+  font-size: 1.3rem;
+  color: #bec8d3;
+}
+
+/* keyframe ANIMATIONS */
+@keyframes float-card {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes progress-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 96%;
+  }
+}
+/* --- abstract --- */
 .auth-form {
   width: 100%;
   max-width: 48rem;
@@ -710,53 +887,94 @@ body {
 .auth__visual {
   position: relative;
   overflow: hidden;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #16212e;
   border-radius: 2rem;
+  background: #1b2735;
 }
 
 .auth-visual__gradient {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top left, rgba(255, 122, 0, 0.18), transparent 45%), radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.18), transparent 45%), linear-gradient(160deg, #16212e, #101923);
   z-index: 1;
+  background: radial-gradient(circle at top left, rgba(255, 122, 0, 0.25), transparent 42%), radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.25), transparent 40%), linear-gradient(160deg, #1b2735, #16212e);
 }
 
 .auth-visual__shape {
   position: absolute;
   border-radius: 50%;
-  backdrop-filter: blur(12px);
-  opacity: 0.4;
+  filter: blur(0.2rem);
+  opacity: 0.65;
   z-index: 2;
 }
 
+/* ---------- Shape 1 ---------- */
 .auth-visual__shape--one {
   width: 18rem;
   height: 18rem;
   top: 8%;
   left: -4%;
   background: rgba(255, 122, 0, 0.25);
+  animation: float-one 12s ease-in-out infinite;
 }
 
+/* ---------- Shape 2 ---------- */
 .auth-visual__shape--two {
-  width: 12rem;
-  height: 12rem;
+  width: 13rem;
+  height: 13rem;
   bottom: 18%;
   right: 10%;
   background: rgba(56, 189, 248, 0.25);
+  animation: float-two 15s ease-in-out infinite;
 }
 
+/* ---------- Shape 3 ---------- */
 .auth-visual__shape--three {
   width: 8rem;
   height: 8rem;
-  top: 60%;
   left: 18%;
+  bottom: 28%;
   background: rgba(255, 255, 255, 0.08);
+  animation: float-three 18s ease-in-out infinite;
 }
 
+/*  ANIMATIONS*/
+@keyframes float-one {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-18px) translateX(12px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+@keyframes float-two {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(20px) translateX(-12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes float-three {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 /* --- layout --- */
 /* --- pages --- */
 /* --- abstract --- */

@@ -1,7 +1,9 @@
 @use "./variables" as *;
+@use "sass:math";
 /* --- clamp calculator for texts: font-size: clamp-rem(16, 2.5, 32); --- */
+
 @function clamp-rem($min, $preferred, $max) {
-  @return clamp(#{$min / 10}rem, #{$preferred}vw, #{$max / 10}rem);
+  @return clamp(#{math.div($min, 10)}rem, #{$preferred}vw, #{math.div($max, 10)}rem);
 }
 
 /* --- Display flex mixin --- */
