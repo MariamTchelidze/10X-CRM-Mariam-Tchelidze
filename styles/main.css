@@ -978,6 +978,14 @@ body[data-theme=light] .modal {
   text-align: center;
 }
 
+.auth-footer--split {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem 2.4rem;
+  flex-wrap: wrap;
+}
+
 .auth-footer__text {
   color: var(--color-text-secondary);
   font-size: 1.5rem;
@@ -1774,6 +1782,44 @@ body.is-swapping-to-login .auth__visual {
 @media (max-width: 768px) {
   .auth--signup .auth__content {
     order: 1;
+  }
+}
+/* --- abstract --- */
+.auth--forgot-password .auth__visual {
+  order: 1;
+}
+
+.auth--forgot-password .auth__content {
+  order: 2;
+}
+
+.forgot-password-form {
+  max-width: 48rem;
+}
+
+.auth-message {
+  width: 100%;
+  padding: 1.2rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.8rem;
+  background: var(--color-elevated);
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+.auth-message--success {
+  border-color: color-mix(in srgb, var(--color-success) 42%, var(--color-border));
+  background: color-mix(in srgb, var(--color-success) 14%, var(--color-elevated));
+  color: var(--color-success);
+}
+
+@media (max-width: 768px) {
+  .auth--forgot-password .auth__content {
+    order: 1;
+  }
+  .auth--forgot-password .auth__visual {
+    order: 2;
   }
 }
 /* --- abstract --- */
