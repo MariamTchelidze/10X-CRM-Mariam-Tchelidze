@@ -86,6 +86,20 @@
     applyTheme(currentTheme === THEMES.light ? THEMES.dark : THEMES.light);
   };
 
+  document.addEventListener("crm:theme:set", (event) => {
+    const requestedTheme = event.detail && event.detail.theme;
+
+    if (requestedTheme === THEMES.dark || requestedTheme === THEMES.light) {
+      applyTheme(requestedTheme);
+    }
+  });
+
+  window.crmTheme = {
+    applyTheme,
+    toggleTheme,
+    getTheme: () => (document.body.dataset.theme === THEMES.light ? THEMES.light : THEMES.dark),
+  };
+
   document.addEventListener("click", (event) => {
     const toggle = event.target.closest(".js-theme-toggle");
 

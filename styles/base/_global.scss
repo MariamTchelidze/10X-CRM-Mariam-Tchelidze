@@ -4,6 +4,18 @@ html {
   scroll-behavior: smooth;
 }
 
+html[data-font-size="small"] {
+  font-size: 58%;
+}
+
+html[data-font-size="medium"] {
+  font-size: 62.5%;
+}
+
+html[data-font-size="large"] {
+  font-size: 67.5%;
+}
+
 body {
   min-height: 100vh;
   background: var(--color-bg);
@@ -11,6 +23,15 @@ body {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+body[data-density="compact"] .app-main,
+body[data-density="compact"] .card__header,
+body[data-density="compact"] .card__body,
+body[data-density="compact"] .card__footer,
+body[data-density="compact"] .stats-card,
+body[data-density="compact"] .dashboard-panel-card {
+  padding: 1.6rem;
 }
 
 body,

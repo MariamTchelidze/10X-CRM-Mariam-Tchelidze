@@ -28,53 +28,160 @@
           <ul class="sidebar__menu">
             <li class="sidebar__item">
               <a href="./dashboard.html" class="sidebar__link sidebar__link--active" data-nav="dashboard" aria-current="page">
-                <img src="./assets/icons/dashboard.svg" alt="" class="sidebar__icon" />
+                <img
+                  src="./assets/icons/dashboard.svg"
+                  data-theme-src-dark="./assets/icons/dashboard.svg"
+                  data-theme-src-light="./assets/icons/dashboard-light-theme.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
                 <span>Dashboard</span>
               </a>
             </li>
             <li class="sidebar__item">
               <a href="./clients.html" class="sidebar__link" data-nav="clients">
-                <img src="./assets/icons/users.svg" alt="" class="sidebar__icon" />
+                <img
+                  src="./assets/icons/users.svg"
+                  data-theme-src-dark="./assets/icons/users.svg"
+                  data-theme-src-light="./assets/icons/users-light-mode.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
                 <span>Clients</span>
               </a>
             </li>
             <li class="sidebar__item">
               <a href="./profile.html" class="sidebar__link" data-nav="profile">
-                <img src="./assets/icons/user-profile.svg" alt="" class="sidebar__icon" />
+                <img
+                  src="./assets/icons/user-profile.svg"
+                  data-theme-src-dark="./assets/icons/user-profile.svg"
+                  data-theme-src-light="./assets/icons/user-profile-light-theme.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
                 <span>Profile</span>
+              </a>
+            </li>
+          </ul>
+
+          <div class="sidebar__divider" role="presentation"></div>
+          <p class="sidebar__group-label">Workspace</p>
+
+          <ul class="sidebar__menu sidebar__menu--secondary">
+            <li class="sidebar__item">
+              <a href="./dashboard.html#sales" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="sales">
+                <img
+                  src="./assets/icons/goals.svg"
+                  data-theme-src-dark="./assets/icons/goals.svg"
+                  data-theme-src-light="./assets/icons/goals-light-theme.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
+                <span>Sales</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./dashboard.html#reports" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="reports">
+                <img
+                  src="./assets/icons/statistics.svg"
+                  data-theme-src-dark="./assets/icons/statistics.svg"
+                  data-theme-src-light="./assets/icons/statistics-light-theme.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
+                <span>Reports</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./dashboard.html#favourites" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="favourites">
+                <img
+                  src="./assets/icons/star.svg"
+                  data-theme-src-dark="./assets/icons/star.svg"
+                  data-theme-src-light="./assets/icons/star-light-theme.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
+                <span>Favourites</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./dashboard.html#activity" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="activity">
+                <img
+                  src="./assets/icons/clock.svg"
+                  data-theme-src-dark="./assets/icons/clock.svg"
+                  data-theme-src-light="./assets/icons/clock-light-theme.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
+                <span>Activity</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./dashboard.html#files" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="files">
+                <img
+                  src="./assets/icons/folder.svg"
+                  data-theme-src-dark="./assets/icons/folder.svg"
+                  data-theme-src-light="./assets/icons/folder-light-theme.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
+                <span>Files</span>
               </a>
             </li>
           </ul>
         </nav>
 
         <div class="sidebar__footer">
+          <button
+            class="btn btn--ghost btn--full sidebar__settings-btn"
+            type="button"
+            data-modal-target="#settings-modal"
+            aria-haspopup="dialog"
+            aria-controls="settings-modal"
+          >
+            <img
+              src="./assets/icons/settings.svg"
+              data-theme-src-dark="./assets/icons/settings.svg"
+              data-theme-src-light="./assets/icons/settings-light-theme.svg"
+              alt=""
+              class="btn__icon"
+            />
+            <span>Settings</span>
+          </button>
+
           <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
             <span class="theme-toggle__track" aria-hidden="true">
-            <span class="theme-toggle__icon theme-toggle__icon--moon">
-              <img
-                src="./assets/icons/moon.svg"
-                data-theme-src-dark="./assets/icons/moon.svg"
-                data-theme-src-light="./assets/icons/moon-light-theme.svg"
-                alt=""
-              />
-            </span>
+              <span class="theme-toggle__icon theme-toggle__icon--moon">
+                <img
+                  src="./assets/icons/moon.svg"
+                  data-theme-src-dark="./assets/icons/moon.svg"
+                  data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                  alt=""
+                />
+              </span>
 
-            <span class="theme-toggle__icon theme-toggle__icon--sun">
-              <img
-                src="./assets/icons/sun.svg"
-                data-theme-src-dark="./assets/icons/sun.svg"
-                data-theme-src-light="./assets/icons/sun-light-theme.svg"
-                alt=""
-              />
-            </span>
+              <span class="theme-toggle__icon theme-toggle__icon--sun">
+                <img
+                  src="./assets/icons/sun.svg"
+                  data-theme-src-dark="./assets/icons/sun.svg"
+                  data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                  alt=""
+                />
+              </span>
 
-            <span class="theme-toggle__thumb"></span>
-          </span>
-          <span class="visually-hidden js-theme-label">Dark</span>
+              <span class="theme-toggle__thumb"></span>
+            </span>
+            <span class="visually-hidden js-theme-label">Dark</span>
           </button>
 
           <button class="btn btn--ghost btn--full js-logout-btn" id="logout-btn" type="button">
-            <img src="./assets/icons/log out.svg" alt="" class="btn__icon" />
+            <img
+              src="./assets/icons/log out.svg"
+              data-theme-src-dark="./assets/icons/log out.svg"
+              data-theme-src-light="./assets/icons/log out-light-theme.svg"
+              alt=""
+              class="btn__icon"
+            />
             <span>Logout</span>
           </button>
         </div>
@@ -98,6 +205,7 @@
           </div>
         </header>
 
+        <div class="dashboard-default-view js-dashboard-view" data-dashboard-view="overview">
         <section class="welcome-panel" aria-labelledby="welcome-title">
           <div>
             <p class="welcome-panel__subtitle">Welcome back,</p>
@@ -233,10 +341,382 @@
             </div>
           </article>
         </section>
-      </main>
+        </div>
+
+        <section class="dashboard-section js-dashboard-view" id="sales" data-dashboard-view="sales" aria-labelledby="sales-title" hidden>
+          <header class="dashboard-section__header">
+            <div>
+              <p class="card__eyebrow">Sales workspace</p>
+              <h2 class="dashboard-section__title" id="sales-title">Sales</h2>
+            </div>
+            <a href="./clients.html" class="btn btn--primary">
+              <img src="./assets/icons/add.svg" data-theme-src-dark="./assets/icons/add.svg" data-theme-src-light="./assets/icons/add-light-theme.svg" alt="" class="btn__icon" />
+              <span>Add Client</span>
+            </a>
+          </header>
+
+          <div class="dashboard-panel-grid">
+            <article class="dashboard-panel-card">
+              <img src="./assets/icons/goals.svg" data-theme-src-dark="./assets/icons/goals.svg" data-theme-src-light="./assets/icons/goals-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <span class="dashboard-panel-card__label">Monthly Target</span>
+              <strong class="dashboard-panel-card__value">$32,000</strong>
+              <p class="dashboard-panel-card__text">76% of target is already covered by active and won deals.</p>
+            </article>
+            <article class="dashboard-panel-card">
+              <img src="./assets/icons/users.svg" data-theme-src-dark="./assets/icons/users.svg" data-theme-src-light="./assets/icons/users-light-mode.svg" alt="" class="dashboard-panel-card__icon" />
+              <span class="dashboard-panel-card__label">Hot Leads</span>
+              <strong class="dashboard-panel-card__value">14</strong>
+              <p class="dashboard-panel-card__text">Leads with recent activity and high projected value.</p>
+            </article>
+            <article class="dashboard-panel-card">
+              <img src="./assets/icons/calendar.svg" data-theme-src-dark="./assets/icons/calendar.svg" data-theme-src-light="./assets/icons/calendar-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <span class="dashboard-panel-card__label">Follow-ups</span>
+              <strong class="dashboard-panel-card__value">7</strong>
+              <p class="dashboard-panel-card__text">Tasks that need attention today or tomorrow.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <header class="card__header">
+              <h3 class="card__title">Sales Focus</h3>
+            </header>
+            <div class="card__body dashboard-list">
+              <div class="dashboard-list__item">
+                <span class="status-badge status-badge--lead">Lead</span>
+                <strong>Alpha Group</strong>
+                <span>Prepare product demo and pricing notes.</span>
+              </div>
+              <div class="dashboard-list__item">
+                <span class="status-badge status-badge--contacted">Contacted</span>
+                <strong>Nino Consulting</strong>
+                <span>Send proposal update after discovery call.</span>
+              </div>
+              <div class="dashboard-list__item">
+                <span class="status-badge status-badge--won">Won</span>
+                <strong>Blue Tech</strong>
+                <span>Move handoff notes into files after onboarding.</span>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-section js-dashboard-view" id="reports" data-dashboard-view="reports" aria-labelledby="reports-title" hidden>
+          <header class="dashboard-section__header">
+            <div>
+              <p class="card__eyebrow">Reporting center</p>
+              <h2 class="dashboard-section__title" id="reports-title">Reports</h2>
+            </div>
+          </header>
+
+          <div class="dashboard-panel-grid">
+            <article class="dashboard-panel-card">
+              <img src="./assets/icons/statistics.svg" data-theme-src-dark="./assets/icons/statistics.svg" data-theme-src-light="./assets/icons/statistics-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <span class="dashboard-panel-card__label">Pipeline Health</span>
+              <strong class="dashboard-panel-card__value">96%</strong>
+              <p class="dashboard-panel-card__text">Balanced pipeline across lead, contacted, and won stages.</p>
+            </article>
+            <article class="dashboard-panel-card">
+              <img src="./assets/icons/data.svg" data-theme-src-dark="./assets/icons/data.svg" data-theme-src-light="./assets/icons/data-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <span class="dashboard-panel-card__label">Conversion</span>
+              <strong class="dashboard-panel-card__value">38%</strong>
+              <p class="dashboard-panel-card__text">Demo conversion placeholder for the future client data module.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <header class="card__header">
+              <h3 class="card__title">Saved Reports</h3>
+            </header>
+            <div class="card__body dashboard-list">
+              <div class="dashboard-list__item">
+                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <strong>Weekly Client Status</strong>
+                <span>Lead, contacted, won, and lost totals.</span>
+              </div>
+              <div class="dashboard-list__item">
+                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <strong>Sales Target Overview</strong>
+                <span>Revenue and target progress summary.</span>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-section js-dashboard-view" id="favourites" data-dashboard-view="favourites" aria-labelledby="favourites-title" hidden>
+          <header class="dashboard-section__header">
+            <div>
+              <p class="card__eyebrow">Pinned workspace</p>
+              <h2 class="dashboard-section__title" id="favourites-title">Favourites</h2>
+            </div>
+          </header>
+
+          <div class="dashboard-panel-grid">
+            <article class="dashboard-panel-card">
+              <img src="./assets/icons/stared.svg" data-theme-src-dark="./assets/icons/stared.svg" data-theme-src-light="./assets/icons/stared-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <span class="dashboard-panel-card__label">Pinned Clients</span>
+              <strong class="dashboard-panel-card__value">3</strong>
+              <p class="dashboard-panel-card__text">Important clients you want to reach quickly.</p>
+            </article>
+          </div>
+
+          <article class="card">
+            <header class="card__header">
+              <h3 class="card__title">Favourite Items</h3>
+            </header>
+            <div class="card__body dashboard-list">
+              <div class="dashboard-list__item">
+                <img src="./assets/icons/star.svg" data-theme-src-dark="./assets/icons/star.svg" data-theme-src-light="./assets/icons/star-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <strong>Blue Tech</strong>
+                <span>Won client with onboarding follow-up.</span>
+              </div>
+              <div class="dashboard-list__item">
+                <img src="./assets/icons/star.svg" data-theme-src-dark="./assets/icons/star.svg" data-theme-src-light="./assets/icons/star-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <strong>Nino Consulting</strong>
+                <span>Contacted account waiting for proposal confirmation.</span>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-section js-dashboard-view" id="activity" data-dashboard-view="activity" aria-labelledby="activity-title" hidden>
+          <header class="dashboard-section__header">
+            <div>
+              <p class="card__eyebrow">Timeline</p>
+              <h2 class="dashboard-section__title" id="activity-title">Activity</h2>
+            </div>
+          </header>
+
+          <article class="card">
+            <header class="card__header">
+              <h3 class="card__title">Recent Activity</h3>
+            </header>
+            <div class="card__body activity-timeline">
+              <div class="activity-timeline__item">
+                <img src="./assets/icons/check-symbol.svg" data-theme-src-dark="./assets/icons/check-symbol.svg" data-theme-src-light="./assets/icons/check-symbol-light-theme.svg" alt="" class="activity-timeline__icon" />
+                <div>
+                  <strong>Blue Tech moved to won.</strong>
+                  <span>Today, 09:20</span>
+                </div>
+              </div>
+              <div class="activity-timeline__item">
+                <img src="./assets/icons/chat.svg" data-theme-src-dark="./assets/icons/chat.svg" data-theme-src-light="./assets/icons/chat-light-theme.svg" alt="" class="activity-timeline__icon" />
+                <div>
+                  <strong>Nino Consulting note added.</strong>
+                  <span>Yesterday, 17:45</span>
+                </div>
+              </div>
+              <div class="activity-timeline__item">
+                <img src="./assets/icons/calendar.svg" data-theme-src-dark="./assets/icons/calendar.svg" data-theme-src-light="./assets/icons/calendar-light-theme.svg" alt="" class="activity-timeline__icon" />
+                <div>
+                  <strong>Alpha Group demo scheduled.</strong>
+                  <span>Yesterday, 12:10</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="dashboard-section js-dashboard-view" id="files" data-dashboard-view="files" aria-labelledby="files-title" hidden>
+          <header class="dashboard-section__header">
+            <div>
+              <p class="card__eyebrow">Account documents</p>
+              <h2 class="dashboard-section__title" id="files-title">Files</h2>
+            </div>
+            <button class="btn btn--ghost" type="button" disabled>
+              <img src="./assets/icons/upload.svg" data-theme-src-dark="./assets/icons/upload.svg" data-theme-src-light="./assets/icons/upload-light-theme.svg" alt="" class="btn__icon" />
+              <span>Upload later</span>
+            </button>
+          </header>
+
+          <article class="card">
+            <header class="card__header">
+              <h3 class="card__title">Imported Files</h3>
+            </header>
+            <div class="card__body file-list">
+              <article class="file-item">
+                <img src="./assets/icons/document.svg" data-theme-src-dark="./assets/icons/document.svg" data-theme-src-light="./assets/icons/document-light-theme.svg" alt="" class="file-item__icon" />
+                <div>
+                  <h3 class="file-item__title">10X-CRM-Exam-PRD.md</h3>
+                  <p class="file-item__meta">Project document • assets/document</p>
+                </div>
+              </article>
+              <article class="file-item">
+                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="file-item__icon" />
+                <div>
+                  <h3 class="file-item__title">ai-log.md</h3>
+                  <p class="file-item__meta">AI usage notes • assets/document</p>
+                </div>
+              </article>
+              <article class="file-item">
+                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="file-item__icon" />
+                <div>
+                  <h3 class="file-item__title">glossary.md</h3>
+                  <p class="file-item__meta">Technical English package • assets/document</p>
+                </div>
+              </article>
+              <article class="file-item">
+                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="file-item__icon" />
+                <div>
+                  <h3 class="file-item__title">research-note.md</h3>
+                  <p class="file-item__meta">Research source note • assets/document</p>
+                </div>
+              </article>
+            </div>
+          </article>
+        </section>      </main>
     </div>
 
+    <section
+      class="modal"
+      id="settings-modal"
+      aria-labelledby="settings-modal-title"
+      aria-describedby="settings-modal-description"
+      aria-hidden="true"
+      data-modal-initial-focus="#settings-theme-dark"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--settings" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">Application settings</p>
+            <h2 class="modal__title" id="settings-modal-title">Settings</h2>
+            <p class="modal__description" id="settings-modal-description">
+              Adjust the CRM appearance for this browser. These options are saved locally.
+            </p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close settings" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+
+        <form class="modal__body settings-grid js-settings-form">
+          <fieldset class="settings-group">
+            <legend class="settings-group__legend">Theme</legend>
+            <div class="settings-options settings-options--three">
+              <label class="settings-option" for="settings-theme-dark">
+                <input class="settings-option__input js-settings-theme" id="settings-theme-dark" type="radio" name="settings-theme" value="dark" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Dark</span>
+                  <span class="settings-option__text">Default CRM theme</span>
+                </span>
+              </label>
+              <label class="settings-option" for="settings-theme-light">
+                <input class="settings-option__input js-settings-theme" id="settings-theme-light" type="radio" name="settings-theme" value="light" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Light</span>
+                  <span class="settings-option__text">Bright workspace</span>
+                </span>
+              </label>
+              <label class="settings-option" for="settings-theme-custom">
+                <input class="settings-option__input js-settings-theme" id="settings-theme-custom" type="radio" name="settings-theme" value="custom" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Custom</span>
+                  <span class="settings-option__text">Use accent color</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-group">
+            <legend class="settings-group__legend">Font Size</legend>
+            <div class="settings-options settings-options--three">
+              <label class="settings-option" for="settings-font-small">
+                <input class="settings-option__input js-settings-font" id="settings-font-small" type="radio" name="settings-font-size" value="small" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Small</span>
+                  <span class="settings-option__text">Dense reading</span>
+                </span>
+              </label>
+              <label class="settings-option" for="settings-font-medium">
+                <input class="settings-option__input js-settings-font" id="settings-font-medium" type="radio" name="settings-font-size" value="medium" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Medium</span>
+                  <span class="settings-option__text">Recommended</span>
+                </span>
+              </label>
+              <label class="settings-option" for="settings-font-large">
+                <input class="settings-option__input js-settings-font" id="settings-font-large" type="radio" name="settings-font-size" value="large" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Large</span>
+                  <span class="settings-option__text">More readable</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-group">
+            <legend class="settings-group__legend">Layout Density</legend>
+            <div class="settings-options settings-options--two">
+              <label class="settings-option" for="settings-density-comfortable">
+                <input class="settings-option__input js-settings-density" id="settings-density-comfortable" type="radio" name="settings-density" value="comfortable" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Comfortable</span>
+                  <span class="settings-option__text">Roomier spacing</span>
+                </span>
+              </label>
+              <label class="settings-option" for="settings-density-compact">
+                <input class="settings-option__input js-settings-density" id="settings-density-compact" type="radio" name="settings-density" value="compact" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Compact</span>
+                  <span class="settings-option__text">More data on screen</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-group">
+            <legend class="settings-group__legend">Custom Accent</legend>
+            <div class="settings-color-row">
+              <label class="settings-color-field" for="settings-accent-color">
+                <span class="settings-color-field__label">Accent color</span>
+                <input class="settings-color-field__input js-settings-accent" id="settings-accent-color" type="color" value="#ff6b1a" />
+              </label>
+              <div class="settings-swatches" aria-label="Suggested accent colors">
+                <button class="settings-swatch" type="button" data-accent-color="#ff6b1a" style="--swatch-color: #ff6b1a">
+                  <span class="visually-hidden">Orange</span>
+                </button>
+                <button class="settings-swatch" type="button" data-accent-color="#4c8fea" style="--swatch-color: #4c8fea">
+                  <span class="visually-hidden">Blue</span>
+                </button>
+                <button class="settings-swatch" type="button" data-accent-color="#55b975" style="--swatch-color: #55b975">
+                  <span class="visually-hidden">Green</span>
+                </button>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-group">
+            <legend class="settings-group__legend">Language</legend>
+            <div class="settings-options settings-options--two">
+              <label class="settings-option" for="settings-language-en">
+                <input class="settings-option__input js-settings-language" id="settings-language-en" type="radio" name="settings-language" value="en" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">English</span>
+                  <span class="settings-option__text">Current default</span>
+                </span>
+              </label>
+              <label class="settings-option" for="settings-language-ka">
+                <input class="settings-option__input js-settings-language" id="settings-language-ka" type="radio" name="settings-language" value="ka" />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Georgian</span>
+                  <span class="settings-option__text">Prepared for translation</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </section>
+
     <script src="./js/ui/theme.js"></script>
+    <script src="./js/ui/modal.js"></script>
+    <script src="./js/ui/settings.js"></script>
+    <script src="./js/dashboard/sections.js"></script>
     <script src="./js/auth/logout.js"></script>
   </body>
 </html>
