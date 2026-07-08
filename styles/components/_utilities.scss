@@ -1,0 +1,7 @@
+@use "../abstracts/variables" as *;
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}

@@ -1,19 +1,27 @@
 "use strict";
 
-const pageLinks = document.querySelectorAll(".auth-footer__link");
+(function initAuthPageSwap() {
+  const links = document.querySelectorAll(".js-auth-link[data-auth-target]");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-pageLinks.forEach((link) => {
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
+  if (!links.length) return;
 
-    const destination = link.href;
+  links.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-    document.body.classList.add("is-page-leaving");
+      const target = link.dataset.authTarget;
+      const destination = link.href;
 
-    requestAnimationFrame(() => {
-      setTimeout(() => {
+      if (!target || prefersReducedMotion) return;
+
+      event.preventDefault();
+
+      document.body.classList.add("is-auth-swapping", `is-swapping-to-${target}`);
+
+      window.setTimeout(() => {
         window.location.href = destination;
-      }, 220);
+      }, 360);
     });
   });
-});
+})();

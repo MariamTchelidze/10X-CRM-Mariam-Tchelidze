@@ -1,0 +1,11 @@
+@use "../abstracts/variables" as *;
+
+.toast-container {
+  position: fixed;
+  right: $space-xl;
+  bottom: $space-xl;
+  z-index: $z-toast;
+  display: grid;
+  gap: $space-sm;
+  width: min(36rem, calc(100vw - 3.2rem));
+}

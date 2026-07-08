@@ -1,0 +1,49 @@
+@use "../abstracts/variables" as *;
+
+.status-badge,
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.5rem 1rem;
+  border: 0.1rem solid transparent;
+  border-radius: $radius-full;
+  font-size: 1.3rem;
+  font-weight: $fw-semibold;
+  white-space: nowrap;
+}
+
+.status-badge--lead {
+  background: rgb(97 166 248 / 14%);
+  color: var(--color-info);
+}
+
+.status-badge--contacted {
+  background: rgb(244 181 63 / 15%);
+  color: var(--color-warning);
+}
+
+.status-badge--won {
+  background: rgb(85 185 117 / 15%);
+  color: var(--color-success);
+}
+
+.status-badge--lost {
+  background: rgb(238 92 76 / 15%);
+  color: var(--color-danger);
+}
+
+.filter-chip {
+  cursor: pointer;
+  background: var(--color-card);
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.filter-chip:hover,
+.filter-chip--active {
+  border-color: var(--color-primary);
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+}

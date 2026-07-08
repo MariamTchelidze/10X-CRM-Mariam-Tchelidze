@@ -3,190 +3,189 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Login | 10X CRM</title>
-
     <link rel="icon" type="image/svg+xml" href="./assets/icons/Logo-dark-theme.svg" />
-
     <link rel="stylesheet" href="./styles/main.css" />
   </head>
 
-  <body>
-    <main class="auth">
+  <body class="theme-dark" data-theme="dark">
+    <main class="auth auth--login" data-auth-page="login">
+      <div class="auth__tools" aria-label="Page tools">
+        <button class="theme-toggle theme-toggle--compact js-theme-toggle" type="button" aria-label="Switch theme">
+          <span class="theme-toggle__track" aria-hidden="true">
+            <span class="theme-toggle__icon theme-toggle__icon--moon">
+              <img
+                src="./assets/icons/moon.svg"
+                data-theme-src-dark="./assets/icons/moon.svg"
+                data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__icon theme-toggle__icon--sun">
+              <img
+                src="./assets/icons/sun.svg"
+                data-theme-src-dark="./assets/icons/sun.svg"
+                data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden js-theme-label">Dark</span>
+        </button>
+      </div>
+
       <div class="auth__container">
-        <section class="auth__content">
-          <!-- Logo -->
-
-          <!-- <div class="auth-logo">
-            <a href="./dashboard.html" class="auth-logo__link">
-              <img src="./assets/icons/Logo-light-theme.svg" alt="10X CRM Logo" class="auth-logo__image" />
+        <aside class="auth__visual" aria-label="CRM preview">
+          <div class="auth__brand">
+            <a href="./dashboard.html" class="auth__brand-link" aria-label="10X CRM dashboard">
+              <img
+                src="./assets/icons/Logo-dark-theme.svg"
+                data-theme-src-dark="./assets/icons/Logo-dark-theme.svg"
+                data-theme-src-light="./assets/icons/Logo-light-theme.svg"
+                alt=""
+                class="auth__brand-logo"
+              />
+              <span class="auth__brand-name">10X CRM</span>
             </a>
-          </div> -->
+          </div>
 
-          <!-- Header -->
+          <section class="dashboard-preview">
+            <header class="dashboard-preview__header">
+              <span class="dashboard-preview__eyebrow">10X CRM</span>
+              <h2 class="dashboard-preview__title">Manage clients, projects, and daily sales flow in one workspace.</h2>
+              <p class="dashboard-preview__subtitle">
+                A clean CRM foundation with authentication, dashboard insights, client records, and profile settings.
+              </p>
+            </header>
 
-          <header class="auth-header">
-            <div class="auth-header__heading">
-              <h1 class="auth-header__title">Welcome Back</h1>
+            <div class="dashboard-preview__stats" aria-label="Preview statistics">
+              <article class="metric-card">
+                <img src="./assets/icons/users.svg" alt="" class="metric-card__icon" />
+                <div class="metric-card__content">
+                  <span class="metric-card__value">128</span>
+                  <span class="metric-card__label">Clients</span>
+                </div>
+              </article>
 
-              <img src="./assets/icons/welcome-back.svg" alt="" aria-hidden="true" class="auth-header__icon" />
+              <article class="metric-card">
+                <img src="./assets/icons/folder.svg" alt="" class="metric-card__icon" />
+                <div class="metric-card__content">
+                  <span class="metric-card__value">42</span>
+                  <span class="metric-card__label">Active deals</span>
+                </div>
+              </article>
+
+              <article class="metric-card">
+                <img src="./assets/icons/statistics.svg" alt="" class="metric-card__icon" />
+                <div class="metric-card__content">
+                  <span class="metric-card__value">96%</span>
+                  <span class="metric-card__label">Pipeline health</span>
+                </div>
+              </article>
             </div>
 
-            <p class="auth-header__subtitle">Sign in to continue managing your clients, projects and daily workflow.</p>
+            <section class="dashboard-preview__performance" aria-label="Pipeline preview">
+              <div class="dashboard-preview__performance-header">
+                <span>Monthly target</span>
+                <strong>76%</strong>
+              </div>
+              <div class="dashboard-preview__progress" aria-hidden="true">
+                <span class="dashboard-preview__progress-fill"></span>
+              </div>
+            </section>
+          </section>
+        </aside>
+
+        <section class="auth__content" aria-labelledby="login-title">
+          <header class="auth-header">
+            <div class="auth-header__heading">
+              <h1 class="auth-header__title" id="login-title">Welcome Back</h1>
+              <img
+                src="./assets/icons/welcome-back.svg"
+                data-theme-src-dark="./assets/icons/welcome-back.svg"
+                data-theme-src-light="./assets/icons/Welcome-back-light-mode.svg"
+                alt=""
+                aria-hidden="true"
+                class="auth-header__icon"
+              />
+            </div>
+            <p class="auth-header__subtitle">Sign in to continue managing clients, projects, and daily workflow.</p>
           </header>
 
-          <!-- Login Form -->
-
-          <form class="auth-form js-login-form" autocomplete="on">
-            <!-- Email -->
-
+          <form class="auth-form js-login-form" id="login-form" autocomplete="on" novalidate>
             <div class="auth-form__group">
-              <label for="email" class="auth-form__label"> Email Address </label>
-
+              <label for="login-email" class="auth-form__label">Email Address</label>
               <input
                 type="email"
-                id="email"
+                id="login-email"
+                name="email"
                 class="input js-email"
                 placeholder="Enter your email"
                 autocomplete="email"
                 required
               />
+              <p class="form-error" id="login-email-error" data-error-for="login-email" hidden></p>
             </div>
 
-            <!-- Password -->
-
             <div class="auth-form__group">
-              <label for="password" class="auth-form__label"> Password </label>
-
+              <label for="login-password" class="auth-form__label">Password</label>
               <div class="password-field">
                 <input
                   type="password"
-                  id="password"
+                  id="login-password"
+                  name="password"
                   class="input js-password"
                   placeholder="Enter your password"
                   autocomplete="current-password"
                   required
                 />
-
-                <button type="button" class="password-field__toggle js-password-toggle" aria-label="Show password">
+                <button type="button" class="password-field__toggle js-password-toggle" data-password-toggle aria-label="Show password">
                   <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
                 </button>
               </div>
+              <p class="form-error" id="login-password-error" data-error-for="login-password" hidden></p>
             </div>
-
-            <!-- Remember -->
 
             <div class="auth-form__options">
               <label class="checkbox">
-                <input type="checkbox" class="checkbox__input js-remember" />
-
-                <span class="checkbox__box"></span>
-
-                <span class="checkbox__label"> Remember me </span>
+                <input type="checkbox" class="checkbox__input js-remember" name="remember" />
+                <span class="checkbox__box" aria-hidden="true"></span>
+                <span class="checkbox__label">Remember me</span>
               </label>
 
-              <a href="#" class="auth-form__forgot"> Forgot Password? </a>
+              <a href="#" class="auth-form__forgot">Forgot Password?</a>
             </div>
-
-            <!-- Submit -->
 
             <button type="submit" class="btn btn--primary btn--full js-login-btn">Sign In</button>
           </form>
 
-          <!-- Divider -->
-
-          <div class="auth-divider">
-            <span class="auth-divider__text"> OR </span>
+          <div class="auth-divider" aria-hidden="true">
+            <span class="auth-divider__text">or</span>
           </div>
 
-          <!-- Social Login -->
-
-          <section class="social-login">
+          <section class="social-login" aria-label="Social login">
             <button type="button" class="btn btn--google">
               <span class="btn__content">
                 <img src="./assets/icons/google.svg" alt="" class="btn__icon" />
-
                 <span>Continue with Google</span>
               </span>
             </button>
           </section>
+
           <footer class="auth-footer">
             <p class="auth-footer__text">
-              Don't have an account?
-
-              <a href="signup.html" class="auth-footer__link"> Sign Up </a>
+              Do not have an account?
+              <a href="./signup.html" class="auth-footer__link js-auth-link" data-auth-target="signup">Sign Up</a>
             </p>
           </footer>
         </section>
-        <aside class="auth__visual">
-          <div class="auth-visual__gradient"></div>
-
-          <section class="dashboard-preview">
-            <header class="dashboard-preview__header">
-              <span class="dashboard-preview__eyebrow"> 10X CRM </span>
-
-              <h2 class="dashboard-preview__title">Manage clients, projects and growth from one place.</h2>
-
-              <p class="dashboard-preview__subtitle">
-                Stay organized and keep your team focused with a clean workspace.
-              </p>
-            </header>
-
-            <section class="dashboard-preview__stats">
-              <article class="metric-card">
-                <div class="metric-card__icon">
-                  <img src="./assets/icons/users.svg" alt="" />
-                </div>
-
-                <div class="metric-card__content">
-                  <span class="metric-card__value">128</span>
-                  <span class="metric-card__label">Active Clients</span>
-                </div>
-              </article>
-
-              <article class="metric-card">
-                <div class="metric-card__icon">
-                  <img src="./assets/icons/folder.svg" alt="" />
-                </div>
-
-                <div class="metric-card__content">
-                  <span class="metric-card__value">24</span>
-                  <span class="metric-card__label">Open Projects</span>
-                </div>
-              </article>
-
-              <article class="metric-card">
-                <div class="metric-card__icon">
-                  <img src="./assets/icons/calendar.svg" alt="" />
-                </div>
-
-                <div class="metric-card__content">
-                  <span class="metric-card__value">18</span>
-                  <span class="metric-card__label">Meetings Today</span>
-                </div>
-              </article>
-            </section>
-
-            <section class="dashboard-preview__performance">
-              <div class="dashboard-preview__performance-header">
-                <span>Team Performance</span>
-                <span>96%</span>
-              </div>
-
-              <div class="dashboard-preview__progress">
-                <span class="dashboard-preview__progress-fill"></span>
-              </div>
-            </section>
-
-            <footer class="dashboard-preview__footer">
-              <span class="dashboard-preview__status-dot"></span>
-
-              <span class="dashboard-preview__status-text"> All systems operational </span>
-            </footer>
-          </section>
-        </aside>
       </div>
     </main>
+
+    <script src="./js/ui/theme.js"></script>
     <script src="./js/components/passwordToggle.js"></script>
     <script src="./js/components/pageSwap.js"></script>
   </body>

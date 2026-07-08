@@ -1,0 +1,29 @@
+:root,
+body[data-theme="dark"],
+body.theme-dark {
+  color-scheme: dark;
+  --color-primary: #ff6b1a;
+  --color-primary-hover: #ff8338;
+  --color-secondary: #4c8fea;
+  --color-bg: #101923;
+  --color-surface: #16212e;
+  --color-card: #1b2735;
+  --color-elevated: #202e3e;
+  --color-sidebar: #14202c;
+  --color-border: #2a3b4e;
+  --color-border-strong: #3a4f6c;
+  --color-divider: #233241;
+  --color-text: #f5f7fa;
+  --color-text-secondary: #bec8d3;
+  --color-text-muted: #8692a0;
+  --color-input-bg: #1e2b39;
+  --color-nav-hover: #233444;
+  --color-soft-primary: rgb(255 107 26 / 14%);
+  --color-soft-secondary: rgb(76 143 234 / 14%);
+  --color-success: #55b975;
+  --color-warning: #f4b53f;
+  --color-danger: #ee5c4c;
+  --color-info: #61a6f8;
+  --shadow-card: 0 1rem 3rem rgb(0 0 0 / 18%);
+  --shadow-soft: 0 0.8rem 2rem rgb(0 0 0 / 14%);
+}

@@ -1,40 +1,58 @@
 @use "../abstracts/variables" as *;
-@use "../base/typography" as *;
 @use "../abstracts/mixins" as *;
 
 .auth__visual {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: $space-3xl;
   overflow: hidden;
-  isolation: isolate;
-  border-radius: $radius-2xl;
-  background: $dark-bg-surface;
-  @include flex(column, center, center);
+  min-height: 68rem;
   padding: $space-3xl;
+  background:
+    linear-gradient(135deg, rgb(255 107 26 / 16%), transparent 38%),
+    linear-gradient(180deg, var(--color-elevated), var(--color-surface));
+}
 
-  @include media(laptop) {
+.auth__brand {
+  position: relative;
+  z-index: 1;
+}
+
+.auth__brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-md;
+  padding: 0.8rem 1.4rem 0.8rem 0.9rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-full;
+  background: rgb(255 255 255 / 6%);
+  box-shadow: var(--shadow-soft);
+}
+
+.auth__brand-logo {
+  width: 5.6rem;
+  height: 5.6rem;
+  flex: 0 0 auto;
+}
+
+.auth__brand-name {
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  font-weight: $fw-bold;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@include media(laptop) {
+  .auth__visual {
     padding: $space-2xl;
   }
+}
 
-  @include media(tablet-lg) {
-    padding: $space-xl;
+@include media(tablet) {
+  .auth__visual {
+    display: none;
   }
-}
-
-.auth-visual__gradient {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(circle at 12% 12%, $shape-primary 0%, transparent 28%),
-    radial-gradient(circle at 88% 82%, $shape-secondary 0%, transparent 26%),
-    linear-gradient(180deg, $dark-bg-surface 0%, $dark-bg-body 100%);
-}
-
-.auth__visual::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.15));
-  pointer-events: none;
 }

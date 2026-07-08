@@ -3,280 +3,240 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>Dashboard | 10X CRM</title>
-
     <link rel="icon" type="image/svg+xml" href="./assets/icons/Logo-dark-theme.svg" />
-
     <link rel="stylesheet" href="./styles/main.css" />
   </head>
 
-  <body class="theme-dark">
-    <!-- =========================================================
-         Toast Notifications
-    ========================================================== -->
-
+  <body class="theme-dark" data-theme="dark" data-page="dashboard">
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- =========================================================
-         Dashboard Layout
-    ========================================================== -->
-
-    <div class="dashboard-layout">
-      <!-- ===========================================
-             Sidebar
-        ============================================ -->
-
-      <aside class="sidebar">
-        <!-- Brand -->
-
-        <a href="dashboard.html" class="sidebar__brand">
-          <span class="sidebar__logo"> 10X </span>
-
-          <span class="sidebar__title"> CRM </span>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
+          <img
+            src="./assets/icons/Logo-dark-theme.svg"
+            data-theme-src-dark="./assets/icons/Logo-dark-theme.svg"
+            data-theme-src-light="./assets/icons/Logo-light-theme.svg"
+            alt=""
+            class="sidebar__logo-image"
+          />
+          <span class="sidebar__brand-text">10X CRM</span>
         </a>
 
-        <!-- Navigation -->
-
-        <nav class="sidebar__navigation" aria-label="Main Navigation">
+        <nav class="sidebar__navigation" aria-label="Main navigation">
           <ul class="sidebar__menu">
             <li class="sidebar__item">
-              <a
-                href="dashboard.html"
-                class="sidebar__link sidebar__link--active"
-                data-nav="dashboard"
-                aria-current="page"
-              >
-                Dashboard
+              <a href="./dashboard.html" class="sidebar__link sidebar__link--active" data-nav="dashboard" aria-current="page">
+                <img src="./assets/icons/dashboard.svg" alt="" class="sidebar__icon" />
+                <span>Dashboard</span>
               </a>
             </li>
-
             <li class="sidebar__item">
-              <a href="clients.html" class="sidebar__link" data-nav="clients"> Clients </a>
+              <a href="./clients.html" class="sidebar__link" data-nav="clients">
+                <img src="./assets/icons/users.svg" alt="" class="sidebar__icon" />
+                <span>Clients</span>
+              </a>
             </li>
-
             <li class="sidebar__item">
-              <a href="profile.html" class="sidebar__link" data-nav="profile"> Profile </a>
+              <a href="./profile.html" class="sidebar__link" data-nav="profile">
+                <img src="./assets/icons/user-profile.svg" alt="" class="sidebar__icon" />
+                <span>Profile</span>
+              </a>
             </li>
           </ul>
         </nav>
 
-        <!-- Sidebar Footer -->
-
         <div class="sidebar__footer">
-          <button class="theme-switch" id="theme-toggle" type="button" aria-label="Toggle theme">Dark Mode</button>
+          <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
+            <span class="theme-toggle__track" aria-hidden="true">
+            <span class="theme-toggle__icon theme-toggle__icon--moon">
+              <img
+                src="./assets/icons/moon.svg"
+                data-theme-src-dark="./assets/icons/moon.svg"
+                data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                alt=""
+              />
+            </span>
 
-          <button class="button button--ghost sidebar__logout" id="logout-btn" type="button">Logout</button>
+            <span class="theme-toggle__icon theme-toggle__icon--sun">
+              <img
+                src="./assets/icons/sun.svg"
+                data-theme-src-dark="./assets/icons/sun.svg"
+                data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden js-theme-label">Dark</span>
+          </button>
+
+          <button class="btn btn--ghost btn--full js-logout-btn" id="logout-btn" type="button">
+            <img src="./assets/icons/log out.svg" alt="" class="btn__icon" />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
-      <!-- Mobile sidebar -->
-      <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-      <!-- ===========================================
-             Main Content
-        ============================================ -->
+      <main class="app-main dashboard-page">
+        <header class="app-header">
+          <div class="app-header__content">
+            <div>
+              <p class="app-header__eyebrow">Overview</p>
+              <h1 class="app-header__title">Dashboard</h1>
+            </div>
 
-      <main class="dashboard">
-        <div class="dashboard__container">
-          <!-- =========================================================
-             Dashboard Header
-        ========================================================== -->
+            <div class="app-header__actions">
+              <div class="date-card" aria-live="polite">
+                <span class="date-card__label">Today</span>
+                <time class="date-card__value" id="dashboard-date" datetime="2026-07-08">July 08, 2026</time>
+                <span class="date-card__clock" id="dashboard-clock">09:30</span>
+              </div>
+            </div>
+          </div>
+        </header>
 
-          <header class="dashboard-header">
-            <div class="dashboard-header__content">
-              <div class="dashboard-header__title-group">
-                <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Open navigation">
-                  ☰
-                </button>
+        <section class="welcome-panel" aria-labelledby="welcome-title">
+          <div>
+            <p class="welcome-panel__subtitle">Welcome back,</p>
+            <h2 class="welcome-panel__title" id="welcome-title">
+              <span id="dashboard-greeting">Mariam</span>
+            </h2>
+            <p class="welcome-panel__description">Here is a clean snapshot of client activity and sales progress.</p>
+          </div>
 
-                <h1 class="dashboard-header__title">Dashboard</h1>
+          <a href="./clients.html" class="btn btn--primary">Manage Clients</a>
+        </section>
+
+        <section class="stats-grid" aria-label="Dashboard statistics">
+          <article class="stats-card" data-stat="clients">
+            <img src="./assets/icons/users.svg" alt="" class="stats-card__icon" />
+            <p class="stats-card__label">Total Clients</p>
+            <strong class="stats-card__value" id="stats-total">128</strong>
+            <span class="stats-card__trend">12 new this week</span>
+          </article>
+
+          <article class="stats-card" data-stat="active">
+            <img src="./assets/icons/folder.svg" alt="" class="stats-card__icon" />
+            <p class="stats-card__label">Active Deals</p>
+            <strong class="stats-card__value" id="stats-active">42</strong>
+            <span class="stats-card__trend">8 need follow-up</span>
+          </article>
+
+          <article class="stats-card" data-stat="revenue">
+            <img src="./assets/icons/statistics.svg" alt="" class="stats-card__icon" />
+            <p class="stats-card__label">Won Revenue</p>
+            <strong class="stats-card__value" id="stats-revenue">$24,500</strong>
+            <span class="stats-card__trend">18 closed deals</span>
+          </article>
+
+          <article class="stats-card" data-stat="pending">
+            <img src="./assets/icons/clock.svg" alt="" class="stats-card__icon" />
+            <p class="stats-card__label">Pending Tasks</p>
+            <strong class="stats-card__value" id="stats-pending">7</strong>
+            <span class="stats-card__trend">3 due today</span>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="card pipeline-card" aria-labelledby="pipeline-title">
+            <header class="card__header">
+              <div>
+                <p class="card__eyebrow">Pipeline</p>
+                <h2 class="card__title" id="pipeline-title">Status Overview</h2>
+              </div>
+            </header>
+
+            <div class="card__body pipeline-list" id="pipeline-overview">
+              <div class="pipeline-item" data-status="lead">
+                <div class="pipeline-item__info">
+                  <span class="pipeline-item__label">Lead</span>
+                  <strong class="pipeline-item__count" id="pipeline-lead">48</strong>
+                </div>
+                <div class="pipeline-item__track" aria-hidden="true">
+                  <span class="pipeline-item__fill" id="pipeline-lead-fill" style="width: 90%"></span>
+                </div>
               </div>
 
-              <div class="dashboard-header__actions">
-                <div class="dashboard-header__datetime" aria-live="polite">
-                  <span class="dashboard-header__date" id="dashboard-date"> July 07, 2026 </span>
+              <div class="pipeline-item" data-status="contacted">
+                <div class="pipeline-item__info">
+                  <span class="pipeline-item__label">Contacted</span>
+                  <strong class="pipeline-item__count" id="pipeline-contacted">31</strong>
+                </div>
+                <div class="pipeline-item__track" aria-hidden="true">
+                  <span class="pipeline-item__fill" id="pipeline-contacted-fill" style="width: 70%"></span>
+                </div>
+              </div>
 
-                  <span class="dashboard-header__clock" id="dashboard-clock"> 19:34:25 </span>
+              <div class="pipeline-item" data-status="won">
+                <div class="pipeline-item__info">
+                  <span class="pipeline-item__label">Won</span>
+                  <strong class="pipeline-item__count" id="pipeline-won">18</strong>
+                </div>
+                <div class="pipeline-item__track" aria-hidden="true">
+                  <span class="pipeline-item__fill" id="pipeline-won-fill" style="width: 45%"></span>
+                </div>
+              </div>
+
+              <div class="pipeline-item" data-status="lost">
+                <div class="pipeline-item__info">
+                  <span class="pipeline-item__label">Lost</span>
+                  <strong class="pipeline-item__count" id="pipeline-lost">7</strong>
+                </div>
+                <div class="pipeline-item__track" aria-hidden="true">
+                  <span class="pipeline-item__fill" id="pipeline-lost-fill" style="width: 20%"></span>
                 </div>
               </div>
             </div>
-          </header>
+          </article>
 
-          <!-- =========================================================
-             Welcome
-        ========================================================== -->
-
-          <section class="welcome" aria-labelledby="welcome-title">
-            <div class="welcome__content">
-              <p class="welcome__subtitle">Welcome back,</p>
-
-              <h2 class="welcome__title" id="welcome-title">
-                <span id="dashboard-greeting"> Mariam </span>
-
-                👋
-              </h2>
-
-              <p class="welcome__description">Here's an overview of your CRM today.</p>
-            </div>
-          </section>
-
-          <!-- =========================================================
-             Statistics
-        ========================================================== -->
-
-          <section class="dashboard-stats" aria-label="Dashboard Statistics">
-            <!-- Total Clients -->
-
-            <article class="stats-card" data-stat="clients">
-              <div class="stats-card__content">
-                <div class="stats-card__icon">
-                  <!-- Icon -->
-                </div>
-
-                <p class="stats-card__label">Total Clients</p>
-
-                <h3 class="stats-card__value" id="stats-total">0</h3>
-              </div>
-            </article>
-
-            <!-- Active Deals -->
-
-            <article class="stats-card" data-stat="active">
-              <div class="stats-card__content">
-                <div class="stats-card__icon">
-                  <!-- Icon -->
-                </div>
-
-                <p class="stats-card__label">Active Deals</p>
-
-                <h3 class="stats-card__value" id="stats-active">0</h3>
-              </div>
-            </article>
-
-            <!-- Won Revenue -->
-
-            <article class="stats-card" data-stat="revenue">
-              <div class="stats-card__content">
-                <div class="stats-card__icon">
-                  <!-- Icon -->
-                </div>
-
-                <p class="stats-card__label">Won Revenue</p>
-
-                <h3 class="stats-card__value" id="stats-revenue">$0</h3>
-              </div>
-            </article>
-
-            <!-- New This Week -->
-
-            <article class="stats-card" data-stat="weekly">
-              <div class="stats-card__content">
-                <div class="stats-card__icon">
-                  <!-- Icon -->
-                </div>
-
-                <p class="stats-card__label">New This Week</p>
-
-                <h3 class="stats-card__value" id="stats-week">0</h3>
-              </div>
-            </article>
-          </section>
-
-          <!-- =========================================================
-             Dashboard Widgets
-        ========================================================== -->
-
-          <section class="dashboard-widgets">
-            <!-- ===========================================
-                 Pipeline Overview
-            ============================================ -->
-
-            <article class="card pipeline" aria-labelledby="pipeline-title">
-              <header class="card__header">
-                <h2 class="card__title" id="pipeline-title">Pipeline Overview</h2>
-              </header>
-
-              <div class="card__body" id="pipeline-overview">
-                <!-- Lead -->
-
-                <div class="pipeline__item" data-status="lead">
-                  <div class="pipeline__info">
-                    <span class="pipeline__label"> Lead </span>
-
-                    <span class="pipeline__count" id="pipeline-lead"> 0 </span>
-                  </div>
-
-                  <div class="pipeline__progress">
-                    <div class="pipeline__fill" id="pipeline-lead-fill"></div>
-                  </div>
-                </div>
-
-                <!-- Contacted -->
-
-                <div class="pipeline__item" data-status="contacted">
-                  <div class="pipeline__info">
-                    <span class="pipeline__label"> Contacted </span>
-
-                    <span class="pipeline__count" id="pipeline-contacted"> 0 </span>
-                  </div>
-
-                  <div class="pipeline__progress">
-                    <div class="pipeline__fill" id="pipeline-contacted-fill"></div>
-                  </div>
-                </div>
-
-                <!-- Won -->
-
-                <div class="pipeline__item" data-status="won">
-                  <div class="pipeline__info">
-                    <span class="pipeline__label"> Won </span>
-
-                    <span class="pipeline__count" id="pipeline-won"> 0 </span>
-                  </div>
-
-                  <div class="pipeline__progress">
-                    <div class="pipeline__fill" id="pipeline-won-fill"></div>
-                  </div>
-                </div>
-
-                <!-- Lost -->
-
-                <div class="pipeline__item" data-status="lost">
-                  <div class="pipeline__info">
-                    <span class="pipeline__label"> Lost </span>
-
-                    <span class="pipeline__count" id="pipeline-lost"> 0 </span>
-                  </div>
-
-                  <div class="pipeline__progress">
-                    <div class="pipeline__fill" id="pipeline-lost-fill"></div>
-                  </div>
-                </div>
-              </div>
-            </article>
-
-            <!-- ===========================================
-                 Recent Clients
-            ============================================ -->
-
-            <article class="card recent-clients" aria-labelledby="recent-clients-title">
-              <header class="card__header">
+          <article class="card recent-clients" aria-labelledby="recent-clients-title">
+            <header class="card__header card__header--split">
+              <div>
+                <p class="card__eyebrow">Recent activity</p>
                 <h2 class="card__title" id="recent-clients-title">Recent Clients</h2>
-              </header>
-
-              <div class="card__body">
-                <div class="recent-clients__list" id="recent-clients-list">
-                  <!-- Client cards rendered by JavaScript -->
-                </div>
               </div>
+              <a href="./clients.html" class="card__link" id="view-all-clients">View all</a>
+            </header>
 
-              <footer class="card__footer">
-                <a href="clients.html" class="card__link" id="view-all-clients"> View All Clients → </a>
-              </footer>
-            </article>
-          </section>
-        </div>
+            <div class="card__body">
+              <div class="recent-clients__list" id="recent-clients-list" data-render-target="recent-clients">
+                <article class="recent-client" data-client-id="demo-1">
+                  <div class="recent-client__avatar" aria-hidden="true">NC</div>
+                  <div class="recent-client__info">
+                    <h3 class="recent-client__name">Nino Consulting</h3>
+                    <p class="recent-client__company">Enterprise account</p>
+                  </div>
+                  <span class="status-badge status-badge--contacted">Contacted</span>
+                </article>
+
+                <article class="recent-client" data-client-id="demo-2">
+                  <div class="recent-client__avatar" aria-hidden="true">AG</div>
+                  <div class="recent-client__info">
+                    <h3 class="recent-client__name">Alpha Group</h3>
+                    <p class="recent-client__company">Product demo booked</p>
+                  </div>
+                  <span class="status-badge status-badge--lead">Lead</span>
+                </article>
+
+                <article class="recent-client" data-client-id="demo-3">
+                  <div class="recent-client__avatar" aria-hidden="true">BT</div>
+                  <div class="recent-client__info">
+                    <h3 class="recent-client__name">Blue Tech</h3>
+                    <p class="recent-client__company">Contract signed</p>
+                  </div>
+                  <span class="status-badge status-badge--won">Won</span>
+                </article>
+              </div>
+            </div>
+          </article>
+        </section>
       </main>
     </div>
+
+    <script src="./js/ui/theme.js"></script>
+    <script src="./js/auth/logout.js"></script>
   </body>
 </html>

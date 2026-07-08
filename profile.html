@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile | 10X CRM</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/icons/Logo-dark-theme.svg" />
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+
+  <body class="theme-dark" data-theme="dark" data-page="profile">
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
+          <img
+            src="./assets/icons/Logo-dark-theme.svg"
+            data-theme-src-dark="./assets/icons/Logo-dark-theme.svg"
+            data-theme-src-light="./assets/icons/Logo-light-theme.svg"
+            alt=""
+            class="sidebar__logo-image"
+          />
+          <span class="sidebar__brand-text">10X CRM</span>
+        </a>
+
+        <nav class="sidebar__navigation" aria-label="Main navigation">
+          <ul class="sidebar__menu">
+            <li class="sidebar__item">
+              <a href="./dashboard.html" class="sidebar__link" data-nav="dashboard">
+                <img src="./assets/icons/dashboard.svg" alt="" class="sidebar__icon" />
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./clients.html" class="sidebar__link" data-nav="clients">
+                <img src="./assets/icons/users.svg" alt="" class="sidebar__icon" />
+                <span>Clients</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./profile.html" class="sidebar__link sidebar__link--active" data-nav="profile" aria-current="page">
+                <img src="./assets/icons/user-profile.svg" alt="" class="sidebar__icon" />
+                <span>Profile</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar__footer">
+          <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
+            <span class="theme-toggle__track" aria-hidden="true">
+            <span class="theme-toggle__icon theme-toggle__icon--moon">
+              <img
+                src="./assets/icons/moon.svg"
+                data-theme-src-dark="./assets/icons/moon.svg"
+                data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__icon theme-toggle__icon--sun">
+              <img
+                src="./assets/icons/sun.svg"
+                data-theme-src-dark="./assets/icons/sun.svg"
+                data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden js-theme-label">Dark</span>
+          </button>
+
+          <button class="btn btn--ghost btn--full js-logout-btn" id="logout-btn" type="button">
+            <img src="./assets/icons/log out.svg" alt="" class="btn__icon" />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="app-main profile-page">
+        <header class="app-header">
+          <div class="app-header__content">
+            <div>
+              <p class="app-header__eyebrow">Account settings</p>
+              <h1 class="app-header__title">Profile</h1>
+            </div>
+          </div>
+        </header>
+
+        <section class="profile-grid">
+          <article class="card profile-card" aria-labelledby="profile-card-title">
+            <header class="card__header card__header--split">
+              <div>
+                <p class="card__eyebrow">Personal details</p>
+                <h2 class="card__title" id="profile-card-title">Edit Profile</h2>
+              </div>
+              <div class="profile-avatar-block">
+                <div class="profile-avatar" id="profile-avatar-preview" aria-live="polite">
+                  <img src="" alt="Profile photo preview" class="profile-avatar__image js-profile-avatar-image" hidden />
+                  <span class="profile-avatar__initials js-profile-avatar-initials" aria-hidden="true">MT</span>
+                </div>
+
+                <div class="profile-avatar-actions">
+                  <label for="profile-avatar-input" class="btn btn--ghost btn--sm profile-avatar__upload">
+                    <img src="./assets/icons/upload.svg" alt="" class="btn__icon" />
+                    <span>Upload Image</span>
+                  </label>
+
+                  <input
+                    id="profile-avatar-input"
+                    name="avatar"
+                    class="profile-avatar__input js-profile-avatar-input"
+                    type="file"
+                    accept="image/*"
+                  />
+
+                  <button
+                    class="icon-btn icon-btn--danger profile-avatar__delete js-remove-avatar"
+                    type="button"
+                    aria-label="Remove uploaded image"
+                    data-tooltip="Remove uploaded image"
+                  >
+                    <img
+                      src="./assets/icons/Delete.svg"
+                      data-theme-src-dark="./assets/icons/Delete.svg"
+                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                  <p
+                    class="profile-avatar__message js-profile-avatar-message"
+                    aria-live="polite"
+                    role="status"
+                    data-visible="false"
+                  ></p>
+                </div>
+              </div>
+            </header>
+
+            <form class="card__body form-grid js-profile-form" id="profile-form" novalidate>
+              <div class="field">
+                <label for="profile-name" class="field__label">Full Name</label>
+                <input id="profile-name" name="fullName" class="input" type="text" value="Mariam Tchelidze" required />
+                <p class="form-error" id="profile-name-error" data-error-for="profile-name" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="profile-email" class="field__label">Email</label>
+                <input id="profile-email" name="email" class="input" type="email" value="mariam@example.com" required />
+                <p class="form-error" id="profile-email-error" data-error-for="profile-email" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="profile-company" class="field__label">Company</label>
+                <input id="profile-company" name="company" class="input" type="text" value="10X CRM Demo" />
+              </div>
+
+              <div class="field">
+                <label for="profile-role" class="field__label">Role</label>
+                <input id="profile-role" name="role" class="input" type="text" value="Sales Manager" />
+              </div>
+
+              <div class="field field--full">
+                <label for="profile-bio" class="field__label">Short Bio</label>
+                <textarea id="profile-bio" name="bio" class="input input--textarea" rows="4">Building a vanilla JavaScript CRM for the 10X course project.</textarea>
+              </div>
+            </form>
+
+            <footer class="card__footer">
+              <button class="btn btn--primary js-save-profile" type="submit" form="profile-form">Save Changes</button>
+            </footer>
+          </article>
+
+          <aside class="profile-side">
+            <article class="card" aria-labelledby="security-title">
+              <header class="card__header">
+                <p class="card__eyebrow">Security</p>
+                <h2 class="card__title" id="security-title">Change Password</h2>
+              </header>
+
+              <form class="card__body stack js-password-form" id="profile-password-form" novalidate>
+                <div class="field">
+                  <label for="current-password" class="field__label">Current Password</label>
+                  <div class="password-field">
+                    <input id="current-password" name="currentPassword" class="input" type="password" autocomplete="current-password" required />
+                    <button type="button" class="password-field__toggle js-password-toggle" data-password-toggle aria-label="Show password">
+                      <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
+                    </button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="new-password" class="field__label">New Password</label>
+                  <div class="password-field">
+                    <input id="new-password" name="newPassword" class="input" type="password" autocomplete="new-password" required />
+                    <button type="button" class="password-field__toggle js-password-toggle" data-password-toggle aria-label="Show password">
+                      <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
+                    </button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="confirm-new-password" class="field__label">Confirm Password</label>
+                  <div class="password-field">
+                    <input id="confirm-new-password" name="confirmNewPassword" class="input" type="password" autocomplete="new-password" required />
+                    <button type="button" class="password-field__toggle js-password-toggle" data-password-toggle aria-label="Show password">
+                      <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <footer class="card__footer">
+                <button class="btn btn--secondary btn--full js-change-password" type="submit" form="profile-password-form">
+                  Update Password
+                </button>
+              </footer>
+            </article>
+
+            <article class="card" aria-labelledby="preferences-title">
+              <header class="card__header">
+                <p class="card__eyebrow">Preferences</p>
+                <h2 class="card__title" id="preferences-title">Workspace</h2>
+              </header>
+              <div class="card__body stack">
+                <div class="preference-row">
+                  <div>
+                    <h3 class="preference-row__title">Theme</h3>
+                    <p class="preference-row__text">Saved in localStorage as crm_theme.</p>
+                  </div>
+                  <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
+                    <span class="theme-toggle__track" aria-hidden="true">
+            <span class="theme-toggle__icon theme-toggle__icon--moon">
+              <img
+                src="./assets/icons/moon.svg"
+                data-theme-src-dark="./assets/icons/moon.svg"
+                data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__icon theme-toggle__icon--sun">
+              <img
+                src="./assets/icons/sun.svg"
+                data-theme-src-dark="./assets/icons/sun.svg"
+                data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden js-theme-label">Dark</span>
+                  </button>
+                </div>
+
+                <div class="preference-row">
+                  <div>
+                    <h3 class="preference-row__title">Stored Data</h3>
+                    <p class="preference-row__text">Reset local CRM demo data when testing the project.</p>
+                  </div>
+                  <button class="btn btn--danger js-open-reset-modal" type="button" data-modal-target="reset-data-modal">Reset</button>
+                </div>
+              </div>
+            </article>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <section class="modal" id="reset-data-modal" aria-labelledby="reset-data-title" aria-hidden="true" hidden>
+      <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <h2 class="modal__title" id="reset-data-title">Reset CRM Data</h2>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close reset dialog" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+        <div class="modal__body">
+          <p>This will clear local demo data for users, session, clients, and theme when the JavaScript reset is implemented.</p>
+        </div>
+        <footer class="modal__footer">
+          <button class="btn btn--ghost js-close-modal" type="button" data-modal-close>Cancel</button>
+          <button class="btn btn--danger js-confirm-reset" type="button">Reset Data</button>
+        </footer>
+      </div>
+    </section>
+
+    <script src="./js/ui/theme.js"></script>
+    <script src="./js/ui/modal.js"></script>
+    <script src="./js/components/passwordToggle.js"></script>
+    <script src="./js/auth/logout.js"></script>
+    <script src="./js/profile/avatar.js"></script>
+  </body>
+</html>

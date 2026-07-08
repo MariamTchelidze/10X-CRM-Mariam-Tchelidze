@@ -1,14 +1,30 @@
-@use "./variables" as *;
-@use "sass:math";
 @use "sass:map";
-/* --- clamp calculator for texts: font-size: clamp-rem(16, 2.5, 32); --- */
+@use "sass:math";
+@use "./variables" as *;
 
-@function clamp-rem($min, $preferred, $max) {
-  @return clamp(#{math.div($min, 10)}rem, #{$preferred}vw, #{math.div($max, 10)}rem);
+$breakpoints: (
+  mobile-sm: $mobile-sm,
+  mobile: $mobile,
+  tablet: $tablet,
+  tablet-lg: $tablet-lg,
+  laptop: $laptop,
+  desktop: $desktop,
+  desktop-lg: $desktop-lg,
+);
+
+@function rem($px) {
+  @return math.div($px, 10) * 1rem;
 }
 
-/* --- Display flex mixin --- */
-@mixin flex($direction: null, $justify: null, $align: null, $gap: null, $wrap: null) {
+@function fluid-rem($min, $max) {
+  @return clamp(#{rem($min)}, 2vw, #{rem($max)});
+}
+
+@function clamp-rem($min, $preferred, $max) {
+  @return clamp(#{rem($min)}, #{$preferred}vw, #{rem($max)});
+}
+
+@mixin flex($direction: row, $justify: null, $align: null, $gap: null, $wrap: null) {
   display: flex;
 
   @if $direction != null {
@@ -24,7 +40,7 @@
   }
 
   @if $gap != null {
-    gap: #{$gap}rem;
+    gap: $gap;
   }
 
   @if $wrap != null {
@@ -32,64 +48,83 @@
   }
 }
 
-/* --- Display grid mixin --- */
-
-@mixin grid($columns: null, $gap: null, $rows: null, $justify: null, $align: null) {
+@mixin grid($columns: null, $gap: null, $min: null) {
   display: grid;
 
-  @if $columns != null {
-    grid-template-columns: repeat($columns, 1fr);
-  }
-
-  @if $rows != null {
-    grid-template-rows: $rows;
+  @if $columns == auto {
+    grid-template-columns: repeat(auto-fit, minmax($min, 1fr));
+  } @else if type-of($columns) == number {
+    grid-template-columns: repeat($columns, minmax(0, 1fr));
+  } @else if $columns != null {
+    grid-template-columns: $columns;
   }
 
   @if $gap != null {
-    gap: #{$gap}rem;
-  }
-
-  @if $justify != null {
-    justify-items: $justify;
-  }
-
-  @if $align != null {
-    align-items: $align;
+    gap: $gap;
   }
 }
-
-/* --- Element positioning mixin relative/absolute/fixed and etc --- */
 
 @mixin position($position, $top: auto, $right: auto, $bottom: auto, $left: auto) {
   position: $position;
 
-  top: if($top == auto, auto, #{$top}rem);
-  right: if($right == auto, auto, #{$right}rem);
-  bottom: if($bottom == auto, auto, #{$bottom}rem);
-  left: if($left == auto, auto, #{$left}rem);
+  @if $top != auto {
+    top: $top;
+  }
+
+  @if $right != auto {
+    right: $right;
+  }
+
+  @if $bottom != auto {
+    bottom: $bottom;
+  }
+
+  @if $left != auto {
+    left: $left;
+  }
 }
-/* --- Transitions for animations --- */
 
-@mixin transition($property: all, $duration: 0.3s, $timing: ease, $delay: 0s) {
-  transition: $property $duration $timing $delay;
+@mixin transition($property: all, $duration: 0.2s, $timing: ease) {
+  transition: $property $duration $timing;
 }
 
-/* --- Responsive layout --- */
-
-$breakpoints: (
-  mobile: $mobile,
-  tablet: $tablet,
-  tablet-lg: $tablet-lg,
-  laptop: $laptop,
-  desktop: $desktop,
-);
-
-@mixin media($breakpoint) {
+@mixin media($breakpoint, $direction: max) {
   @if map.has-key($breakpoints, $breakpoint) {
-    @media (max-width: #{map.get($breakpoints, $breakpoint)}) {
-      @content;
+    @if $direction == min {
+      @media (min-width: #{map.get($breakpoints, $breakpoint) + 1px}) {
+        @content;
+      }
+    } @else {
+      @media (max-width: #{map.get($breakpoints, $breakpoint)}) {
+        @content;
+      }
     }
   } @else {
     @warn "Unknown breakpoint: #{$breakpoint}";
   }
+}
+
+@mixin focus-ring {
+  outline: 0.3rem solid rgb(255 107 26 / 24%);
+  outline-offset: 0.3rem;
+}
+
+@mixin button-reset {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

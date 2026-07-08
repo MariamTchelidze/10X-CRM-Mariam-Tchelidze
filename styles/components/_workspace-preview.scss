@@ -1,178 +1,124 @@
 @use "../abstracts/variables" as *;
-@use "../base/typography" as *;
 @use "../abstracts/mixins" as *;
 
 .dashboard-preview {
   position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 56rem;
-  @include flex(column);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
   gap: $space-2xl;
-  color: $dark-text-primary;
+  width: 100%;
+  max-width: 58rem;
+}
 
-  @include media(tablet-lg) {
-    gap: $space-xl;
-  }
+.dashboard-preview__header {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
 
-  &__header {
-    @include flex(column);
-    gap: $space-md;
-    margin-bottom: $space-3xl;
-  }
+.dashboard-preview__eyebrow {
+  align-self: flex-start;
+  padding: 0.6rem 1rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-full;
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  font-weight: $fw-bold;
+  text-transform: uppercase;
+}
 
-  &__eyebrow {
-    display: inline-flex;
-    align-self: flex-start;
-    padding: 0.6rem 1.2rem;
-    border: 0.1rem solid $glass-border;
-    border-radius: $radius-full;
-    background: $glass-bg;
-    backdrop-filter: $glass-blur;
-    color: $primary;
-    font-size: 1.3rem;
-    font-weight: $fw-semibold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+.dashboard-preview__title {
+  max-width: 50rem;
+  color: var(--color-text);
+  font-size: 3.8rem;
+  line-height: 1.16;
+}
 
-  &__title {
-    font-size: clamp(3.8rem, 3vw, 4.2rem);
-    line-height: 1.15;
-    max-width: 48rem;
-    color: $dark-text-primary;
-    text-wrap: balance;
-    @include media(tablet-lg) {
-      font-size: 3.6rem;
-      max-width: 100%;
-    }
+.dashboard-preview__subtitle {
+  max-width: 48rem;
+  color: var(--color-text-secondary);
+  font-size: 1.6rem;
+  line-height: 1.7;
+}
 
-    @include media(tablet) {
-      font-size: 3rem;
-    }
-  }
-
-  &__subtitle {
-    max-width: 46rem;
-    color: $dark-text-secondary;
-    font-size: 1.7rem;
-    line-height: 1.7;
-    @include media(tablet-lg) {
-      max-width: 100%;
-      font-size: 1.6rem;
-    }
-
-    @include media(tablet) {
-      font-size: 1.5rem;
-    }
-  }
-
-  &__stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: $space-lg;
-    @include media(tablet-lg) {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  &__performance {
-    @include flex(column);
-    gap: $space-md;
-    @include media(tablet) {
-      margin-top: $space-md;
-    }
-  }
-
-  &__performance-header {
-    @include flex(row, center, space-between);
-    color: $dark-text-secondary;
-    font-size: 1.4rem;
-    font-weight: $fw-medium;
-  }
-
-  &__progress {
-    overflow: hidden;
-    width: 100%;
-    height: 0.8rem;
-    border-radius: $radius-full;
-    background: $glass-bg;
-  }
-
-  &__progress-fill {
-    display: block;
-    width: 96%;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, $primary, $secondary);
-  }
-
-  &__footer {
-    @include flex(row, center, center);
-    gap: $space-sm;
-    padding-top: $space-xl;
-    border-top: 0.1rem solid $glass-border;
-  }
-
-  &__status-dot {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 50%;
-    background: $chart-green;
-  }
-
-  &__status-text {
-    color: $dark-text-secondary;
-    font-size: 1.4rem;
-    font-weight: $fw-medium;
-  }
+.dashboard-preview__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-md;
 }
 
 .metric-card {
-  @include flex(column);
-  gap: $space-xl;
-  padding: 2.4rem;
-  border: 0.1rem solid $glass-border;
-  border-radius: $radius-xl;
-  background: $glass-bg;
-  backdrop-filter: $glass-blur;
-  &__icon {
-    width: 5.4rem;
-    height: 5.4rem;
-    border-radius: $radius-lg;
-    background: $dark-bg-card;
-    margin-bottom: $space-sm;
-    @include flex(row, center, center);
-    img {
-      width: 2.6rem;
-      height: 2.6rem;
-    }
-    @include media(tablet-lg) {
-      width: 4.8rem;
-      height: 4.8rem;
-    }
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  padding: $space-lg;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.metric-card__icon {
+  width: 3rem;
+  height: 3rem;
+}
+
+.metric-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xs;
+}
+
+.metric-card__value {
+  color: var(--color-text);
+  font-size: 2.6rem;
+  font-weight: $fw-bold;
+  line-height: 1;
+}
+
+.metric-card__label {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+  font-weight: $fw-semibold;
+}
+
+.dashboard-preview__performance {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+}
+
+.dashboard-preview__performance-header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+}
+
+.dashboard-preview__progress {
+  overflow: hidden;
+  width: 100%;
+  height: 0.8rem;
+  border-radius: $radius-full;
+  background: var(--color-divider);
+}
+
+.dashboard-preview__progress-fill {
+  display: block;
+  width: 76%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+@include media(laptop) {
+  .dashboard-preview__stats {
+    grid-template-columns: 1fr;
   }
 
-  &__content {
-    @include flex(column);
-    gap: $space-xs;
-  }
-
-  &__value {
-    color: $dark-text-primary;
-    font-size: 3rem;
-    font-weight: $fw-bold;
-    line-height: 1;
-    @include media(tablet-lg) {
-      font-size: 2.6rem;
-    }
-  }
-
-  &__label {
-    color: $dark-text-secondary;
-    font-size: 1.4rem;
-    font-weight: $fw-medium;
-  }
-  @include media(tablet-lg) {
-    padding: $space-md;
+  .dashboard-preview__title {
+    font-size: 3.2rem;
   }
 }

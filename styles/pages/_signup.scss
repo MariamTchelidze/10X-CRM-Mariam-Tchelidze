@@ -1,86 +1,29 @@
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
-.auth--signup {
-  .auth__container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
+.auth--signup .auth__content {
+  order: 1;
+}
 
-  .auth__content {
+.auth--signup .auth__visual {
+  order: 2;
+}
+
+.auth--signup .auth__content {
+  padding-block: $space-2xl;
+}
+
+.auth--signup .auth-form {
+  max-width: 62rem;
+}
+
+.auth--signup .auth-divider,
+.auth--signup .social-login {
+  max-width: 62rem;
+}
+
+@include media(tablet) {
+  .auth--signup .auth__content {
     order: 1;
-    justify-content: center;
-    padding-block: $space-xl;
-  }
-
-  .auth__visual {
-    order: 2;
-  }
-
-  .auth-header {
-    margin-bottom: $space-xl;
-
-    &__title {
-      font-size: 5.2rem;
-    }
-
-    &__subtitle {
-      max-width: 44rem;
-      margin-inline: auto;
-    }
-  }
-
-  .auth-form {
-    gap: $space-lg;
-
-    &__row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: $space-md;
-    }
-
-    &__group {
-      width: 100%;
-    }
-  }
-
-  .password-field {
-    width: 100%;
-  }
-
-  .btn--primary {
-    margin-top: $space-sm;
-  }
-
-  .auth-divider {
-    margin-block: $space-lg;
-  }
-
-  .social-login {
-    margin-bottom: $space-lg;
-  }
-
-  .auth-footer {
-    margin-top: 0;
-  }
-
-  @include media(tablet) {
-    .auth__container {
-      grid-template-columns: 1fr;
-    }
-
-    .auth__content {
-      order: 1;
-    }
-
-    .auth__visual {
-      order: 2;
-    }
-
-    .auth-form {
-      &__row {
-        grid-template-columns: 1fr;
-      }
-    }
   }
 }

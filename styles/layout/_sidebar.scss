@@ -1,197 +1,251 @@
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
-/* ==========================================================
-   Sidebar
-========================================================== */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  padding: $space-2xl;
+}
 
 .sidebar {
   position: sticky;
   top: 0;
-  left: 0;
-
+  display: flex;
+  flex-direction: column;
   width: 26rem;
   height: 100vh;
-
-  flex-shrink: 0;
-
+  flex: 0 0 26rem;
   padding: $space-xl;
-
-  background-color: $dark-bg-surface;
-  border-right: 1px solid $dark-border;
-
-  @include flex(column);
-
-  @include transition(transform);
-
-  z-index: 1000;
-
-  /* ==========================
-       Brand
-    ========================== */
-
-  &__brand {
-    @include flex(row, flex-start, center, 1);
-
-    margin-bottom: $space-3xl;
-
-    color: $dark-text-primary;
-    text-decoration: none;
-  }
-
-  &__logo {
-    @include flex(center, center);
-
-    width: 4.2rem;
-    height: 4.2rem;
-
-    border-radius: $radius-md;
-
-    background-color: $primary;
-
-    color: $dark-text-primary;
-    font-weight: 700;
-  }
-
-  &__title {
-    font-size: $fs-xl;
-    font-weight: 700;
-  }
-
-  /* ==========================
-       Navigation
-    ========================== */
-
-  &__navigation {
-    flex: 1;
-  }
-
-  &__menu {
-    @include flex(column);
-
-    list-style: none;
-  }
-
-  &__item {
-    width: 100%;
-  }
-
-  &__link {
-    @include flex(row, flex-start, center, 1.2);
-
-    width: 100%;
-
-    padding: 1.4rem 1.6rem;
-
-    border-radius: $radius-md;
-
-    color: $dark-text-secondary;
-    text-decoration: none;
-
-    @include transition;
-
-    &:hover {
-      background-color: $dark-nav-hover;
-      color: $dark-text-primary;
-    }
-
-    &--active {
-      background-color: $primary;
-      color: $dark-text-primary;
-    }
-  }
-
-  /* ==========================
-       Footer
-    ========================== */
-
-  &__footer {
-    @include flex(column, null, stretch, 1.2);
-
-    padding-top: $space-xl;
-
-    border-top: 1px solid $dark-border;
-  }
-
-  &__logout {
-    width: 100%;
-  }
+  border-right: 0.1rem solid var(--color-border);
+  background: var(--color-sidebar);
 }
 
-/* ==========================================================
-   Sidebar Toggle
-========================================================== */
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  margin-bottom: $space-2xl;
+  color: var(--color-text);
+  font-weight: $fw-bold;
+}
 
-.sidebar-toggle {
-  display: none;
+.sidebar__logo-image {
+  width: 4rem;
+  height: 4rem;
+}
 
-  width: 4.4rem;
-  height: 4.4rem;
+.sidebar__brand-text {
+  font-size: 1.9rem;
+}
 
-  border: none;
+.sidebar__navigation {
+  flex: 1;
+}
 
+.sidebar__menu {
+  display: grid;
+  gap: $space-sm;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  min-height: 4.6rem;
+  padding: 1rem 1.2rem;
   border-radius: $radius-md;
+  color: var(--color-text-secondary);
+  font-weight: $fw-semibold;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
-  background: transparent;
-
-  color: $dark-text-primary;
-
-  cursor: pointer;
-}
-
-/* ==========================================================
-   Overlay
-========================================================== */
-
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-
-  background: rgba(0, 0, 0, 0.55);
-
-  opacity: 0;
-  visibility: hidden;
-
-  @include transition;
-
-  z-index: 900;
-
-  &--show {
-    opacity: 1;
-    visibility: visible;
+  &:hover {
+    background: var(--color-nav-hover);
+    color: var(--color-text);
   }
 }
 
-/* ==========================================================
-   Tablet
-========================================================== */
+.sidebar__link--active {
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+}
+
+.sidebar__icon {
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+}
+
+.sidebar__footer {
+  display: grid;
+  gap: $space-md;
+  padding-top: $space-xl;
+  border-top: 0.1rem solid var(--color-divider);
+}
+
+.app-header {
+  margin-bottom: $space-xl;
+}
+
+.app-header__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+}
+
+.app-header__eyebrow {
+  margin-bottom: $space-xs;
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  font-weight: $fw-bold;
+  text-transform: uppercase;
+}
+
+.app-header__title {
+  color: var(--color-text);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+}
+
+.date-card {
+  display: grid;
+  gap: $space-2xs;
+  min-width: 18rem;
+  padding: $space-md $space-lg;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-card);
+  text-align: right;
+}
+
+.date-card__label,
+.date-card__clock {
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+}
+
+.date-card__value {
+  color: var(--color-text);
+  font-weight: $fw-semibold;
+}
 
 @include media(tablet-lg) {
-  .sidebar {
-    position: fixed;
-
-    transform: translateX(-100%);
-
-    box-shadow: $shadow-lg;
-
-    &--open {
-      transform: translateX(0);
-    }
+  .app-shell {
+    flex-direction: column;
   }
 
-  .sidebar-toggle {
-    @include flex(center, center);
+  .app-main {
+    padding: $space-xl;
+  }
+
+  .sidebar {
+    position: sticky;
+    z-index: $z-sticky;
+    flex: none;
+    width: 100%;
+    height: auto;
+    padding: $space-md $space-xl;
+    border-right: 0;
+    border-bottom: 0.1rem solid var(--color-border);
+  }
+
+  .sidebar,
+  .sidebar__menu,
+  .sidebar__footer {
+    display: flex;
+    align-items: center;
+  }
+
+  .sidebar__brand {
+    margin-bottom: 0;
+    margin-right: auto;
+  }
+
+  .sidebar__navigation {
+    flex: none;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .sidebar__menu {
+    gap: $space-xs;
+  }
+
+  .sidebar__footer {
+    gap: $space-sm;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .sidebar__footer .btn {
+    width: auto;
+  }
+
+  .theme-toggle {
+    width: auto;
   }
 }
 
-/* ==========================================================
-   Mobile
-========================================================== */
+@include media(tablet) {
+  .app-header__content {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .app-header__actions,
+  .date-card {
+    width: 100%;
+  }
+
+  .date-card {
+    text-align: left;
+  }
+}
 
 @include media(mobile) {
-  .sidebar {
-    width: 24rem;
-
+  .app-main {
     padding: $space-lg;
+  }
+
+  .sidebar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sidebar__brand {
+    margin-right: 0;
+  }
+
+  .sidebar__navigation,
+  .sidebar__footer {
+    width: 100%;
+  }
+
+  .sidebar__menu {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sidebar__link {
+    justify-content: center;
+    padding-inline: $space-sm;
+  }
+
+  .sidebar__link span {
+    display: none;
   }
 }

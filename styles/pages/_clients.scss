@@ -1,0 +1,161 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.summary-card {
+  display: grid;
+  gap: $space-xs;
+  padding: $space-lg;
+}
+
+.summary-card__label {
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+  font-weight: $fw-semibold;
+}
+
+.summary-card__value {
+  color: var(--color-text);
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.client-workspace {
+  overflow: hidden;
+}
+
+.client-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-xl;
+}
+
+.client-toolbar__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $space-md;
+  flex-wrap: wrap;
+}
+
+.client-toolbar__actions > * {
+  flex: 1 1 18rem;
+}
+
+.client-filters {
+  display: flex;
+  gap: $space-sm;
+  overflow-x: auto;
+  padding: $space-lg $space-xl;
+  border-bottom: 0.1rem solid var(--color-divider);
+}
+
+.client-list {
+  display: grid;
+  gap: $space-lg;
+  padding: $space-xl;
+}
+
+.client-card {
+  display: grid;
+  grid-template-columns: minmax(22rem, 0.9fr) minmax(0, 1.3fr) auto;
+  align-items: center;
+  gap: $space-lg;
+  padding: $space-lg;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+}
+
+.client-card__main {
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  min-width: 0;
+}
+
+.client-card__avatar {
+  width: 4.8rem;
+  height: 4.8rem;
+  flex: 0 0 auto;
+}
+
+.client-card__name {
+  color: var(--color-text);
+  font-size: 1.7rem;
+}
+
+.client-card__company {
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
+
+.client-card__meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-md;
+}
+
+.client-card__meta dt {
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: $fw-bold;
+  text-transform: uppercase;
+}
+
+.client-card__meta dd {
+  overflow-wrap: anywhere;
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+}
+
+.client-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $space-md;
+}
+
+.client-card__actions {
+  display: flex;
+  gap: $space-sm;
+}
+
+@include media(laptop) {
+  .client-card {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .client-card__footer {
+    justify-content: space-between;
+  }
+}
+
+@include media(tablet) {
+  .clients-page .app-header__content .btn {
+    width: 100%;
+  }
+
+  .client-toolbar,
+  .client-toolbar__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .client-card__meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@include media(mobile) {
+  .client-list {
+    padding: $space-lg;
+  }
+
+  .client-card__footer,
+  .client-card__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

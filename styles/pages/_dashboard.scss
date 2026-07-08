@@ -1,242 +1,194 @@
 @use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
-/* ==========================================================
-   Dashboard Layout
-========================================================== */
-
-.dashboard-layout {
-  @include flex;
-  min-height: 100vh;
-  background-color: $dark-bg-body;
+.dashboard-page,
+.clients-page,
+.profile-page {
+  display: flex;
+  flex-direction: column;
 }
 
-.dashboard {
-  flex: 1;
-  min-width: 0;
-  background-color: $dark-bg-body;
-
-  &__container {
-    width: 100%;
-    max-width: 160rem;
-    margin-inline: auto;
-    padding: $space-2xl;
-
-    @include flex(column, null, null, $space-2xl);
-  }
+.welcome-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-xl;
+  margin-bottom: $space-xl;
+  padding: $space-xl;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background:
+    linear-gradient(135deg, var(--color-soft-primary), transparent 45%),
+    var(--color-card);
+  box-shadow: var(--shadow-card);
 }
 
-/* ==========================================================
-   Dashboard Header
-========================================================== */
-
-.dashboard-header {
-  &__content {
-    @include flex(row, space-between, center);
-  }
-
-  &__datetime {
-    @include flex(column, center, flex-end, $space-xs);
-  }
-
-  &__date,
-  &__clock {
-    color: $dark-text-secondary;
-  }
+.welcome-panel__subtitle {
+  color: var(--color-text-muted);
+  font-weight: $fw-semibold;
 }
 
-/* ==========================================================
-   Welcome
-========================================================== */
-
-.welcome {
-  &__content {
-    @include flex(column, null, flex-start, $space-sm);
-  }
-
-  &__subtitle {
-    color: $dark-text-muted;
-  }
-
-  &__title {
-    color: $dark-text-primary;
-  }
-
-  &__description {
-    max-width: 60rem;
-    color: $dark-text-secondary;
-    line-height: 1.6;
-  }
+.welcome-panel__title {
+  margin-block: $space-xs;
+  color: var(--color-text);
 }
 
-/* ==========================================================
-   Statistics
-========================================================== */
-
-.dashboard-stats {
-  @include grid(4, $space-lg);
+.welcome-panel__description {
+  color: var(--color-text-secondary);
 }
 
-/* ==========================================================
-   Pipeline
-========================================================== */
-
-.pipeline {
-  &__item {
-    @include flex(column, null, null, $space-sm);
-
-    &:not(:last-child) {
-      margin-bottom: $space-lg;
-    }
-  }
-
-  &__info {
-    @include flex(row, space-between, center);
-  }
-
-  &__label {
-    color: $dark-text-secondary;
-  }
-
-  &__count {
-    color: $dark-text-primary;
-    font-weight: $fw-semibold;
-  }
-
-  &__progress {
-    width: 100%;
-    height: 0.8rem;
-
-    overflow: hidden;
-
-    border-radius: $radius-full;
-    background-color: $dark-divider;
-  }
-
-  &__fill {
-    width: 0;
-    height: 100%;
-
-    border-radius: inherit;
-    background-color: $primary;
-
-    @include transition;
-  }
+.stats-grid,
+.client-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $space-lg;
+  margin-bottom: $space-xl;
 }
 
-/* ==========================================================
-   Recent Clients
-========================================================== */
+.stats-card {
+  display: grid;
+  gap: $space-sm;
+  padding: $space-xl;
+}
 
-.recent-clients {
-  &__list {
-    @include flex(column);
+.stats-card__icon {
+  width: 3.2rem;
+  height: 3.2rem;
+}
 
-    min-height: 20rem;
-  }
+.stats-card__label,
+.stats-card__trend {
+  color: var(--color-text-secondary);
+}
+
+.stats-card__label {
+  font-weight: $fw-semibold;
+}
+
+.stats-card__value {
+  color: var(--color-text);
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.stats-card__trend {
+  font-size: 1.3rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(32rem, 0.8fr);
+  gap: $space-xl;
+}
+
+.pipeline-list {
+  display: grid;
+  gap: $space-lg;
+}
+
+.pipeline-item {
+  display: grid;
+  gap: $space-sm;
+}
+
+.pipeline-item__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+}
+
+.pipeline-item__count {
+  color: var(--color-text);
+}
+
+.pipeline-item__track {
+  overflow: hidden;
+  height: 0.8rem;
+  border-radius: $radius-full;
+  background: var(--color-divider);
+}
+
+.pipeline-item__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+.recent-clients__list {
+  display: grid;
+  gap: $space-md;
 }
 
 .recent-client {
-  @include flex(row, space-between, center);
-
-  padding-block: $space-md;
-
-  &:not(:last-child) {
-    border-bottom: 0.1rem solid $dark-divider;
-  }
-
-  &__left {
-    @include flex(row, null, center, $space-md);
-  }
-
-  &__avatar {
-    width: 4.8rem;
-    height: 4.8rem;
-
-    overflow: hidden;
-
-    border-radius: 50%;
-
-    img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-    }
-  }
-
-  &__info {
-    @include flex(column, null, flex-start, 0.4rem);
-  }
-
-  &__name {
-    color: $dark-text-primary;
-    font-weight: $fw-medium;
-  }
-
-  &__company {
-    color: $dark-text-muted;
-  }
-
-  &__right {
-    @include flex(column, center, flex-end, 0.4rem);
-  }
-
-  &__date {
-    color: $dark-text-muted;
-  }
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
 }
 
-/* ==========================================================
-   Responsive
-========================================================== */
+.recent-client__avatar,
+.client-card__avatar,
+.profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  font-weight: $fw-bold;
+}
+
+.recent-client__avatar {
+  width: 4.4rem;
+  height: 4.4rem;
+}
+
+.recent-client__name {
+  color: var(--color-text);
+  font-size: 1.6rem;
+}
+
+.recent-client__company {
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
 
 @include media(laptop) {
-  .dashboard-stats {
-    @include grid(2, $space-lg);
+  .stats-grid,
+  .client-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
 
-@include media(tablet-lg) {
   .dashboard-grid {
-    @include grid(1, $space-xl);
+    grid-template-columns: 1fr;
   }
 }
 
 @include media(tablet) {
-  .dashboard {
-    &__container {
-      padding: $space-xl;
-    }
+  .welcome-panel {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
 
 @include media(mobile) {
-  .dashboard {
-    &__container {
-      padding: $space-lg;
-    }
-  }
-
-  .dashboard-header {
-    &__content {
-      @include flex(column, null, flex-start, $space-md);
-    }
-
-    &__datetime {
-      align-items: flex-start;
-    }
-  }
-
-  .dashboard-stats {
-    @include grid(1, $space-md);
+  .stats-grid,
+  .client-summary {
+    grid-template-columns: 1fr;
   }
 
   .recent-client {
-    @include flex(column, null, flex-start, $space-md);
+    grid-template-columns: auto minmax(0, 1fr);
+  }
 
-    &__right {
-      align-items: flex-start;
-    }
+  .recent-client .status-badge {
+    grid-column: 1 / -1;
+    justify-self: start;
   }
 }

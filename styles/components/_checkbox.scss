@@ -1,59 +1,59 @@
 @use "../abstracts/variables" as *;
-@use "../base/typography" as *;
-@use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
 .checkbox {
-  @include flex(row, center, flex-start);
+  display: inline-flex;
+  align-items: flex-start;
   gap: $space-sm;
   cursor: pointer;
   user-select: none;
 }
 
 .checkbox__input {
-  display: none;
+  @include visually-hidden;
 }
 
 .checkbox__box {
-  width: 1.8rem;
-  height: 1.8rem;
   position: relative;
-  border: 0.2rem solid $dark-border;
-  border-radius: 0.4rem;
-  background: transparent;
-  @include transition;
-  &:hover {
-    border-color: $accent-orange;
-  }
-}
-
-.checkbox__label {
-  font-size: 1.5rem;
-  font-weight: $fw-medium;
-  color: $dark-text-secondary;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex: 0 0 auto;
+  border: 0.2rem solid var(--color-border-strong);
+  border-radius: $radius-sm;
+  background: var(--color-input-bg);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .checkbox__box::after {
   content: "";
   position: absolute;
-  left: 50%;
   top: 45%;
+  left: 50%;
   width: 0.5rem;
   height: 1rem;
-  border-right: 0.2rem solid transparent;
-  border-bottom: 0.2rem solid transparent;
+  border-right: 0.2rem solid #ffffff;
+  border-bottom: 0.2rem solid #ffffff;
+  opacity: 0;
   transform: translate(-50%, -50%) rotate(45deg);
-  @include transition;
+}
+
+.checkbox__label {
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+  font-weight: $fw-medium;
 }
 
 .checkbox__input:checked + .checkbox__box {
-  background: $soft-green;
-  border-color: $accent-orange;
+  border-color: var(--color-primary);
+  background: var(--color-primary);
 }
+
 .checkbox__input:checked + .checkbox__box::after {
-  border-color: $success;
+  opacity: 1;
 }
+
 .checkbox__input:focus-visible + .checkbox__box {
-  outline: 0.2rem solid rgba($accent-orange, 0.4);
-  outline-offset: 0.3rem;
+  @include focus-ring;
 }

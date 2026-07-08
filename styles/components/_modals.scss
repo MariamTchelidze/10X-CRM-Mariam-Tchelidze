@@ -1,0 +1,175 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  overflow-y: auto;
+  padding: $space-xl;
+  background: rgb(5 10 16 / 72%);
+  backdrop-filter: blur(0.6rem);
+}
+
+body[data-theme="light"] .modal {
+  background: rgb(34 40 49 / 38%);
+}
+
+.modal__dialog {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(72rem, 100%);
+  max-height: calc(100vh - 4rem);
+  max-height: calc(100dvh - 4rem);
+  overflow: hidden;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  animation: modal-enter $transition-slow both;
+}
+
+.modal__dialog--small {
+  width: min(44rem, 100%);
+}
+
+.modal__header,
+.modal__footer {
+  display: flex;
+  gap: $space-md;
+  padding: $space-xl;
+}
+
+.modal__header {
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 0.1rem solid var(--color-divider);
+}
+
+.modal__footer {
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 0.1rem solid var(--color-divider);
+  background: color-mix(in srgb, var(--color-surface) 88%, var(--color-elevated));
+}
+
+.modal__eyebrow {
+  margin-bottom: $space-xs;
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  font-weight: $fw-bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.modal__title {
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.modal__description {
+  max-width: 54rem;
+  margin-top: $space-sm;
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
+
+.modal__body {
+  overflow-y: auto;
+  padding: $space-xl;
+}
+
+.modal__body--form {
+  align-content: start;
+}
+
+.details-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-md;
+  margin-bottom: $space-xl;
+}
+
+.details-list div {
+  padding: $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+}
+
+.details-list dt {
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+}
+
+.details-list dd {
+  margin-top: $space-xs;
+  color: var(--color-text);
+}
+
+.note-form,
+.reminder-panel {
+  display: grid;
+  gap: $space-md;
+  margin-top: $space-lg;
+}
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@include media(tablet) {
+  .modal {
+    padding: $space-lg;
+  }
+
+  .modal__header,
+  .modal__body,
+  .modal__footer {
+    padding: $space-lg;
+  }
+
+  .modal__footer {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .details-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@include media(mobile) {
+  .modal {
+    align-items: end;
+    padding: $space-sm;
+  }
+
+  .modal__dialog {
+    width: 100%;
+    max-height: calc(100vh - 1.6rem);
+    max-height: calc(100dvh - 1.6rem);
+    border-radius: $radius-lg;
+  }
+
+  .modal__header {
+    gap: $space-lg;
+  }
+}

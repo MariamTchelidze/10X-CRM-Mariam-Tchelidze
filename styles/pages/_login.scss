@@ -1,118 +1,88 @@
-@use "../abstracts/mixins" as *;
 @use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
 
 .auth {
+  position: relative;
+  display: grid;
   min-height: 100vh;
-  @include flex(row, center, center);
   padding: $space-lg;
-  background-color: $dark-bg-body;
+  background: var(--color-bg);
+}
+
+.auth__tools {
+  position: fixed;
+  top: $space-lg;
+  right: $space-lg;
+  z-index: 3;
 }
 
 .auth__container {
-  @include grid(2, 0);
-
-  width: 100%;
-  max-width: 140rem;
+  align-self: center;
+  justify-self: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  width: min(138rem, 100%);
   overflow: hidden;
-  background-color: $dark-bg-surface;
-  border: 0.1rem solid $dark-border;
-  border-radius: $radius-2xl;
-  box-shadow: $shadow-lg;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 
 .auth__content {
-  @include flex(column, center);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 68rem;
+  padding: $space-3xl;
+  background: var(--color-surface);
+}
+
+.auth--login .auth__visual {
+  order: 1;
+}
+
+.auth--login .auth__content {
   order: 2;
-  padding: $space-2xl;
 }
-
-.auth__visual {
-  position: relative;
-
-  overflow: hidden;
-
-  background:
-    radial-gradient(circle at top left, rgba($primary, 0.18), transparent 40%),
-    radial-gradient(circle at bottom right, rgba($secondary, 0.22), transparent 45%), $dark-bg-body;
-}
-
-.auth__visual::before {
-  content: "";
-
-  @include position(absolute, -8rem, -8rem);
-
-  width: 40rem;
-  aspect-ratio: 1;
-
-  border-radius: 50%;
-
-  background: rgba($primary, 0.22);
-
-  filter: blur(10rem);
-}
-
-.auth__visual::after {
-  content: "";
-
-  position: absolute;
-
-  bottom: -10rem;
-  left: -8rem;
-
-  width: 35rem;
-  aspect-ratio: 1;
-
-  border-radius: 50%;
-
-  background: rgba($secondary, 0.18);
-
-  filter: blur(8rem);
-}
-
-/* resopnsive */
 
 @include media(laptop) {
-  .auth__container {
-    max-width: 120rem;
+  .auth__content {
+    padding: $space-2xl;
   }
 }
 
 @include media(tablet) {
+  .auth {
+    padding: $space-md;
+  }
+
+  .auth__tools {
+    position: absolute;
+  }
+
   .auth__container {
     grid-template-columns: 1fr;
   }
 
-  .auth__visual {
-    display: none;
-  }
-
   .auth__content {
-    padding: $space-xl;
+    min-height: auto;
+    padding: $space-2xl $space-xl;
   }
 }
 
 @include media(mobile) {
   .auth {
-    padding: $space-md;
+    padding: 0;
   }
 
   .auth__container {
-    min-height: auto;
-
-    border-radius: $radius-xl;
+    min-height: 100vh;
+    border-radius: 0;
+    border-inline: 0;
   }
 
   .auth__content {
-    padding: $space-xl;
-  }
-}
-
-@include media(mobile-sm) {
-  .auth {
-    padding: $space-sm;
-  }
-
-  .auth__content {
-    padding: $space-lg;
+    padding: 8rem $space-lg $space-xl;
   }
 }

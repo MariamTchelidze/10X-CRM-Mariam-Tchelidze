@@ -1,70 +1,100 @@
 @use "../abstracts/variables" as *;
-@use "../base/typography" as *;
-@use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
+
+.auth-form,
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
 
 .auth-form {
   width: 100%;
   max-width: 48rem;
   margin-inline: auto;
-  @include flex(column);
-  gap: $space-xl;
 }
 
-.auth-form__group {
-  @include flex(column, 1.5rem);
+.auth-form__row,
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-lg;
 }
 
-.auth-form__label {
-  margin-bottom: $space-xs;
+.auth-form__group,
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.auth-form__label,
+.field__label {
+  color: var(--color-text-secondary);
   font-size: 1.4rem;
-  font-weight: $fw-medium;
-  color: $dark-text-secondary;
+  font-weight: $fw-semibold;
 }
 
-.auth-form__options {
+.auth-form__options,
+.auth-form__terms {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $space-md;
-  margin-top: $space-xs;
-  margin-bottom: $space-sm;
 }
 
 .auth-form__forgot {
-  color: $secondary;
-  font-size: 1.5rem;
-  font-weight: $fw-medium;
-  text-decoration: none;
-  transition: color $transition;
+  color: var(--color-secondary);
+  font-size: 1.4rem;
+  font-weight: $fw-semibold;
 
-  &:hover {
-    color: $primary;
-  }
-
+  &:hover,
   &:focus-visible {
-    outline: none;
-    color: $primary;
+    color: var(--color-primary);
   }
 }
 
-@media (max-width: 768px) {
+.form-error,
+.form-hint {
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.form-error {
+  color: var(--color-danger);
+}
+
+.form-hint {
+  color: var(--color-text-muted);
+}
+
+.password-strength {
+  overflow: hidden;
+  height: 0.6rem;
+  border-radius: $radius-full;
+  background: var(--color-divider);
+}
+
+.password-strength__bar {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-warning);
+}
+
+@include media(tablet) {
+  .auth-form__row,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
   .auth-form__options {
-    flex-direction: column;
     align-items: flex-start;
-  }
-
-  .auth-form__forgot {
-    align-self: flex-end;
-  }
-}
-
-@media (max-width: 480px) {
-  .auth-form {
-    gap: $space-md;
-  }
-
-  .auth-form__label {
-    font-size: 1.3rem;
+    flex-direction: column;
   }
 }

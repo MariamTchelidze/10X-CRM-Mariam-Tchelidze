@@ -1,7 +1,39 @@
+@use "../abstracts/mixins" as *;
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+body,
+input,
+button,
+textarea,
+select {
+  font-family: "Inter", sans-serif;
+}
+
+html:lang(ka) body,
+html:lang(ka) input,
+html:lang(ka) button,
+html:lang(ka) textarea,
+html:lang(ka) select {
+  font-family: "Noto Sans Georgian", "Inter", sans-serif;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.visually-hidden,
+.sr-only {
+  @include visually-hidden;
 }

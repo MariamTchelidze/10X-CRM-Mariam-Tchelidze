@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clients | 10X CRM</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/icons/Logo-dark-theme.svg" />
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+
+  <body class="theme-dark" data-theme="dark" data-page="clients">
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
+          <img
+            src="./assets/icons/Logo-dark-theme.svg"
+            data-theme-src-dark="./assets/icons/Logo-dark-theme.svg"
+            data-theme-src-light="./assets/icons/Logo-light-theme.svg"
+            alt=""
+            class="sidebar__logo-image"
+          />
+          <span class="sidebar__brand-text">10X CRM</span>
+        </a>
+
+        <nav class="sidebar__navigation" aria-label="Main navigation">
+          <ul class="sidebar__menu">
+            <li class="sidebar__item">
+              <a href="./dashboard.html" class="sidebar__link" data-nav="dashboard">
+                <img src="./assets/icons/dashboard.svg" alt="" class="sidebar__icon" />
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./clients.html" class="sidebar__link sidebar__link--active" data-nav="clients" aria-current="page">
+                <img src="./assets/icons/users.svg" alt="" class="sidebar__icon" />
+                <span>Clients</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a href="./profile.html" class="sidebar__link" data-nav="profile">
+                <img src="./assets/icons/user-profile.svg" alt="" class="sidebar__icon" />
+                <span>Profile</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar__footer">
+          <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
+            <span class="theme-toggle__track" aria-hidden="true">
+            <span class="theme-toggle__icon theme-toggle__icon--moon">
+              <img
+                src="./assets/icons/moon.svg"
+                data-theme-src-dark="./assets/icons/moon.svg"
+                data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__icon theme-toggle__icon--sun">
+              <img
+                src="./assets/icons/sun.svg"
+                data-theme-src-dark="./assets/icons/sun.svg"
+                data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                alt=""
+              />
+            </span>
+
+            <span class="theme-toggle__thumb"></span>
+          </span>
+          <span class="visually-hidden js-theme-label">Dark</span>
+          </button>
+
+          <button class="btn btn--ghost btn--full js-logout-btn" id="logout-btn" type="button">
+            <img src="./assets/icons/log out.svg" alt="" class="btn__icon" />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="app-main clients-page">
+        <header class="app-header">
+          <div class="app-header__content">
+            <div>
+              <p class="app-header__eyebrow">CRM database</p>
+              <h1 class="app-header__title">Clients</h1>
+            </div>
+
+            <button
+              class="btn btn--primary js-open-client-modal"
+              id="add-client-btn"
+              type="button"
+              data-modal-target="#client-modal"
+              aria-haspopup="dialog"
+              aria-controls="client-modal"
+            >
+              <img
+                src="./assets/icons/add.svg"
+                data-theme-src-dark="./assets/icons/add.svg"
+                data-theme-src-light="./assets/icons/add-light-theme.svg"
+                alt=""
+                class="btn__icon"
+              />
+              <span>Add Client</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="client-summary" aria-label="Client summary">
+          <article class="summary-card">
+            <span class="summary-card__label">Total</span>
+            <strong class="summary-card__value" id="clients-count-total">128</strong>
+          </article>
+          <article class="summary-card">
+            <span class="summary-card__label">Leads</span>
+            <strong class="summary-card__value" id="clients-count-lead">48</strong>
+          </article>
+          <article class="summary-card">
+            <span class="summary-card__label">Contacted</span>
+            <strong class="summary-card__value" id="clients-count-contacted">31</strong>
+          </article>
+          <article class="summary-card">
+            <span class="summary-card__label">Won</span>
+            <strong class="summary-card__value" id="clients-count-won">18</strong>
+          </article>
+        </section>
+
+        <section class="card client-workspace" aria-labelledby="clients-workspace-title">
+          <header class="card__header client-toolbar">
+            <div>
+              <p class="card__eyebrow">Search and filter</p>
+              <h2 class="card__title" id="clients-workspace-title">Client List</h2>
+            </div>
+
+            <div class="client-toolbar__actions">
+              <label class="search-field" for="clients-search">
+                <img
+                  src="./assets/icons/search.svg"
+                  data-theme-src-dark="./assets/icons/search.svg"
+                  data-theme-src-light="./assets/icons/search-light-theme.svg"
+                  alt=""
+                  class="search-field__icon"
+                />
+                <span class="visually-hidden">Search clients</span>
+                <input
+                  type="search"
+                  id="clients-search"
+                  class="search-field__input js-client-search"
+                  placeholder="Search by name, company, or email"
+                  data-search-field="clients"
+                />
+              </label>
+
+              <label class="select-field" for="clients-sort">
+                <span class="visually-hidden">Sort clients</span>
+                <select id="clients-sort" class="select-field__control js-client-sort" data-sort-field="clients">
+                  <option value="created-desc">Newest first</option>
+                  <option value="name-asc">Name A-Z</option>
+                  <option value="name-desc">Name Z-A</option>
+                  <option value="value-desc">Highest value</option>
+                  <option value="value-asc">Lowest value</option>
+                </select>
+              </label>
+            </div>
+          </header>
+
+          <div class="client-filters" aria-label="Client status filters">
+            <button class="filter-chip filter-chip--active js-status-filter" type="button" data-status-filter="all">All</button>
+            <button class="filter-chip js-status-filter" type="button" data-status-filter="lead">Lead</button>
+            <button class="filter-chip js-status-filter" type="button" data-status-filter="contacted">Contacted</button>
+            <button class="filter-chip js-status-filter" type="button" data-status-filter="won">Won</button>
+            <button class="filter-chip js-status-filter" type="button" data-status-filter="lost">Lost</button>
+          </div>
+
+          <div class="state-panel" id="clients-loading" hidden>
+            <span class="loader" aria-hidden="true"></span>
+            <p>Loading clients...</p>
+          </div>
+
+          <div class="state-panel state-panel--error" id="clients-error" hidden>
+            <img
+              src="./assets/icons/warning.svg"
+              data-theme-src-dark="./assets/icons/warning.svg"
+              data-theme-src-light="./assets/icons/warning-light-theme.svg"
+              alt=""
+            />
+            <p>Clients could not be loaded.</p>
+            <button class="btn btn--secondary js-retry-clients" type="button">Retry</button>
+          </div>
+
+          <div class="client-list" id="clients-list" data-render-target="clients">
+            <article class="client-card" data-client-id="demo-1" data-status="lead">
+              <div class="client-card__main">
+                <div class="client-card__avatar" aria-hidden="true">AG</div>
+                <div>
+                  <h3 class="client-card__name">Alpha Group</h3>
+                  <p class="client-card__company">Retail technology</p>
+                </div>
+              </div>
+
+              <dl class="client-card__meta">
+                <div>
+                  <dt>Email</dt>
+                  <dd>hello@alpha.example</dd>
+                </div>
+                <div>
+                  <dt>Phone</dt>
+                  <dd>+995 555 010 101</dd>
+                </div>
+                <div>
+                  <dt>Value</dt>
+                  <dd>$4,200</dd>
+                </div>
+              </dl>
+
+              <div class="client-card__footer">
+                <span class="status-badge status-badge--lead">Lead</span>
+                <div class="client-card__actions">
+                  <button class="icon-btn js-view-client" type="button" aria-label="View Alpha Group" data-client-action="view">
+                    <img
+                      src="./assets/icons/info.svg"
+                      data-theme-src-dark="./assets/icons/info.svg"
+                      data-theme-src-light="./assets/icons/info-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                  <button class="icon-btn js-edit-client" type="button" aria-label="Edit Alpha Group" data-client-action="edit">
+                    <img
+                      src="./assets/icons/Edit.svg"
+                      data-theme-src-dark="./assets/icons/Edit.svg"
+                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                  <button class="icon-btn icon-btn--danger js-delete-client" type="button" aria-label="Delete Alpha Group" data-client-action="delete">
+                    <img
+                      src="./assets/icons/Delete.svg"
+                      data-theme-src-dark="./assets/icons/Delete.svg"
+                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="client-card" data-client-id="demo-2" data-status="contacted">
+              <div class="client-card__main">
+                <div class="client-card__avatar" aria-hidden="true">NC</div>
+                <div>
+                  <h3 class="client-card__name">Nino Consulting</h3>
+                  <p class="client-card__company">Business services</p>
+                </div>
+              </div>
+
+              <dl class="client-card__meta">
+                <div>
+                  <dt>Email</dt>
+                  <dd>nino@example.com</dd>
+                </div>
+                <div>
+                  <dt>Phone</dt>
+                  <dd>+995 555 020 202</dd>
+                </div>
+                <div>
+                  <dt>Value</dt>
+                  <dd>$7,800</dd>
+                </div>
+              </dl>
+
+              <div class="client-card__footer">
+                <span class="status-badge status-badge--contacted">Contacted</span>
+                <div class="client-card__actions">
+                  <button class="icon-btn js-view-client" type="button" aria-label="View Nino Consulting" data-client-action="view">
+                    <img
+                      src="./assets/icons/info.svg"
+                      data-theme-src-dark="./assets/icons/info.svg"
+                      data-theme-src-light="./assets/icons/info-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                  <button class="icon-btn js-edit-client" type="button" aria-label="Edit Nino Consulting" data-client-action="edit">
+                    <img
+                      src="./assets/icons/Edit.svg"
+                      data-theme-src-dark="./assets/icons/Edit.svg"
+                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                  <button class="icon-btn icon-btn--danger js-delete-client" type="button" aria-label="Delete Nino Consulting" data-client-action="delete">
+                    <img
+                      src="./assets/icons/Delete.svg"
+                      data-theme-src-dark="./assets/icons/Delete.svg"
+                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <article class="client-card" data-client-id="demo-3" data-status="won">
+              <div class="client-card__main">
+                <div class="client-card__avatar" aria-hidden="true">BT</div>
+                <div>
+                  <h3 class="client-card__name">Blue Tech</h3>
+                  <p class="client-card__company">Software vendor</p>
+                </div>
+              </div>
+
+              <dl class="client-card__meta">
+                <div>
+                  <dt>Email</dt>
+                  <dd>sales@bluetech.example</dd>
+                </div>
+                <div>
+                  <dt>Phone</dt>
+                  <dd>+995 555 030 303</dd>
+                </div>
+                <div>
+                  <dt>Value</dt>
+                  <dd>$12,500</dd>
+                </div>
+              </dl>
+
+              <div class="client-card__footer">
+                <span class="status-badge status-badge--won">Won</span>
+                <div class="client-card__actions">
+                  <button class="icon-btn js-view-client" type="button" aria-label="View Blue Tech" data-client-action="view">
+                    <img
+                      src="./assets/icons/info.svg"
+                      data-theme-src-dark="./assets/icons/info.svg"
+                      data-theme-src-light="./assets/icons/info-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                  <button class="icon-btn js-edit-client" type="button" aria-label="Edit Blue Tech" data-client-action="edit">
+                    <img
+                      src="./assets/icons/Edit.svg"
+                      data-theme-src-dark="./assets/icons/Edit.svg"
+                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                  <button class="icon-btn icon-btn--danger js-delete-client" type="button" aria-label="Delete Blue Tech" data-client-action="delete">
+                    <img
+                      src="./assets/icons/Delete.svg"
+                      data-theme-src-dark="./assets/icons/Delete.svg"
+                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                      alt=""
+                    />
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="empty-state" id="clients-empty" hidden>
+            <img
+              src="./assets/icons/folder.svg"
+              data-theme-src-dark="./assets/icons/folder.svg"
+              data-theme-src-light="./assets/icons/folder-light-theme.svg"
+              alt=""
+            />
+            <h3>No clients found</h3>
+            <p>Adjust filters or add a new client to start building the CRM database.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <section
+      class="modal"
+      id="client-modal"
+      aria-labelledby="client-modal-title"
+      aria-describedby="client-modal-description"
+      aria-hidden="true"
+      data-modal-initial-focus="#client-name"
+      hidden
+    >
+      <div class="modal__dialog" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">Client manager</p>
+            <h2 class="modal__title" id="client-modal-title">Add Client</h2>
+            <p class="modal__description" id="client-modal-description">
+              Add the main client details now. Saving and rendering the client will connect in the next JavaScript step.
+            </p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close client form" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+
+        <form class="modal__body modal__body--form form-grid js-client-form" id="client-form" novalidate>
+          <div class="field">
+            <label for="client-name" class="field__label">Client Name</label>
+            <input id="client-name" name="name" class="input" type="text" placeholder="Client or contact name" required />
+            <p class="form-error" id="client-name-error" data-error-for="client-name" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="client-company" class="field__label">Company</label>
+            <input id="client-company" name="company" class="input" type="text" placeholder="Company name" required />
+            <p class="form-error" id="client-company-error" data-error-for="client-company" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="client-email" class="field__label">Email</label>
+            <input id="client-email" name="email" class="input" type="email" placeholder="client@example.com" required />
+            <p class="form-error" id="client-email-error" data-error-for="client-email" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="client-phone" class="field__label">Phone</label>
+            <input id="client-phone" name="phone" class="input" type="tel" placeholder="+995 555 000 000" required />
+            <p class="form-error" id="client-phone-error" data-error-for="client-phone" hidden></p>
+          </div>
+
+          <div class="field">
+            <label for="client-status" class="field__label">Status</label>
+            <select id="client-status" name="status" class="input" required>
+              <option value="lead">Lead</option>
+              <option value="contacted">Contacted</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="client-value" class="field__label">Deal Value</label>
+            <input id="client-value" name="value" class="input" type="number" min="0" step="100" placeholder="0" />
+          </div>
+
+          <div class="field field--full">
+            <label for="client-notes" class="field__label">Notes</label>
+            <textarea id="client-notes" name="notes" class="input input--textarea" rows="4" placeholder="Add a short note for future follow-up"></textarea>
+          </div>
+        </form>
+
+        <footer class="modal__footer">
+          <button class="btn btn--ghost js-close-modal" type="button" data-modal-close>Cancel</button>
+          <button class="btn btn--primary js-save-client" type="submit" form="client-form">Save Client</button>
+        </footer>
+      </div>
+    </section>
+
+    <section class="modal" id="client-details-modal" aria-labelledby="client-details-title" aria-hidden="true" hidden>
+      <div class="modal__dialog" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="card__eyebrow">Client details</p>
+            <h2 class="modal__title" id="client-details-title">Client Name</h2>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close client details" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+
+        <div class="modal__body client-details" id="client-details-content">
+          <dl class="details-list">
+            <div>
+              <dt>Email</dt>
+              <dd id="details-email">client@example.com</dd>
+            </div>
+            <div>
+              <dt>Phone</dt>
+              <dd id="details-phone">+995 555 000 000</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd id="details-status">Lead</dd>
+            </div>
+          </dl>
+
+          <form class="note-form js-note-form" id="client-note-form">
+            <label for="client-note" class="field__label">Add Note</label>
+            <textarea id="client-note" class="input input--textarea" rows="3" placeholder="Write a dated note"></textarea>
+            <button class="btn btn--secondary" type="submit">Add Note</button>
+          </form>
+
+          <div class="reminder-panel">
+            <label for="client-reminder" class="field__label">Reminder</label>
+            <input id="client-reminder" class="input" type="datetime-local" />
+            <button class="btn btn--ghost js-set-reminder" type="button">Set Reminder</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="modal" id="delete-client-modal" aria-labelledby="delete-client-title" aria-hidden="true" hidden>
+      <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <h2 class="modal__title" id="delete-client-title">Delete Client</h2>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close delete confirmation" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+        <div class="modal__body">
+          <p>This action will remove the selected client from the CRM list.</p>
+        </div>
+        <footer class="modal__footer">
+          <button class="btn btn--ghost js-close-modal" type="button" data-modal-close>Cancel</button>
+          <button class="btn btn--danger js-confirm-delete" type="button">Delete</button>
+        </footer>
+      </div>
+    </section>
+
+    <template id="client-card-template">
+      <article class="client-card" data-client-id="" data-status="">
+        <div class="client-card__main">
+          <div class="client-card__avatar" data-client-initials aria-hidden="true"></div>
+          <div>
+            <h3 class="client-card__name" data-client-name></h3>
+            <p class="client-card__company" data-client-company></p>
+          </div>
+        </div>
+        <dl class="client-card__meta">
+          <div>
+            <dt>Email</dt>
+            <dd data-client-email></dd>
+          </div>
+          <div>
+            <dt>Phone</dt>
+            <dd data-client-phone></dd>
+          </div>
+          <div>
+            <dt>Value</dt>
+            <dd data-client-value></dd>
+          </div>
+        </dl>
+        <div class="client-card__footer">
+          <span class="status-badge" data-client-status></span>
+          <div class="client-card__actions">
+            <button class="icon-btn js-view-client" type="button" data-client-action="view" aria-label="View client">
+              <img
+                      src="./assets/icons/info.svg"
+                      data-theme-src-dark="./assets/icons/info.svg"
+                      data-theme-src-light="./assets/icons/info-light-theme.svg"
+                      alt=""
+                    />
+            </button>
+            <button class="icon-btn js-edit-client" type="button" data-client-action="edit" aria-label="Edit client">
+              <img
+                      src="./assets/icons/Edit.svg"
+                      data-theme-src-dark="./assets/icons/Edit.svg"
+                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
+                      alt=""
+                    />
+            </button>
+            <button class="icon-btn icon-btn--danger js-delete-client" type="button" data-client-action="delete" aria-label="Delete client">
+              <img
+                      src="./assets/icons/Delete.svg"
+                      data-theme-src-dark="./assets/icons/Delete.svg"
+                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                      alt=""
+                    />
+            </button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="./js/ui/theme.js"></script>
+    <script src="./js/ui/modal.js"></script>
+    <script src="./js/auth/logout.js"></script>
+  </body>
+</html>

@@ -1,19 +1,51 @@
-const passwordFields = document.querySelectorAll(".password-field");
+"use strict";
 
-passwordFields.forEach((field) => {
-  const input = field.querySelector("input");
-  const toggle = field.querySelector(".password-field__toggle");
-  const icon = field.querySelector(".password-field__icon");
+(function initPasswordToggles() {
+  const getCurrentTheme = () => document.body.dataset.theme === "light" ? "light" : "dark";
 
-  if (!input || !toggle || !icon) return;
+  const getIconPath = (isVisible) => {
+    const state = isVisible ? "open" : "closed";
+    const suffix = getCurrentTheme() === "light" ? "-light-theme" : "";
 
-  toggle.addEventListener("click", () => {
-    const isHidden = input.type === "password";
+    return `./assets/icons/eye-${state}${suffix}.svg`;
+  };
 
-    input.type = isHidden ? "text" : "password";
+  const updateToggleIcon = (toggle, input) => {
+    const icon = toggle.querySelector(".password-field__icon");
+    const isVisible = input.type === "text";
 
-    icon.src = isHidden ? "./assets/icons/eye-open.svg" : "./assets/icons/eye-closed.svg";
+    if (icon) {
+      icon.src = getIconPath(isVisible);
+    }
 
-    toggle.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
-  });
-});
+    toggle.setAttribute("aria-label", isVisible ? "Hide password" : "Show password");
+  };
+
+  const setupToggle = (toggle) => {
+    const field = toggle.closest(".password-field");
+    const input = field ? field.querySelector("input") : null;
+
+    if (!input) return;
+
+    updateToggleIcon(toggle, input);
+
+    toggle.addEventListener("click", () => {
+      input.type = input.type === "password" ? "text" : "password";
+      updateToggleIcon(toggle, input);
+    });
+  };
+
+  const refreshIcons = () => {
+    document.querySelectorAll(".js-password-toggle").forEach((toggle) => {
+      const field = toggle.closest(".password-field");
+      const input = field ? field.querySelector("input") : null;
+
+      if (input) {
+        updateToggleIcon(toggle, input);
+      }
+    });
+  };
+
+  document.querySelectorAll(".js-password-toggle").forEach(setupToggle);
+  window.addEventListener("crm:themechange", refreshIcons);
+})();
