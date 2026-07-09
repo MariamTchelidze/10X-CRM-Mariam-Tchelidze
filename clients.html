@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./styles/main.css" />
   </head>
 
-  <body class="theme-dark" data-theme="dark" data-page="clients">
+  <body class="theme-dark clientsPage" data-theme="dark" data-page="clients">
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <div class="app-shell">
@@ -39,7 +39,12 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./clients.html" class="sidebar__link sidebar__link--active" data-nav="clients" aria-current="page">
+              <a
+                href="./clients.html"
+                class="sidebar__link sidebar__link--active"
+                data-nav="clients"
+                aria-current="page"
+              >
                 <img
                   src="./assets/icons/users.svg"
                   data-theme-src-dark="./assets/icons/users.svg"
@@ -69,7 +74,11 @@
 
           <ul class="sidebar__menu sidebar__menu--secondary">
             <li class="sidebar__item">
-              <a href="./dashboard.html#sales" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="sales">
+              <a
+                href="./dashboard.html#sales"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="sales"
+              >
                 <img
                   src="./assets/icons/goals.svg"
                   data-theme-src-dark="./assets/icons/goals.svg"
@@ -81,7 +90,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#reports" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="reports">
+              <a
+                href="./dashboard.html#reports"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="reports"
+              >
                 <img
                   src="./assets/icons/statistics.svg"
                   data-theme-src-dark="./assets/icons/statistics.svg"
@@ -93,7 +106,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#favourites" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="favourites">
+              <a
+                href="./dashboard.html#favourites"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="favourites"
+              >
                 <img
                   src="./assets/icons/star.svg"
                   data-theme-src-dark="./assets/icons/star.svg"
@@ -105,7 +122,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#activity" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="activity">
+              <a
+                href="./dashboard.html#activity"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="activity"
+              >
                 <img
                   src="./assets/icons/clock.svg"
                   data-theme-src-dark="./assets/icons/clock.svg"
@@ -117,7 +138,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#files" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="files">
+              <a
+                href="./dashboard.html#files"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="files"
+              >
                 <img
                   src="./assets/icons/folder.svg"
                   data-theme-src-dark="./assets/icons/folder.svg"
@@ -274,7 +299,9 @@
           </header>
 
           <div class="client-filters" aria-label="Client status filters">
-            <button class="filter-chip filter-chip--active js-status-filter" type="button" data-status-filter="all">All</button>
+            <button class="filter-chip filter-chip--active js-status-filter" type="button" data-status-filter="all">
+              All
+            </button>
             <button class="filter-chip js-status-filter" type="button" data-status-filter="lead">Lead</button>
             <button class="filter-chip js-status-filter" type="button" data-status-filter="contacted">Contacted</button>
             <button class="filter-chip js-status-filter" type="button" data-status-filter="won">Won</button>
@@ -325,7 +352,12 @@
               <div class="client-card__footer">
                 <span class="status-badge status-badge--lead">Lead</span>
                 <div class="client-card__actions">
-                  <button class="icon-btn js-view-client" type="button" aria-label="View Alpha Group" data-client-action="view">
+                  <button
+                    class="icon-btn js-view-client"
+                    type="button"
+                    aria-label="View Alpha Group"
+                    data-client-action="view"
+                  >
                     <img
                       src="./assets/icons/info.svg"
                       data-theme-src-dark="./assets/icons/info.svg"
@@ -333,7 +365,12 @@
                       alt=""
                     />
                   </button>
-                  <button class="icon-btn js-edit-client" type="button" aria-label="Edit Alpha Group" data-client-action="edit">
+                  <button
+                    class="icon-btn js-edit-client"
+                    type="button"
+                    aria-label="Edit Alpha Group"
+                    data-client-action="edit"
+                  >
                     <img
                       src="./assets/icons/Edit.svg"
                       data-theme-src-dark="./assets/icons/Edit.svg"
@@ -341,7 +378,12 @@
                       alt=""
                     />
                   </button>
-                  <button class="icon-btn icon-btn--danger js-delete-client" type="button" aria-label="Delete Alpha Group" data-client-action="delete">
+                  <button
+                    class="icon-btn icon-btn--danger js-delete-client"
+                    type="button"
+                    aria-label="Delete Alpha Group"
+                    data-client-action="delete"
+                  >
                     <img
                       src="./assets/icons/Delete.svg"
                       data-theme-src-dark="./assets/icons/Delete.svg"
@@ -380,7 +422,12 @@
               <div class="client-card__footer">
                 <span class="status-badge status-badge--contacted">Contacted</span>
                 <div class="client-card__actions">
-                  <button class="icon-btn js-view-client" type="button" aria-label="View Nino Consulting" data-client-action="view">
+                  <button
+                    class="icon-btn js-view-client"
+                    type="button"
+                    aria-label="View Nino Consulting"
+                    data-client-action="view"
+                  >
                     <img
                       src="./assets/icons/info.svg"
                       data-theme-src-dark="./assets/icons/info.svg"
@@ -388,7 +435,12 @@
                       alt=""
                     />
                   </button>
-                  <button class="icon-btn js-edit-client" type="button" aria-label="Edit Nino Consulting" data-client-action="edit">
+                  <button
+                    class="icon-btn js-edit-client"
+                    type="button"
+                    aria-label="Edit Nino Consulting"
+                    data-client-action="edit"
+                  >
                     <img
                       src="./assets/icons/Edit.svg"
                       data-theme-src-dark="./assets/icons/Edit.svg"
@@ -396,7 +448,12 @@
                       alt=""
                     />
                   </button>
-                  <button class="icon-btn icon-btn--danger js-delete-client" type="button" aria-label="Delete Nino Consulting" data-client-action="delete">
+                  <button
+                    class="icon-btn icon-btn--danger js-delete-client"
+                    type="button"
+                    aria-label="Delete Nino Consulting"
+                    data-client-action="delete"
+                  >
                     <img
                       src="./assets/icons/Delete.svg"
                       data-theme-src-dark="./assets/icons/Delete.svg"
@@ -435,7 +492,12 @@
               <div class="client-card__footer">
                 <span class="status-badge status-badge--won">Won</span>
                 <div class="client-card__actions">
-                  <button class="icon-btn js-view-client" type="button" aria-label="View Blue Tech" data-client-action="view">
+                  <button
+                    class="icon-btn js-view-client"
+                    type="button"
+                    aria-label="View Blue Tech"
+                    data-client-action="view"
+                  >
                     <img
                       src="./assets/icons/info.svg"
                       data-theme-src-dark="./assets/icons/info.svg"
@@ -443,7 +505,12 @@
                       alt=""
                     />
                   </button>
-                  <button class="icon-btn js-edit-client" type="button" aria-label="Edit Blue Tech" data-client-action="edit">
+                  <button
+                    class="icon-btn js-edit-client"
+                    type="button"
+                    aria-label="Edit Blue Tech"
+                    data-client-action="edit"
+                  >
                     <img
                       src="./assets/icons/Edit.svg"
                       data-theme-src-dark="./assets/icons/Edit.svg"
@@ -451,7 +518,12 @@
                       alt=""
                     />
                   </button>
-                  <button class="icon-btn icon-btn--danger js-delete-client" type="button" aria-label="Delete Blue Tech" data-client-action="delete">
+                  <button
+                    class="icon-btn icon-btn--danger js-delete-client"
+                    type="button"
+                    aria-label="Delete Blue Tech"
+                    data-client-action="delete"
+                  >
                     <img
                       src="./assets/icons/Delete.svg"
                       data-theme-src-dark="./assets/icons/Delete.svg"
@@ -509,7 +581,14 @@
         <form class="modal__body modal__body--form form-grid js-client-form" id="client-form" novalidate>
           <div class="field">
             <label for="client-name" class="field__label">Client Name</label>
-            <input id="client-name" name="name" class="input" type="text" placeholder="Client or contact name" required />
+            <input
+              id="client-name"
+              name="name"
+              class="input"
+              type="text"
+              placeholder="Client or contact name"
+              required
+            />
             <p class="form-error" id="client-name-error" data-error-for="client-name" hidden></p>
           </div>
 
@@ -521,7 +600,14 @@
 
           <div class="field">
             <label for="client-email" class="field__label">Email</label>
-            <input id="client-email" name="email" class="input" type="email" placeholder="client@example.com" required />
+            <input
+              id="client-email"
+              name="email"
+              class="input"
+              type="email"
+              placeholder="client@example.com"
+              required
+            />
             <p class="form-error" id="client-email-error" data-error-for="client-email" hidden></p>
           </div>
 
@@ -548,7 +634,13 @@
 
           <div class="field field--full">
             <label for="client-notes" class="field__label">Notes</label>
-            <textarea id="client-notes" name="notes" class="input input--textarea" rows="4" placeholder="Add a short note for future follow-up"></textarea>
+            <textarea
+              id="client-notes"
+              name="notes"
+              class="input input--textarea"
+              rows="4"
+              placeholder="Add a short note for future follow-up"
+            ></textarea>
           </div>
         </form>
 
@@ -594,7 +686,12 @@
 
           <form class="note-form js-note-form" id="client-note-form">
             <label for="client-note" class="field__label">Add Note</label>
-            <textarea id="client-note" class="input input--textarea" rows="3" placeholder="Write a dated note"></textarea>
+            <textarea
+              id="client-note"
+              class="input input--textarea"
+              rows="3"
+              placeholder="Write a dated note"
+            ></textarea>
             <button class="btn btn--secondary" type="submit">Add Note</button>
           </form>
 
@@ -658,27 +755,32 @@
           <div class="client-card__actions">
             <button class="icon-btn js-view-client" type="button" data-client-action="view" aria-label="View client">
               <img
-                      src="./assets/icons/info.svg"
-                      data-theme-src-dark="./assets/icons/info.svg"
-                      data-theme-src-light="./assets/icons/info-light-theme.svg"
-                      alt=""
-                    />
+                src="./assets/icons/info.svg"
+                data-theme-src-dark="./assets/icons/info.svg"
+                data-theme-src-light="./assets/icons/info-light-theme.svg"
+                alt=""
+              />
             </button>
             <button class="icon-btn js-edit-client" type="button" data-client-action="edit" aria-label="Edit client">
               <img
-                      src="./assets/icons/Edit.svg"
-                      data-theme-src-dark="./assets/icons/Edit.svg"
-                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
-                      alt=""
-                    />
+                src="./assets/icons/Edit.svg"
+                data-theme-src-dark="./assets/icons/Edit.svg"
+                data-theme-src-light="./assets/icons/Edit-light-theme.svg"
+                alt=""
+              />
             </button>
-            <button class="icon-btn icon-btn--danger js-delete-client" type="button" data-client-action="delete" aria-label="Delete client">
+            <button
+              class="icon-btn icon-btn--danger js-delete-client"
+              type="button"
+              data-client-action="delete"
+              aria-label="Delete client"
+            >
               <img
-                      src="./assets/icons/Delete.svg"
-                      data-theme-src-dark="./assets/icons/Delete.svg"
-                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
-                      alt=""
-                    />
+                src="./assets/icons/Delete.svg"
+                data-theme-src-dark="./assets/icons/Delete.svg"
+                data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                alt=""
+              />
             </button>
           </div>
         </div>
@@ -718,21 +820,39 @@
             <legend class="settings-group__legend">Theme</legend>
             <div class="settings-options settings-options--three">
               <label class="settings-option" for="settings-theme-dark">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-dark" type="radio" name="settings-theme" value="dark" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-dark"
+                  type="radio"
+                  name="settings-theme"
+                  value="dark"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Dark</span>
                   <span class="settings-option__text">Default CRM theme</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-theme-light">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-light" type="radio" name="settings-theme" value="light" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-light"
+                  type="radio"
+                  name="settings-theme"
+                  value="light"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Light</span>
                   <span class="settings-option__text">Bright workspace</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-theme-custom">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-custom" type="radio" name="settings-theme" value="custom" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-custom"
+                  type="radio"
+                  name="settings-theme"
+                  value="custom"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Custom</span>
                   <span class="settings-option__text">Use accent color</span>
@@ -745,21 +865,39 @@
             <legend class="settings-group__legend">Font Size</legend>
             <div class="settings-options settings-options--three">
               <label class="settings-option" for="settings-font-small">
-                <input class="settings-option__input js-settings-font" id="settings-font-small" type="radio" name="settings-font-size" value="small" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-small"
+                  type="radio"
+                  name="settings-font-size"
+                  value="small"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Small</span>
                   <span class="settings-option__text">Dense reading</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-font-medium">
-                <input class="settings-option__input js-settings-font" id="settings-font-medium" type="radio" name="settings-font-size" value="medium" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-medium"
+                  type="radio"
+                  name="settings-font-size"
+                  value="medium"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Medium</span>
                   <span class="settings-option__text">Recommended</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-font-large">
-                <input class="settings-option__input js-settings-font" id="settings-font-large" type="radio" name="settings-font-size" value="large" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-large"
+                  type="radio"
+                  name="settings-font-size"
+                  value="large"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Large</span>
                   <span class="settings-option__text">More readable</span>
@@ -772,14 +910,26 @@
             <legend class="settings-group__legend">Layout Density</legend>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-density-comfortable">
-                <input class="settings-option__input js-settings-density" id="settings-density-comfortable" type="radio" name="settings-density" value="comfortable" />
+                <input
+                  class="settings-option__input js-settings-density"
+                  id="settings-density-comfortable"
+                  type="radio"
+                  name="settings-density"
+                  value="comfortable"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Comfortable</span>
                   <span class="settings-option__text">Roomier spacing</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-density-compact">
-                <input class="settings-option__input js-settings-density" id="settings-density-compact" type="radio" name="settings-density" value="compact" />
+                <input
+                  class="settings-option__input js-settings-density"
+                  id="settings-density-compact"
+                  type="radio"
+                  name="settings-density"
+                  value="compact"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Compact</span>
                   <span class="settings-option__text">More data on screen</span>
@@ -793,16 +943,36 @@
             <div class="settings-color-row">
               <label class="settings-color-field" for="settings-accent-color">
                 <span class="settings-color-field__label">Accent color</span>
-                <input class="settings-color-field__input js-settings-accent" id="settings-accent-color" type="color" value="#ff6b1a" />
+                <input
+                  class="settings-color-field__input js-settings-accent"
+                  id="settings-accent-color"
+                  type="color"
+                  value="#ff6b1a"
+                />
               </label>
               <div class="settings-swatches" aria-label="Suggested accent colors">
-                <button class="settings-swatch" type="button" data-accent-color="#ff6b1a" style="--swatch-color: #ff6b1a">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#ff6b1a"
+                  style="--swatch-color: #ff6b1a"
+                >
                   <span class="visually-hidden">Orange</span>
                 </button>
-                <button class="settings-swatch" type="button" data-accent-color="#4c8fea" style="--swatch-color: #4c8fea">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#4c8fea"
+                  style="--swatch-color: #4c8fea"
+                >
                   <span class="visually-hidden">Blue</span>
                 </button>
-                <button class="settings-swatch" type="button" data-accent-color="#55b975" style="--swatch-color: #55b975">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#55b975"
+                  style="--swatch-color: #55b975"
+                >
                   <span class="visually-hidden">Green</span>
                 </button>
               </div>
@@ -813,14 +983,26 @@
             <legend class="settings-group__legend">Language</legend>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-language-en">
-                <input class="settings-option__input js-settings-language" id="settings-language-en" type="radio" name="settings-language" value="en" />
+                <input
+                  class="settings-option__input js-settings-language"
+                  id="settings-language-en"
+                  type="radio"
+                  name="settings-language"
+                  value="en"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">English</span>
                   <span class="settings-option__text">Current default</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-language-ka">
-                <input class="settings-option__input js-settings-language" id="settings-language-ka" type="radio" name="settings-language" value="ka" />
+                <input
+                  class="settings-option__input js-settings-language"
+                  id="settings-language-ka"
+                  type="radio"
+                  name="settings-language"
+                  value="ka"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Georgian</span>
                   <span class="settings-option__text">Prepared for translation</span>
@@ -832,9 +1014,6 @@
       </div>
     </section>
 
-    <script src="./js/ui/theme.js"></script>
-    <script src="./js/ui/modal.js"></script>
-    <script src="./js/ui/settings.js"></script>
-    <script src="./js/auth/logout.js"></script>
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>

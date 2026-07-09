@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./styles/main.css" />
   </head>
 
-  <body class="theme-dark" data-theme="dark" data-page="profile">
+  <body class="theme-dark profilePage" data-theme="dark" data-page="profile">
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <div class="app-shell">
@@ -51,7 +51,12 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./profile.html" class="sidebar__link sidebar__link--active" data-nav="profile" aria-current="page">
+              <a
+                href="./profile.html"
+                class="sidebar__link sidebar__link--active"
+                data-nav="profile"
+                aria-current="page"
+              >
                 <img
                   src="./assets/icons/user-profile.svg"
                   data-theme-src-dark="./assets/icons/user-profile.svg"
@@ -69,7 +74,11 @@
 
           <ul class="sidebar__menu sidebar__menu--secondary">
             <li class="sidebar__item">
-              <a href="./dashboard.html#sales" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="sales">
+              <a
+                href="./dashboard.html#sales"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="sales"
+              >
                 <img
                   src="./assets/icons/goals.svg"
                   data-theme-src-dark="./assets/icons/goals.svg"
@@ -81,7 +90,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#reports" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="reports">
+              <a
+                href="./dashboard.html#reports"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="reports"
+              >
                 <img
                   src="./assets/icons/statistics.svg"
                   data-theme-src-dark="./assets/icons/statistics.svg"
@@ -93,7 +106,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#favourites" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="favourites">
+              <a
+                href="./dashboard.html#favourites"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="favourites"
+              >
                 <img
                   src="./assets/icons/star.svg"
                   data-theme-src-dark="./assets/icons/star.svg"
@@ -105,7 +122,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#activity" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="activity">
+              <a
+                href="./dashboard.html#activity"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="activity"
+              >
                 <img
                   src="./assets/icons/clock.svg"
                   data-theme-src-dark="./assets/icons/clock.svg"
@@ -117,7 +138,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#files" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="files">
+              <a
+                href="./dashboard.html#files"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="files"
+              >
                 <img
                   src="./assets/icons/folder.svg"
                   data-theme-src-dark="./assets/icons/folder.svg"
@@ -206,7 +231,12 @@
               </div>
               <div class="profile-avatar-block">
                 <div class="profile-avatar" id="profile-avatar-preview" aria-live="polite">
-                  <img src="" alt="Profile photo preview" class="profile-avatar__image js-profile-avatar-image" hidden />
+                  <img
+                    src=""
+                    alt="Profile photo preview"
+                    class="profile-avatar__image js-profile-avatar-image"
+                    hidden
+                  />
                   <span class="profile-avatar__initials js-profile-avatar-initials" aria-hidden="true">MT</span>
                 </div>
 
@@ -272,7 +302,9 @@
 
               <div class="field field--full">
                 <label for="profile-bio" class="field__label">Short Bio</label>
-                <textarea id="profile-bio" name="bio" class="input input--textarea" rows="4">Building a vanilla JavaScript CRM for the 10X course project.</textarea>
+                <textarea id="profile-bio" name="bio" class="input input--textarea" rows="4">
+Building a vanilla JavaScript CRM for the 10X course project.</textarea
+                >
               </div>
             </form>
 
@@ -292,8 +324,20 @@
                 <div class="field">
                   <label for="current-password" class="field__label">Current Password</label>
                   <div class="password-field">
-                    <input id="current-password" name="currentPassword" class="input" type="password" autocomplete="current-password" required />
-                    <button type="button" class="password-field__toggle js-password-toggle" data-password-toggle aria-label="Show password">
+                    <input
+                      id="current-password"
+                      name="currentPassword"
+                      class="input"
+                      type="password"
+                      autocomplete="current-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="password-field__toggle js-password-toggle"
+                      data-password-toggle
+                      aria-label="Show password"
+                    >
                       <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
                     </button>
                   </div>
@@ -302,8 +346,20 @@
                 <div class="field">
                   <label for="new-password" class="field__label">New Password</label>
                   <div class="password-field">
-                    <input id="new-password" name="newPassword" class="input" type="password" autocomplete="new-password" required />
-                    <button type="button" class="password-field__toggle js-password-toggle" data-password-toggle aria-label="Show password">
+                    <input
+                      id="new-password"
+                      name="newPassword"
+                      class="input"
+                      type="password"
+                      autocomplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="password-field__toggle js-password-toggle"
+                      data-password-toggle
+                      aria-label="Show password"
+                    >
                       <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
                     </button>
                   </div>
@@ -312,8 +368,20 @@
                 <div class="field">
                   <label for="confirm-new-password" class="field__label">Confirm Password</label>
                   <div class="password-field">
-                    <input id="confirm-new-password" name="confirmNewPassword" class="input" type="password" autocomplete="new-password" required />
-                    <button type="button" class="password-field__toggle js-password-toggle" data-password-toggle aria-label="Show password">
+                    <input
+                      id="confirm-new-password"
+                      name="confirmNewPassword"
+                      class="input"
+                      type="password"
+                      autocomplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      class="password-field__toggle js-password-toggle"
+                      data-password-toggle
+                      aria-label="Show password"
+                    >
                       <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
                     </button>
                   </div>
@@ -321,7 +389,11 @@
               </form>
 
               <footer class="card__footer">
-                <button class="btn btn--secondary btn--full js-change-password" type="submit" form="profile-password-form">
+                <button
+                  class="btn btn--secondary btn--full js-change-password"
+                  type="submit"
+                  form="profile-password-form"
+                >
                   Update Password
                 </button>
               </footer>
@@ -340,27 +412,27 @@
                   </div>
                   <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
                     <span class="theme-toggle__track" aria-hidden="true">
-            <span class="theme-toggle__icon theme-toggle__icon--moon">
-              <img
-                src="./assets/icons/moon.svg"
-                data-theme-src-dark="./assets/icons/moon.svg"
-                data-theme-src-light="./assets/icons/moon-light-theme.svg"
-                alt=""
-              />
-            </span>
+                      <span class="theme-toggle__icon theme-toggle__icon--moon">
+                        <img
+                          src="./assets/icons/moon.svg"
+                          data-theme-src-dark="./assets/icons/moon.svg"
+                          data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                          alt=""
+                        />
+                      </span>
 
-            <span class="theme-toggle__icon theme-toggle__icon--sun">
-              <img
-                src="./assets/icons/sun.svg"
-                data-theme-src-dark="./assets/icons/sun.svg"
-                data-theme-src-light="./assets/icons/sun-light-theme.svg"
-                alt=""
-              />
-            </span>
+                      <span class="theme-toggle__icon theme-toggle__icon--sun">
+                        <img
+                          src="./assets/icons/sun.svg"
+                          data-theme-src-dark="./assets/icons/sun.svg"
+                          data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                          alt=""
+                        />
+                      </span>
 
-            <span class="theme-toggle__thumb"></span>
-          </span>
-          <span class="visually-hidden js-theme-label">Dark</span>
+                      <span class="theme-toggle__thumb"></span>
+                    </span>
+                    <span class="visually-hidden js-theme-label">Dark</span>
                   </button>
                 </div>
 
@@ -369,7 +441,13 @@
                     <h3 class="preference-row__title">Stored Data</h3>
                     <p class="preference-row__text">Reset local CRM demo data when testing the project.</p>
                   </div>
-                  <button class="btn btn--danger js-open-reset-modal" type="button" data-modal-target="reset-data-modal">Reset</button>
+                  <button
+                    class="btn btn--danger js-open-reset-modal"
+                    type="button"
+                    data-modal-target="reset-data-modal"
+                  >
+                    Reset
+                  </button>
                 </div>
               </div>
             </article>
@@ -392,7 +470,10 @@
           </button>
         </header>
         <div class="modal__body">
-          <p>This will clear local demo data for users, session, clients, and theme when the JavaScript reset is implemented.</p>
+          <p>
+            This will clear local demo data for users, session, clients, and theme when the JavaScript reset is
+            implemented.
+          </p>
         </div>
         <footer class="modal__footer">
           <button class="btn btn--ghost js-close-modal" type="button" data-modal-close>Cancel</button>
@@ -434,21 +515,39 @@
             <legend class="settings-group__legend">Theme</legend>
             <div class="settings-options settings-options--three">
               <label class="settings-option" for="settings-theme-dark">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-dark" type="radio" name="settings-theme" value="dark" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-dark"
+                  type="radio"
+                  name="settings-theme"
+                  value="dark"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Dark</span>
                   <span class="settings-option__text">Default CRM theme</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-theme-light">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-light" type="radio" name="settings-theme" value="light" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-light"
+                  type="radio"
+                  name="settings-theme"
+                  value="light"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Light</span>
                   <span class="settings-option__text">Bright workspace</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-theme-custom">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-custom" type="radio" name="settings-theme" value="custom" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-custom"
+                  type="radio"
+                  name="settings-theme"
+                  value="custom"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Custom</span>
                   <span class="settings-option__text">Use accent color</span>
@@ -461,21 +560,39 @@
             <legend class="settings-group__legend">Font Size</legend>
             <div class="settings-options settings-options--three">
               <label class="settings-option" for="settings-font-small">
-                <input class="settings-option__input js-settings-font" id="settings-font-small" type="radio" name="settings-font-size" value="small" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-small"
+                  type="radio"
+                  name="settings-font-size"
+                  value="small"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Small</span>
                   <span class="settings-option__text">Dense reading</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-font-medium">
-                <input class="settings-option__input js-settings-font" id="settings-font-medium" type="radio" name="settings-font-size" value="medium" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-medium"
+                  type="radio"
+                  name="settings-font-size"
+                  value="medium"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Medium</span>
                   <span class="settings-option__text">Recommended</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-font-large">
-                <input class="settings-option__input js-settings-font" id="settings-font-large" type="radio" name="settings-font-size" value="large" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-large"
+                  type="radio"
+                  name="settings-font-size"
+                  value="large"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Large</span>
                   <span class="settings-option__text">More readable</span>
@@ -488,14 +605,26 @@
             <legend class="settings-group__legend">Layout Density</legend>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-density-comfortable">
-                <input class="settings-option__input js-settings-density" id="settings-density-comfortable" type="radio" name="settings-density" value="comfortable" />
+                <input
+                  class="settings-option__input js-settings-density"
+                  id="settings-density-comfortable"
+                  type="radio"
+                  name="settings-density"
+                  value="comfortable"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Comfortable</span>
                   <span class="settings-option__text">Roomier spacing</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-density-compact">
-                <input class="settings-option__input js-settings-density" id="settings-density-compact" type="radio" name="settings-density" value="compact" />
+                <input
+                  class="settings-option__input js-settings-density"
+                  id="settings-density-compact"
+                  type="radio"
+                  name="settings-density"
+                  value="compact"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Compact</span>
                   <span class="settings-option__text">More data on screen</span>
@@ -509,16 +638,36 @@
             <div class="settings-color-row">
               <label class="settings-color-field" for="settings-accent-color">
                 <span class="settings-color-field__label">Accent color</span>
-                <input class="settings-color-field__input js-settings-accent" id="settings-accent-color" type="color" value="#ff6b1a" />
+                <input
+                  class="settings-color-field__input js-settings-accent"
+                  id="settings-accent-color"
+                  type="color"
+                  value="#ff6b1a"
+                />
               </label>
               <div class="settings-swatches" aria-label="Suggested accent colors">
-                <button class="settings-swatch" type="button" data-accent-color="#ff6b1a" style="--swatch-color: #ff6b1a">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#ff6b1a"
+                  style="--swatch-color: #ff6b1a"
+                >
                   <span class="visually-hidden">Orange</span>
                 </button>
-                <button class="settings-swatch" type="button" data-accent-color="#4c8fea" style="--swatch-color: #4c8fea">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#4c8fea"
+                  style="--swatch-color: #4c8fea"
+                >
                   <span class="visually-hidden">Blue</span>
                 </button>
-                <button class="settings-swatch" type="button" data-accent-color="#55b975" style="--swatch-color: #55b975">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#55b975"
+                  style="--swatch-color: #55b975"
+                >
                   <span class="visually-hidden">Green</span>
                 </button>
               </div>
@@ -529,14 +678,26 @@
             <legend class="settings-group__legend">Language</legend>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-language-en">
-                <input class="settings-option__input js-settings-language" id="settings-language-en" type="radio" name="settings-language" value="en" />
+                <input
+                  class="settings-option__input js-settings-language"
+                  id="settings-language-en"
+                  type="radio"
+                  name="settings-language"
+                  value="en"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">English</span>
                   <span class="settings-option__text">Current default</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-language-ka">
-                <input class="settings-option__input js-settings-language" id="settings-language-ka" type="radio" name="settings-language" value="ka" />
+                <input
+                  class="settings-option__input js-settings-language"
+                  id="settings-language-ka"
+                  type="radio"
+                  name="settings-language"
+                  value="ka"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Georgian</span>
                   <span class="settings-option__text">Prepared for translation</span>
@@ -548,11 +709,6 @@
       </div>
     </section>
 
-    <script src="./js/ui/theme.js"></script>
-    <script src="./js/ui/modal.js"></script>
-    <script src="./js/ui/settings.js"></script>
-    <script src="./js/components/passwordToggle.js"></script>
-    <script src="./js/auth/logout.js"></script>
-    <script src="./js/profile/avatar.js"></script>
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>

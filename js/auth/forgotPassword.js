@@ -1,77 +1,84 @@
 "use strict";
+const forgotPasswordPage = document.querySelector(".forgotPasswordPage");
 
-(function initForgotPasswordForm() {
-  const form = document.querySelector(".js-forgot-password-form");
+initForgotPassword();
 
-  if (!form) return;
+function initForgotPassword() {
+  if (!forgotPasswordPage) return;
 
-  const emailInput = form.querySelector(".js-forgot-email");
-  const submitButton = form.querySelector(".js-forgot-password-submit");
-  const statusMessage = form.querySelector(".js-forgot-password-status");
-  const emailError = document.querySelector("[data-error-for='forgot-email']");
+  (function initForgotPasswordForm() {
+    const form = document.querySelector(".js-forgot-password-form");
 
-  const setEmailError = (message) => {
-    if (!emailError || !emailInput) return;
+    if (!form) return;
 
-    emailError.textContent = message;
-    emailError.hidden = !message;
-    emailInput.classList.toggle("input--error", Boolean(message));
-  };
+    const emailInput = form.querySelector(".js-forgot-email");
+    const submitButton = form.querySelector(".js-forgot-password-submit");
+    const statusMessage = form.querySelector(".js-forgot-password-status");
+    const emailError = document.querySelector("[data-error-for='forgot-email']");
 
-  const showSuccess = () => {
-    if (!statusMessage) return;
+    const setEmailError = (message) => {
+      if (!emailError || !emailInput) return;
 
-    statusMessage.hidden = false;
-  };
+      emailError.textContent = message;
+      emailError.hidden = !message;
+      emailInput.classList.toggle("input--error", Boolean(message));
+    };
 
-  const hideSuccess = () => {
-    if (!statusMessage) return;
+    const showSuccess = () => {
+      if (!statusMessage) return;
 
-    statusMessage.hidden = true;
-  };
+      statusMessage.hidden = false;
+    };
 
-  const validateEmail = () => {
-    if (!emailInput) return false;
+    const hideSuccess = () => {
+      if (!statusMessage) return;
 
-    const email = emailInput.value.trim();
+      statusMessage.hidden = true;
+    };
 
-    if (!email) {
-      setEmailError("Please enter your email address.");
-      return false;
-    }
+    const validateEmail = () => {
+      if (!emailInput) return false;
 
-    if (!emailInput.validity.valid) {
-      setEmailError("Please enter a valid email address.");
-      return false;
-    }
+      const email = emailInput.value.trim();
 
-    setEmailError("");
-    return true;
-  };
+      if (!email) {
+        setEmailError("Please enter your email address.");
+        return false;
+      }
 
-  emailInput?.addEventListener("input", () => {
-    setEmailError("");
-    hideSuccess();
-  });
+      if (!emailInput.validity.valid) {
+        setEmailError("Please enter a valid email address.");
+        return false;
+      }
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    hideSuccess();
+      setEmailError("");
+      return true;
+    };
 
-    if (!validateEmail()) return;
+    emailInput?.addEventListener("input", () => {
+      setEmailError("");
+      hideSuccess();
+    });
 
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Reset Link Sent";
-    }
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      hideSuccess();
 
-    showSuccess();
+      if (!validateEmail()) return;
 
-    window.setTimeout(() => {
-      if (!submitButton) return;
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Reset Link Sent";
+      }
 
-      submitButton.disabled = false;
-      submitButton.textContent = "Send Reset Link";
-    }, 1800);
-  });
-})();
+      showSuccess();
+
+      window.setTimeout(() => {
+        if (!submitButton) return;
+
+        submitButton.disabled = false;
+        submitButton.textContent = "Send Reset Link";
+      }, 1800);
+    });
+  })();
+}

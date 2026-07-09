@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./styles/main.css" />
   </head>
 
-  <body class="theme-dark" data-theme="dark" data-page="dashboard">
+  <body class="theme-dark dashboardPage" data-theme="dark" data-page="dashboard">
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <div class="app-shell">
@@ -27,7 +27,12 @@
         <nav class="sidebar__navigation" aria-label="Main navigation">
           <ul class="sidebar__menu">
             <li class="sidebar__item">
-              <a href="./dashboard.html" class="sidebar__link sidebar__link--active" data-nav="dashboard" aria-current="page">
+              <a
+                href="./dashboard.html"
+                class="sidebar__link sidebar__link--active"
+                data-nav="dashboard"
+                aria-current="page"
+              >
                 <img
                   src="./assets/icons/dashboard.svg"
                   data-theme-src-dark="./assets/icons/dashboard.svg"
@@ -69,7 +74,11 @@
 
           <ul class="sidebar__menu sidebar__menu--secondary">
             <li class="sidebar__item">
-              <a href="./dashboard.html#sales" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="sales">
+              <a
+                href="./dashboard.html#sales"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="sales"
+              >
                 <img
                   src="./assets/icons/goals.svg"
                   data-theme-src-dark="./assets/icons/goals.svg"
@@ -81,7 +90,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#reports" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="reports">
+              <a
+                href="./dashboard.html#reports"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="reports"
+              >
                 <img
                   src="./assets/icons/statistics.svg"
                   data-theme-src-dark="./assets/icons/statistics.svg"
@@ -93,7 +106,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#favourites" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="favourites">
+              <a
+                href="./dashboard.html#favourites"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="favourites"
+              >
                 <img
                   src="./assets/icons/star.svg"
                   data-theme-src-dark="./assets/icons/star.svg"
@@ -105,7 +122,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#activity" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="activity">
+              <a
+                href="./dashboard.html#activity"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="activity"
+              >
                 <img
                   src="./assets/icons/clock.svg"
                   data-theme-src-dark="./assets/icons/clock.svg"
@@ -117,7 +138,11 @@
               </a>
             </li>
             <li class="sidebar__item">
-              <a href="./dashboard.html#files" class="sidebar__link sidebar__link--secondary" data-dashboard-section-link="files">
+              <a
+                href="./dashboard.html#files"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="files"
+              >
                 <img
                   src="./assets/icons/folder.svg"
                   data-theme-src-dark="./assets/icons/folder.svg"
@@ -206,170 +231,200 @@
         </header>
 
         <div class="dashboard-default-view js-dashboard-view" data-dashboard-view="overview">
-        <section class="welcome-panel" aria-labelledby="welcome-title">
-          <div>
-            <p class="welcome-panel__subtitle">Welcome back,</p>
-            <h2 class="welcome-panel__title" id="welcome-title">
-              <span id="dashboard-greeting">Mariam</span>
-            </h2>
-            <p class="welcome-panel__description">Here is a clean snapshot of client activity and sales progress.</p>
-          </div>
-
-          <a href="./clients.html" class="btn btn--primary">Manage Clients</a>
-        </section>
-
-        <section class="stats-grid" aria-label="Dashboard statistics">
-          <article class="stats-card" data-stat="clients">
-            <img src="./assets/icons/users.svg" alt="" class="stats-card__icon" />
-            <p class="stats-card__label">Total Clients</p>
-            <strong class="stats-card__value" id="stats-total">128</strong>
-            <span class="stats-card__trend">12 new this week</span>
-          </article>
-
-          <article class="stats-card" data-stat="active">
-            <img src="./assets/icons/folder.svg" alt="" class="stats-card__icon" />
-            <p class="stats-card__label">Active Deals</p>
-            <strong class="stats-card__value" id="stats-active">42</strong>
-            <span class="stats-card__trend">8 need follow-up</span>
-          </article>
-
-          <article class="stats-card" data-stat="revenue">
-            <img src="./assets/icons/statistics.svg" alt="" class="stats-card__icon" />
-            <p class="stats-card__label">Won Revenue</p>
-            <strong class="stats-card__value" id="stats-revenue">$24,500</strong>
-            <span class="stats-card__trend">18 closed deals</span>
-          </article>
-
-          <article class="stats-card" data-stat="pending">
-            <img src="./assets/icons/clock.svg" alt="" class="stats-card__icon" />
-            <p class="stats-card__label">Pending Tasks</p>
-            <strong class="stats-card__value" id="stats-pending">7</strong>
-            <span class="stats-card__trend">3 due today</span>
-          </article>
-        </section>
-
-        <section class="dashboard-grid">
-          <article class="card pipeline-card" aria-labelledby="pipeline-title">
-            <header class="card__header">
-              <div>
-                <p class="card__eyebrow">Pipeline</p>
-                <h2 class="card__title" id="pipeline-title">Status Overview</h2>
-              </div>
-            </header>
-
-            <div class="card__body pipeline-list" id="pipeline-overview">
-              <div class="pipeline-item" data-status="lead">
-                <div class="pipeline-item__info">
-                  <span class="pipeline-item__label">Lead</span>
-                  <strong class="pipeline-item__count" id="pipeline-lead">48</strong>
-                </div>
-                <div class="pipeline-item__track" aria-hidden="true">
-                  <span class="pipeline-item__fill" id="pipeline-lead-fill" style="width: 90%"></span>
-                </div>
-              </div>
-
-              <div class="pipeline-item" data-status="contacted">
-                <div class="pipeline-item__info">
-                  <span class="pipeline-item__label">Contacted</span>
-                  <strong class="pipeline-item__count" id="pipeline-contacted">31</strong>
-                </div>
-                <div class="pipeline-item__track" aria-hidden="true">
-                  <span class="pipeline-item__fill" id="pipeline-contacted-fill" style="width: 70%"></span>
-                </div>
-              </div>
-
-              <div class="pipeline-item" data-status="won">
-                <div class="pipeline-item__info">
-                  <span class="pipeline-item__label">Won</span>
-                  <strong class="pipeline-item__count" id="pipeline-won">18</strong>
-                </div>
-                <div class="pipeline-item__track" aria-hidden="true">
-                  <span class="pipeline-item__fill" id="pipeline-won-fill" style="width: 45%"></span>
-                </div>
-              </div>
-
-              <div class="pipeline-item" data-status="lost">
-                <div class="pipeline-item__info">
-                  <span class="pipeline-item__label">Lost</span>
-                  <strong class="pipeline-item__count" id="pipeline-lost">7</strong>
-                </div>
-                <div class="pipeline-item__track" aria-hidden="true">
-                  <span class="pipeline-item__fill" id="pipeline-lost-fill" style="width: 20%"></span>
-                </div>
-              </div>
+          <section class="welcome-panel" aria-labelledby="welcome-title">
+            <div>
+              <p class="welcome-panel__subtitle">Welcome back,</p>
+              <h2 class="welcome-panel__title" id="welcome-title">
+                <span id="dashboard-greeting">Mariam</span>
+              </h2>
+              <p class="welcome-panel__description">Here is a clean snapshot of client activity and sales progress.</p>
             </div>
-          </article>
 
-          <article class="card recent-clients" aria-labelledby="recent-clients-title">
-            <header class="card__header card__header--split">
-              <div>
-                <p class="card__eyebrow">Recent activity</p>
-                <h2 class="card__title" id="recent-clients-title">Recent Clients</h2>
+            <a href="./clients.html" class="btn btn--primary">Manage Clients</a>
+          </section>
+
+          <section class="stats-grid" aria-label="Dashboard statistics">
+            <article class="stats-card" data-stat="clients">
+              <img src="./assets/icons/users.svg" alt="" class="stats-card__icon" />
+              <p class="stats-card__label">Total Clients</p>
+              <strong class="stats-card__value" id="stats-total">128</strong>
+              <span class="stats-card__trend">12 new this week</span>
+            </article>
+
+            <article class="stats-card" data-stat="active">
+              <img src="./assets/icons/folder.svg" alt="" class="stats-card__icon" />
+              <p class="stats-card__label">Active Deals</p>
+              <strong class="stats-card__value" id="stats-active">42</strong>
+              <span class="stats-card__trend">8 need follow-up</span>
+            </article>
+
+            <article class="stats-card" data-stat="revenue">
+              <img src="./assets/icons/statistics.svg" alt="" class="stats-card__icon" />
+              <p class="stats-card__label">Won Revenue</p>
+              <strong class="stats-card__value" id="stats-revenue">$24,500</strong>
+              <span class="stats-card__trend">18 closed deals</span>
+            </article>
+
+            <article class="stats-card" data-stat="pending">
+              <img src="./assets/icons/clock.svg" alt="" class="stats-card__icon" />
+              <p class="stats-card__label">Pending Tasks</p>
+              <strong class="stats-card__value" id="stats-pending">7</strong>
+              <span class="stats-card__trend">3 due today</span>
+            </article>
+          </section>
+
+          <section class="dashboard-grid">
+            <article class="card pipeline-card" aria-labelledby="pipeline-title">
+              <header class="card__header">
+                <div>
+                  <p class="card__eyebrow">Pipeline</p>
+                  <h2 class="card__title" id="pipeline-title">Status Overview</h2>
+                </div>
+              </header>
+
+              <div class="card__body pipeline-list" id="pipeline-overview">
+                <div class="pipeline-item" data-status="lead">
+                  <div class="pipeline-item__info">
+                    <span class="pipeline-item__label">Lead</span>
+                    <strong class="pipeline-item__count" id="pipeline-lead">48</strong>
+                  </div>
+                  <div class="pipeline-item__track" aria-hidden="true">
+                    <span class="pipeline-item__fill" id="pipeline-lead-fill" style="width: 90%"></span>
+                  </div>
+                </div>
+
+                <div class="pipeline-item" data-status="contacted">
+                  <div class="pipeline-item__info">
+                    <span class="pipeline-item__label">Contacted</span>
+                    <strong class="pipeline-item__count" id="pipeline-contacted">31</strong>
+                  </div>
+                  <div class="pipeline-item__track" aria-hidden="true">
+                    <span class="pipeline-item__fill" id="pipeline-contacted-fill" style="width: 70%"></span>
+                  </div>
+                </div>
+
+                <div class="pipeline-item" data-status="won">
+                  <div class="pipeline-item__info">
+                    <span class="pipeline-item__label">Won</span>
+                    <strong class="pipeline-item__count" id="pipeline-won">18</strong>
+                  </div>
+                  <div class="pipeline-item__track" aria-hidden="true">
+                    <span class="pipeline-item__fill" id="pipeline-won-fill" style="width: 45%"></span>
+                  </div>
+                </div>
+
+                <div class="pipeline-item" data-status="lost">
+                  <div class="pipeline-item__info">
+                    <span class="pipeline-item__label">Lost</span>
+                    <strong class="pipeline-item__count" id="pipeline-lost">7</strong>
+                  </div>
+                  <div class="pipeline-item__track" aria-hidden="true">
+                    <span class="pipeline-item__fill" id="pipeline-lost-fill" style="width: 20%"></span>
+                  </div>
+                </div>
               </div>
-              <a href="./clients.html" class="card__link" id="view-all-clients">View all</a>
-            </header>
+            </article>
 
-            <div class="card__body">
-              <div class="recent-clients__list" id="recent-clients-list" data-render-target="recent-clients">
-                <article class="recent-client" data-client-id="demo-1">
-                  <div class="recent-client__avatar" aria-hidden="true">NC</div>
-                  <div class="recent-client__info">
-                    <h3 class="recent-client__name">Nino Consulting</h3>
-                    <p class="recent-client__company">Enterprise account</p>
-                  </div>
-                  <span class="status-badge status-badge--contacted">Contacted</span>
-                </article>
+            <article class="card recent-clients" aria-labelledby="recent-clients-title">
+              <header class="card__header card__header--split">
+                <div>
+                  <p class="card__eyebrow">Recent activity</p>
+                  <h2 class="card__title" id="recent-clients-title">Recent Clients</h2>
+                </div>
+                <a href="./clients.html" class="card__link" id="view-all-clients">View all</a>
+              </header>
 
-                <article class="recent-client" data-client-id="demo-2">
-                  <div class="recent-client__avatar" aria-hidden="true">AG</div>
-                  <div class="recent-client__info">
-                    <h3 class="recent-client__name">Alpha Group</h3>
-                    <p class="recent-client__company">Product demo booked</p>
-                  </div>
-                  <span class="status-badge status-badge--lead">Lead</span>
-                </article>
+              <div class="card__body">
+                <div class="recent-clients__list" id="recent-clients-list" data-render-target="recent-clients">
+                  <article class="recent-client" data-client-id="demo-1">
+                    <div class="recent-client__avatar" aria-hidden="true">NC</div>
+                    <div class="recent-client__info">
+                      <h3 class="recent-client__name">Nino Consulting</h3>
+                      <p class="recent-client__company">Enterprise account</p>
+                    </div>
+                    <span class="status-badge status-badge--contacted">Contacted</span>
+                  </article>
 
-                <article class="recent-client" data-client-id="demo-3">
-                  <div class="recent-client__avatar" aria-hidden="true">BT</div>
-                  <div class="recent-client__info">
-                    <h3 class="recent-client__name">Blue Tech</h3>
-                    <p class="recent-client__company">Contract signed</p>
-                  </div>
-                  <span class="status-badge status-badge--won">Won</span>
-                </article>
+                  <article class="recent-client" data-client-id="demo-2">
+                    <div class="recent-client__avatar" aria-hidden="true">AG</div>
+                    <div class="recent-client__info">
+                      <h3 class="recent-client__name">Alpha Group</h3>
+                      <p class="recent-client__company">Product demo booked</p>
+                    </div>
+                    <span class="status-badge status-badge--lead">Lead</span>
+                  </article>
+
+                  <article class="recent-client" data-client-id="demo-3">
+                    <div class="recent-client__avatar" aria-hidden="true">BT</div>
+                    <div class="recent-client__info">
+                      <h3 class="recent-client__name">Blue Tech</h3>
+                      <p class="recent-client__company">Contract signed</p>
+                    </div>
+                    <span class="status-badge status-badge--won">Won</span>
+                  </article>
+                </div>
               </div>
-            </div>
-          </article>
-        </section>
+            </article>
+          </section>
         </div>
 
-        <section class="dashboard-section js-dashboard-view" id="sales" data-dashboard-view="sales" aria-labelledby="sales-title" hidden>
+        <section
+          class="dashboard-section js-dashboard-view"
+          id="sales"
+          data-dashboard-view="sales"
+          aria-labelledby="sales-title"
+          hidden
+        >
           <header class="dashboard-section__header">
             <div>
               <p class="card__eyebrow">Sales workspace</p>
               <h2 class="dashboard-section__title" id="sales-title">Sales</h2>
             </div>
             <a href="./clients.html" class="btn btn--primary">
-              <img src="./assets/icons/add.svg" data-theme-src-dark="./assets/icons/add.svg" data-theme-src-light="./assets/icons/add-light-theme.svg" alt="" class="btn__icon" />
+              <img
+                src="./assets/icons/add.svg"
+                data-theme-src-dark="./assets/icons/add.svg"
+                data-theme-src-light="./assets/icons/add-light-theme.svg"
+                alt=""
+                class="btn__icon"
+              />
               <span>Add Client</span>
             </a>
           </header>
 
           <div class="dashboard-panel-grid">
             <article class="dashboard-panel-card">
-              <img src="./assets/icons/goals.svg" data-theme-src-dark="./assets/icons/goals.svg" data-theme-src-light="./assets/icons/goals-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <img
+                src="./assets/icons/goals.svg"
+                data-theme-src-dark="./assets/icons/goals.svg"
+                data-theme-src-light="./assets/icons/goals-light-theme.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
               <span class="dashboard-panel-card__label">Monthly Target</span>
               <strong class="dashboard-panel-card__value">$32,000</strong>
               <p class="dashboard-panel-card__text">76% of target is already covered by active and won deals.</p>
             </article>
             <article class="dashboard-panel-card">
-              <img src="./assets/icons/users.svg" data-theme-src-dark="./assets/icons/users.svg" data-theme-src-light="./assets/icons/users-light-mode.svg" alt="" class="dashboard-panel-card__icon" />
+              <img
+                src="./assets/icons/users.svg"
+                data-theme-src-dark="./assets/icons/users.svg"
+                data-theme-src-light="./assets/icons/users-light-mode.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
               <span class="dashboard-panel-card__label">Hot Leads</span>
               <strong class="dashboard-panel-card__value">14</strong>
               <p class="dashboard-panel-card__text">Leads with recent activity and high projected value.</p>
             </article>
             <article class="dashboard-panel-card">
-              <img src="./assets/icons/calendar.svg" data-theme-src-dark="./assets/icons/calendar.svg" data-theme-src-light="./assets/icons/calendar-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <img
+                src="./assets/icons/calendar.svg"
+                data-theme-src-dark="./assets/icons/calendar.svg"
+                data-theme-src-light="./assets/icons/calendar-light-theme.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
               <span class="dashboard-panel-card__label">Follow-ups</span>
               <strong class="dashboard-panel-card__value">7</strong>
               <p class="dashboard-panel-card__text">Tasks that need attention today or tomorrow.</p>
@@ -400,7 +455,13 @@
           </article>
         </section>
 
-        <section class="dashboard-section js-dashboard-view" id="reports" data-dashboard-view="reports" aria-labelledby="reports-title" hidden>
+        <section
+          class="dashboard-section js-dashboard-view"
+          id="reports"
+          data-dashboard-view="reports"
+          aria-labelledby="reports-title"
+          hidden
+        >
           <header class="dashboard-section__header">
             <div>
               <p class="card__eyebrow">Reporting center</p>
@@ -410,13 +471,25 @@
 
           <div class="dashboard-panel-grid">
             <article class="dashboard-panel-card">
-              <img src="./assets/icons/statistics.svg" data-theme-src-dark="./assets/icons/statistics.svg" data-theme-src-light="./assets/icons/statistics-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <img
+                src="./assets/icons/statistics.svg"
+                data-theme-src-dark="./assets/icons/statistics.svg"
+                data-theme-src-light="./assets/icons/statistics-light-theme.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
               <span class="dashboard-panel-card__label">Pipeline Health</span>
               <strong class="dashboard-panel-card__value">96%</strong>
               <p class="dashboard-panel-card__text">Balanced pipeline across lead, contacted, and won stages.</p>
             </article>
             <article class="dashboard-panel-card">
-              <img src="./assets/icons/data.svg" data-theme-src-dark="./assets/icons/data.svg" data-theme-src-light="./assets/icons/data-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <img
+                src="./assets/icons/data.svg"
+                data-theme-src-dark="./assets/icons/data.svg"
+                data-theme-src-light="./assets/icons/data-light-theme.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
               <span class="dashboard-panel-card__label">Conversion</span>
               <strong class="dashboard-panel-card__value">38%</strong>
               <p class="dashboard-panel-card__text">Demo conversion placeholder for the future client data module.</p>
@@ -429,12 +502,24 @@
             </header>
             <div class="card__body dashboard-list">
               <div class="dashboard-list__item">
-                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <img
+                  src="./assets/icons/txt-doc.svg"
+                  data-theme-src-dark="./assets/icons/txt-doc.svg"
+                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
+                  alt=""
+                  class="dashboard-list__icon"
+                />
                 <strong>Weekly Client Status</strong>
                 <span>Lead, contacted, won, and lost totals.</span>
               </div>
               <div class="dashboard-list__item">
-                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <img
+                  src="./assets/icons/txt-doc.svg"
+                  data-theme-src-dark="./assets/icons/txt-doc.svg"
+                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
+                  alt=""
+                  class="dashboard-list__icon"
+                />
                 <strong>Sales Target Overview</strong>
                 <span>Revenue and target progress summary.</span>
               </div>
@@ -442,7 +527,13 @@
           </article>
         </section>
 
-        <section class="dashboard-section js-dashboard-view" id="favourites" data-dashboard-view="favourites" aria-labelledby="favourites-title" hidden>
+        <section
+          class="dashboard-section js-dashboard-view"
+          id="favourites"
+          data-dashboard-view="favourites"
+          aria-labelledby="favourites-title"
+          hidden
+        >
           <header class="dashboard-section__header">
             <div>
               <p class="card__eyebrow">Pinned workspace</p>
@@ -452,7 +543,13 @@
 
           <div class="dashboard-panel-grid">
             <article class="dashboard-panel-card">
-              <img src="./assets/icons/stared.svg" data-theme-src-dark="./assets/icons/stared.svg" data-theme-src-light="./assets/icons/stared-light-theme.svg" alt="" class="dashboard-panel-card__icon" />
+              <img
+                src="./assets/icons/stared.svg"
+                data-theme-src-dark="./assets/icons/stared.svg"
+                data-theme-src-light="./assets/icons/stared-light-theme.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
               <span class="dashboard-panel-card__label">Pinned Clients</span>
               <strong class="dashboard-panel-card__value">3</strong>
               <p class="dashboard-panel-card__text">Important clients you want to reach quickly.</p>
@@ -465,12 +562,24 @@
             </header>
             <div class="card__body dashboard-list">
               <div class="dashboard-list__item">
-                <img src="./assets/icons/star.svg" data-theme-src-dark="./assets/icons/star.svg" data-theme-src-light="./assets/icons/star-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <img
+                  src="./assets/icons/star.svg"
+                  data-theme-src-dark="./assets/icons/star.svg"
+                  data-theme-src-light="./assets/icons/star-light-theme.svg"
+                  alt=""
+                  class="dashboard-list__icon"
+                />
                 <strong>Blue Tech</strong>
                 <span>Won client with onboarding follow-up.</span>
               </div>
               <div class="dashboard-list__item">
-                <img src="./assets/icons/star.svg" data-theme-src-dark="./assets/icons/star.svg" data-theme-src-light="./assets/icons/star-light-theme.svg" alt="" class="dashboard-list__icon" />
+                <img
+                  src="./assets/icons/star.svg"
+                  data-theme-src-dark="./assets/icons/star.svg"
+                  data-theme-src-light="./assets/icons/star-light-theme.svg"
+                  alt=""
+                  class="dashboard-list__icon"
+                />
                 <strong>Nino Consulting</strong>
                 <span>Contacted account waiting for proposal confirmation.</span>
               </div>
@@ -478,7 +587,13 @@
           </article>
         </section>
 
-        <section class="dashboard-section js-dashboard-view" id="activity" data-dashboard-view="activity" aria-labelledby="activity-title" hidden>
+        <section
+          class="dashboard-section js-dashboard-view"
+          id="activity"
+          data-dashboard-view="activity"
+          aria-labelledby="activity-title"
+          hidden
+        >
           <header class="dashboard-section__header">
             <div>
               <p class="card__eyebrow">Timeline</p>
@@ -492,21 +607,39 @@
             </header>
             <div class="card__body activity-timeline">
               <div class="activity-timeline__item">
-                <img src="./assets/icons/check-symbol.svg" data-theme-src-dark="./assets/icons/check-symbol.svg" data-theme-src-light="./assets/icons/check-symbol-light-theme.svg" alt="" class="activity-timeline__icon" />
+                <img
+                  src="./assets/icons/check-symbol.svg"
+                  data-theme-src-dark="./assets/icons/check-symbol.svg"
+                  data-theme-src-light="./assets/icons/check-symbol-light-theme.svg"
+                  alt=""
+                  class="activity-timeline__icon"
+                />
                 <div>
                   <strong>Blue Tech moved to won.</strong>
                   <span>Today, 09:20</span>
                 </div>
               </div>
               <div class="activity-timeline__item">
-                <img src="./assets/icons/chat.svg" data-theme-src-dark="./assets/icons/chat.svg" data-theme-src-light="./assets/icons/chat-light-theme.svg" alt="" class="activity-timeline__icon" />
+                <img
+                  src="./assets/icons/chat.svg"
+                  data-theme-src-dark="./assets/icons/chat.svg"
+                  data-theme-src-light="./assets/icons/chat-light-theme.svg"
+                  alt=""
+                  class="activity-timeline__icon"
+                />
                 <div>
                   <strong>Nino Consulting note added.</strong>
                   <span>Yesterday, 17:45</span>
                 </div>
               </div>
               <div class="activity-timeline__item">
-                <img src="./assets/icons/calendar.svg" data-theme-src-dark="./assets/icons/calendar.svg" data-theme-src-light="./assets/icons/calendar-light-theme.svg" alt="" class="activity-timeline__icon" />
+                <img
+                  src="./assets/icons/calendar.svg"
+                  data-theme-src-dark="./assets/icons/calendar.svg"
+                  data-theme-src-light="./assets/icons/calendar-light-theme.svg"
+                  alt=""
+                  class="activity-timeline__icon"
+                />
                 <div>
                   <strong>Alpha Group demo scheduled.</strong>
                   <span>Yesterday, 12:10</span>
@@ -516,14 +649,26 @@
           </article>
         </section>
 
-        <section class="dashboard-section js-dashboard-view" id="files" data-dashboard-view="files" aria-labelledby="files-title" hidden>
+        <section
+          class="dashboard-section js-dashboard-view"
+          id="files"
+          data-dashboard-view="files"
+          aria-labelledby="files-title"
+          hidden
+        >
           <header class="dashboard-section__header">
             <div>
               <p class="card__eyebrow">Account documents</p>
               <h2 class="dashboard-section__title" id="files-title">Files</h2>
             </div>
             <button class="btn btn--ghost" type="button" disabled>
-              <img src="./assets/icons/upload.svg" data-theme-src-dark="./assets/icons/upload.svg" data-theme-src-light="./assets/icons/upload-light-theme.svg" alt="" class="btn__icon" />
+              <img
+                src="./assets/icons/upload.svg"
+                data-theme-src-dark="./assets/icons/upload.svg"
+                data-theme-src-light="./assets/icons/upload-light-theme.svg"
+                alt=""
+                class="btn__icon"
+              />
               <span>Upload later</span>
             </button>
           </header>
@@ -534,28 +679,52 @@
             </header>
             <div class="card__body file-list">
               <article class="file-item">
-                <img src="./assets/icons/document.svg" data-theme-src-dark="./assets/icons/document.svg" data-theme-src-light="./assets/icons/document-light-theme.svg" alt="" class="file-item__icon" />
+                <img
+                  src="./assets/icons/document.svg"
+                  data-theme-src-dark="./assets/icons/document.svg"
+                  data-theme-src-light="./assets/icons/document-light-theme.svg"
+                  alt=""
+                  class="file-item__icon"
+                />
                 <div>
                   <h3 class="file-item__title">10X-CRM-Exam-PRD.md</h3>
                   <p class="file-item__meta">Project document • assets/document</p>
                 </div>
               </article>
               <article class="file-item">
-                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="file-item__icon" />
+                <img
+                  src="./assets/icons/txt-doc.svg"
+                  data-theme-src-dark="./assets/icons/txt-doc.svg"
+                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
+                  alt=""
+                  class="file-item__icon"
+                />
                 <div>
                   <h3 class="file-item__title">ai-log.md</h3>
                   <p class="file-item__meta">AI usage notes • assets/document</p>
                 </div>
               </article>
               <article class="file-item">
-                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="file-item__icon" />
+                <img
+                  src="./assets/icons/txt-doc.svg"
+                  data-theme-src-dark="./assets/icons/txt-doc.svg"
+                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
+                  alt=""
+                  class="file-item__icon"
+                />
                 <div>
                   <h3 class="file-item__title">glossary.md</h3>
                   <p class="file-item__meta">Technical English package • assets/document</p>
                 </div>
               </article>
               <article class="file-item">
-                <img src="./assets/icons/txt-doc.svg" data-theme-src-dark="./assets/icons/txt-doc.svg" data-theme-src-light="./assets/icons/txt-doc-light-theme.svg" alt="" class="file-item__icon" />
+                <img
+                  src="./assets/icons/txt-doc.svg"
+                  data-theme-src-dark="./assets/icons/txt-doc.svg"
+                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
+                  alt=""
+                  class="file-item__icon"
+                />
                 <div>
                   <h3 class="file-item__title">research-note.md</h3>
                   <p class="file-item__meta">Research source note • assets/document</p>
@@ -563,7 +732,8 @@
               </article>
             </div>
           </article>
-        </section>      </main>
+        </section>
+      </main>
     </div>
 
     <section
@@ -599,21 +769,39 @@
             <legend class="settings-group__legend">Theme</legend>
             <div class="settings-options settings-options--three">
               <label class="settings-option" for="settings-theme-dark">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-dark" type="radio" name="settings-theme" value="dark" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-dark"
+                  type="radio"
+                  name="settings-theme"
+                  value="dark"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Dark</span>
                   <span class="settings-option__text">Default CRM theme</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-theme-light">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-light" type="radio" name="settings-theme" value="light" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-light"
+                  type="radio"
+                  name="settings-theme"
+                  value="light"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Light</span>
                   <span class="settings-option__text">Bright workspace</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-theme-custom">
-                <input class="settings-option__input js-settings-theme" id="settings-theme-custom" type="radio" name="settings-theme" value="custom" />
+                <input
+                  class="settings-option__input js-settings-theme"
+                  id="settings-theme-custom"
+                  type="radio"
+                  name="settings-theme"
+                  value="custom"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Custom</span>
                   <span class="settings-option__text">Use accent color</span>
@@ -626,21 +814,39 @@
             <legend class="settings-group__legend">Font Size</legend>
             <div class="settings-options settings-options--three">
               <label class="settings-option" for="settings-font-small">
-                <input class="settings-option__input js-settings-font" id="settings-font-small" type="radio" name="settings-font-size" value="small" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-small"
+                  type="radio"
+                  name="settings-font-size"
+                  value="small"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Small</span>
                   <span class="settings-option__text">Dense reading</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-font-medium">
-                <input class="settings-option__input js-settings-font" id="settings-font-medium" type="radio" name="settings-font-size" value="medium" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-medium"
+                  type="radio"
+                  name="settings-font-size"
+                  value="medium"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Medium</span>
                   <span class="settings-option__text">Recommended</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-font-large">
-                <input class="settings-option__input js-settings-font" id="settings-font-large" type="radio" name="settings-font-size" value="large" />
+                <input
+                  class="settings-option__input js-settings-font"
+                  id="settings-font-large"
+                  type="radio"
+                  name="settings-font-size"
+                  value="large"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Large</span>
                   <span class="settings-option__text">More readable</span>
@@ -653,14 +859,26 @@
             <legend class="settings-group__legend">Layout Density</legend>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-density-comfortable">
-                <input class="settings-option__input js-settings-density" id="settings-density-comfortable" type="radio" name="settings-density" value="comfortable" />
+                <input
+                  class="settings-option__input js-settings-density"
+                  id="settings-density-comfortable"
+                  type="radio"
+                  name="settings-density"
+                  value="comfortable"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Comfortable</span>
                   <span class="settings-option__text">Roomier spacing</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-density-compact">
-                <input class="settings-option__input js-settings-density" id="settings-density-compact" type="radio" name="settings-density" value="compact" />
+                <input
+                  class="settings-option__input js-settings-density"
+                  id="settings-density-compact"
+                  type="radio"
+                  name="settings-density"
+                  value="compact"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Compact</span>
                   <span class="settings-option__text">More data on screen</span>
@@ -674,16 +892,36 @@
             <div class="settings-color-row">
               <label class="settings-color-field" for="settings-accent-color">
                 <span class="settings-color-field__label">Accent color</span>
-                <input class="settings-color-field__input js-settings-accent" id="settings-accent-color" type="color" value="#ff6b1a" />
+                <input
+                  class="settings-color-field__input js-settings-accent"
+                  id="settings-accent-color"
+                  type="color"
+                  value="#ff6b1a"
+                />
               </label>
               <div class="settings-swatches" aria-label="Suggested accent colors">
-                <button class="settings-swatch" type="button" data-accent-color="#ff6b1a" style="--swatch-color: #ff6b1a">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#ff6b1a"
+                  style="--swatch-color: #ff6b1a"
+                >
                   <span class="visually-hidden">Orange</span>
                 </button>
-                <button class="settings-swatch" type="button" data-accent-color="#4c8fea" style="--swatch-color: #4c8fea">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#4c8fea"
+                  style="--swatch-color: #4c8fea"
+                >
                   <span class="visually-hidden">Blue</span>
                 </button>
-                <button class="settings-swatch" type="button" data-accent-color="#55b975" style="--swatch-color: #55b975">
+                <button
+                  class="settings-swatch"
+                  type="button"
+                  data-accent-color="#55b975"
+                  style="--swatch-color: #55b975"
+                >
                   <span class="visually-hidden">Green</span>
                 </button>
               </div>
@@ -694,14 +932,26 @@
             <legend class="settings-group__legend">Language</legend>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-language-en">
-                <input class="settings-option__input js-settings-language" id="settings-language-en" type="radio" name="settings-language" value="en" />
+                <input
+                  class="settings-option__input js-settings-language"
+                  id="settings-language-en"
+                  type="radio"
+                  name="settings-language"
+                  value="en"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">English</span>
                   <span class="settings-option__text">Current default</span>
                 </span>
               </label>
               <label class="settings-option" for="settings-language-ka">
-                <input class="settings-option__input js-settings-language" id="settings-language-ka" type="radio" name="settings-language" value="ka" />
+                <input
+                  class="settings-option__input js-settings-language"
+                  id="settings-language-ka"
+                  type="radio"
+                  name="settings-language"
+                  value="ka"
+                />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Georgian</span>
                   <span class="settings-option__text">Prepared for translation</span>
@@ -713,10 +963,6 @@
       </div>
     </section>
 
-    <script src="./js/ui/theme.js"></script>
-    <script src="./js/ui/modal.js"></script>
-    <script src="./js/ui/settings.js"></script>
-    <script src="./js/dashboard/sections.js"></script>
-    <script src="./js/auth/logout.js"></script>
+    <script type="module" src="./js/app.js"></script>
   </body>
 </html>
