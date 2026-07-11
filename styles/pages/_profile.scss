@@ -1,4 +1,4 @@
-﻿@use "../abstracts/variables" as *;
+@use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
 .profile-grid {
@@ -297,3 +297,56 @@
   justify-content: center;
 }
 
+
+.profile-private-stats {
+  display: grid;
+  gap: $space-lg;
+  padding: $space-xl;
+  border-top: 0.1rem solid var(--color-divider);
+}
+
+.profile-private-stats__title {
+  color: var(--color-text);
+  font-size: 1.8rem;
+}
+
+.profile-private-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $space-md;
+}
+
+.profile-private-stats__item {
+  display: grid;
+  gap: $space-xs;
+  padding: $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+}
+
+.profile-private-stats__item span {
+  color: var(--color-text-muted);
+  font-size: 1.3rem;
+}
+
+.profile-private-stats__item strong {
+  color: var(--color-text);
+  font-size: 2.4rem;
+}
+
+.profile-private-stats__item--score strong {
+  color: var(--color-primary);
+}
+
+@include media(tablet) {
+  .profile-private-stats__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include media(mobile) {
+  .profile-private-stats__grid {
+    grid-template-columns: 1fr;
+  }
+}

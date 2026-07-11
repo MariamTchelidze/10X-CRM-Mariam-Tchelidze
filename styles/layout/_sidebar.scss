@@ -1,4 +1,4 @@
-﻿@use "../abstracts/variables" as *;
+@use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
 .app-shell {
@@ -331,3 +331,29 @@
 }
 
 
+
+.welcome-panel__subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+}
+
+.welcome-panel__greeting-icon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.notification-button,
+.date-card {
+  min-height: 6.4rem;
+}
+
+.date-card {
+  min-width: 26rem;
+  white-space: nowrap;
+}
+
+.date-card__timezone {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+}

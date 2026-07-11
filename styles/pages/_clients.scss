@@ -159,3 +159,23 @@
     flex-direction: column;
   }
 }
+.select-field--icon {
+  position: relative;
+}
+
+.select-field__icon-preview {
+  position: absolute;
+  top: 50%;
+  left: 1.2rem;
+  z-index: 1;
+  width: 1.8rem;
+  height: 1.8rem;
+  background: var(--select-icon) center / contain no-repeat;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.select-field--icon select,
+.select-field--icon .input {
+  padding-left: 4rem;
+}

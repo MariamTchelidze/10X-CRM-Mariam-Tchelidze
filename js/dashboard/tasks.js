@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 const taskWorkspacePage = document.querySelector(".dashboardPage");
 const taskSummaryPage = document.querySelector(".profilePage");
@@ -103,6 +103,7 @@ function initTasks() {
   let activeTaskId = null;
   let draggedTaskId = null;
   let pendingDeleteTaskId = null;
+  let editingSubtaskId = null;
 
   const addTaskForm = document.querySelector(".js-add-task-form");
   const addTaskStatus = document.querySelector(".js-add-task-status");
@@ -157,6 +158,7 @@ function initTasks() {
       archived: Boolean(task.archived),
       deleted: Boolean(task.deleted),
       deletedAt: task.deletedAt || "",
+      dueAt: task.dueAt || "",
     };
   };
 
@@ -223,6 +225,8 @@ function initTasks() {
         message,
         taskId,
         read: false,
+        status: "unread",
+        selected: false,
         createdAt: new Date().toISOString(),
       },
       ...notifications,
@@ -400,7 +404,7 @@ function initTasks() {
     });
   };
   const renderNotifications = () => {
-    const unreadCount = notifications.filter((notification) => !notification.read).length;
+    const unreadCount = notifications.filter((notification) => !(notification.read || notification.status === "read")).length;
     const counter = document.querySelector(".js-notification-count");
     const list = document.querySelector(".js-notification-list");
 
@@ -419,16 +423,15 @@ function initTasks() {
     list.innerHTML = notifications
       .map(
         (notification) => `
-          <button
-            class="notification-item js-notification-item${notification.read ? "" : " notification-item--unread"}"
-            type="button"
+          <article tabindex="0" role="button" class="notification-item js-notification-item${notification.read || notification.status === "read" ? "" : " notification-item--unread"}"
             data-notification-id="${notification.id}"
-            data-notification-task-id="${escapeHtml(notification.taskId)}"
-          >
+            data-notification-task-id="${escapeHtml(notification.taskId)}">
+            <span class="notification-item__select" data-skip-delete-confirm>
+              <input class="js-notification-select" type="checkbox" data-notification-id="${notification.id}" ${notification.selected ? "checked" : ""} aria-label="Select notification" />
+            </span>
             <span class="notification-item__message">${escapeHtml(notification.message)}</span>
             <time class="notification-item__time">${formatDateTime(notification.createdAt)}</time>
-          </button>
-        `,
+          </article>`,
       )
       .join("");
   };
@@ -452,11 +455,22 @@ function initTasks() {
     checklist.innerHTML = task.subtasks
       .map(
         (subtask) => `
-          <label class="task-checklist__item" data-subtask-id="${subtask.id}">
+                    <div class="task-checklist__item" data-subtask-id="${subtask.id}">
             <input class="task-checklist__checkbox js-subtask-toggle" type="checkbox" ${subtask.done ? "checked" : ""} />
-            <span class="task-checklist__text">${escapeHtml(subtask.text)}</span>
-            <button class="task-card__button task-card__button--danger js-remove-subtask" type="button">Remove</button>
-          </label>
+            ${
+              editingSubtaskId === subtask.id
+                ? `<input class="input task-checklist__edit-input js-subtask-edit-input" type="text" value="${escapeHtml(subtask.text)}" />`
+                : `<span class="task-checklist__text">${escapeHtml(subtask.text)}</span>`
+            }
+            <div class="task-checklist__actions">
+              ${
+                editingSubtaskId === subtask.id
+                  ? `<button class="task-card__button task-card__button--primary js-save-subtask" type="button">Save</button><button class="task-card__button js-cancel-subtask-edit" type="button">Cancel</button>`
+                  : `<button class="task-card__button js-edit-subtask" type="button">Edit</button>`
+              }
+              <button class="task-card__button task-card__button--danger js-remove-subtask" type="button">Remove</button>
+            </div>
+          </div>
         `,
       )
       .join("");
@@ -545,6 +559,39 @@ function initTasks() {
     render();
   };
 
+
+  const parseTaskDeadline = (task) => {
+    const rawValue = task.dueAt || task.dueDate;
+    const date = new Date(rawValue);
+    return Number.isNaN(date.getTime()) ? null : date;
+  };
+
+  const moveOverdueTasks = (now = new Date()) => {
+    let changed = false;
+
+    tasks = tasks.map((task) => {
+      const deadline = parseTaskDeadline(task);
+
+      if (
+        !deadline ||
+        task.status === "done" ||
+        task.status === "overdue" ||
+        task.archived ||
+        task.deleted ||
+        deadline.getTime() >= now.getTime()
+      ) {
+        return task;
+      }
+
+      changed = true;
+      return normalizeTask({ ...task, status: "overdue" });
+    });
+
+    if (changed) {
+      saveTasks();
+      render();
+    }
+  };
   const openDeleteTaskModal = (taskId) => {
     pendingDeleteTaskId = taskId;
     document.querySelector(".js-open-delete-task-helper")?.click();
@@ -656,6 +703,7 @@ function initTasks() {
       client: formData.get("client").trim(),
       description: formData.get("description").trim(),
       dueDate: formatDueDate(formData.get("dueDate")),
+      dueAt: new Date(`${formData.get("dueDate")}T23:59:59`).toISOString(),
       priority: formData.get("priority"),
       assignee: formData.get("assignee") || "Unassigned",
       color: getPriorityColor(formData.get("priority")),
@@ -823,6 +871,44 @@ function initTasks() {
     });
   });
 
+
+  document.addEventListener("click", (event) => {
+    const editButton = event.target.closest(".js-edit-subtask");
+    const saveButton = event.target.closest(".js-save-subtask");
+    const cancelButton = event.target.closest(".js-cancel-subtask-edit");
+
+    if (!activeTaskId || (!editButton && !saveButton && !cancelButton)) return;
+
+    const subtaskItem = event.target.closest("[data-subtask-id]");
+    const task = getTaskById(activeTaskId);
+
+    if (!subtaskItem || !task) return;
+
+    if (editButton) {
+      editingSubtaskId = subtaskItem.dataset.subtaskId;
+      renderTaskDetails(task);
+      document.querySelector(".js-subtask-edit-input")?.focus({ preventScroll: true });
+      return;
+    }
+
+    if (cancelButton) {
+      editingSubtaskId = null;
+      renderTaskDetails(task);
+      return;
+    }
+
+    const input = subtaskItem.querySelector(".js-subtask-edit-input");
+    const nextText = input?.value.trim();
+
+    if (!nextText) return;
+
+    editingSubtaskId = null;
+    updateTask(task.id, {
+      subtasks: task.subtasks.map((subtask) =>
+        subtask.id === subtaskItem.dataset.subtaskId ? { ...subtask, text: nextText } : subtask,
+      ),
+    });
+  });
   document.querySelector(".js-task-detail-assignee-control")?.addEventListener("change", (event) => {
     const hiddenAssignee = detailsForm?.querySelector(".js-task-detail-assignee");
     const assigneeAvatar = document.querySelector(".js-task-detail-assignee-avatar");
@@ -878,6 +964,8 @@ function initTasks() {
   });
 
   document.addEventListener("click", (event) => {
+    if (event.target.closest(".js-notification-select")) return;
+
     const notificationItem = event.target.closest(".js-notification-item");
 
     if (!notificationItem) return;
@@ -886,7 +974,7 @@ function initTasks() {
     const taskId = notificationItem.dataset.notificationTaskId;
 
     notifications = notifications.map((notification) =>
-      notification.id === notificationId ? { ...notification, read: true } : notification,
+      notification.id === notificationId ? { ...notification, read: true, status: "read" } : notification,
     );
     saveNotifications();
     renderNotifications();
@@ -897,7 +985,30 @@ function initTasks() {
   });
 
   document.querySelector(".js-clear-notifications")?.addEventListener("click", () => {
-    notifications = notifications.map((notification) => ({ ...notification, read: true }));
+    notifications = notifications.map((notification) => ({ ...notification, read: true, status: "read" }));
+    saveNotifications();
+    renderNotifications();
+  });
+
+  document.addEventListener("change", (event) => {
+    const checkbox = event.target.closest(".js-notification-select");
+
+    if (!checkbox) return;
+
+    notifications = notifications.map((notification) =>
+      notification.id === checkbox.dataset.notificationId ? { ...notification, selected: checkbox.checked } : notification,
+    );
+    saveNotifications();
+  });
+
+  document.querySelector(".js-delete-selected-notifications")?.addEventListener("click", () => {
+    notifications = notifications.filter((notification) => !notification.selected);
+    saveNotifications();
+    renderNotifications();
+  });
+
+  document.querySelector(".js-delete-read-notifications")?.addEventListener("click", () => {
+    notifications = notifications.filter((notification) => !(notification.read || notification.status === "read"));
     saveNotifications();
     renderNotifications();
   });
@@ -921,11 +1032,9 @@ function initTasks() {
   addTaskForm?.addEventListener("submit", createTaskFromForm);
   addTaskForm?.addEventListener("input", clearTaskFormErrors);
   document.querySelector(".js-task-reset")?.addEventListener("click", resetTasks);
+  window.addEventListener("crm:clocktick", (event) => moveOverdueTasks(event.detail?.now || new Date()));
+  window.setInterval(() => moveOverdueTasks(new Date()), 30000);
 
+  moveOverdueTasks(new Date());
   render();
 }
-
-
-
-
-
