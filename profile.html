@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -637,7 +637,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
                 />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Custom</span>
-                  <span class="settings-option__text">Use accent color</span>
+                  <span class="settings-option__text">Theme + accent color</span>
                 </span>
               </label>
             </div>
@@ -720,8 +720,39 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
             </div>
           </fieldset>
 
-          <fieldset class="settings-group">
-            <legend class="settings-group__legend">Custom Accent</legend>
+          <fieldset class="settings-group settings-group--custom js-custom-theme-panel" aria-describedby="custom-theme-note">
+            <legend class="settings-group__legend">Custom Appearance</legend>
+            <p class="settings-group__hint" id="custom-theme-note">
+              Available only when Custom theme is selected.
+            </p>
+            <div class="settings-options settings-options--two">
+              <label class="settings-option" for="settings-custom-theme-dark">
+                <input
+                  class="settings-option__input js-settings-custom-theme"
+                  id="settings-custom-theme-dark"
+                  type="radio"
+                  name="settings-custom-theme"
+                  value="dark"
+                />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Dark Base</span>
+                  <span class="settings-option__text">Custom accent on dark UI</span>
+                </span>
+              </label>
+              <label class="settings-option" for="settings-custom-theme-light">
+                <input
+                  class="settings-option__input js-settings-custom-theme"
+                  id="settings-custom-theme-light"
+                  type="radio"
+                  name="settings-custom-theme"
+                  value="light"
+                />
+                <span class="settings-option__content">
+                  <span class="settings-option__title">Light Base</span>
+                  <span class="settings-option__text">Custom accent on light UI</span>
+                </span>
+              </label>
+            </div>
             <div class="settings-color-row">
               <label class="settings-color-field" for="settings-accent-color">
                 <span class="settings-color-field__label">Accent color</span>
@@ -792,16 +823,89 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
               </label>
             </div>
           </fieldset>
+          <fieldset class="settings-group settings-group--danger">
+            <legend class="settings-group__legend">Danger Zone</legend>
+            <div class="settings-danger">
+              <div>
+                <h3 class="settings-danger__title">Delete Account</h3>
+                <p class="settings-danger__text">
+                  Delete this demo account and all CRM data saved in this browser.
+                </p>
+              </div>
+              <button
+                class="btn btn--danger js-delete-account-trigger"
+                type="button"
+                data-modal-target="#delete-account-modal"
+                aria-haspopup="dialog"
+                aria-controls="delete-account-modal"
+              >
+                Delete Account
+              </button>
+            </div>
+          </fieldset>
         </form>
+      </div>
+    </section>
+    <section
+      class="modal"
+      id="delete-account-modal"
+      aria-labelledby="delete-account-title"
+      aria-describedby="delete-account-description"
+      aria-hidden="true"
+      data-modal-initial-focus="#delete-account-confirmation"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">Danger zone</p>
+            <h2 class="modal__title" id="delete-account-title">Delete Account</h2>
+            <p class="modal__description" id="delete-account-description">
+              This permanently clears the CRM data stored for this browser.
+            </p>
+          </div>
+          <button
+            class="icon-btn js-close-modal"
+            type="button"
+            aria-label="Close delete account"
+            data-modal-close
+          >
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+
+        <form class="modal__body delete-account-confirm js-delete-account-form" id="delete-account-form" novalidate>
+          <p class="delete-account-confirm__warning">
+            This action removes saved users, the active session, clients, profile image,
+            tasks, notifications, settings, and theme preferences from local storage.
+          </p>
+          <div class="field">
+            <label class="field__label" for="delete-account-confirmation">Type DELETE to confirm</label>
+            <input
+              class="input js-delete-account-confirmation"
+              id="delete-account-confirmation"
+              name="confirmation"
+              type="text"
+              autocomplete="off"
+            />
+            <p class="form-error js-delete-account-error" hidden></p>
+          </div>
+        </form>
+
+        <footer class="modal__footer">
+          <button class="btn btn--ghost" type="button" data-modal-close>Cancel</button>
+          <button class="btn btn--danger js-confirm-delete-account" type="submit" form="delete-account-form">
+            Delete Account
+          </button>
+        </footer>
       </div>
     </section>
 
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>
-
-
-
-
-
-

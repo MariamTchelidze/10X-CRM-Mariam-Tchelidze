@@ -113,6 +113,28 @@ body[data-theme="light"] .modal {
   font-weight: $fw-semibold;
 }
 
+.settings-group__hint {
+  margin-top: $space-xs;
+  color: var(--color-text-muted);
+  font-size: 1.3rem;
+}
+
+.settings-group--custom {
+  transition:
+    opacity $transition,
+    border-color $transition;
+}
+
+.settings-group--custom[data-enabled="false"] {
+  opacity: 0.62;
+}
+
+.settings-group--custom[data-enabled="false"] .settings-option,
+.settings-group--custom[data-enabled="false"] .settings-color-field,
+.settings-group--custom[data-enabled="false"] .settings-swatch {
+  cursor: not-allowed;
+}
+
 .settings-options {
   display: grid;
   gap: $space-md;
@@ -203,6 +225,48 @@ body[data-theme="light"] .modal {
   background: var(--swatch-color);
 }
 
+.settings-group--danger {
+  border-color: rgb(238 92 76 / 38%);
+  background: color-mix(in srgb, var(--color-danger) 8%, var(--color-elevated));
+}
+
+.settings-danger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-lg;
+  margin-top: $space-md;
+}
+
+.settings-danger__title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.6rem;
+}
+
+.settings-danger__text {
+  max-width: 52rem;
+  margin-top: $space-xs;
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
+
+.delete-account-confirm {
+  display: grid;
+  gap: $space-lg;
+}
+
+.delete-account-confirm__warning {
+  margin: 0;
+  padding: $space-md;
+  border: 0.1rem solid rgb(238 92 76 / 32%);
+  border-left: 0.4rem solid var(--color-danger);
+  border-radius: $radius-md;
+  background: rgb(238 92 76 / 10%);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
 .details-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -263,6 +327,12 @@ body[data-theme="light"] .modal {
     align-items: stretch;
     flex-direction: column-reverse;
   }
+
+  .settings-danger {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
 
   .details-list,
   .settings-options--three,

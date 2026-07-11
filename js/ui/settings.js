@@ -2,19 +2,45 @@
 
 (function initSettingsPanel() {
   const STORAGE_KEY = "crm_app_settings";
+  const SESSION_KEY = "crm_session";
+  const DEFAULT_ACCENT = "#ff6b1a";
+  const ACCOUNT_STORAGE_KEYS = [
+    "crm_users",
+    "crm_clients",
+    "crm_profile_avatar",
+    "crm_tasks",
+    "crm_task_notifications",
+    "crm_theme",
+    STORAGE_KEY,
+  ];
   const DEFAULTS = {
+    themeMode: "dark",
+    customTheme: "dark",
     fontSize: "medium",
     density: "comfortable",
     language: "en",
-    accentColor: "#ff6b1a",
+    accentColor: DEFAULT_ACCENT,
   };
 
   const form = document.querySelector(".js-settings-form");
+  const customThemePanel = document.querySelector(".js-custom-theme-panel");
+  const deleteAccountForm = document.querySelector(".js-delete-account-form");
 
   const readSettings = () => {
     try {
-      const settings = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-      return { ...DEFAULTS, ...settings };
+      const storedSettings = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      const fallbackTheme = document.body.dataset.theme === "light" ? "light" : "dark";
+      const themeMode = ["dark", "light", "custom"].includes(storedSettings.themeMode)
+        ? storedSettings.themeMode
+        : fallbackTheme;
+      const customTheme = storedSettings.customTheme === "light" ? "light" : "dark";
+
+      return {
+        ...DEFAULTS,
+        ...storedSettings,
+        themeMode,
+        customTheme,
+      };
     } catch (error) {
       return { ...DEFAULTS };
     }
@@ -40,23 +66,6 @@
     document.body.style.setProperty("--color-primary", color);
   };
 
-  const applySettings = (settings) => {
-    document.documentElement.dataset.fontSize = settings.fontSize;
-    document.body.dataset.density = settings.density;
-    document.documentElement.lang = settings.language;
-    applyAccentColor(settings.accentColor);
-
-    setChecked(".js-settings-font", settings.fontSize);
-    setChecked(".js-settings-density", settings.density);
-    setChecked(".js-settings-language", settings.language);
-
-    const accentInput = document.querySelector(".js-settings-accent");
-
-    if (accentInput) {
-      accentInput.value = settings.accentColor;
-    }
-  };
-
   const setTheme = (theme) => {
     const nextTheme = theme === "light" ? "light" : "dark";
 
@@ -68,20 +77,80 @@
     document.dispatchEvent(new CustomEvent("crm:theme:set", { detail: { theme: nextTheme } }));
   };
 
-  const syncThemeControl = (theme) => {
-    const selectedTheme = document.querySelector(`.js-settings-theme[value="${theme}"]`);
+  const syncCustomPanel = (isCustom) => {
+    if (!customThemePanel) return;
 
-    if (selectedTheme) {
-      selectedTheme.checked = true;
+    customThemePanel.dataset.enabled = String(isCustom);
+    customThemePanel.querySelectorAll("input, button").forEach((control) => {
+      control.disabled = !isCustom;
+    });
+  };
+
+  const applySettings = (settings) => {
+    const isCustom = settings.themeMode === "custom";
+    const activeAccent = isCustom ? settings.accentColor : DEFAULT_ACCENT;
+
+    document.documentElement.dataset.fontSize = settings.fontSize;
+    document.body.dataset.density = settings.density;
+    document.documentElement.lang = settings.language;
+    applyAccentColor(activeAccent);
+
+    setChecked(".js-settings-theme", settings.themeMode);
+    setChecked(".js-settings-custom-theme", settings.customTheme);
+    setChecked(".js-settings-font", settings.fontSize);
+    setChecked(".js-settings-density", settings.density);
+    setChecked(".js-settings-language", settings.language);
+    syncCustomPanel(isCustom);
+
+    const accentInput = document.querySelector(".js-settings-accent");
+
+    if (accentInput) {
+      accentInput.value = settings.accentColor;
+    }
+  };
+
+  const setDeleteAccountError = (message) => {
+    const error = deleteAccountForm?.querySelector(".js-delete-account-error");
+
+    if (!error) return;
+
+    error.textContent = message;
+    error.hidden = !message;
+  };
+
+  const clearAccountData = () => {
+    try {
+      ACCOUNT_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+      localStorage.removeItem(SESSION_KEY);
+    } catch (error) {
+      // Redirect still happens if storage is partially unavailable.
+    }
+
+    try {
+      sessionStorage.removeItem(SESSION_KEY);
+    } catch (error) {
+      // Some browsers can block session storage in private modes.
     }
   };
 
   let settings = readSettings();
   applySettings(settings);
-  syncThemeControl(document.body.dataset.theme === "light" ? "light" : "dark");
+  setTheme(settings.themeMode === "custom" ? settings.customTheme : settings.themeMode);
 
   window.addEventListener("crm:themechange", (event) => {
-    syncThemeControl(event.detail && event.detail.theme === "light" ? "light" : "dark");
+    const changedTheme = event.detail && event.detail.theme === "light" ? "light" : "dark";
+
+    if (settings.themeMode === "custom" && settings.customTheme === changedTheme) return;
+    if (settings.themeMode === changedTheme) return;
+
+    settings = {
+      ...settings,
+      themeMode: changedTheme,
+      customTheme: settings.customTheme,
+      accentColor: DEFAULT_ACCENT,
+    };
+    applySettings(settings);
+    saveSettings(settings);
   });
 
   form?.addEventListener("change", (event) => {
@@ -89,12 +158,35 @@
 
     if (target.matches(".js-settings-theme")) {
       if (target.value === "custom") {
+        settings = {
+          ...settings,
+          themeMode: "custom",
+          customTheme: settings.customTheme || document.body.dataset.theme || "dark",
+        };
+        setTheme(settings.customTheme);
+        applySettings(settings);
+        saveSettings(settings);
         document.querySelector(".js-settings-accent")?.focus({ preventScroll: true });
         return;
       }
 
+      settings = {
+        ...settings,
+        themeMode: target.value,
+        accentColor: DEFAULT_ACCENT,
+      };
       setTheme(target.value);
+      applySettings(settings);
+      saveSettings(settings);
       return;
+    }
+
+    if (target.matches(".js-settings-custom-theme")) {
+      settings = { ...settings, customTheme: target.value };
+
+      if (settings.themeMode === "custom") {
+        setTheme(target.value);
+      }
     }
 
     if (target.matches(".js-settings-font")) {
@@ -110,6 +202,8 @@
     }
 
     if (target.matches(".js-settings-accent")) {
+      if (settings.themeMode !== "custom") return;
+
       settings = { ...settings, accentColor: target.value };
     }
 
@@ -120,10 +214,35 @@
   document.addEventListener("click", (event) => {
     const swatch = event.target.closest("[data-accent-color]");
 
-    if (!swatch) return;
+    if (!swatch || settings.themeMode !== "custom") return;
 
-    settings = { ...settings, accentColor: swatch.dataset.accentColor || DEFAULTS.accentColor };
+    settings = { ...settings, accentColor: swatch.dataset.accentColor || DEFAULT_ACCENT };
     applySettings(settings);
     saveSettings(settings);
+  });
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest(".js-delete-account-trigger");
+
+    if (!trigger || !deleteAccountForm) return;
+
+    deleteAccountForm.reset();
+    setDeleteAccountError("");
+  });
+
+  deleteAccountForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const confirmation = deleteAccountForm
+      .querySelector(".js-delete-account-confirmation")
+      ?.value.trim();
+
+    if (confirmation !== "DELETE") {
+      setDeleteAccountError('Type "DELETE" to confirm account deletion.');
+      return;
+    }
+
+    clearAccountData();
+    window.location.href = "./index.html";
   });
 })();
