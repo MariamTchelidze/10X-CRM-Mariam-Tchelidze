@@ -4,6 +4,7 @@
   const teamForm = document.querySelector(".js-communication-chat-form");
   const teamMessages = document.querySelector(".js-communication-chat-messages");
   const teamInput = document.querySelector(".js-communication-chat-input");
+  const recipientSelect = document.querySelector(".js-communication-recipient");
   const aiForm = document.querySelector(".js-ai-chat-form");
   const aiMessages = document.querySelector(".js-ai-chat-messages");
   const aiInput = document.querySelector(".js-ai-chat-input");
@@ -62,6 +63,11 @@
               <strong>${escapeHtml(message.author)}</strong>
               <time>${formatTime(message.createdAt)}</time>
             </header>
+            ${
+              message.recipient
+                ? `<span class="communication-message__recipient">To ${escapeHtml(message.recipient)}</span>`
+                : ""
+            }
             <p>${escapeHtml(message.text)}</p>
           </article>
         `,
@@ -74,6 +80,7 @@
     {
       role: "team",
       author: "Mariam",
+      recipient: "Sales Team",
       text: "Please review today's hot leads.",
       createdAt: new Date().toISOString(),
     },
@@ -94,6 +101,8 @@
     event.preventDefault();
 
     const text = teamInput.value.trim();
+    const recipient = recipientSelect?.value || "Sales Team";
+
     if (!text) return;
 
     teamHistory = [
@@ -101,6 +110,7 @@
       {
         role: "user",
         author: "You",
+        recipient,
         text,
         createdAt: new Date().toISOString(),
       },
@@ -108,7 +118,7 @@
     saveHistory(TEAM_KEY, teamHistory);
     renderMessages(teamMessages, teamHistory, "No team messages yet.");
     teamInput.value = "";
-    window.crmNotifications?.add("New internal chat message saved.");
+    window.crmNotifications?.add(`New Messenger message sent to ${recipient}.`);
   });
 
   aiForm?.addEventListener("submit", (event) => {

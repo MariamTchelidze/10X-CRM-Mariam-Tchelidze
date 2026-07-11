@@ -391,6 +391,34 @@ body[data-theme="light"] .modal {
   flex-wrap: wrap;
 }
 
+.communication-chat__recipient-row {
+  display: grid;
+  grid-template-columns: minmax(20rem, 28rem) minmax(0, 1fr);
+  align-items: end;
+  gap: $space-md;
+  padding: $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+}
+
+.communication-chat__recipient-hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.communication-message__recipient {
+  width: fit-content;
+  padding: 0.3rem 0.7rem;
+  border-radius: $radius-full;
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  font-weight: $fw-semibold;
+}
+
 .communication-chat__messages {
   display: grid;
   align-content: start;
@@ -439,6 +467,7 @@ body[data-theme="light"] .modal {
 }
 
 @include media(mobile) {
+  .communication-chat__recipient-row,
   .communication-chat__form {
     grid-template-columns: 1fr;
   }

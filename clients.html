@@ -250,7 +250,7 @@
                       alt=""
                       class="sidebar__icon"
                     />
-                    <span>Communication Chat</span>
+                    <span>Messenger</span>
                   </button>
                   <button
                     class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
@@ -1302,7 +1302,7 @@
         <header class="modal__header">
           <div>
             <p class="modal__eyebrow">Communication</p>
-            <h2 class="modal__title" id="communication-chat-title">Team Communication Chat</h2>
+            <h2 class="modal__title" id="communication-chat-title">Messenger</h2>
             <p class="modal__description">Call, text, WhatsApp, or continue your internal team conversation.</p>
           </div>
           <button class="icon-btn js-close-modal" type="button" aria-label="Close communication chat" data-modal-close>
@@ -1320,7 +1320,20 @@
             <a class="btn btn--ghost" href="sms:+995555010101">Text SMS</a>
             <a class="btn btn--ghost" href="https://wa.me/995555010101" target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
-          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
+          <div class="communication-chat__recipient-row">
+            <label class="field" for="communication-recipient">
+              <span class="field__label">Send to</span>
+              <select class="input select-field js-communication-recipient" id="communication-recipient">
+                <option value="Sales Team">Sales Team</option>
+                <option value="Support Team">Support Team</option>
+                <option value="Account Manager">Account Manager</option>
+                <option value="Mariam Tchelidze">Mariam Tchelidze</option>
+              </select>
+            </label>
+            <p class="communication-chat__recipient-hint">
+              Message will be saved to the selected teammate or department inbox.
+            </p>
+          </div>          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
         </div>
         <form class="modal__footer communication-chat__form js-communication-chat-form">
           <label class="visually-hidden" for="communication-chat-input">Message team</label>
