@@ -1,6 +1,8 @@
 "use strict";
 
 (function initToast() {
+  const PENDING_TOAST_KEY = "crm_pending_toast";
+
   const ensureContainer = () => {
     let container = document.getElementById("toast-container");
 
@@ -32,5 +34,23 @@
     window.setTimeout(close, 3000);
   };
 
-  window.crmToast = { show };
+  const queue = (message, type = "success") => {
+    sessionStorage.setItem(PENDING_TOAST_KEY, JSON.stringify({ message, type }));
+  };
+
+  const showPending = () => {
+    try {
+      const pendingToast = JSON.parse(sessionStorage.getItem(PENDING_TOAST_KEY) || "null");
+
+      if (!pendingToast) return;
+
+      sessionStorage.removeItem(PENDING_TOAST_KEY);
+      show(pendingToast.message, pendingToast.type);
+    } catch (error) {
+      sessionStorage.removeItem(PENDING_TOAST_KEY);
+    }
+  };
+
+  window.crmToast = { show, queue };
+  showPending();
 })();

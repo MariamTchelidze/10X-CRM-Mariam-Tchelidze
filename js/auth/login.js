@@ -52,6 +52,7 @@ function initLogin() {
       loginAt: new Date().toISOString(),
     });
 
+    window.crmToast?.queue("You have been logged in successfully.", "success");
     window.location.href = constants.PAGES.dashboard;
   });
 }

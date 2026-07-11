@@ -2,8 +2,8 @@
 
 .toast-container {
   position: fixed;
+  top: $space-xl;
   right: $space-xl;
-  bottom: $space-xl;
   z-index: $z-toast;
   display: grid;
   gap: $space-sm;

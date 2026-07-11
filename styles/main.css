@@ -1748,8 +1748,8 @@ body.is-swapping-to-login .auth__visual {
 
 .toast-container {
   position: fixed;
+  top: 2.4rem;
   right: 2.4rem;
-  bottom: 2.4rem;
   z-index: 1000;
   display: grid;
   gap: 0.8rem;
