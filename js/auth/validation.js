@@ -17,7 +17,14 @@
   };
 
   const passwordIsValid = (password) => {
-    return password.length >= 8 && /[a-zA-Z]/.test(password) && /[0-9]/.test(password);
+    const allowedCharacters = /^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/;
+
+    return (
+      password.length >= 8 &&
+      allowedCharacters.test(password) &&
+      /[A-Za-z]/.test(password) &&
+      /[0-9]/.test(password)
+    );
   };
 
   const getErrorElement = (input) => {

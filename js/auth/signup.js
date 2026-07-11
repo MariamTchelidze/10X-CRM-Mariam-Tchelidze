@@ -47,7 +47,7 @@ function initSignup() {
     }
 
     if (!validation.passwordIsValid(password)) {
-      validation.setFieldError(passwordInput, "Password must be at least 8 characters and contain a letter and a number");
+      validation.setFieldError(passwordInput, "Password must be at least 8 characters and contain a Latin letter and a number");
       isValid = false;
     }
 

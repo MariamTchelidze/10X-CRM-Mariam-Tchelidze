@@ -45,7 +45,7 @@ function initProfile() {
     }
 
     if (!validation.passwordIsValid(newPassword)) {
-      validation.setFieldError(newPasswordInput, "Password must be at least 8 characters and contain a letter and a number");
+      validation.setFieldError(newPasswordInput, "Password must be at least 8 characters and contain a Latin letter and a number");
       isValid = false;
     } else if (newPassword === currentPassword) {
       validation.setFieldError(newPasswordInput, "New password must be different from the current one");
