@@ -1061,7 +1061,9 @@
 
 .chart-card {
   display: grid;
+  grid-template-rows: auto minmax(20rem, 24rem);
   gap: $space-md;
+  min-height: 30rem;
   padding: $space-lg;
   border: 0.1rem solid var(--color-border);
   border-radius: $radius-md;
@@ -1075,7 +1077,8 @@
 
 .crm-chart {
   width: 100%;
-  height: 24rem;
+  height: 100%;
+  min-height: 20rem;
 }
 
 .file-item--interactive {

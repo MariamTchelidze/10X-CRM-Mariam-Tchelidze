@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 (function initDashboardSections() {
   const SECTION_META = {
@@ -8,6 +8,8 @@
     favourites: { eyebrow: "Workspace", title: "Favourites" },
     activity: { eyebrow: "Workspace", title: "Activity" },
     files: { eyebrow: "Workspace", title: "Files" },
+    users: { eyebrow: "Team", title: "Users" },
+    roles: { eyebrow: "Team", title: "Roles" },
     tasks: { eyebrow: "Workspace", title: "Task Board" },
     "recycle-bin": { eyebrow: "Workspace", title: "Recycle Bin" },
   };
@@ -77,4 +79,3 @@
 
   showSection(getHashSection());
 })();
-

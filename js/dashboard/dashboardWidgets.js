@@ -136,13 +136,20 @@
     }
   });
 
+  const isCanvasDrawable = (canvas) => {
+    const rect = canvas.getBoundingClientRect();
+    return !canvas.closest("[hidden]") && rect.width > 20 && rect.height > 20;
+  };
+
   const drawChart = (canvas, progress) => {
+    if (!isCanvasDrawable(canvas)) return;
+
     const context = canvas.getContext("2d");
     const ratio = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    canvas.width = Math.max(1, rect.width * ratio);
-    canvas.height = Math.max(1, rect.height * ratio);
-    context.scale(ratio, ratio);
+    canvas.width = Math.round(rect.width * ratio);
+    canvas.height = Math.round(rect.height * ratio);
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
     context.clearRect(0, 0, rect.width, rect.height);
 
     const type = canvas.dataset.chartType;
@@ -202,7 +209,7 @@
   };
 
   const animateCharts = () => {
-    const canvases = document.querySelectorAll(".js-crm-chart");
+    const canvases = Array.from(document.querySelectorAll(".js-crm-chart")).filter(isCanvasDrawable);
     let startTime = 0;
     const duration = 900;
 
@@ -216,7 +223,17 @@
     if (canvases.length) requestAnimationFrame(frame);
   };
 
-  animateCharts();
-  window.addEventListener("resize", animateCharts);
-  window.addEventListener("crm:themechange", animateCharts);
+  const scheduleCharts = () => {
+    requestAnimationFrame(() => requestAnimationFrame(animateCharts));
+  };
+
+  scheduleCharts();
+  window.addEventListener("resize", scheduleCharts);
+  window.addEventListener("crm:themechange", scheduleCharts);
+  window.addEventListener("hashchange", scheduleCharts);
+  document.addEventListener("click", (event) => {
+    if (event.target.closest('[data-dashboard-section-link="reports"]')) {
+      scheduleCharts();
+    }
+  });
 })();

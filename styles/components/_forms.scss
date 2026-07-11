@@ -58,6 +58,11 @@
   }
 }
 
+.input-error {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 0.3rem rgba(238, 92, 76, 0.14);
+}
+
 .form-error,
 .form-hint {
   font-size: 1.3rem;

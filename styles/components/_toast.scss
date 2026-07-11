@@ -9,3 +9,34 @@
   gap: $space-sm;
   width: min(36rem, calc(100vw - 3.2rem));
 }
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  padding: $space-md $space-lg;
+  border: 0.1rem solid var(--color-border);
+  border-left: 0.4rem solid var(--color-success);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+  box-shadow: $shadow-lg;
+  color: var(--color-text);
+}
+
+.toast--error {
+  border-left-color: var(--color-danger);
+}
+
+.toast__message {
+  font-size: 1.4rem;
+  font-weight: $fw-semibold;
+}
+
+.toast__close {
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 1.8rem;
+  line-height: 1;
+}

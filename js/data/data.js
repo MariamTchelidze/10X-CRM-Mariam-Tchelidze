@@ -1,0 +1,82 @@
+"use strict";
+
+(function initCrmData() {
+  const API_URL = "https://dummyjson.com/users";
+  const statuses = ["lead", "contacted", "won", "lost"];
+
+  const getInitials = (name = "") =>
+    name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() || "")
+      .join("");
+
+  const formatStatus = (status = "lead") => {
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  };
+
+  const mapApiUserToClient = (user, index = 0) => {
+    const status = statuses[index % statuses.length];
+    const name = `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.username || "Unnamed Client";
+
+    return {
+      id: user.id,
+      name,
+      email: user.email || "",
+      phone: user.phone || "",
+      company: user.company?.name || "Unknown Company",
+      image: user.image || "",
+      status,
+      dealValue: 2500 + index * 750,
+      notes: [],
+      createdAt: new Date(Date.now() - index * 86400000).toISOString(),
+    };
+  };
+
+  const fetchInitialClients = async () => {
+    const response = await fetch(`${API_URL}?limit=30`);
+
+    if (!response.ok) {
+      throw new Error("Clients could not be loaded.");
+    }
+
+    const data = await response.json();
+    return (data.users || []).map(mapApiUserToClient);
+  };
+
+  const postClient = async (client) => {
+    const response = await fetch(`${API_URL}/add`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName: client.name,
+        email: client.email,
+        phone: client.phone,
+        company: { name: client.company },
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Client could not be added.");
+    }
+
+    return response.json();
+  };
+
+  const deleteClientRequest = async (clientId) => {
+    const response = await fetch(`${API_URL}/${clientId}`, { method: "DELETE" });
+
+    if (!response.ok && response.status !== 404) {
+      throw new Error("Client could not be deleted.");
+    }
+  };
+
+  window.crmData = {
+    fetchInitialClients,
+    postClient,
+    deleteClientRequest,
+    getInitials,
+    formatStatus,
+  };
+})();

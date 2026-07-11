@@ -154,6 +154,62 @@
               </a>
             </li>
             <li class="sidebar__item sidebar__item--dropdown">
+              <details class="sidebar-dropdown">
+                <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
+                  <span class="sidebar-dropdown__label">
+                    <img
+                      src="./assets/icons/team.svg"
+                      data-theme-src-dark="./assets/icons/team.svg"
+                      data-theme-src-light="./assets/icons/team-light-mode.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Team</span>
+                  </span>
+                  <img
+                    src="./assets/icons/arrow-down.svg"
+                    data-theme-src-dark="./assets/icons/arrow-down.svg"
+                    data-theme-src-light="./assets/icons/arrow-down-light-mode.svg"
+                    data-arrow-src-down-dark="./assets/icons/arrow-down.svg"
+                    data-arrow-src-down-light="./assets/icons/arrow-down-light-mode.svg"
+                    data-arrow-src-up-dark="./assets/icons/arrow-up.svg"
+                    data-arrow-src-up-light="./assets/icons/arrow-up-light-mode.svg"
+                    alt=""
+                    class="sidebar-dropdown__arrow"
+                  />
+                </summary>
+                <div class="sidebar-dropdown__menu">
+                  <a
+                    href="./dashboard.html#users"
+                    class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
+                    data-dashboard-section-link="users"
+                  >
+                    <img
+                      src="./assets/icons/users.svg"
+                      data-theme-src-dark="./assets/icons/users.svg"
+                      data-theme-src-light="./assets/icons/users-light-mode.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Users</span>
+                  </a>
+                  <a
+                    href="./dashboard.html#roles"
+                    class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
+                    data-dashboard-section-link="roles"
+                  >
+                    <img
+                      src="./assets/icons/user-profile.svg"
+                      data-theme-src-dark="./assets/icons/user-profile.svg"
+                      data-theme-src-light="./assets/icons/user-profile-light-theme.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Roles</span>
+                  </a>
+                </div>
+              </details>
+            </li>            <li class="sidebar__item sidebar__item--dropdown">
               <details class="sidebar-dropdown" open>
                 <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
                   <span class="sidebar-dropdown__label">
@@ -949,6 +1005,87 @@
               </button>
             </div>
           </article>
+        </section>
+        <section
+          class="dashboard-section js-dashboard-view"
+          id="users"
+          data-dashboard-view="users"
+          aria-labelledby="users-title"
+          hidden
+        >
+          <header class="dashboard-section__header">
+            <div>
+              <p class="card__eyebrow">Team workspace</p>
+              <h2 class="dashboard-section__title" id="users-title">Users</h2>
+            </div>
+          </header>
+          <div class="dashboard-panel-grid">
+            <article class="dashboard-panel-card">
+              <img
+                src="./assets/icons/team.svg"
+                data-theme-src-dark="./assets/icons/team.svg"
+                data-theme-src-light="./assets/icons/team-light-mode.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
+              <span class="dashboard-panel-card__label">Active users</span>
+              <strong class="dashboard-panel-card__value">4</strong>
+              <p class="dashboard-panel-card__text">Team members who can be assigned CRM tasks and client follow-ups.</p>
+            </article>
+            <article class="dashboard-panel-card">
+              <img
+                src="./assets/icons/chat.svg"
+                data-theme-src-dark="./assets/icons/chat.svg"
+                data-theme-src-light="./assets/icons/chat-light-theme.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
+              <span class="dashboard-panel-card__label">Inbox</span>
+              <strong class="dashboard-panel-card__value">Messenger</strong>
+              <p class="dashboard-panel-card__text">Use Messenger to continue internal conversations with selected teammates.</p>
+            </article>
+          </div>
+        </section>
+
+        <section
+          class="dashboard-section js-dashboard-view"
+          id="roles"
+          data-dashboard-view="roles"
+          aria-labelledby="roles-title"
+          hidden
+        >
+          <header class="dashboard-section__header">
+            <div>
+              <p class="card__eyebrow">Team permissions</p>
+              <h2 class="dashboard-section__title" id="roles-title">Roles</h2>
+            </div>
+          </header>
+          <div class="dashboard-panel-grid">
+            <article class="dashboard-panel-card">
+              <img
+                src="./assets/icons/user-profile.svg"
+                data-theme-src-dark="./assets/icons/user-profile.svg"
+                data-theme-src-light="./assets/icons/user-profile-light-theme.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
+              <span class="dashboard-panel-card__label">Sales Manager</span>
+              <strong class="dashboard-panel-card__value">Owner</strong>
+              <p class="dashboard-panel-card__text">Can manage clients, tasks, reports, and team assignments.</p>
+            </article>
+            <article class="dashboard-panel-card">
+              <img
+                src="./assets/icons/users.svg"
+                data-theme-src-dark="./assets/icons/users.svg"
+                data-theme-src-light="./assets/icons/users-light-mode.svg"
+                alt=""
+                class="dashboard-panel-card__icon"
+              />
+              <span class="dashboard-panel-card__label">Support Team</span>
+              <strong class="dashboard-panel-card__value">Member</strong>
+              <p class="dashboard-panel-card__text">Can receive assigned work and collaborate through task comments.</p>
+            </article>
+          </div>
         </section>
         <section
           class="dashboard-section task-board-section js-dashboard-view"

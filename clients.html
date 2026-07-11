@@ -154,6 +154,62 @@
               </a>
             </li>
             <li class="sidebar__item sidebar__item--dropdown">
+              <details class="sidebar-dropdown">
+                <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
+                  <span class="sidebar-dropdown__label">
+                    <img
+                      src="./assets/icons/team.svg"
+                      data-theme-src-dark="./assets/icons/team.svg"
+                      data-theme-src-light="./assets/icons/team-light-mode.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Team</span>
+                  </span>
+                  <img
+                    src="./assets/icons/arrow-down.svg"
+                    data-theme-src-dark="./assets/icons/arrow-down.svg"
+                    data-theme-src-light="./assets/icons/arrow-down-light-mode.svg"
+                    data-arrow-src-down-dark="./assets/icons/arrow-down.svg"
+                    data-arrow-src-down-light="./assets/icons/arrow-down-light-mode.svg"
+                    data-arrow-src-up-dark="./assets/icons/arrow-up.svg"
+                    data-arrow-src-up-light="./assets/icons/arrow-up-light-mode.svg"
+                    alt=""
+                    class="sidebar-dropdown__arrow"
+                  />
+                </summary>
+                <div class="sidebar-dropdown__menu">
+                  <a
+                    href="./dashboard.html#users"
+                    class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
+                    data-dashboard-section-link="users"
+                  >
+                    <img
+                      src="./assets/icons/users.svg"
+                      data-theme-src-dark="./assets/icons/users.svg"
+                      data-theme-src-light="./assets/icons/users-light-mode.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Users</span>
+                  </a>
+                  <a
+                    href="./dashboard.html#roles"
+                    class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
+                    data-dashboard-section-link="roles"
+                  >
+                    <img
+                      src="./assets/icons/user-profile.svg"
+                      data-theme-src-dark="./assets/icons/user-profile.svg"
+                      data-theme-src-light="./assets/icons/user-profile-light-theme.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Roles</span>
+                  </a>
+                </div>
+              </details>
+            </li>            <li class="sidebar__item sidebar__item--dropdown">
               <details class="sidebar-dropdown" open>
                 <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
                   <span class="sidebar-dropdown__label">
@@ -524,7 +580,7 @@
                     class="icon-btn icon-btn--danger js-delete-client"
                     type="button"
                     aria-label="Delete Alpha Group"
-                    data-client-action="delete"
+                    data-client-action="delete" data-skip-delete-confirm
                   >
                     <img
                       src="./assets/icons/Delete.svg"
@@ -594,7 +650,7 @@
                     class="icon-btn icon-btn--danger js-delete-client"
                     type="button"
                     aria-label="Delete Nino Consulting"
-                    data-client-action="delete"
+                    data-client-action="delete" data-skip-delete-confirm
                   >
                     <img
                       src="./assets/icons/Delete.svg"
@@ -664,7 +720,7 @@
                     class="icon-btn icon-btn--danger js-delete-client"
                     type="button"
                     aria-label="Delete Blue Tech"
-                    data-client-action="delete"
+                    data-client-action="delete" data-skip-delete-confirm
                   >
                     <img
                       src="./assets/icons/Delete.svg"
@@ -914,7 +970,7 @@
             <button
               class="icon-btn icon-btn--danger js-delete-client"
               type="button"
-              data-client-action="delete"
+              data-client-action="delete" data-skip-delete-confirm
               aria-label="Delete client"
             >
               <img
