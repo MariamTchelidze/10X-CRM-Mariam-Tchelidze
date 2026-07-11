@@ -1,4 +1,4 @@
-:root,
+﻿:root,
 body[data-theme="dark"],
 body.theme-dark {
   color-scheme: dark;
@@ -24,6 +24,14 @@ body.theme-dark {
   --color-warning: #f4b53f;
   --color-danger: #ee5c4c;
   --color-info: #61a6f8;
+  --color-task-todo: #61a6f8;
+  --color-task-todo-soft: rgb(97 166 248 / 14%);
+  --color-task-progress: #ff6b1a;
+  --color-task-progress-soft: rgb(255 107 26 / 16%);
+  --color-task-overdue: #ee5c4c;
+  --color-task-overdue-soft: rgb(238 92 76 / 16%);
+  --color-task-done: #55b975;
+  --color-task-done-soft: rgb(85 185 117 / 16%);
   --shadow-card: 0 1rem 3rem rgb(0 0 0 / 18%);
   --shadow-soft: 0 0.8rem 2rem rgb(0 0 0 / 14%);
 }

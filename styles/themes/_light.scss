@@ -1,4 +1,4 @@
-body[data-theme="light"],
+﻿body[data-theme="light"],
 body.theme-light {
   color-scheme: light;
   --color-primary: #ff6b1a;
@@ -23,6 +23,14 @@ body.theme-light {
   --color-warning: #c98918;
   --color-danger: #d94736;
   --color-info: #2e7fd9;
+  --color-task-todo: #2e7fd9;
+  --color-task-todo-soft: #eef6ff;
+  --color-task-progress: #e95a00;
+  --color-task-progress-soft: #fff2e8;
+  --color-task-overdue: #d94736;
+  --color-task-overdue-soft: #ffedeb;
+  --color-task-done: #3f9f61;
+  --color-task-done-soft: #eaf8ef;
   --shadow-card: 0 1rem 2.6rem rgb(34 40 49 / 9%);
   --shadow-soft: 0 0.8rem 1.8rem rgb(34 40 49 / 7%);
 }

@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 (function initDashboardSections() {
   const SECTION_META = {
@@ -8,6 +8,7 @@
     favourites: { eyebrow: "Workspace", title: "Favourites" },
     activity: { eyebrow: "Workspace", title: "Activity" },
     files: { eyebrow: "Workspace", title: "Files" },
+    tasks: { eyebrow: "Workspace", title: "Task Board" },
   };
 
   const views = Array.from(document.querySelectorAll(".js-dashboard-view"));

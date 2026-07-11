@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -151,6 +151,22 @@
                   class="sidebar__icon"
                 />
                 <span>Files</span>
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a
+                href="./dashboard.html#tasks"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="tasks"
+              >
+                <img
+                  src="./assets/icons/tasks.svg"
+                  data-theme-src-dark="./assets/icons/tasks.svg"
+                  data-theme-src-light="./assets/icons/tasks-light-mode.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
+                <span>Tasks</span>
               </a>
             </li>
           </ul>
@@ -399,6 +415,36 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
               </footer>
             </article>
 
+
+            <article class="card profile-task-summary" aria-labelledby="profile-task-summary-title">
+              <header class="card__header">
+                <p class="card__eyebrow">My work</p>
+                <h2 class="card__title" id="profile-task-summary-title">Task Summary</h2>
+              </header>
+              <div class="card__body">
+                <div class="profile-task-summary__grid js-task-summary" aria-label="Task summary">
+                  <div class="profile-task-summary__item profile-task-summary__item--todo">
+                    <span class="profile-task-summary__value" data-task-summary="todo">0</span>
+                    <span class="profile-task-summary__label">To Do</span>
+                  </div>
+                  <div class="profile-task-summary__item profile-task-summary__item--progress">
+                    <span class="profile-task-summary__value" data-task-summary="in-progress">0</span>
+                    <span class="profile-task-summary__label">In Progress</span>
+                  </div>
+                  <div class="profile-task-summary__item profile-task-summary__item--overdue">
+                    <span class="profile-task-summary__value" data-task-summary="overdue">0</span>
+                    <span class="profile-task-summary__label">Overdue</span>
+                  </div>
+                  <div class="profile-task-summary__item profile-task-summary__item--done">
+                    <span class="profile-task-summary__value" data-task-summary="done">0</span>
+                    <span class="profile-task-summary__label">Done</span>
+                  </div>
+                </div>
+                <a class="btn btn--ghost btn--full profile-task-summary__link" href="./dashboard.html#tasks">
+                  View Task Board
+                </a>
+              </div>
+            </article>
             <article class="card" aria-labelledby="preferences-title">
               <header class="card__header">
                 <p class="card__eyebrow">Preferences</p>
@@ -712,3 +758,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>
+
+
+
+

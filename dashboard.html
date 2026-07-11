@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -153,6 +153,22 @@
                 <span>Files</span>
               </a>
             </li>
+            <li class="sidebar__item">
+              <a
+                href="./dashboard.html#tasks"
+                class="sidebar__link sidebar__link--secondary"
+                data-dashboard-section-link="tasks"
+              >
+                <img
+                  src="./assets/icons/tasks.svg"
+                  data-theme-src-dark="./assets/icons/tasks.svg"
+                  data-theme-src-light="./assets/icons/tasks-light-mode.svg"
+                  alt=""
+                  class="sidebar__icon"
+                />
+                <span>Tasks</span>
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -221,6 +237,30 @@
             </div>
 
             <div class="app-header__actions">
+              <button
+                class="icon-btn notification-button js-notifications-button"
+                type="button"
+                aria-label="Open notifications"
+                data-modal-target="#notifications-modal"
+                aria-haspopup="dialog"
+                aria-controls="notifications-modal"
+              >
+                <img
+                  src="./assets/icons/notification.svg"
+                  data-theme-src-dark="./assets/icons/notification.svg"
+                  data-theme-src-light="./assets/icons/notification-light-theme.svg"
+                  alt=""
+                />
+                <span class="notification-button__count js-notification-count" hidden>0</span>
+              </button>
+              <button
+                class="visually-hidden js-open-task-details-helper"
+                type="button"
+                data-modal-target="#task-details-modal"
+                aria-controls="task-details-modal"
+              >
+                Open task details
+              </button>
               <div class="date-card" aria-live="polite">
                 <span class="date-card__label">Today</span>
                 <time class="date-card__value" id="dashboard-date" datetime="2026-07-08">July 08, 2026</time>
@@ -688,7 +728,7 @@
                 />
                 <div>
                   <h3 class="file-item__title">10X-CRM-Exam-PRD.md</h3>
-                  <p class="file-item__meta">Project document • assets/document</p>
+                  <p class="file-item__meta">Project document â€¢ assets/document</p>
                 </div>
               </article>
               <article class="file-item">
@@ -701,7 +741,7 @@
                 />
                 <div>
                   <h3 class="file-item__title">ai-log.md</h3>
-                  <p class="file-item__meta">AI usage notes • assets/document</p>
+                  <p class="file-item__meta">AI usage notes â€¢ assets/document</p>
                 </div>
               </article>
               <article class="file-item">
@@ -714,7 +754,7 @@
                 />
                 <div>
                   <h3 class="file-item__title">glossary.md</h3>
-                  <p class="file-item__meta">Technical English package • assets/document</p>
+                  <p class="file-item__meta">Technical English package â€¢ assets/document</p>
                 </div>
               </article>
               <article class="file-item">
@@ -727,15 +767,345 @@
                 />
                 <div>
                   <h3 class="file-item__title">research-note.md</h3>
-                  <p class="file-item__meta">Research source note • assets/document</p>
+                  <p class="file-item__meta">Research source note â€¢ assets/document</p>
                 </div>
               </article>
+            </div>
+          </article>
+        </section>
+        <section
+          class="dashboard-section task-board-section js-dashboard-view"
+          id="tasks"
+          data-dashboard-view="tasks"
+          aria-labelledby="tasks-title"
+          hidden
+        >
+          <header class="dashboard-section__header task-board-section__header">
+            <div>
+              <p class="card__eyebrow">Personal workflow</p>
+              <h2 class="dashboard-section__title" id="tasks-title">Task Board</h2>
+              <p class="dashboard-section__text">
+                Drag tasks between columns to update their status. Archive keeps task history, while delete removes it permanently.
+              </p>
+            </div>
+            <div class="task-board-actions" aria-label="Task board actions">
+              <button class="btn btn--ghost js-task-reset" type="button">Reset demo tasks</button>
+            </div>
+          </header>
+
+          <section class="task-board js-task-board" aria-label="Task status board">
+            <article class="task-column task-column--todo" data-task-status="todo">
+              <header class="task-column__header">
+                <div>
+                  <p class="task-column__eyebrow">Queue</p>
+                  <h3 class="task-column__title">To Do</h3>
+                </div>
+                <div class="task-column__tools">
+                  <span class="task-column__count js-task-count" data-task-count="todo">0</span>
+                  <button
+                    class="btn btn--primary btn--sm task-column__add js-open-add-task-modal"
+                    type="button"
+                    data-modal-target="#add-task-modal"
+                    aria-haspopup="dialog"
+                    aria-controls="add-task-modal"
+                  >
+                    <img
+                      src="./assets/icons/add.svg"
+                      data-theme-src-dark="./assets/icons/add.svg"
+                      data-theme-src-light="./assets/icons/add-light-theme.svg"
+                      alt=""
+                      class="btn__icon"
+                    />
+                    <span>Add Task</span>
+                  </button>
+                </div>
+              </header>
+              <div class="task-column__dropzone js-task-dropzone" data-task-dropzone="todo" aria-label="To Do tasks"></div>
+            </article>
+
+            <article class="task-column task-column--progress" data-task-status="in-progress">
+              <header class="task-column__header">
+                <div>
+                  <p class="task-column__eyebrow">Active</p>
+                  <h3 class="task-column__title">In Progress</h3>
+                </div>
+                <span class="task-column__count js-task-count" data-task-count="in-progress">0</span>
+              </header>
+              <div class="task-column__dropzone js-task-dropzone" data-task-dropzone="in-progress" aria-label="In Progress tasks"></div>
+            </article>
+
+            <article class="task-column task-column--overdue" data-task-status="overdue">
+              <header class="task-column__header">
+                <div>
+                  <p class="task-column__eyebrow">Needs attention</p>
+                  <h3 class="task-column__title">Overdue</h3>
+                </div>
+                <span class="task-column__count js-task-count" data-task-count="overdue">0</span>
+              </header>
+              <div class="task-column__dropzone js-task-dropzone" data-task-dropzone="overdue" aria-label="Overdue tasks"></div>
+            </article>
+
+            <article class="task-column task-column--done" data-task-status="done">
+              <header class="task-column__header">
+                <div>
+                  <p class="task-column__eyebrow">Completed</p>
+                  <h3 class="task-column__title">Done</h3>
+                </div>
+                <span class="task-column__count js-task-count" data-task-count="done">0</span>
+              </header>
+              <div class="task-column__dropzone js-task-dropzone" data-task-dropzone="done" aria-label="Done tasks"></div>
+            </article>
+          </section>
+
+          <article class="card task-archive" aria-labelledby="archived-tasks-title">
+            <header class="card__header card__header--split">
+              <div>
+                <p class="card__eyebrow">Hidden from board</p>
+                <h3 class="card__title" id="archived-tasks-title">Archived Tasks</h3>
+              </div>
+              <span class="status-badge status-badge--neutral js-task-archive-count">0 archived</span>
+            </header>
+            <div class="card__body task-archive__list js-task-archive-list">
+              <p class="task-empty">No archived tasks yet.</p>
             </div>
           </article>
         </section>
       </main>
     </div>
 
+
+
+    <section
+      class="modal"
+      id="task-details-modal"
+      aria-labelledby="task-details-title"
+      aria-describedby="task-details-description"
+      aria-hidden="true"
+      data-modal-initial-focus="#task-detail-title"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--task-details" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">Task details</p>
+            <h2 class="modal__title" id="task-details-title">Open Task</h2>
+            <p class="modal__description" id="task-details-description">
+              Edit task content, manage checklist items, and leave team comments.
+            </p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close task details" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+
+        <div class="modal__body task-details">
+          <form class="task-details__form js-task-details-form" id="task-details-form" novalidate>
+            <input class="js-task-detail-id" type="hidden" name="taskId" />
+
+            <div class="field">
+              <label class="field__label" for="task-detail-title">Title</label>
+              <input class="input js-task-detail-title" id="task-detail-title" name="title" type="text" required />
+              <p class="form-error" data-error-for="task-detail-title" hidden></p>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="task-detail-description">Description</label>
+              <textarea
+                class="input input--textarea task-form__textarea js-task-detail-description"
+                id="task-detail-description"
+                name="description"
+                rows="4"
+              ></textarea>
+            </div>
+          </form>
+
+          <section class="task-details__panel" aria-labelledby="task-checklist-title">
+            <div class="task-details__panel-header">
+              <h3 class="task-details__title" id="task-checklist-title">Checklist</h3>
+              <span class="task-details__meta js-task-checklist-progress">0/0 done</span>
+            </div>
+            <div class="task-checklist js-task-checklist"></div>
+            <form class="task-inline-form js-add-subtask-form">
+              <label class="visually-hidden" for="new-subtask">New subtask</label>
+              <input class="input js-new-subtask" id="new-subtask" name="subtask" type="text" placeholder="Add checklist item" />
+              <button class="btn btn--ghost btn--sm" type="submit">Add</button>
+            </form>
+          </section>
+
+          <section class="task-details__panel" aria-labelledby="task-comments-title">
+            <div class="task-details__panel-header">
+              <h3 class="task-details__title" id="task-comments-title">Comments</h3>
+              <span class="task-details__meta js-task-comment-count">0 comments</span>
+            </div>
+            <div class="task-comments js-task-comments"></div>
+            <form class="task-comment-form js-task-comment-form">
+              <label class="field__label" for="task-comment-mention">Mention teammate</label>
+              <select class="input select-field js-task-comment-mention" id="task-comment-mention" name="mention">
+                <option value="">No mention</option>
+                <option value="Mariam Tchelidze">@Mariam Tchelidze</option>
+                <option value="Sales Team">@Sales Team</option>
+                <option value="Support Team">@Support Team</option>
+                <option value="Account Manager">@Account Manager</option>
+              </select>
+
+              <label class="field__label" for="task-comment-message">Comment</label>
+              <textarea
+                class="input input--textarea task-form__textarea js-task-comment-message"
+                id="task-comment-message"
+                name="message"
+                rows="3"
+                placeholder="Leave directions, error notes, or next steps"
+              ></textarea>
+              <p class="form-error js-task-comment-error" hidden></p>
+              <button class="btn btn--secondary" type="submit">Leave Comment</button>
+            </form>
+          </section>
+        </div>
+
+        <footer class="modal__footer">
+          <button class="btn btn--ghost" type="button" data-modal-close>Close</button>
+          <button class="btn btn--primary" type="submit" form="task-details-form">Save Changes</button>
+        </footer>
+      </div>
+    </section>
+
+    <section
+      class="modal"
+      id="notifications-modal"
+      aria-labelledby="notifications-title"
+      aria-hidden="true"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">Updates</p>
+            <h2 class="modal__title" id="notifications-title">Notifications</h2>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close notifications" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+        <div class="modal__body notification-list js-notification-list">
+          <p class="task-empty">No notifications yet.</p>
+        </div>
+        <footer class="modal__footer">
+          <button class="btn btn--ghost js-clear-notifications" type="button">Mark all read</button>
+          <button class="btn btn--primary" type="button" data-modal-close>Done</button>
+        </footer>
+      </div>
+    </section>
+    <section
+      class="modal"
+      id="add-task-modal"
+      aria-labelledby="add-task-modal-title"
+      aria-describedby="add-task-modal-description"
+      aria-hidden="true"
+      data-modal-initial-focus="#task-title"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--task" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">To Do task</p>
+            <h2 class="modal__title" id="add-task-modal-title">Add New Task</h2>
+            <p class="modal__description" id="add-task-modal-description">
+              New tasks start in To Do. You can drag them to another status after creating them.
+            </p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close add task" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+
+        <form class="modal__body modal__body--form task-form js-add-task-form" id="add-task-form" novalidate>
+          <div class="field">
+            <label class="field__label" for="task-title">Task Title</label>
+            <input class="input js-task-title" id="task-title" name="title" type="text" placeholder="Follow up with client" required />
+            <p class="form-error" data-error-for="task-title" hidden></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="task-client">Client</label>
+            <input class="input js-task-client" id="task-client" name="client" type="text" placeholder="Alpha Group" required />
+            <p class="form-error" data-error-for="task-client" hidden></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="task-due-date">Due Date</label>
+            <input class="input js-task-due-date" id="task-due-date" name="dueDate" type="date" required />
+            <p class="form-error" data-error-for="task-due-date" hidden></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="task-priority">Priority</label>
+            <select class="input select-field js-task-priority" id="task-priority" name="priority" required>
+              <option value="">Choose priority</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+            <p class="form-error" data-error-for="task-priority" hidden></p>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="task-assignee">Assignee</label>
+            <select class="input select-field js-task-assignee" id="task-assignee" name="assignee">
+              <option value="Mariam Tchelidze">Mariam Tchelidze</option>
+              <option value="Sales Team">Sales Team</option>
+              <option value="Support Team">Support Team</option>
+              <option value="Account Manager">Account Manager</option>
+            </select>
+          </div>
+
+
+          <div class="field field--full">
+            <label class="field__label" for="task-description">Description</label>
+            <textarea
+              class="input input--textarea task-form__textarea js-task-description"
+              id="task-description"
+              name="description"
+              rows="3"
+              placeholder="Write a short task note"
+            ></textarea>
+          </div>
+
+          <div class="field field--full">
+            <label class="field__label" for="task-subtasks">Subtasks</label>
+            <textarea
+              class="input input--textarea task-form__textarea js-task-subtasks"
+              id="task-subtasks"
+              name="subtasks"
+              rows="3"
+              placeholder="Write each subtask on a new line"
+            ></textarea>
+            <p class="field__hint">Example: Call client, prepare offer, send email.</p>
+          </div>
+
+          <p class="form-status js-add-task-status" hidden></p>
+        </form>
+
+        <footer class="modal__footer">
+          <button class="btn btn--ghost" type="button" data-modal-close>Cancel</button>
+          <button class="btn btn--primary js-save-task" type="submit" form="add-task-form">Create Task</button>
+        </footer>
+      </div>
+    </section>
     <section
       class="modal"
       id="settings-modal"
@@ -966,3 +1336,11 @@
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>
+
+
+
+
+
+
+
+

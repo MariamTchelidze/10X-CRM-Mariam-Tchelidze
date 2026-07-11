@@ -1,4 +1,4 @@
-import "./ui/theme.js";
+﻿import "./ui/theme.js";
 import "./components/passwordToggle.js";
 import "./components/pageSwap.js";
 
@@ -22,6 +22,7 @@ import "./core/storage.js";
 
 import "./dashboard/dashboard.js";
 import "./dashboard/sections.js";
+import "./dashboard/tasks.js";
 
 import "./data/data.js";
 
@@ -43,3 +44,4 @@ import "./utils/dom.js";
 import "./utils/formatters.js";
 import "./utils/helpers.js";
 import "./utils/validators.js";
+

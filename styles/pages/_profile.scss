@@ -1,4 +1,4 @@
-@use "../abstracts/variables" as *;
+﻿@use "../abstracts/variables" as *;
 @use "../abstracts/mixins" as *;
 
 .profile-grid {
@@ -267,3 +267,33 @@
     white-space: normal;
   }
 }
+
+.profile-task-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $space-sm;
+  margin-bottom: $space-lg;
+}
+
+.profile-task-summary__item {
+  display: grid;
+  gap: $space-xs;
+  padding: $space-md;
+  border-radius: $radius-md;
+}
+
+.profile-task-summary__value {
+  font-size: 2.2rem;
+  font-weight: $fw-bold;
+  line-height: 1;
+}
+
+.profile-task-summary__label {
+  font-size: 1.3rem;
+  font-weight: $fw-semibold;
+}
+
+.profile-task-summary__link {
+  justify-content: center;
+}
+

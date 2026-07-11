@@ -1,4 +1,4 @@
-/* Brand */
+﻿/* Brand */
 $primary: #ff6b1a;
 $primary-hover: #ff8338;
 $primary-active: #e95a00;
@@ -11,6 +11,11 @@ $secondary-active: #3b7ed8;
 $secondary-light: #eef5ff;
 
 /* Status */
+$task-todo: #4c8fea;
+$task-in-progress: #ff6b1a;
+$task-overdue: #e65a4b;
+$task-done: #55b975;
+
 $success: #55b975;
 $success-light: #eaf8ef;
 $warning: #f4b53f;
@@ -175,3 +180,4 @@ $fs-lg: 1.8rem;
 $fs-xl: 2.4rem;
 $fs-2xl: 3.2rem;
 $fs-3xl: 4rem;
+
