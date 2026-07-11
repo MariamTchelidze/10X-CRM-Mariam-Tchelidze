@@ -9,6 +9,7 @@
     activity: { eyebrow: "Workspace", title: "Activity" },
     files: { eyebrow: "Workspace", title: "Files" },
     tasks: { eyebrow: "Workspace", title: "Task Board" },
+    "recycle-bin": { eyebrow: "Workspace", title: "Recycle Bin" },
   };
 
   const views = Array.from(document.querySelectorAll(".js-dashboard-view"));
@@ -76,3 +77,4 @@
 
   showSection(getHashSection());
 })();
+

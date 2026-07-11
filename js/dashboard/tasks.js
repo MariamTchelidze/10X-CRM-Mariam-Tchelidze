@@ -102,6 +102,7 @@ function initTasks() {
 
   let activeTaskId = null;
   let draggedTaskId = null;
+  let pendingDeleteTaskId = null;
 
   const addTaskForm = document.querySelector(".js-add-task-form");
   const addTaskStatus = document.querySelector(".js-add-task-status");
@@ -153,6 +154,9 @@ function initTasks() {
       color: getPriorityColor(task.priority),
       subtasks: Array.isArray(task.subtasks) ? task.subtasks.map(normalizeSubtask).filter((item) => item.text) : [],
       comments: Array.isArray(task.comments) ? task.comments : [],
+      archived: Boolean(task.archived),
+      deleted: Boolean(task.deleted),
+      deletedAt: task.deletedAt || "",
     };
   };
 
@@ -162,8 +166,9 @@ function initTasks() {
   const saveTasks = () => saveJson(TASKS_KEY, tasks);
   const saveNotifications = () => saveJson(NOTIFICATIONS_KEY, notifications);
 
-  const getActiveTasks = () => tasks.filter((task) => !task.archived);
-  const getArchivedTasks = () => tasks.filter((task) => task.archived);
+  const getActiveTasks = () => tasks.filter((task) => !task.archived && !task.deleted);
+  const getArchivedTasks = () => tasks.filter((task) => task.archived && !task.deleted);
+  const getDeletedTasks = () => tasks.filter((task) => task.deleted);
   const getTaskById = (taskId) => tasks.find((task) => task.id === taskId);
 
   const escapeHtml = (value) => {
@@ -358,6 +363,42 @@ function initTasks() {
     renderArchive();
   };
 
+
+  const renderRecycleBin = () => {
+    const recycleList = document.querySelector(".js-recycle-bin-list");
+    const recycleCount = document.querySelector(".js-recycle-count");
+    const deletedTasks = getDeletedTasks();
+
+    if (recycleCount) {
+      recycleCount.textContent = `${deletedTasks.length} deleted`;
+    }
+
+    if (!recycleList) return;
+
+    if (!deletedTasks.length) {
+      recycleList.innerHTML = '<p class="task-empty">Recycle bin is empty.</p>';
+      return;
+    }
+
+    recycleList.innerHTML = "";
+    deletedTasks.forEach((task) => {
+      const item = document.createElement("article");
+      item.className = "recycle-task-item";
+      item.dataset.taskId = task.id;
+      item.innerHTML = `
+        <div>
+          <h4 class="recycle-task-item__title">${escapeHtml(task.title)}</h4>
+          <p class="recycle-task-item__meta">${escapeHtml(task.client)} | ${escapeHtml(task.priority)} | ${escapeHtml(task.dueDate)}</p>
+        </div>
+        <div class="recycle-task-item__actions">
+          <button class="task-card__button task-card__button--primary" type="button" data-task-action="open">Open</button>
+          <button class="task-card__button" type="button" data-task-action="restore-from-recycle">Restore</button>
+          <button class="task-card__button task-card__button--danger" type="button" data-task-action="delete-permanent">Delete Permanently</button>
+        </div>
+      `;
+      recycleList.append(item);
+    });
+  };
   const renderNotifications = () => {
     const unreadCount = notifications.filter((notification) => !notification.read).length;
     const counter = document.querySelector(".js-notification-count");
@@ -458,6 +499,24 @@ function initTasks() {
     detailsForm.querySelector(".js-task-detail-id").value = task.id;
     detailsForm.querySelector(".js-task-detail-title").value = task.title;
     detailsForm.querySelector(".js-task-detail-description").value = task.description || "";
+    detailsForm.querySelector(".js-task-detail-assignee").value = task.assignee || "Unassigned";
+
+    const assigneeControl = document.querySelector(".js-task-detail-assignee-control");
+    const assigneeAvatar = document.querySelector(".js-task-detail-assignee-avatar");
+    const assigneeName = document.querySelector(".js-task-detail-assignee-name");
+
+    if (assigneeControl) {
+      assigneeControl.value = task.assignee || "Mariam Tchelidze";
+    }
+
+    if (assigneeAvatar) {
+      assigneeAvatar.textContent = getInitials(task.assignee);
+    }
+
+    if (assigneeName) {
+      assigneeName.textContent = task.assignee || "Unassigned";
+    }
+
     renderChecklist(task);
     renderComments(task);
   };
@@ -465,6 +524,7 @@ function initTasks() {
   const render = () => {
     if (taskWorkspacePage && board) {
       renderBoard();
+      renderRecycleBin();
       renderNotifications();
     }
 
@@ -485,11 +545,20 @@ function initTasks() {
     render();
   };
 
-  const deleteTask = (taskId) => {
-    const shouldDelete = window.confirm("Delete this task permanently? This cannot be undone.");
+  const openDeleteTaskModal = (taskId) => {
+    pendingDeleteTaskId = taskId;
+    document.querySelector(".js-open-delete-task-helper")?.click();
+  };
 
-    if (!shouldDelete) return;
+  const moveTaskToRecycle = (taskId) => {
+    updateTask(taskId, {
+      archived: false,
+      deleted: true,
+      deletedAt: new Date().toISOString(),
+    });
+  };
 
+  const deleteTaskPermanently = (taskId) => {
     tasks = tasks.filter((task) => task.id !== taskId);
     saveTasks();
     render();
@@ -594,6 +663,8 @@ function initTasks() {
       comments: [],
       status: "todo",
       archived: false,
+      deleted: false,
+      deletedAt: "",
     };
 
     tasks = [nextTask, ...tasks];
@@ -667,8 +738,16 @@ function initTasks() {
       updateTask(taskId, { archived: false });
     }
 
+    if (actionButton.dataset.taskAction === "restore-from-recycle") {
+      updateTask(taskId, { deleted: false, deletedAt: "" });
+    }
+
     if (actionButton.dataset.taskAction === "delete") {
-      deleteTask(taskId);
+      openDeleteTaskModal(taskId);
+    }
+
+    if (actionButton.dataset.taskAction === "delete-permanent") {
+      deleteTaskPermanently(taskId);
     }
   });
 
@@ -678,6 +757,8 @@ function initTasks() {
     const taskId = detailsForm.querySelector(".js-task-detail-id").value;
     const title = detailsForm.querySelector(".js-task-detail-title").value.trim();
     const description = detailsForm.querySelector(".js-task-detail-description").value.trim();
+    const previousTask = getTaskById(taskId);
+    const assignee = detailsForm.querySelector(".js-task-detail-assignee").value;
 
     setFieldError("task-detail-title", "");
 
@@ -686,7 +767,12 @@ function initTasks() {
       return;
     }
 
-    updateTask(taskId, { title, description });
+    updateTask(taskId, { title, description, assignee });
+
+    if (previousTask && previousTask.assignee !== assignee) {
+      addNotification(`${title} was reassigned to ${assignee}.`, taskId);
+    }
+
     document.querySelector("#task-details-modal [data-modal-close]")?.click();
   });
 
@@ -735,6 +821,24 @@ function initTasks() {
     updateTask(task.id, {
       subtasks: task.subtasks.filter((subtask) => subtask.id !== subtaskItem.dataset.subtaskId),
     });
+  });
+
+  document.querySelector(".js-task-detail-assignee-control")?.addEventListener("change", (event) => {
+    const hiddenAssignee = detailsForm?.querySelector(".js-task-detail-assignee");
+    const assigneeAvatar = document.querySelector(".js-task-detail-assignee-avatar");
+    const assigneeName = document.querySelector(".js-task-detail-assignee-name");
+
+    if (hiddenAssignee) {
+      hiddenAssignee.value = event.target.value;
+    }
+
+    if (assigneeAvatar) {
+      assigneeAvatar.textContent = getInitials(event.target.value);
+    }
+
+    if (assigneeName) {
+      assigneeName.textContent = event.target.value;
+    }
   });
 
   commentsForm?.addEventListener("submit", (event) => {
@@ -798,11 +902,30 @@ function initTasks() {
     renderNotifications();
   });
 
+
+  document.querySelector(".js-move-task-recycle")?.addEventListener("click", () => {
+    if (!pendingDeleteTaskId) return;
+
+    moveTaskToRecycle(pendingDeleteTaskId);
+    pendingDeleteTaskId = null;
+    document.querySelector("#delete-task-modal [data-modal-close]")?.click();
+  });
+
+  document.querySelector(".js-delete-task-permanently")?.addEventListener("click", () => {
+    if (!pendingDeleteTaskId) return;
+
+    deleteTaskPermanently(pendingDeleteTaskId);
+    pendingDeleteTaskId = null;
+    document.querySelector("#delete-task-modal [data-modal-close]")?.click();
+  });
   addTaskForm?.addEventListener("submit", createTaskFromForm);
   addTaskForm?.addEventListener("input", clearTaskFormErrors);
   document.querySelector(".js-task-reset")?.addEventListener("click", resetTasks);
 
   render();
 }
+
+
+
 
 
