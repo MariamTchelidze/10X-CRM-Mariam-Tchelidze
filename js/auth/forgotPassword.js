@@ -46,7 +46,7 @@ function initForgotPassword() {
         return false;
       }
 
-      if (!emailInput.validity.valid) {
+      if (!window.crmValidation?.emailIsValid(email)) {
         setEmailError("Please enter a valid email address.");
         return false;
       }

@@ -2,10 +2,18 @@
 
 (function initValidationHelpers() {
   const emailIsValid = (email) => {
+    const allowedDomains = [".com", ".net", ".org"];
     const normalized = email.trim().toLowerCase();
     const atIndex = normalized.indexOf("@");
     const dotIndex = normalized.lastIndexOf(".");
-    return atIndex > 0 && dotIndex > atIndex + 1 && dotIndex < normalized.length - 1;
+    const domainEnding = normalized.slice(dotIndex);
+
+    return (
+      atIndex > 0 &&
+      dotIndex > atIndex + 1 &&
+      allowedDomains.includes(domainEnding) &&
+      normalized.endsWith(domainEnding)
+    );
   };
 
   const passwordIsValid = (password) => {
