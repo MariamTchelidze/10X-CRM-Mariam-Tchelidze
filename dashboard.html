@@ -210,6 +210,67 @@
                 </div>
               </details>
             </li>
+            <li class="sidebar__item sidebar__item--dropdown">
+              <details class="sidebar-dropdown">
+                <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
+                  <span class="sidebar-dropdown__label">
+                    <img
+                      src="./assets/icons/chat.svg"
+                      data-theme-src-dark="./assets/icons/chat.svg"
+                      data-theme-src-light="./assets/icons/chat-light-theme.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Communications</span>
+                  </span>
+                  <img
+                    src="./assets/icons/arrow-down.svg"
+                    data-theme-src-dark="./assets/icons/arrow-down.svg"
+                    data-theme-src-light="./assets/icons/arrow-down-light-mode.svg"
+                    data-arrow-src-down-dark="./assets/icons/arrow-down.svg"
+                    data-arrow-src-down-light="./assets/icons/arrow-down-light-mode.svg"
+                    data-arrow-src-up-dark="./assets/icons/arrow-up.svg"
+                    data-arrow-src-up-light="./assets/icons/arrow-up-light-mode.svg"
+                    alt=""
+                    class="sidebar-dropdown__arrow"
+                  />
+                </summary>
+                <div class="sidebar-dropdown__menu">
+                  <button
+                    class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
+                    type="button"
+                    data-modal-target="#communication-chat-modal"
+                    aria-haspopup="dialog"
+                    aria-controls="communication-chat-modal"
+                  >
+                    <img
+                      src="./assets/icons/chat.svg"
+                      data-theme-src-dark="./assets/icons/chat.svg"
+                      data-theme-src-light="./assets/icons/chat-light-theme.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Messenger</span>
+                  </button>
+                  <button
+                    class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
+                    type="button"
+                    data-modal-target="#ai-chat-modal"
+                    aria-haspopup="dialog"
+                    aria-controls="ai-chat-modal"
+                  >
+                    <img
+                      src="./assets/icons/theme-edit.svg"
+                      data-theme-src-dark="./assets/icons/theme-edit.svg"
+                      data-theme-src-light="./assets/icons/theme-edit-light-theme.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>AI Chat</span>
+                  </button>
+                </div>
+              </details>
+            </li>
           </ul>
         </nav>
 
@@ -312,7 +373,7 @@
               </button>
               <div class="date-card" aria-live="polite">
                 <span class="date-card__label">Today</span>
-                                <time class="date-card__value js-live-date" id="dashboard-date" datetime="">Loading date</time>
+                <time class="date-card__value js-live-date" id="dashboard-date" datetime="">Loading date</time>
                 <span class="date-card__clock js-live-clock" id="dashboard-clock">--:--:--</span>
                 <span class="date-card__timezone js-live-timezone">Local time</span>
               </div>
@@ -602,7 +663,11 @@
                   <h3 class="chart-card__title">Monthly Won Value</h3>
                 </div>
               </header>
-              <canvas class="crm-chart js-crm-chart" data-chart-type="line" aria-label="Monthly revenue line chart"></canvas>
+              <canvas
+                class="crm-chart js-crm-chart"
+                data-chart-type="line"
+                aria-label="Monthly revenue line chart"
+              ></canvas>
             </article>
             <article class="chart-card">
               <header class="chart-card__header">
@@ -611,11 +676,15 @@
                   <h3 class="chart-card__title">Contracts</h3>
                 </div>
               </header>
-              <canvas class="crm-chart js-crm-chart" data-chart-type="pie" aria-label="Contract outcome pie chart"></canvas>
+              <canvas
+                class="crm-chart js-crm-chart"
+                data-chart-type="pie"
+                aria-label="Contract outcome pie chart"
+              ></canvas>
             </article>
           </section>
 
-<article class="card">
+          <article class="card">
             <header class="card__header">
               <h3 class="card__title">Saved Reports</h3>
             </header>
@@ -849,7 +918,13 @@
                   <p class="file-item__meta">Research source note - assets/document</p>
                 </div>
               </article>
-              <article class="file-item file-item--interactive js-open-spreadsheet" tabindex="0" role="button" data-file-name="clients-pipeline.csv" data-file-type="csv">
+              <article
+                class="file-item file-item--interactive js-open-spreadsheet"
+                tabindex="0"
+                role="button"
+                data-file-name="clients-pipeline.csv"
+                data-file-type="csv"
+              >
                 <img
                   src="./assets/icons/data.svg"
                   data-theme-src-dark="./assets/icons/data.svg"
@@ -1219,7 +1294,7 @@
     </section>
 
     <section class="modal" id="notifications-modal" aria-labelledby="notifications-title" aria-hidden="true" hidden>
-      <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
+      <div class="modal__dialog modal__dialog--notifications" role="dialog" aria-modal="true">
         <header class="modal__header">
           <div>
             <p class="modal__eyebrow">Updates</p>
@@ -1238,9 +1313,13 @@
           <p class="task-empty">No notifications yet.</p>
         </div>
         <footer class="modal__footer">
-                    <button class="btn btn--ghost js-clear-notifications" type="button">Mark all read</button>
-          <button class="btn btn--ghost js-delete-selected-notifications" type="button" data-skip-delete-confirm>Delete selected</button>
-          <button class="btn btn--danger js-delete-read-notifications" type="button" data-skip-delete-confirm>Delete read</button>
+          <button class="btn btn--ghost js-clear-notifications" type="button">Mark all read</button>
+          <button class="btn btn--ghost js-delete-selected-notifications" type="button" data-skip-delete-confirm>
+            Delete selected
+          </button>
+          <button class="btn btn--danger js-delete-read-notifications" type="button" data-skip-delete-confirm>
+            Delete read
+          </button>
           <button class="btn btn--primary" type="button" data-modal-close>Done</button>
         </footer>
       </div>
@@ -1510,11 +1589,12 @@
             </div>
           </fieldset>
 
-          <fieldset class="settings-group settings-group--custom js-custom-theme-panel" aria-describedby="custom-theme-note">
+          <fieldset
+            class="settings-group settings-group--custom js-custom-theme-panel"
+            aria-describedby="custom-theme-note"
+          >
             <legend class="settings-group__legend">Custom Appearance</legend>
-            <p class="settings-group__hint" id="custom-theme-note">
-              Available only when Custom theme is selected.
-            </p>
+            <p class="settings-group__hint" id="custom-theme-note">Available only when Custom theme is selected.</p>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-custom-theme-dark">
                 <input
@@ -1618,14 +1698,13 @@
             <div class="settings-danger">
               <div>
                 <h3 class="settings-danger__title">Delete Account</h3>
-                <p class="settings-danger__text">
-                  Delete this demo account and all CRM data saved in this browser.
-                </p>
+                <p class="settings-danger__text">Delete this demo account and all CRM data saved in this browser.</p>
               </div>
               <button
                 class="btn btn--danger js-delete-account-trigger"
                 type="button"
                 data-modal-target="#delete-account-modal"
+                data-skip-delete-confirm
                 aria-haspopup="dialog"
                 aria-controls="delete-account-modal"
               >
@@ -1642,24 +1721,19 @@
       aria-labelledby="delete-account-title"
       aria-describedby="delete-account-description"
       aria-hidden="true"
-      data-modal-initial-focus="#delete-account-confirmation"
+      data-modal-initial-focus="#delete-account-password"
       hidden
     >
       <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
         <header class="modal__header">
           <div>
             <p class="modal__eyebrow">Danger zone</p>
-            <h2 class="modal__title" id="delete-account-title">Delete Account</h2>
+            <h2 class="modal__title" id="delete-account-title">Are you sure to delete account?</h2>
             <p class="modal__description" id="delete-account-description">
-              This permanently clears the CRM data stored for this browser.
+              To delete your account permanently please enter your password here.
             </p>
           </div>
-          <button
-            class="icon-btn js-close-modal"
-            type="button"
-            aria-label="Close delete account"
-            data-modal-close
-          >
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close delete account" data-modal-close>
             <img
               src="./assets/icons/close.svg"
               data-theme-src-dark="./assets/icons/close.svg"
@@ -1671,17 +1745,18 @@
 
         <form class="modal__body delete-account-confirm js-delete-account-form" id="delete-account-form" novalidate>
           <p class="delete-account-confirm__warning">
-            This action removes saved users, the active session, clients, profile image,
-            tasks, notifications, settings, and theme preferences from local storage.
+            This action permanently clears the demo account, session, clients, profile image, tasks, notifications,
+            settings, and theme preferences stored in this browser.
           </p>
           <div class="field">
-            <label class="field__label" for="delete-account-confirmation">Type DELETE to confirm</label>
+            <label class="field__label" for="delete-account-password">Password</label>
             <input
-              class="input js-delete-account-confirmation"
-              id="delete-account-confirmation"
-              name="confirmation"
-              type="text"
-              autocomplete="off"
+              class="input js-delete-account-password"
+              id="delete-account-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
             />
             <p class="form-error js-delete-account-error" hidden></p>
           </div>
@@ -1693,6 +1768,88 @@
             Delete Account
           </button>
         </footer>
+      </div>
+    </section>
+    <section
+      class="modal communication-modal"
+      id="communication-chat-modal"
+      aria-labelledby="communication-chat-title"
+      aria-hidden="true"
+      data-modal-initial-focus="#communication-chat-input"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--chat" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">Communication</p>
+            <h2 class="modal__title" id="communication-chat-title">Team Communication Chat</h2>
+            <p class="modal__description">Call, text, WhatsApp, or continue your internal team conversation.</p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close communication chat" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+        <div class="modal__body communication-chat">
+          <div class="communication-chat__quick-actions">
+            <a class="btn btn--ghost" href="tel:+995555010101">Call Alpha Group</a>
+            <a class="btn btn--ghost" href="sms:+995555010101">Text SMS</a>
+            <a class="btn btn--ghost" href="https://wa.me/995555010101" target="_blank" rel="noreferrer">WhatsApp</a>
+          </div>
+          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
+        </div>
+        <form class="modal__footer communication-chat__form js-communication-chat-form">
+          <label class="visually-hidden" for="communication-chat-input">Message team</label>
+          <input
+            class="input js-communication-chat-input"
+            id="communication-chat-input"
+            type="text"
+            placeholder="Message your team"
+          />
+          <button class="btn btn--primary" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <section
+      class="modal communication-modal"
+      id="ai-chat-modal"
+      aria-labelledby="ai-chat-title"
+      aria-hidden="true"
+      data-modal-initial-focus="#ai-chat-input"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--chat" role="dialog" aria-modal="true">
+        <header class="modal__header">
+          <div>
+            <p class="modal__eyebrow">AI Assistant</p>
+            <h2 class="modal__title" id="ai-chat-title">AI Chat</h2>
+            <p class="modal__description">Ask for CRM help. The conversation is saved locally in this browser.</p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close AI chat" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+        <div class="modal__body communication-chat__messages js-ai-chat-messages" aria-live="polite"></div>
+        <form class="modal__footer communication-chat__form js-ai-chat-form">
+          <label class="visually-hidden" for="ai-chat-input">Ask the AI assistant</label>
+          <input
+            class="input js-ai-chat-input"
+            id="ai-chat-input"
+            type="text"
+            placeholder="Ask: create a follow-up task for Alpha Group"
+          />
+          <button class="btn btn--primary" type="submit">Send</button>
+        </form>
       </div>
     </section>
     <section

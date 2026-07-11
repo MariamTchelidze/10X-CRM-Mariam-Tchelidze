@@ -10,6 +10,8 @@
     "crm_profile_avatar",
     "crm_tasks",
     "crm_task_notifications",
+    "crm_team_chat_history",
+    "crm_ai_chat_history",
     "crm_theme",
     STORAGE_KEY,
   ];
@@ -106,6 +108,20 @@
 
     if (accentInput) {
       accentInput.value = settings.accentColor;
+    }
+  };
+
+  const getStoredAccountPassword = () => {
+    try {
+      const session = JSON.parse(localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY) || "{}");
+      const users = JSON.parse(localStorage.getItem("crm_users") || "[]");
+      const currentUser = Array.isArray(users)
+        ? users.find((user) => user.email && user.email === session.email) || users[0]
+        : null;
+
+      return currentUser?.password || session.password || "10xcrm";
+    } catch (error) {
+      return "10xcrm";
     }
   };
 
@@ -233,12 +249,16 @@
   deleteAccountForm?.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const confirmation = deleteAccountForm
-      .querySelector(".js-delete-account-confirmation")
-      ?.value.trim();
+    const password = deleteAccountForm.querySelector(".js-delete-account-password")?.value.trim();
+    const storedPassword = getStoredAccountPassword();
 
-    if (confirmation !== "DELETE") {
-      setDeleteAccountError('Type "DELETE" to confirm account deletion.');
+    if (!password) {
+      setDeleteAccountError("Please enter your password.");
+      return;
+    }
+
+    if (password !== storedPassword) {
+      setDeleteAccountError("Password does not match this account.");
       return;
     }
 

@@ -1111,6 +1111,88 @@ body[data-theme=light] .modal {
     flex-direction: column;
   }
 }
+.modal__dialog--notifications {
+  width: min(68rem, 100%);
+  min-height: min(68rem, 100dvh - 4rem);
+}
+
+.modal__dialog--notifications .notification-list {
+  align-content: start;
+  max-height: none;
+}
+
+.modal__dialog--chat {
+  width: min(76rem, 100%);
+  min-height: min(70rem, 100dvh - 4rem);
+}
+
+.communication-chat {
+  display: grid;
+  gap: 1.6rem;
+  align-content: start;
+}
+
+.communication-chat__quick-actions {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.communication-chat__messages {
+  display: grid;
+  align-content: start;
+  gap: 1.2rem;
+  min-height: 32rem;
+}
+
+.communication-chat__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.communication-message {
+  display: grid;
+  gap: 0.4rem;
+  max-width: 78%;
+  padding: 1.2rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.8rem;
+  background: var(--color-elevated);
+  color: var(--color-text-secondary);
+}
+
+.communication-message--user {
+  justify-self: end;
+  background: var(--color-soft-primary);
+  color: var(--color-text);
+}
+
+.communication-message--assistant,
+.communication-message--team,
+.communication-message--system {
+  justify-self: start;
+}
+
+.communication-message header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.2rem;
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+}
+
+.communication-message p {
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .communication-chat__form {
+    grid-template-columns: 1fr;
+  }
+  .communication-message {
+    max-width: 100%;
+  }
+}
 /* --- abstract --- */
 .auth-header {
   display: flex;

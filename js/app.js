@@ -2,6 +2,8 @@ import "./ui/theme.js";
 import "./ui/liveHeader.js";
 import "./ui/destructiveConfirm.js";
 import "./ui/iconSelect.js";
+import "./ui/notifications.js";
+import "./ui/communication.js";
 import "./components/passwordToggle.js";
 import "./components/pageSwap.js";
 

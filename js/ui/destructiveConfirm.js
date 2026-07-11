@@ -11,6 +11,7 @@
 
   const isDeleteControl = (element) => {
     if (!element || element.dataset.skipDeleteConfirm !== undefined) return false;
+    if (element.dataset.modalTarget === "#delete-account-modal") return false;
     if (element.closest("[data-skip-delete-confirm]")) return false;
     if (element.closest("#global-delete-confirm-modal")) return false;
 
