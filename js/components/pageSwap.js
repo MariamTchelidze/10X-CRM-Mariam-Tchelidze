@@ -21,7 +21,7 @@
 
       window.setTimeout(() => {
         window.location.href = destination;
-      }, 360);
+      }, 300);
     });
   });
 })();

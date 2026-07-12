@@ -1,8 +1,8 @@
 .auth__content,
 .auth__visual {
   transition:
-    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.28s ease;
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.24s ease;
   will-change: transform, opacity;
 }
 
@@ -12,22 +12,22 @@ body.is-auth-swapping {
 
 body.is-swapping-to-signup .auth__content {
   opacity: 0;
-  transform: translateX(-110%);
+  transform: translateX(-82%) scale(0.992);
 }
 
 body.is-swapping-to-signup .auth__visual {
   opacity: 0;
-  transform: translateX(110%);
+  transform: translateX(82%) scale(0.992);
 }
 
 body.is-swapping-to-login .auth__content {
   opacity: 0;
-  transform: translateX(110%);
+  transform: translateX(82%) scale(0.992);
 }
 
 body.is-swapping-to-login .auth__visual {
   opacity: 0;
-  transform: translateX(-110%);
+  transform: translateX(-82%) scale(0.992);
 }
 
 @media (prefers-reduced-motion: reduce) {

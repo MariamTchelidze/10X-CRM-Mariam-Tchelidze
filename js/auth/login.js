@@ -53,6 +53,12 @@ function initLogin() {
     });
 
     window.crmToast?.queue("You have been logged in successfully.", "success");
+
+    if (window.crmPageTransition) {
+      window.crmPageTransition.transitionTo(constants.PAGES.dashboard);
+      return;
+    }
+
     window.location.href = constants.PAGES.dashboard;
   });
 }

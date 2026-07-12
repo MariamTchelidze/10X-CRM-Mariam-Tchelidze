@@ -1,0 +1,64 @@
+@use "../abstracts/variables" as *;
+
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal + 10;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(255, 248, 242, 0.64);
+  backdrop-filter: blur(0.14rem);
+  transition: opacity 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-dark .page-transition-overlay {
+  background: rgba(16, 25, 35, 0.64);
+}
+
+.auth,
+.app-shell {
+  transform-origin: center;
+}
+
+body.is-page-transitioning {
+  pointer-events: none;
+}
+
+body.is-page-exiting .page-transition-overlay {
+  opacity: 1;
+}
+
+body.is-page-exiting .auth,
+body.is-page-exiting .app-shell {
+  opacity: 0.18;
+  transform: translateY(-0.35rem) scale(0.996);
+  transition:
+    opacity 0.22s ease,
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.is-page-entering .auth,
+body.is-page-entering .app-shell {
+  opacity: 0.96;
+  transform: translateY(0.35rem) scale(0.998);
+}
+
+body.is-page-entering.is-page-enter-ready .auth,
+body.is-page-entering.is-page-enter-ready .app-shell {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 0.18s ease,
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition-overlay,
+  body.is-page-exiting .auth,
+  body.is-page-exiting .app-shell,
+  body.is-page-entering .auth,
+  body.is-page-entering .app-shell {
+    transition: none;
+    transform: none;
+  }
+}
