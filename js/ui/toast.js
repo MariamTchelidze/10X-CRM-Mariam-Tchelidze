@@ -3,6 +3,7 @@
 (function initToast() {
   const PENDING_TOAST_KEY = "crm_pending_toast";
 
+  /* --- container should exist in HTML document - if doesn't exist - create it --- */
   const ensureContainer = () => {
     let container = document.getElementById("toast-container");
 
@@ -11,11 +12,12 @@
     container = document.createElement("div");
     container.className = "toast-container";
     container.id = "toast-container";
-    container.setAttribute("aria-live", "polite");
-    container.setAttribute("aria-atomic", "true");
+    container.setAttribute("aria-live", "polite"); // screen reader
+    container.setAttribute("aria-atomic", "true"); // screen reader
     document.body.append(container);
     return container;
   };
+  /* --- visually shown messages: error/success handling --- */
 
   const show = (message, type = "success") => {
     const container = ensureContainer();
@@ -34,10 +36,13 @@
     window.setTimeout(close, 3000);
   };
 
+  /* ---  to secure js storage after page reload --- */
+
   const queue = (message, type = "success") => {
     sessionStorage.setItem(PENDING_TOAST_KEY, JSON.stringify({ message, type }));
   };
 
+  /* ---  check and display any pending toast notification in sessionStorage --- */
   const showPending = () => {
     try {
       const pendingToast = JSON.parse(sessionStorage.getItem(PENDING_TOAST_KEY) || "null");

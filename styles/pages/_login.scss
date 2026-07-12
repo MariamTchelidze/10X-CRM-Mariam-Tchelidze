@@ -6,7 +6,9 @@
   display: grid;
   min-height: 100vh;
   padding: $space-lg;
-  background: var(--color-bg);
+  overflow-x: clip;
+    scrollbar-gutter: stable;
+background: var(--color-bg);
 }
 
 .auth__tools {
@@ -23,6 +25,9 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   width: min(138rem, 100%);
   overflow: hidden;
+  contain: layout paint;
+  isolation: isolate;
+  transform: translateZ(0);
   border: 0.1rem solid var(--color-border);
   border-radius: $radius-lg;
   background: var(--color-surface);
@@ -30,12 +35,17 @@
 }
 
 .auth__content {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 68rem;
   padding: $space-3xl;
   background: var(--color-surface);
+}
+
+.auth__visual {
+  min-width: 0;
 }
 
 .auth--login .auth__visual {

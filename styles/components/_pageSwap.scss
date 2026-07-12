@@ -1,38 +1,46 @@
-.auth__content,
-.auth__visual {
-  transition:
-    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.24s ease;
-  will-change: transform, opacity;
+.auth {
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
-body.is-auth-swapping {
+body.is-auth-page-exiting-left,
+body.is-auth-page-entering-from-right {
+  overflow-x: clip;
+}
+
+body.is-auth-page-exiting-left {
   pointer-events: none;
 }
 
-body.is-swapping-to-signup .auth__content {
-  opacity: 0;
-  transform: translateX(-82%) scale(0.992);
+body.is-auth-page-exiting-left .auth {
+  opacity: 0.98;
+  transform: translate3d(-100%, 0, 0);
+  transition:
+    transform 0.56s cubic-bezier(0.25, 0.8, 0.25, 1),
+    opacity 0.36s ease;
+  will-change: transform, opacity;
 }
 
-body.is-swapping-to-signup .auth__visual {
-  opacity: 0;
-  transform: translateX(82%) scale(0.992);
+body.is-auth-page-entering-from-right .auth {
+  opacity: 0.98;
+  transform: translate3d(100%, 0, 0);
 }
 
-body.is-swapping-to-login .auth__content {
-  opacity: 0;
-  transform: translateX(82%) scale(0.992);
-}
-
-body.is-swapping-to-login .auth__visual {
-  opacity: 0;
-  transform: translateX(-82%) scale(0.992);
+body.is-auth-page-entering-from-right.is-auth-page-enter-ready .auth {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 0.58s cubic-bezier(0.25, 0.8, 0.25, 1),
+    opacity 0.36s ease;
+  will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .auth__content,
-  .auth__visual {
+  body.is-auth-page-exiting-left .auth,
+  body.is-auth-page-entering-from-right .auth,
+  body.is-auth-page-entering-from-right.is-auth-page-enter-ready .auth {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }

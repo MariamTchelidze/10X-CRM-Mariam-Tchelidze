@@ -19,12 +19,6 @@
   logoutButtons.forEach((button) => {
     button.addEventListener("click", () => {
       button.disabled = true;
-
-      if (window.crmPageTransition) {
-        window.crmPageTransition.transitionTo(loginPage, { beforeRedirect: clearSession });
-        return;
-      }
-
       clearSession();
       window.location.href = loginPage;
     });
