@@ -48,6 +48,48 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  scrollbar-color:
+    color-mix(in srgb, var(--color-primary) 52%, transparent)
+    color-mix(in srgb, var(--color-card) 34%, transparent);
+  scrollbar-width: thin;
+}
+
+.sidebar__navigation::-webkit-scrollbar {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.sidebar__navigation::-webkit-scrollbar-track {
+  border-radius: $radius-full;
+  background: color-mix(in srgb, var(--color-card) 28%, transparent);
+}
+
+.sidebar__navigation::-webkit-scrollbar-thumb {
+  border: 0.2rem solid transparent;
+  border-radius: $radius-full;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-primary) 68%, #ffffff 10%),
+      color-mix(in srgb, var(--color-primary) 48%, transparent)
+    )
+    border-box;
+  background-clip: padding-box;
+}
+
+.sidebar__navigation::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-primary) 82%, #ffffff 10%),
+      color-mix(in srgb, var(--color-primary) 62%, transparent)
+    )
+    border-box;
+  background-clip: padding-box;
+}
+
+.sidebar__navigation::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .sidebar__divider {
@@ -387,4 +429,225 @@
   color: var(--color-text-muted);
   font-size: 1rem;
   line-height: 1.15;
+}
+
+.sidebar-toggle,
+.sidebar-backdrop {
+  display: none;
+}
+
+@include media(tablet-lg) {
+  body.is-sidebar-open {
+    overflow: hidden;
+  }
+
+  .app-shell {
+    display: block;
+  }
+
+  .app-main {
+    width: 100%;
+    padding: $space-xl;
+  }
+
+  .sidebar-toggle {
+    @include button-reset;
+    position: fixed;
+    top: $space-md;
+    left: $space-md;
+    z-index: $z-modal + 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.4rem;
+    height: 4.4rem;
+    border: 0.1rem solid var(--color-border);
+    border-radius: $radius-full;
+    background: color-mix(in srgb, var(--color-card) 84%, transparent);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(1.2rem);
+  }
+
+  .sidebar-toggle__icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .sidebar-toggle__icon--close {
+    display: none;
+  }
+
+  body.is-sidebar-open .sidebar-toggle__icon--open {
+    display: none;
+  }
+
+  body.is-sidebar-open .sidebar-toggle__icon--close {
+    display: block;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: $z-modal;
+    display: block;
+    background: color-mix(in srgb, var(--color-bg) 62%, transparent);
+    backdrop-filter: blur(0.3rem);
+  }
+
+  .sidebar-backdrop[hidden] {
+    display: none;
+  }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: $z-modal + 1;
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    width: min(30rem, calc(100vw - 4.8rem));
+    height: 100dvh;
+    padding: 7.2rem $space-xl $space-xl;
+    border-right: 0.1rem solid var(--color-border);
+    border-bottom: 0;
+    background: color-mix(in srgb, var(--color-sidebar) 94%, transparent);
+    box-shadow: var(--shadow-lg);
+    transform: translate3d(-105%, 0, 0);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: blur(1.4rem);
+  }
+
+  body.is-sidebar-open .sidebar {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .sidebar,
+  .sidebar__menu,
+  .sidebar__footer {
+    align-items: stretch;
+  }
+
+  .sidebar__brand {
+    margin-right: 0;
+    margin-bottom: $space-2xl;
+  }
+
+  .sidebar__navigation {
+    display: block;
+    flex: 1;
+    max-width: none;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .sidebar__divider {
+    align-self: auto;
+    margin: $space-lg 0 $space-md;
+    border-top: 0.1rem solid var(--color-divider);
+    border-left: 0;
+  }
+
+  .sidebar__group-label {
+    display: block;
+  }
+
+  .sidebar__menu,
+  .sidebar__menu--secondary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-sm;
+  }
+
+  .sidebar__link,
+  .sidebar-dropdown__summary {
+    justify-content: flex-start;
+  }
+
+  .sidebar__link span {
+    display: inline;
+  }
+
+  .sidebar__footer {
+    display: grid;
+    gap: $space-md;
+    padding-top: $space-xl;
+    border-top: 0.1rem solid var(--color-divider);
+  }
+
+  .sidebar__footer .btn,
+  .theme-toggle {
+    width: 100%;
+  }
+
+  .app-header__content {
+    padding-left: 5.4rem;
+  }
+
+  .app-header__actions {
+    margin-left: 0;
+  }
+
+  .date-card {
+    min-width: 16.8rem;
+    max-width: 18.4rem;
+    min-height: 4.4rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .notification-button {
+    width: 4.4rem;
+    height: 4.4rem;
+    min-height: 4.4rem;
+  }
+}
+
+@include media(tablet) {
+  .app-header__content {
+    padding-left: 5.2rem;
+  }
+
+  .app-header__actions {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .date-card {
+    width: 100%;
+    max-width: none;
+    text-align: right;
+  }
+}
+
+@include media(mobile) {
+  .app-main {
+    padding: $space-lg;
+  }
+
+  .app-header__content {
+    padding-left: 4.8rem;
+  }
+
+  .app-header__actions {
+    gap: $space-sm;
+  }
+
+  .date-card {
+    min-width: 0;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .date-card__label,
+  .date-card__timezone {
+    display: none;
+  }
+
+  .date-card__value {
+    font-size: 1.2rem;
+  }
+
+  .date-card__clock {
+    font-size: 1.1rem;
+  }
 }

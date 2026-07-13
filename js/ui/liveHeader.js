@@ -19,10 +19,10 @@
   const getDayPart = (hour) => dayParts.find((part) => hour >= part.from && hour < part.to) || dayParts[0];
 
   const formatDate = (date) =>
-    date.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
+    date.toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
       year: "numeric",
     });
 
@@ -30,7 +30,6 @@
     date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
-      second: "2-digit",
     });
 
   const tick = () => {

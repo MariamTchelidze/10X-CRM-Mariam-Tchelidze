@@ -45,7 +45,7 @@ function initLogin() {
       validation.setFieldError(passwordInput, "Invalid email or password");
       return;
     }
-
+    /* ---  Session creation --- */
     storage.write(constants.SESSION_KEY, {
       userId: user.id,
       email: user.email,

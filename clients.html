@@ -11,8 +11,32 @@
   <body class="theme-dark clientsPage" data-theme="dark" data-page="clients">
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
+    <button
+      class="sidebar-toggle js-sidebar-toggle"
+      type="button"
+      aria-label="Open navigation"
+      aria-controls="app-sidebar"
+      aria-expanded="false"
+    >
+      <img
+        src="./assets/icons/burger-menu.svg"
+        data-theme-src-dark="./assets/icons/burger-menu.svg"
+        data-theme-src-light="./assets/icons/burger-menu-light-theme.svg"
+        alt=""
+        class="sidebar-toggle__icon sidebar-toggle__icon--open"
+      />
+      <img
+        src="./assets/icons/close.svg"
+        data-theme-src-dark="./assets/icons/close.svg"
+        data-theme-src-light="./assets/icons/close-light-theme.svg"
+        alt=""
+        class="sidebar-toggle__icon sidebar-toggle__icon--close"
+      />
+    </button>
+
+    <div class="sidebar-backdrop js-sidebar-backdrop" hidden></div>
     <div class="app-shell">
-      <aside class="sidebar" aria-label="Primary navigation">
+      <aside class="sidebar js-sidebar" id="app-sidebar" aria-label="Primary navigation">
         <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
           <img
             src="./assets/icons/Logo-dark-theme.svg"
@@ -441,19 +465,19 @@
         <section class="client-summary" aria-label="Client summary">
           <article class="summary-card">
             <span class="summary-card__label">Total</span>
-            <strong class="summary-card__value" id="clients-count-total">128</strong>
+            <strong class="summary-card__value" id="clients-count-total">0</strong>
           </article>
           <article class="summary-card">
             <span class="summary-card__label">Leads</span>
-            <strong class="summary-card__value" id="clients-count-lead">48</strong>
+            <strong class="summary-card__value" id="clients-count-lead">0</strong>
           </article>
           <article class="summary-card">
             <span class="summary-card__label">Contacted</span>
-            <strong class="summary-card__value" id="clients-count-contacted">31</strong>
+            <strong class="summary-card__value" id="clients-count-contacted">0</strong>
           </article>
           <article class="summary-card">
             <span class="summary-card__label">Won</span>
-            <strong class="summary-card__value" id="clients-count-won">18</strong>
+            <strong class="summary-card__value" id="clients-count-won">0</strong>
           </article>
         </section>
 
@@ -522,217 +546,7 @@
             <button class="btn btn--secondary js-retry-clients" type="button">Retry</button>
           </div>
 
-          <div class="client-list" id="clients-list" data-render-target="clients">
-            <article class="client-card" data-client-id="demo-1" data-status="lead">
-              <div class="client-card__main">
-                <div class="client-card__avatar" aria-hidden="true">AG</div>
-                <div>
-                  <h3 class="client-card__name">Alpha Group</h3>
-                  <p class="client-card__company">Retail technology</p>
-                </div>
-              </div>
-
-              <dl class="client-card__meta">
-                <div>
-                  <dt>Email</dt>
-                  <dd>hello@alpha.example</dd>
-                </div>
-                <div>
-                  <dt>Phone</dt>
-                  <dd>+995 555 010 101</dd>
-                </div>
-                <div>
-                  <dt>Value</dt>
-                  <dd>$4,200</dd>
-                </div>
-              </dl>
-
-              <div class="client-card__footer">
-                <span class="status-badge status-badge--lead">Lead</span>
-                <div class="client-card__actions">
-                  <button
-                    class="icon-btn js-view-client"
-                    type="button"
-                    aria-label="View Alpha Group"
-                    data-client-action="view"
-                  >
-                    <img
-                      src="./assets/icons/info.svg"
-                      data-theme-src-dark="./assets/icons/info.svg"
-                      data-theme-src-light="./assets/icons/info-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                  <button
-                    class="icon-btn js-edit-client"
-                    type="button"
-                    aria-label="Edit Alpha Group"
-                    data-client-action="edit"
-                  >
-                    <img
-                      src="./assets/icons/Edit.svg"
-                      data-theme-src-dark="./assets/icons/Edit.svg"
-                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                  <button
-                    class="icon-btn icon-btn--danger js-delete-client"
-                    type="button"
-                    aria-label="Delete Alpha Group"
-                    data-client-action="delete" data-skip-delete-confirm
-                  >
-                    <img
-                      src="./assets/icons/Delete.svg"
-                      data-theme-src-dark="./assets/icons/Delete.svg"
-                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <article class="client-card" data-client-id="demo-2" data-status="contacted">
-              <div class="client-card__main">
-                <div class="client-card__avatar" aria-hidden="true">NC</div>
-                <div>
-                  <h3 class="client-card__name">Nino Consulting</h3>
-                  <p class="client-card__company">Business services</p>
-                </div>
-              </div>
-
-              <dl class="client-card__meta">
-                <div>
-                  <dt>Email</dt>
-                  <dd>nino@example.com</dd>
-                </div>
-                <div>
-                  <dt>Phone</dt>
-                  <dd>+995 555 020 202</dd>
-                </div>
-                <div>
-                  <dt>Value</dt>
-                  <dd>$7,800</dd>
-                </div>
-              </dl>
-
-              <div class="client-card__footer">
-                <span class="status-badge status-badge--contacted">Contacted</span>
-                <div class="client-card__actions">
-                  <button
-                    class="icon-btn js-view-client"
-                    type="button"
-                    aria-label="View Nino Consulting"
-                    data-client-action="view"
-                  >
-                    <img
-                      src="./assets/icons/info.svg"
-                      data-theme-src-dark="./assets/icons/info.svg"
-                      data-theme-src-light="./assets/icons/info-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                  <button
-                    class="icon-btn js-edit-client"
-                    type="button"
-                    aria-label="Edit Nino Consulting"
-                    data-client-action="edit"
-                  >
-                    <img
-                      src="./assets/icons/Edit.svg"
-                      data-theme-src-dark="./assets/icons/Edit.svg"
-                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                  <button
-                    class="icon-btn icon-btn--danger js-delete-client"
-                    type="button"
-                    aria-label="Delete Nino Consulting"
-                    data-client-action="delete" data-skip-delete-confirm
-                  >
-                    <img
-                      src="./assets/icons/Delete.svg"
-                      data-theme-src-dark="./assets/icons/Delete.svg"
-                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <article class="client-card" data-client-id="demo-3" data-status="won">
-              <div class="client-card__main">
-                <div class="client-card__avatar" aria-hidden="true">BT</div>
-                <div>
-                  <h3 class="client-card__name">Blue Tech</h3>
-                  <p class="client-card__company">Software vendor</p>
-                </div>
-              </div>
-
-              <dl class="client-card__meta">
-                <div>
-                  <dt>Email</dt>
-                  <dd>sales@bluetech.example</dd>
-                </div>
-                <div>
-                  <dt>Phone</dt>
-                  <dd>+995 555 030 303</dd>
-                </div>
-                <div>
-                  <dt>Value</dt>
-                  <dd>$12,500</dd>
-                </div>
-              </dl>
-
-              <div class="client-card__footer">
-                <span class="status-badge status-badge--won">Won</span>
-                <div class="client-card__actions">
-                  <button
-                    class="icon-btn js-view-client"
-                    type="button"
-                    aria-label="View Blue Tech"
-                    data-client-action="view"
-                  >
-                    <img
-                      src="./assets/icons/info.svg"
-                      data-theme-src-dark="./assets/icons/info.svg"
-                      data-theme-src-light="./assets/icons/info-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                  <button
-                    class="icon-btn js-edit-client"
-                    type="button"
-                    aria-label="Edit Blue Tech"
-                    data-client-action="edit"
-                  >
-                    <img
-                      src="./assets/icons/Edit.svg"
-                      data-theme-src-dark="./assets/icons/Edit.svg"
-                      data-theme-src-light="./assets/icons/Edit-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                  <button
-                    class="icon-btn icon-btn--danger js-delete-client"
-                    type="button"
-                    aria-label="Delete Blue Tech"
-                    data-client-action="delete" data-skip-delete-confirm
-                  >
-                    <img
-                      src="./assets/icons/Delete.svg"
-                      data-theme-src-dark="./assets/icons/Delete.svg"
-                      data-theme-src-light="./assets/icons/Delete-light-theme.svg"
-                      alt=""
-                    />
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
+          <div class="client-list" id="clients-list" data-render-target="clients"></div>
 
           <div class="empty-state" id="clients-empty" hidden>
             <img

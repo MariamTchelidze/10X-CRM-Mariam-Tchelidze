@@ -20,7 +20,8 @@
 }
 
 .client-workspace {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .client-toolbar {
@@ -53,14 +54,15 @@
 .client-list {
   display: grid;
   gap: $space-lg;
+  min-width: 118rem;
   padding: $space-xl;
 }
 
 .client-card {
   display: grid;
-  grid-template-columns: minmax(22rem, 0.9fr) minmax(0, 1.3fr) auto;
+  grid-template-columns: minmax(32rem, 1.15fr) minmax(52rem, 1.6fr) minmax(20rem, auto);
   align-items: center;
-  gap: $space-lg;
+  gap: $space-xl;
   padding: $space-lg;
   border: 0.1rem solid var(--color-border);
   border-radius: $radius-md;
@@ -81,19 +83,30 @@
 }
 
 .client-card__name {
+  overflow: hidden;
   color: var(--color-text);
   font-size: 1.7rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .client-card__company {
+  overflow: hidden;
   color: var(--color-text-muted);
   font-size: 1.4rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .client-card__meta {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: $space-md;
+  grid-template-columns: minmax(26rem, 1.3fr) minmax(17rem, 0.85fr) minmax(12rem, 0.55fr);
+  gap: $space-xl;
+  min-width: 0;
+}
+
+.client-card__meta > div {
+  min-width: 0;
 }
 
 .client-card__meta dt {
@@ -104,9 +117,11 @@
 }
 
 .client-card__meta dd {
-  overflow-wrap: anywhere;
+  overflow: hidden;
   color: var(--color-text-secondary);
   font-size: 1.4rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .client-card__footer {
@@ -114,6 +129,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: $space-md;
+  min-width: 0;
 }
 
 .client-card__actions {
@@ -122,9 +138,17 @@
 }
 
 @include media(laptop) {
+  .client-list {
+    min-width: 0;
+  }
+
   .client-card {
     grid-template-columns: 1fr;
     align-items: stretch;
+  }
+
+  .client-card__meta {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .client-card__footer {

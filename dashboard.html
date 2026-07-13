@@ -11,8 +11,32 @@
   <body class="theme-dark dashboardPage" data-theme="dark" data-page="dashboard">
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
+    <button
+      class="sidebar-toggle js-sidebar-toggle"
+      type="button"
+      aria-label="Open navigation"
+      aria-controls="app-sidebar"
+      aria-expanded="false"
+    >
+      <img
+        src="./assets/icons/burger-menu.svg"
+        data-theme-src-dark="./assets/icons/burger-menu.svg"
+        data-theme-src-light="./assets/icons/burger-menu-light-theme.svg"
+        alt=""
+        class="sidebar-toggle__icon sidebar-toggle__icon--open"
+      />
+      <img
+        src="./assets/icons/close.svg"
+        data-theme-src-dark="./assets/icons/close.svg"
+        data-theme-src-light="./assets/icons/close-light-theme.svg"
+        alt=""
+        class="sidebar-toggle__icon sidebar-toggle__icon--close"
+      />
+    </button>
+
+    <div class="sidebar-backdrop js-sidebar-backdrop" hidden></div>
     <div class="app-shell">
-      <aside class="sidebar" aria-label="Primary navigation">
+      <aside class="sidebar js-sidebar" id="app-sidebar" aria-label="Primary navigation">
         <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
           <img
             src="./assets/icons/Logo-dark-theme.svg"

@@ -12,6 +12,7 @@ function initSignup() {
   const validation = window.crmValidation;
   const form = document.querySelector(".js-signup-form");
 
+  /* ---  check if  all the modules aand form class works fine if not stop the function  --- */
   if (!constants || !storage || !validation || !form) return;
 
   const fullNameInput = form.querySelector("#signup-full-name");
@@ -47,7 +48,10 @@ function initSignup() {
     }
 
     if (!validation.passwordIsValid(password)) {
-      validation.setFieldError(passwordInput, "Password must be at least 8 characters and contain a Latin letter and a number");
+      validation.setFieldError(
+        passwordInput,
+        "Password must be at least 8 characters and contain a Latin letter and a number",
+      );
       isValid = false;
     }
 
