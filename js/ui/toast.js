@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Toast Notification Helper --- */
 (function initToast() {
   const PENDING_TOAST_KEY = "crm_pending_toast";
 
@@ -17,6 +18,7 @@
     document.body.append(container);
     return container;
   };
+
   /* --- visually shown messages: error/success handling --- */
 
   const show = (message, type = "success") => {

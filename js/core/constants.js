@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Shared Local Storage Keys --- */
 window.crmConstants = {
   USERS_KEY: "crm_users",
   SESSION_KEY: "crm_session",

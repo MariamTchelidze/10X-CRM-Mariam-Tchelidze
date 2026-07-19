@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Task Board Controller --- */
 const taskWorkspacePage = document.querySelector(".dashboardPage");
 const taskSummaryPage = document.querySelector(".profilePage");
 
@@ -11,6 +12,7 @@ function initTasks() {
 
   if (!board && !summary) return;
 
+  /* --- Task constants define storage, statuses, labels, priorities, and demo data. --- */
   const TASKS_KEY = "crm_tasks";
   const NOTIFICATIONS_KEY = "crm_task_notifications";
   const PENDING_TASK_KEY = "crm_pending_open_task";
@@ -101,11 +103,13 @@ function initTasks() {
     },
   ];
 
+  /* --- Runtime state tracks the open task, drag item, delete target, and edited checklist item. --- */
   let activeTaskId = null;
   let draggedTaskId = null;
   let pendingDeleteTaskId = null;
   let editingSubtaskId = null;
 
+  /* --- DOM references collect task modals, forms, and board controls. --- */
   const addTaskForm = document.querySelector(".js-add-task-form");
   const addTaskStatus = document.querySelector(".js-add-task-status");
   const detailsModal = document.getElementById("task-details-modal");
@@ -113,6 +117,7 @@ function initTasks() {
   const commentsForm = document.querySelector(".js-task-comment-form");
   const addSubtaskForm = document.querySelector(".js-add-subtask-form");
 
+  /* --- Storage helpers keep task and notification JSON safe. --- */
   const readJson = (key, fallback) => {
     try {
       const value = JSON.parse(localStorage.getItem(key) || "null");
@@ -138,6 +143,7 @@ function initTasks() {
     return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   };
 
+  /* --- Normalizers guarantee every task/checklist item has the expected shape. --- */
   const normalizeSubtask = (subtask) => {
     if (typeof subtask === "string") {
       return { id: createId("subtask"), text: subtask, done: false };
@@ -163,6 +169,7 @@ function initTasks() {
     };
   };
 
+  /* --- Saved state starts from localStorage, falling back to demo task data. --- */
   let tasks = readJson(TASKS_KEY, defaultTasks).map(normalizeTask);
   let notifications = readJson(NOTIFICATIONS_KEY, []);
 
@@ -174,6 +181,7 @@ function initTasks() {
   const getDeletedTasks = () => tasks.filter((task) => task.deleted);
   const getTaskById = (taskId) => tasks.find((task) => task.id === taskId);
 
+  /* --- Display helpers protect generated task markup and format dates. --- */
   const escapeHtml = (value) => {
     return String(value || "")
       .replaceAll("&", "&amp;")
@@ -192,6 +200,7 @@ function initTasks() {
       .join("")
       .toUpperCase() || "NA";
   };
+
   const formatDueDate = (value) => {
     if (!value) return "No due date";
 
@@ -219,6 +228,7 @@ function initTasks() {
     });
   };
 
+  /* --- Notification helper records task events for the notification modal. --- */
   const addNotification = (message, taskId = "") => {
     notifications = [
       {
@@ -236,6 +246,7 @@ function initTasks() {
     renderNotifications();
   };
 
+  /* --- Summary helpers calculate task totals and checklist progress. --- */
   const getTaskCounts = () => {
     return getActiveTasks().reduce(
       (counts, task) => {
@@ -262,6 +273,7 @@ function initTasks() {
     return `<p class="task-card__meta">${done}/${total} checklist done</p>`;
   };
 
+  /* --- Card renderer builds draggable task cards for each board column. --- */
   const createTaskCard = (task) => {
     const card = document.createElement("article");
     const color = getPriorityColor(task.priority);
@@ -300,6 +312,7 @@ function initTasks() {
     return card;
   };
 
+  /* --- Render helpers repaint profile summaries, archive, board, recycle bin, and notifications. --- */
   const renderSummary = () => {
     const counts = getTaskCounts();
 
@@ -345,6 +358,7 @@ function initTasks() {
     });
   };
 
+  /* --- Board and Recycle Bin Rendering --- */
   const renderBoard = () => {
     const counts = getTaskCounts();
 
@@ -404,6 +418,7 @@ function initTasks() {
       recycleList.append(item);
     });
   };
+
   const renderNotifications = () => {
     const unreadCount = notifications.filter((notification) => !(notification.read || notification.status === "read")).length;
     const counter = document.querySelector(".js-notification-count");
@@ -554,6 +569,7 @@ function initTasks() {
     window.dispatchEvent(new CustomEvent("crm:tasks:update", { detail: { tasks } }));
   };
 
+  /* --- Task mutation helpers update one task and persist the board. --- */
   const updateTask = (taskId, updates) => {
     tasks = tasks.map((task) => (task.id === taskId ? normalizeTask({ ...task, ...updates }) : task));
     saveTasks();
@@ -561,6 +577,7 @@ function initTasks() {
   };
 
 
+  /* --- Overdue helpers compare task deadlines with the live clock time. --- */
   const parseTaskDeadline = (task) => {
     const rawValue = task.dueAt || task.dueDate;
     const date = new Date(rawValue);
@@ -593,6 +610,8 @@ function initTasks() {
       render();
     }
   };
+
+  /* --- Delete helpers choose recycle-bin or permanent removal behavior. --- */
   const openDeleteTaskModal = (taskId) => {
     pendingDeleteTaskId = taskId;
     document.querySelector(".js-open-delete-task-helper")?.click();
@@ -640,6 +659,7 @@ function initTasks() {
     window.requestAnimationFrame(() => openTaskDetails(pendingTaskId));
   };
 
+  /* --- Add-task validation helpers keep modal errors beside their fields. --- */
   const setFieldError = (fieldId, message) => {
     const errorElement = document.querySelector(`[data-error-for="${fieldId}"]`);
     const field = document.getElementById(fieldId);

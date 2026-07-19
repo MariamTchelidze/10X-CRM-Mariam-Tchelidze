@@ -9,6 +9,7 @@
   </head>
 
   <body class="theme-dark profilePage" data-theme="dark" data-page="profile">
+    <!-- --- Toast Notifications --- -->
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <button
@@ -36,6 +37,7 @@
 
     <div class="sidebar-backdrop js-sidebar-backdrop" hidden></div>
     <div class="app-shell">
+      <!-- --- Sidebar Navigation --- -->
       <aside class="sidebar js-sidebar" id="app-sidebar" aria-label="Primary navigation">
         <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
           <img
@@ -233,7 +235,8 @@
                   </a>
                 </div>
               </details>
-            </li>            <li class="sidebar__item sidebar__item--dropdown">
+            </li>
+            <li class="sidebar__item sidebar__item--dropdown">
               <details class="sidebar-dropdown" open>
                 <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
                   <span class="sidebar-dropdown__label">
@@ -426,6 +429,7 @@
         </div>
       </aside>
 
+      <!-- --- Profile Workspace --- -->
       <main class="app-main profile-page">
         <header class="app-header">
           <div class="app-header__content">
@@ -460,6 +464,7 @@
           </div>
         </header>
 
+        <!-- --- Profile Form and Account Panels --- -->
         <section class="profile-grid">
           <article class="card profile-card" aria-labelledby="profile-card-title">
             <header class="card__header card__header--split">
@@ -551,6 +556,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
               <button class="btn btn--primary js-save-profile" type="submit" form="profile-form">Save Changes</button>
             </footer>
 
+            <!-- --- Private Statistics --- -->
             <section class="profile-private-stats" aria-labelledby="private-stats-title">
               <div>
                 <p class="card__eyebrow">Read-only performance</p>
@@ -576,6 +582,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
               </div>
             </section>
 
+            <!-- --- Call History Notes --- -->
             <section class="profile-call-history" aria-labelledby="profile-call-history-title">
               <div class="profile-call-history__header">
                 <p class="card__eyebrow">Communication</p>
@@ -659,7 +666,12 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
                       <img src="./assets/icons/eye-closed.svg" alt="" class="password-field__icon js-password-icon" />
                     </button>
                   </div>
-                  <p class="form-error" id="confirm-new-password-error" data-error-for="confirm-new-password" hidden></p>
+                  <p
+                    class="form-error"
+                    id="confirm-new-password-error"
+                    data-error-for="confirm-new-password"
+                    hidden
+                  ></p>
                 </div>
               </form>
 
@@ -673,7 +685,6 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
                 </button>
               </footer>
             </article>
-
 
             <article class="card profile-task-summary" aria-labelledby="profile-task-summary-title">
               <header class="card__header">
@@ -761,6 +772,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
       </main>
     </div>
 
+    <!-- --- Reset Demo Data Modal --- -->
     <section class="modal" id="reset-data-modal" aria-labelledby="reset-data-title" aria-hidden="true" hidden>
       <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
         <header class="modal__header">
@@ -776,7 +788,8 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
         </header>
         <div class="modal__body">
           <p>
-            This will reset only the CRM clients database from the API. Your account, session, password, and theme will stay unchanged.
+            This will reset only the CRM clients database from the API. Your account, session, password, and theme will
+            stay unchanged.
           </p>
         </div>
         <footer class="modal__footer">
@@ -786,6 +799,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
       </div>
     </section>
 
+    <!-- --- Settings Modal --- -->
     <section
       class="modal"
       id="settings-modal"
@@ -937,11 +951,12 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
             </div>
           </fieldset>
 
-          <fieldset class="settings-group settings-group--custom js-custom-theme-panel" aria-describedby="custom-theme-note">
+          <fieldset
+            class="settings-group settings-group--custom js-custom-theme-panel"
+            aria-describedby="custom-theme-note"
+          >
             <legend class="settings-group__legend">Custom Appearance</legend>
-            <p class="settings-group__hint" id="custom-theme-note">
-              Available only when Custom theme is selected.
-            </p>
+            <p class="settings-group__hint" id="custom-theme-note">Available only when Custom theme is selected.</p>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-custom-theme-dark">
                 <input
@@ -1053,9 +1068,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
             <div class="settings-danger">
               <div>
                 <h3 class="settings-danger__title">Delete Account</h3>
-                <p class="settings-danger__text">
-                  Delete this demo account and all CRM data saved in this browser.
-                </p>
+                <p class="settings-danger__text">Delete this demo account and all CRM data saved in this browser.</p>
               </div>
               <button
                 class="btn btn--danger js-delete-account-trigger"
@@ -1072,6 +1085,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
         </form>
       </div>
     </section>
+    <!-- --- Notifications Modal --- -->
     <section class="modal" id="notifications-modal" aria-labelledby="notifications-title" aria-hidden="true" hidden>
       <div class="modal__dialog modal__dialog--notifications" role="dialog" aria-modal="true">
         <header class="modal__header">
@@ -1094,12 +1108,18 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
         </div>
         <footer class="modal__footer">
           <button class="btn btn--ghost js-clear-notifications" type="button">Mark all read</button>
-          <button class="btn btn--ghost js-delete-selected-notifications" type="button" data-skip-delete-confirm>Delete selected</button>
-          <button class="btn btn--danger js-delete-read-notifications" type="button" data-skip-delete-confirm>Delete read</button>
+          <button class="btn btn--ghost js-delete-selected-notifications" type="button" data-skip-delete-confirm>
+            Delete selected
+          </button>
+          <button class="btn btn--danger js-delete-read-notifications" type="button" data-skip-delete-confirm>
+            Delete read
+          </button>
           <button class="btn btn--primary" type="button" data-modal-close>Done</button>
         </footer>
       </div>
     </section>
+
+    <!-- --- Account Deletion Modal --- -->
     <section
       class="modal"
       id="delete-account-modal"
@@ -1198,16 +1218,23 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
             <p class="communication-chat__recipient-hint">
               Message will be saved to the selected teammate or department inbox.
             </p>
-          </div>          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
+          </div>
+          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
         </div>
         <form class="modal__footer communication-chat__form js-communication-chat-form">
           <label class="visually-hidden" for="communication-chat-input">Message team</label>
-          <input class="input js-communication-chat-input" id="communication-chat-input" type="text" placeholder="Message your team" />
+          <input
+            class="input js-communication-chat-input"
+            id="communication-chat-input"
+            type="text"
+            placeholder="Message your team"
+          />
           <button class="btn btn--primary" type="submit">Send</button>
         </form>
       </div>
     </section>
 
+    <!-- --- Application Phone Modal --- -->
     <section
       class="modal phone-modal"
       id="phone-modal"
@@ -1221,7 +1248,9 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
           <div>
             <p class="modal__eyebrow">Application phone</p>
             <h2 class="modal__title" id="phone-title">10X CRM Phone</h2>
-            <p class="modal__description">Demo dialer is call-ready, but real calling is disabled from configuration.</p>
+            <p class="modal__description">
+              Demo dialer is call-ready, but real calling is disabled from configuration.
+            </p>
           </div>
           <button class="icon-btn js-close-modal" type="button" aria-label="Close phone" data-modal-close>
             <img
@@ -1257,13 +1286,28 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="9">9</button>
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="+">+</button>
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="0">0</button>
-              <button class="phone-dialer__key phone-dialer__key--backspace js-phone-delete" type="button" data-skip-delete-confirm aria-label="Delete last digit">
-                <img src="./assets/icons/Delete.svg" data-theme-src-dark="./assets/icons/Delete.svg" data-theme-src-light="./assets/icons/Delete-light-theme.svg" alt="" />
+              <button
+                class="phone-dialer__key phone-dialer__key--backspace js-phone-delete"
+                type="button"
+                data-skip-delete-confirm
+                aria-label="Delete last digit"
+              >
+                <img
+                  src="./assets/icons/Delete.svg"
+                  data-theme-src-dark="./assets/icons/Delete.svg"
+                  data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                  alt=""
+                />
               </button>
             </div>
             <div class="phone-dialer__actions">
               <button class="btn btn--primary btn--full phone-dialer__action js-phone-call" type="button">
-                <img src="./assets/icons/phone.svg" data-theme-src-dark="./assets/icons/phone.svg" data-theme-src-light="./assets/icons/phone-light-mode.svg" alt="" />
+                <img
+                  src="./assets/icons/phone.svg"
+                  data-theme-src-dark="./assets/icons/phone.svg"
+                  data-theme-src-light="./assets/icons/phone-light-mode.svg"
+                  alt=""
+                />
                 Call
               </button>
             </div>
@@ -1282,7 +1326,12 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
                 <h3 class="phone-dialer__subtitle">Call Essentials</h3>
               </div>
               <label class="visually-hidden" for="phone-note">Call note</label>
-              <textarea class="input input--textarea js-phone-note" id="phone-note" rows="5" placeholder="Write important details from this call"></textarea>
+              <textarea
+                class="input input--textarea js-phone-note"
+                id="phone-note"
+                rows="5"
+                placeholder="Write important details from this call"
+              ></textarea>
               <button class="btn btn--secondary btn--full" type="submit">Save Call Note</button>
             </form>
           </aside>
@@ -1290,6 +1339,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
       </div>
     </section>
 
+    <!-- --- 10X SensAI Modal --- -->
     <section
       class="modal communication-modal sensai-modal"
       id="ai-chat-modal"
@@ -1318,7 +1368,9 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
           <div>
             <p class="modal__eyebrow">CRM helper agent</p>
             <h2 class="modal__title" id="ai-chat-title">10X SensAI</h2>
-            <p class="modal__description">Ask SensAI about clients, tasks, activity, reminders, or today&apos;s CRM focus.</p>
+            <p class="modal__description">
+              Ask SensAI about clients, tasks, activity, reminders, or today&apos;s CRM focus.
+            </p>
           </div>
           <button class="icon-btn js-close-modal" type="button" aria-label="Close 10X SensAI" data-modal-close>
             <img
@@ -1345,6 +1397,8 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
         </form>
       </div>
     </section>
+
+    <!-- --- Call Note Delete Confirmation Modal --- -->
     <section
       class="modal call-note-delete-modal js-call-note-delete-modal"
       id="delete-call-note-modal"
@@ -1362,7 +1416,12 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
               This call note will be removed from Call History.
             </p>
           </div>
-          <button class="icon-btn js-cancel-call-note-delete" type="button" data-skip-delete-confirm aria-label="Close call note delete dialog">
+          <button
+            class="icon-btn js-cancel-call-note-delete"
+            type="button"
+            data-skip-delete-confirm
+            aria-label="Close call note delete dialog"
+          >
             <img
               src="./assets/icons/close.svg"
               data-theme-src-dark="./assets/icons/close.svg"
@@ -1372,12 +1431,17 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
           </button>
         </header>
         <footer class="modal__footer">
-          <button class="btn btn--ghost js-cancel-call-note-delete" type="button" data-skip-delete-confirm>Cancel</button>
-          <button class="btn btn--danger js-confirm-call-note-delete" type="button" data-skip-delete-confirm>Delete Note</button>
+          <button class="btn btn--ghost js-cancel-call-note-delete" type="button" data-skip-delete-confirm>
+            Cancel
+          </button>
+          <button class="btn btn--danger js-confirm-call-note-delete" type="button" data-skip-delete-confirm>
+            Delete Note
+          </button>
         </footer>
       </div>
     </section>
 
+    <!-- --- Global Delete Confirmation Modal --- -->
     <section
       class="modal destructive-confirm js-destructive-confirm"
       id="global-delete-confirm-modal"
@@ -1411,6 +1475,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
       </div>
     </section>
 
+    <!-- --- JavaScript Entry Point --- -->
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>

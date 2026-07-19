@@ -1,6 +1,8 @@
 "use strict";
 
+/* --- Global Destructive Action Confirmation --- */
 (function initDestructiveConfirm() {
+  /* --- Modal references support one shared confirmation UI for delete actions. --- */
   const modal = document.querySelector(".js-destructive-confirm");
   const confirmButton = modal?.querySelector(".js-global-delete-confirm");
   const cancelButtons = modal?.querySelectorAll(".js-global-delete-cancel");
@@ -9,6 +11,7 @@
 
   if (!modal || !confirmButton) return;
 
+  /* --- Detects destructive buttons while excluding custom delete flows. --- */
   const isDeleteControl = (element) => {
     if (!element || element.dataset.skipDeleteConfirm !== undefined) return false;
     if (element.dataset.modalTarget === "#delete-account-modal") return false;
@@ -27,6 +30,7 @@
     return /delete|remove/i.test(`${text} ${label} ${action} ${classes}`);
   };
 
+  /* --- Opens the shared confirmation before the original delete click continues. --- */
   const openModal = () => {
     modal.hidden = false;
     modal.dataset.modalState = "open";
@@ -35,6 +39,7 @@
     window.requestAnimationFrame(() => confirmButton.focus({ preventScroll: true }));
   };
 
+  /* --- Resets pending delete state after confirm or cancel. --- */
   const closeModal = () => {
     modal.hidden = true;
     modal.dataset.modalState = "closed";

@@ -1,3 +1,4 @@
+/* --- Dashboard Summary Controller --- */
 const dashboardPage = document.querySelector(".dashboardPage");
 
 const TASKS_KEY = "crm_tasks";
@@ -61,6 +62,7 @@ function getClientDate(client) {
 }
 
 function getStoredClients() {
+  /* --- Dashboard reads shared storage to summarize clients and tasks. --- */
   const storage = window.crmStorage;
   const constants = window.crmConstants;
   if (!storage || !constants) return [];

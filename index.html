@@ -9,7 +9,9 @@
   </head>
 
   <body class="theme-dark loginPage" data-theme="dark">
+    <!-- --- Toast Notifications --- -->
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+    <!-- --- Login Page Layout --- -->
     <main class="auth auth--login" data-auth-page="login">
       <div class="auth__tools" aria-label="Page tools">
         <button class="theme-toggle theme-toggle--compact js-theme-toggle" type="button" aria-label="Switch theme">
@@ -39,6 +41,7 @@
       </div>
 
       <div class="auth__container">
+        <!-- --- CRM Preview Panel --- -->
         <aside class="auth__visual" aria-label="CRM preview">
           <div class="auth__brand">
             <a href="#" class="auth__brand-link" aria-label="10X CRM dashboard">
@@ -100,6 +103,7 @@
           </section>
         </aside>
 
+        <!-- --- Sign In Form --- -->
         <section class="auth__content" aria-labelledby="login-title">
           <header class="auth-header">
             <div class="auth-header__heading">
@@ -162,7 +166,9 @@
                 <span class="checkbox__label">Remember me</span>
               </label>
 
-              <a href="./forgot-password.html" class="auth-form__forgot js-auth-link" data-auth-target="forgot-password">Forgot Password?</a>
+              <a href="./forgot-password.html" class="auth-form__forgot js-auth-link" data-auth-target="forgot-password"
+                >Forgot Password?</a
+              >
             </div>
 
             <button type="submit" class="btn btn--primary btn--full js-login-btn">Sign In</button>
@@ -172,6 +178,7 @@
             <span class="auth-divider__text">or</span>
           </div>
 
+          <!-- --- Social Login Buttons --- -->
           <section class="social-login" aria-label="Social login">
             <button type="button" class="btn btn--google">
               <span class="btn__content">
@@ -191,6 +198,7 @@
       </div>
     </main>
 
+    <!-- --- JavaScript Entry Point --- -->
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>

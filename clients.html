@@ -9,6 +9,7 @@
   </head>
 
   <body class="theme-dark clientsPage" data-theme="dark" data-page="clients">
+    <!-- --- Toast Notifications --- -->
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <button
@@ -36,6 +37,7 @@
 
     <div class="sidebar-backdrop js-sidebar-backdrop" hidden></div>
     <div class="app-shell">
+      <!-- --- Sidebar Navigation --- -->
       <aside class="sidebar js-sidebar" id="app-sidebar" aria-label="Primary navigation">
         <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
           <img
@@ -233,7 +235,8 @@
                   </a>
                 </div>
               </details>
-            </li>            <li class="sidebar__item sidebar__item--dropdown">
+            </li>
+            <li class="sidebar__item sidebar__item--dropdown">
               <details class="sidebar-dropdown" open>
                 <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
                   <span class="sidebar-dropdown__label">
@@ -426,6 +429,7 @@
         </div>
       </aside>
 
+      <!-- --- Clients Workspace --- -->
       <main class="app-main clients-page">
         <header class="app-header">
           <div class="app-header__content">
@@ -434,7 +438,7 @@
               <h1 class="app-header__title">Clients</h1>
             </div>
 
-                        <div class="app-header__actions">
+            <div class="app-header__actions">
               <button
                 class="icon-btn notification-button js-notifications-button"
                 type="button"
@@ -458,7 +462,7 @@
                 <span class="date-card__timezone js-live-timezone">Local time</span>
               </div>
             </div>
-<button
+            <button
               class="btn btn--primary js-open-client-modal"
               id="add-client-btn"
               type="button"
@@ -478,6 +482,7 @@
           </div>
         </header>
 
+        <!-- --- Client Summary Cards --- -->
         <section class="client-summary" aria-label="Client summary">
           <article class="summary-card">
             <span class="summary-card__label">Total</span>
@@ -497,6 +502,7 @@
           </article>
         </section>
 
+        <!-- --- Client Table Workspace --- -->
         <section class="card client-workspace" aria-labelledby="clients-workspace-title">
           <header class="card__header client-toolbar">
             <div>
@@ -525,12 +531,43 @@
 
               <label class="select-field select-field--icon js-icon-select" for="clients-sort">
                 <span class="visually-hidden">Sort clients</span>
-                <span class="select-field__icon-preview js-select-icon-preview" aria-hidden="true"></span><select id="clients-sort" class="select-field__control js-client-sort" data-sort-field="clients">
-                  <option value="created-desc" data-icon="./assets/icons/sort-general.svg" data-icon-light="./assets/icons/sort-general-light-theme.svg">Newest first</option>
-                  <option value="name-asc" data-icon="./assets/icons/sort-alph-up.svg" data-icon-light="./assets/icons/sort-alph-up-light-theme.svg">Name A-Z</option>
-                  <option value="name-desc" data-icon="./assets/icons/sort-alph-down.svg" data-icon-light="./assets/icons/sort-alph-down-light-theme.svg">Name Z-A</option>
-                  <option value="value-desc" data-icon="./assets/icons/sort-num-down.svg" data-icon-light="./assets/icons/sort-num-down-light-theme.svg">Highest value</option>
-                  <option value="value-asc" data-icon="./assets/icons/sort-num-up.svg" data-icon-light="./assets/icons/sort-num-up-light-theme.svg">Lowest value</option>
+                <span class="select-field__icon-preview js-select-icon-preview" aria-hidden="true"></span
+                ><select id="clients-sort" class="select-field__control js-client-sort" data-sort-field="clients">
+                  <option
+                    value="created-desc"
+                    data-icon="./assets/icons/sort-general.svg"
+                    data-icon-light="./assets/icons/sort-general-light-theme.svg"
+                  >
+                    Newest first
+                  </option>
+                  <option
+                    value="name-asc"
+                    data-icon="./assets/icons/sort-alph-up.svg"
+                    data-icon-light="./assets/icons/sort-alph-up-light-theme.svg"
+                  >
+                    Name A-Z
+                  </option>
+                  <option
+                    value="name-desc"
+                    data-icon="./assets/icons/sort-alph-down.svg"
+                    data-icon-light="./assets/icons/sort-alph-down-light-theme.svg"
+                  >
+                    Name Z-A
+                  </option>
+                  <option
+                    value="value-desc"
+                    data-icon="./assets/icons/sort-num-down.svg"
+                    data-icon-light="./assets/icons/sort-num-down-light-theme.svg"
+                  >
+                    Highest value
+                  </option>
+                  <option
+                    value="value-asc"
+                    data-icon="./assets/icons/sort-num-up.svg"
+                    data-icon-light="./assets/icons/sort-num-up-light-theme.svg"
+                  >
+                    Lowest value
+                  </option>
                 </select>
               </label>
             </div>
@@ -562,6 +599,7 @@
             <button class="btn btn--secondary js-retry-clients" type="button">Retry</button>
           </div>
 
+          <!-- --- Dynamic Client List --- -->
           <div class="client-list" id="clients-list" data-render-target="clients"></div>
 
           <div class="empty-state" id="clients-empty" hidden>
@@ -578,6 +616,7 @@
       </main>
     </div>
 
+    <!-- --- Add and Edit Client Modal --- -->
     <section
       class="modal"
       id="client-modal"
@@ -651,7 +690,9 @@
               <option value="" data-country="">Detect from phone or choose manually</option>
               <option value="Pacific/Auckland" data-country="New Zealand">New Zealand - Auckland</option>
               <option value="Asia/Tbilisi" data-country="Georgia">Georgia - Tbilisi</option>
-              <option value="America/New_York" data-country="United States / Canada">United States / Canada - Eastern</option>
+              <option value="America/New_York" data-country="United States / Canada">
+                United States / Canada - Eastern
+              </option>
               <option value="Europe/London" data-country="United Kingdom">United Kingdom - London</option>
               <option value="Europe/Berlin" data-country="Germany">Germany - Berlin</option>
               <option value="Europe/Paris" data-country="France">France - Paris</option>
@@ -669,16 +710,42 @@
               <option value="America/Sao_Paulo" data-country="Brazil">Brazil - Sao Paulo</option>
               <option value="America/Mexico_City" data-country="Mexico">Mexico - Mexico City</option>
             </select>
-            <p class="field__hint">Used by Live Time Center. Phone code can auto-suggest it, but manual choice is more reliable.</p>
+            <p class="field__hint">
+              Used by Live Time Center. Phone code can auto-suggest it, but manual choice is more reliable.
+            </p>
           </div>
 
           <div class="field">
             <label for="client-status" class="field__label">Status</label>
             <select id="client-status" name="status" class="input js-icon-select-control" required>
-              <option value="lead" data-icon="./assets/icons/star.svg" data-icon-light="./assets/icons/star-light-theme.svg">Lead</option>
-              <option value="contacted" data-icon="./assets/icons/chat.svg" data-icon-light="./assets/icons/chat-light-theme.svg">Contacted</option>
-              <option value="won" data-icon="./assets/icons/verified.svg" data-icon-light="./assets/icons/verified-light-theme.svg">Won</option>
-              <option value="lost" data-icon="./assets/icons/warning.svg" data-icon-light="./assets/icons/warning-light-theme.svg">Lost</option>
+              <option
+                value="lead"
+                data-icon="./assets/icons/star.svg"
+                data-icon-light="./assets/icons/star-light-theme.svg"
+              >
+                Lead
+              </option>
+              <option
+                value="contacted"
+                data-icon="./assets/icons/chat.svg"
+                data-icon-light="./assets/icons/chat-light-theme.svg"
+              >
+                Contacted
+              </option>
+              <option
+                value="won"
+                data-icon="./assets/icons/verified.svg"
+                data-icon-light="./assets/icons/verified-light-theme.svg"
+              >
+                Won
+              </option>
+              <option
+                value="lost"
+                data-icon="./assets/icons/warning.svg"
+                data-icon-light="./assets/icons/warning-light-theme.svg"
+              >
+                Lost
+              </option>
             </select>
           </div>
 
@@ -715,6 +782,7 @@
       Open client details
     </button>
 
+    <!-- --- Client Details, Notes, and Reminders Modal --- -->
     <section class="modal" id="client-details-modal" aria-labelledby="client-details-title" aria-hidden="true" hidden>
       <div class="modal__dialog" role="dialog" aria-modal="true">
         <header class="modal__header">
@@ -844,7 +912,7 @@
         </div>
       </div>
     </section>
-
+    <!-- --- Client Note Delete Confirmation Modal --- -->
     <section
       class="modal note-delete-modal"
       id="delete-note-modal"
@@ -881,6 +949,7 @@
       </div>
     </section>
 
+    <!-- --- Client Delete Confirmation Modal --- -->
     <section class="modal" id="delete-client-modal" aria-labelledby="delete-client-title" aria-hidden="true" hidden>
       <div class="modal__dialog modal__dialog--small" role="dialog" aria-modal="true">
         <header class="modal__header">
@@ -949,7 +1018,8 @@
             <button
               class="icon-btn icon-btn--danger js-delete-client"
               type="button"
-              data-client-action="delete" data-skip-delete-confirm
+              data-client-action="delete"
+              data-skip-delete-confirm
               aria-label="Delete client"
             >
               <img
@@ -963,7 +1033,7 @@
         </div>
       </article>
     </template>
-
+    <!-- --- Settings Modal --- -->
     <section
       class="modal"
       id="settings-modal"
@@ -1115,11 +1185,12 @@
             </div>
           </fieldset>
 
-          <fieldset class="settings-group settings-group--custom js-custom-theme-panel" aria-describedby="custom-theme-note">
+          <fieldset
+            class="settings-group settings-group--custom js-custom-theme-panel"
+            aria-describedby="custom-theme-note"
+          >
             <legend class="settings-group__legend">Custom Appearance</legend>
-            <p class="settings-group__hint" id="custom-theme-note">
-              Available only when Custom theme is selected.
-            </p>
+            <p class="settings-group__hint" id="custom-theme-note">Available only when Custom theme is selected.</p>
             <div class="settings-options settings-options--two">
               <label class="settings-option" for="settings-custom-theme-dark">
                 <input
@@ -1231,9 +1302,7 @@
             <div class="settings-danger">
               <div>
                 <h3 class="settings-danger__title">Delete Account</h3>
-                <p class="settings-danger__text">
-                  Delete this demo account and all CRM data saved in this browser.
-                </p>
+                <p class="settings-danger__text">Delete this demo account and all CRM data saved in this browser.</p>
               </div>
               <button
                 class="btn btn--danger js-delete-account-trigger"
@@ -1250,6 +1319,7 @@
         </form>
       </div>
     </section>
+    <!-- --- Notifications Modal --- -->
     <section class="modal" id="notifications-modal" aria-labelledby="notifications-title" aria-hidden="true" hidden>
       <div class="modal__dialog modal__dialog--notifications" role="dialog" aria-modal="true">
         <header class="modal__header">
@@ -1272,12 +1342,17 @@
         </div>
         <footer class="modal__footer">
           <button class="btn btn--ghost js-clear-notifications" type="button">Mark all read</button>
-          <button class="btn btn--ghost js-delete-selected-notifications" type="button" data-skip-delete-confirm>Delete selected</button>
-          <button class="btn btn--danger js-delete-read-notifications" type="button" data-skip-delete-confirm>Delete read</button>
+          <button class="btn btn--ghost js-delete-selected-notifications" type="button" data-skip-delete-confirm>
+            Delete selected
+          </button>
+          <button class="btn btn--danger js-delete-read-notifications" type="button" data-skip-delete-confirm>
+            Delete read
+          </button>
           <button class="btn btn--primary" type="button" data-modal-close>Done</button>
         </footer>
       </div>
     </section>
+    <!-- --- Account Deletion Modal --- -->
     <section
       class="modal"
       id="delete-account-modal"
@@ -1376,16 +1451,22 @@
             <p class="communication-chat__recipient-hint">
               Message will be saved to the selected teammate or department inbox.
             </p>
-          </div>          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
+          </div>
+          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
         </div>
         <form class="modal__footer communication-chat__form js-communication-chat-form">
           <label class="visually-hidden" for="communication-chat-input">Message team</label>
-          <input class="input js-communication-chat-input" id="communication-chat-input" type="text" placeholder="Message your team" />
+          <input
+            class="input js-communication-chat-input"
+            id="communication-chat-input"
+            type="text"
+            placeholder="Message your team"
+          />
           <button class="btn btn--primary" type="submit">Send</button>
         </form>
       </div>
     </section>
-
+    <!-- --- Application Phone Modal --- -->
     <section
       class="modal phone-modal"
       id="phone-modal"
@@ -1399,7 +1480,9 @@
           <div>
             <p class="modal__eyebrow">Application phone</p>
             <h2 class="modal__title" id="phone-title">10X CRM Phone</h2>
-            <p class="modal__description">Demo dialer is call-ready, but real calling is disabled from configuration.</p>
+            <p class="modal__description">
+              Demo dialer is call-ready, but real calling is disabled from configuration.
+            </p>
           </div>
           <button class="icon-btn js-close-modal" type="button" aria-label="Close phone" data-modal-close>
             <img
@@ -1435,13 +1518,28 @@
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="9">9</button>
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="+">+</button>
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="0">0</button>
-              <button class="phone-dialer__key phone-dialer__key--backspace js-phone-delete" type="button" data-skip-delete-confirm aria-label="Delete last digit">
-                <img src="./assets/icons/Delete.svg" data-theme-src-dark="./assets/icons/Delete.svg" data-theme-src-light="./assets/icons/Delete-light-theme.svg" alt="" />
+              <button
+                class="phone-dialer__key phone-dialer__key--backspace js-phone-delete"
+                type="button"
+                data-skip-delete-confirm
+                aria-label="Delete last digit"
+              >
+                <img
+                  src="./assets/icons/Delete.svg"
+                  data-theme-src-dark="./assets/icons/Delete.svg"
+                  data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                  alt=""
+                />
               </button>
             </div>
             <div class="phone-dialer__actions">
               <button class="btn btn--primary btn--full phone-dialer__action js-phone-call" type="button">
-                <img src="./assets/icons/phone.svg" data-theme-src-dark="./assets/icons/phone.svg" data-theme-src-light="./assets/icons/phone-light-mode.svg" alt="" />
+                <img
+                  src="./assets/icons/phone.svg"
+                  data-theme-src-dark="./assets/icons/phone.svg"
+                  data-theme-src-light="./assets/icons/phone-light-mode.svg"
+                  alt=""
+                />
                 Call
               </button>
             </div>
@@ -1460,14 +1558,19 @@
                 <h3 class="phone-dialer__subtitle">Call Essentials</h3>
               </div>
               <label class="visually-hidden" for="phone-note">Call note</label>
-              <textarea class="input input--textarea js-phone-note" id="phone-note" rows="5" placeholder="Write important details from this call"></textarea>
+              <textarea
+                class="input input--textarea js-phone-note"
+                id="phone-note"
+                rows="5"
+                placeholder="Write important details from this call"
+              ></textarea>
               <button class="btn btn--secondary btn--full" type="submit">Save Call Note</button>
             </form>
           </aside>
         </div>
       </div>
     </section>
-
+    <!-- --- 10X SensAI Modal --- -->
     <section
       class="modal communication-modal sensai-modal"
       id="ai-chat-modal"
@@ -1496,7 +1599,9 @@
           <div>
             <p class="modal__eyebrow">CRM helper agent</p>
             <h2 class="modal__title" id="ai-chat-title">10X SensAI</h2>
-            <p class="modal__description">Ask SensAI about clients, tasks, activity, reminders, or today&apos;s CRM focus.</p>
+            <p class="modal__description">
+              Ask SensAI about clients, tasks, activity, reminders, or today&apos;s CRM focus.
+            </p>
           </div>
           <button class="icon-btn js-close-modal" type="button" aria-label="Close 10X SensAI" data-modal-close>
             <img
@@ -1523,6 +1628,8 @@
         </form>
       </div>
     </section>
+
+    <!-- --- Global Delete Confirmation Modal --- -->
     <section
       class="modal destructive-confirm js-destructive-confirm"
       id="global-delete-confirm-modal"
@@ -1556,6 +1663,7 @@
       </div>
     </section>
 
+    <!-- --- JavaScript Entry Point --- -->
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>

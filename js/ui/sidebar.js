@@ -1,6 +1,8 @@
 "use strict";
 
+/* --- Responsive Sidebar Controller --- */
 (function initSidebarDropdowns() {
+  /* --- Sidebar dropdowns share one arrow-update behavior. --- */
   const dropdowns = document.querySelectorAll(".sidebar-dropdown");
 
   if (!dropdowns.length) return;
@@ -35,6 +37,7 @@
 })();
 
 (function initResponsiveSidebar() {
+  /* --- Drawer references control mobile sidebar open and close state. --- */
   const sidebar = document.querySelector(".js-sidebar");
   const toggle = document.querySelector(".js-sidebar-toggle");
   const backdrop = document.querySelector(".js-sidebar-backdrop");
@@ -42,6 +45,7 @@
 
   if (!sidebar || !toggle || !backdrop) return;
 
+  /* --- Toggles responsive sidebar state and body scroll lock. --- */
   const setOpen = (isOpen) => {
     document.body.classList.toggle("is-sidebar-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));

@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Reusable Modal Controller --- */
 (function initModalController() {
   const OPEN_CLASS = "modal-open";
   const MODAL_SELECTOR = ".modal";
@@ -37,6 +38,7 @@
     return getFocusableElements(modal)[0] || modal.querySelector("[role='dialog']") || modal;
   };
 
+  /* --- Opens one modal and remembers which element launched it. --- */
   const openModal = (modal, trigger = null) => {
     if (!modal) return;
 
@@ -75,6 +77,7 @@
     }
   }
 
+  /* --- Keeps Tab navigation inside the active modal. --- */
   const trapFocus = (event) => {
     if (!activeModal || event.key !== "Tab") return;
 

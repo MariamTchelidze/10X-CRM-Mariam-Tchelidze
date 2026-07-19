@@ -1,3 +1,4 @@
+/* --- Forgot Password Page Logic --- */
 "use strict";
 const forgotPasswordPage = document.querySelector(".forgotPasswordPage");
 
@@ -7,7 +8,8 @@ function initForgotPassword() {
   if (!forgotPasswordPage) return;
 
   (function initForgotPasswordForm() {
-    const form = document.querySelector(".js-forgot-password-form");
+    /* --- DOM references collect the recovery form and feedback elements. --- */
+  const form = document.querySelector(".js-forgot-password-form");
 
     if (!form) return;
 

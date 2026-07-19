@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Dynamic Dashboard Section Data --- */
 (function initDashboardSectionsData() {
   const dashboardPage = document.querySelector(".dashboardPage");
   const storage = window.crmStorage;
@@ -32,6 +33,7 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  /* --- Storage and Formatting Helpers --- */
   const readArray = (key) => {
     const value = storage.read(key, []);
     return Array.isArray(value) ? value : [];
@@ -79,6 +81,7 @@
     });
   };
 
+  /* --- Section metrics summarize current client, task, note, and file data. --- */
   const getMetrics = () => {
     const clients = getClients();
     const tasks = getTasks();

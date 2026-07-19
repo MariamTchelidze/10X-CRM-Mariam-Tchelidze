@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Clients Page Controller --- */
 const clientsPage = document.querySelector(".clientsPage");
 
 initClients();
@@ -7,6 +8,7 @@ initClients();
 function initClients() {
   if (!clientsPage) return;
 
+  /* --- Shared modules connect clients to storage, API, validation, and card rendering. --- */
   const constants = window.crmConstants;
   const storage = window.crmStorage;
   const data = window.crmData;
@@ -15,6 +17,7 @@ function initClients() {
 
   if (!constants || !storage || !data || !cards || !formHelpers) return;
 
+  /* --- DOM references collect the client list, forms, modals, and status panels. --- */
   const list = document.getElementById("clients-list");
   const loading = document.getElementById("clients-loading");
   const error = document.getElementById("clients-error");
@@ -54,11 +57,13 @@ function initClients() {
 
   if (!list) return;
 
+  /* --- Page State --- */
   let clients = [];
   let activeStatus = "all";
   let pendingDeleteId = null;
   let pendingNoteDeleteId = null;
   let editingClientId = null;
+  /* --- Storage keys and UI messages connect client notes with task-board data. --- */
   const TASKS_KEY = "crm_tasks";
   const DEFAULT_CLIENTS_ERROR = "Could not load clients. Check your connection and try again.";
 
@@ -68,6 +73,7 @@ function initClients() {
     maximumFractionDigits: 0,
   });
 
+  /* --- Small Formatting and Safety Helpers --- */
   const getSummaryElement = (id) => document.getElementById(id);
 
   const escapeHtml = (value = "") =>
@@ -100,6 +106,7 @@ function initClients() {
     delete button.dataset.originalText;
   };
 
+  /* --- Note/task constants define note statuses and cross-page task opening. --- */
   const PENDING_TASK_KEY = "crm_pending_open_task";
   const NOTE_STATUSES = [
     { value: "", label: "No status" },
@@ -109,6 +116,7 @@ function initClients() {
     { value: "processed", label: "Processed" },
   ];
 
+  /* --- Phone-code timezone map supports client country clocks and manual clients. --- */
   const CLIENT_TIMEZONES = [
     { code: "+995", country: "Georgia", timezone: "Asia/Tbilisi" },
     { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
@@ -131,6 +139,7 @@ function initClients() {
     { code: "+52", country: "Mexico", timezone: "America/Mexico_City" },
   ].sort((a, b) => b.code.length - a.code.length);
 
+  /* --- Timezone helpers infer country data from international phone numbers. --- */
   const normalizePhone = (phone = "") => String(phone).replace(/[^\d+]/g, "");
 
   const detectClientTimezone = (phone = "") => {
@@ -151,6 +160,7 @@ function initClients() {
 
   const CLIENT_STATUSES = ["lead", "contacted", "won", "lost"];
 
+  /* --- Data Normalization --- */
   const normalizeNote = (note = {}, index = 0) => {
     const fallbackDate = note.date || note.createdAt || new Date().toLocaleString();
 
@@ -201,6 +211,7 @@ function initClients() {
     if (shouldSave) saveClients();
   };
 
+  /* --- Detail helpers fill modal fields and format stored dates safely. --- */
   const setDetailText = (selector, value) => {
     const element = detailsModal?.querySelector(selector);
     if (element) element.textContent = value;
@@ -228,6 +239,7 @@ function initClients() {
     return currentUser?.fullName || session?.email || "CRM User";
   };
 
+  /* --- Task helpers attach client notes to existing or newly created tasks. --- */
   const getStoredTasks = () => storage.read(TASKS_KEY, []);
 
   const saveStoredTasks = (tasks) => {
@@ -270,6 +282,7 @@ function initClients() {
     }
   };
 
+  /* --- Reminder helpers keep the client follow-up UI readable. --- */
   const getNoteCountLabel = (count) => `${count} ${count === 1 ? "note" : "notes"}`;
 
   const formatReminderDate = (value) => {
@@ -316,6 +329,7 @@ function initClients() {
     reminderStatus.dataset.state = client.reminderNotified || isDue ? "sent" : "scheduled";
   };
 
+  /* --- Note delete/status helpers manage individual note actions inside the modal. --- */
   const getNoteById = (clientId, noteId) => {
     const client = getClientById(clientId);
     const notes = Array.isArray(client?.notes) ? client.notes : [];
@@ -436,6 +450,7 @@ function initClients() {
       .join("");
   };
 
+  /* --- State update helper changes one client, then saves the whole list. --- */
   const updateClient = (clientId, updater) => {
     clients = clients.map((client) =>
       String(client.id) === String(clientId) ? updater(client) : client,
@@ -443,6 +458,7 @@ function initClients() {
     saveClients();
   };
 
+  /* --- Client Details Modal Rendering --- */
   const renderClientDetails = (client) => {
     if (!detailsModal || !detailsContent || !client) return;
 
@@ -484,6 +500,7 @@ function initClients() {
   };
 
 
+  /* --- Loading and Error UI State --- */
   const setLoading = (isLoading) => {
     if (loading) loading.hidden = !isLoading;
     if (error) error.hidden = true;
@@ -510,6 +527,7 @@ function initClients() {
     getSummaryElement("clients-count-won").textContent = clients.filter((client) => client.status === "won").length;
   };
 
+  /* --- Filter pipeline combines status, search text, and sort order. --- */
   const getFilteredClients = () => {
     const query = String(searchInput?.value || "").trim().toLowerCase();
     const sortValue = sortSelect?.value || "created-desc";
@@ -552,6 +570,7 @@ function initClients() {
     updateSummary();
   };
 
+  /* --- Reminder automation creates notifications when follow-up time arrives. --- */
   const triggerClientReminder = (client) => {
     if (!client || client.reminderNotified || !client.reminderAt) return;
 
@@ -582,6 +601,7 @@ function initClients() {
       });
   };
 
+  /* --- API Load and Reminder Checks --- */
   const loadClients = async () => {
     if (clients.length) {
       renderClients();
@@ -606,6 +626,7 @@ function initClients() {
     }
   };
 
+  /* --- Form mode helpers switch the modal between add and edit behavior. --- */
   const fillClientForm = (client) => {
     if (!form || !client) return;
 
@@ -680,7 +701,8 @@ function initClients() {
   };
 
   const setActiveStatusFilter = (selectedButton) => {
-    statusFilters.forEach((button) => {
+    /* --- Final listeners connect filters, retry, reminders, and initial page load. --- */
+  statusFilters.forEach((button) => {
       button.classList.toggle("filter-chip--active", button === selectedButton);
     });
 
@@ -697,6 +719,7 @@ function initClients() {
     }
   });
 
+  /* --- Add and Edit Client Submit Flow --- */
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -772,6 +795,7 @@ function initClients() {
     }
   });
 
+  /* --- Client List Event Delegation --- */
   list.addEventListener("click", (event) => {
     const deleteButton = event.target.closest(".js-delete-client");
     const actionButton = event.target.closest("[data-client-action]");
@@ -799,6 +823,7 @@ function initClients() {
     openClientDetails(card.dataset.clientId);
   });
 
+  /* --- Client Notes and Reminders --- */
   noteForm?.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -1029,6 +1054,7 @@ function initClients() {
     button.addEventListener("click", closeNoteDeleteModal);
   });
 
+  /* --- Client Delete Flow --- */
   confirmDeleteButton?.addEventListener("click", async () => {
     if (!pendingDeleteId) return;
 

@@ -1,6 +1,8 @@
 "use strict";
 
+/* --- Header Greeting, Clock, and Notifications Entry --- */
 (function initLiveHeader() {
+  /* --- Header elements are shared across protected CRM pages. --- */
   const dateElement = document.querySelector(".js-live-date");
   const clockElement = document.querySelector(".js-live-clock");
   const timezoneElement = document.querySelector(".js-live-timezone");
@@ -8,6 +10,7 @@
 
   if (!dateElement && !clockElement && !greetingElement) return;
 
+  /* --- Day-part ranges drive the greeting and weather-style icon. --- */
   const dayParts = [
     { from: 5, to: 12, label: "Good morning", icon: "./assets/icons/Morning.svg" },
     { from: 12, to: 17, label: "Good afternoon", icon: "./assets/icons/Afternoon.svg" },
@@ -32,6 +35,7 @@
       minute: "2-digit",
     });
 
+  /* --- Updates greeting, date, and time every second. --- */
   const tick = () => {
     const now = new Date();
     const dayPart = getDayPart(now.getHours());

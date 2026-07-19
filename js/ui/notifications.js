@@ -1,8 +1,11 @@
 "use strict";
 
+/* --- Notification Center Controller --- */
 (function initGlobalNotifications() {
+  /* --- Notification storage key is shared with tasks and communication events. --- */
   const STORAGE_KEY = "crm_task_notifications";
 
+  /* --- Notification Storage --- */
   const readNotifications = () => {
     try {
       const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -49,8 +52,10 @@
     });
   };
 
+  /* --- Runtime notification state mirrors localStorage for quick rendering. --- */
   let notifications = readNotifications();
 
+  /* --- Normalizer gives each notification consistent id, status, date, and task link. --- */
   const normalizeNotification = (notification) => ({
     ...notification,
     status: notification.status || (notification.read ? "read" : "unread"),
@@ -90,6 +95,7 @@
     });
   };
 
+  /* --- Public add helper lets other modules create notifications. --- */
   const add = (message, taskId = "") => {
     notifications = [
       {

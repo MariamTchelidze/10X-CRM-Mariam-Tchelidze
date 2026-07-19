@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Live Clock and Client Timezone Modal --- */
 (function initLiveClockModal() {
   const protectedPage = document.querySelector(".dashboardPage, .clientsPage, .profilePage");
   const clockCards = Array.from(document.querySelectorAll(".date-card"));
@@ -214,7 +215,8 @@
   };
 
   const closeModal = () => {
-    const modal = document.getElementById("live-clock-modal");
+    /* --- DOM references collect animated clock and country-time list elements. --- */
+  const modal = document.getElementById("live-clock-modal");
     if (!modal) return;
     modal.hidden = true;
     modal.dataset.modalState = "closed";

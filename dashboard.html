@@ -9,6 +9,7 @@
   </head>
 
   <body class="theme-dark dashboardPage" data-theme="dark" data-page="dashboard">
+    <!-- --- Toast Notifications --- -->
     <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
     <button
@@ -36,6 +37,7 @@
 
     <div class="sidebar-backdrop js-sidebar-backdrop" hidden></div>
     <div class="app-shell">
+      <!-- --- Sidebar Navigation --- -->
       <aside class="sidebar js-sidebar" id="app-sidebar" aria-label="Primary navigation">
         <a href="./dashboard.html" class="sidebar__brand" aria-label="10X CRM dashboard">
           <img
@@ -233,7 +235,8 @@
                   </a>
                 </div>
               </details>
-            </li>            <li class="sidebar__item sidebar__item--dropdown">
+            </li>
+            <li class="sidebar__item sidebar__item--dropdown">
               <details class="sidebar-dropdown" open>
                 <summary class="sidebar__link sidebar__link--secondary sidebar-dropdown__summary">
                   <span class="sidebar-dropdown__label">
@@ -426,6 +429,7 @@
         </div>
       </aside>
 
+      <!-- --- Dashboard Workspace --- -->
       <main class="app-main dashboard-page">
         <header class="app-header">
           <div class="app-header__content">
@@ -478,6 +482,7 @@
         </header>
 
         <div class="dashboard-default-view js-dashboard-view" data-dashboard-view="overview">
+          <!-- --- Welcome Summary --- -->
           <section class="welcome-panel" aria-labelledby="welcome-title">
             <div>
               <p class="welcome-panel__subtitle js-dynamic-greeting">Welcome back,</p>
@@ -490,6 +495,7 @@
             <a href="./clients.html" class="btn btn--primary">Manage Clients</a>
           </section>
 
+          <!-- --- Dashboard Statistics --- -->
           <section class="stats-grid" aria-label="Dashboard statistics">
             <article class="stats-card" data-stat="clients">
               <img src="./assets/icons/users.svg" alt="" class="stats-card__icon" />
@@ -650,7 +656,9 @@
               />
               <span class="dashboard-panel-card__label">Monthly Target</span>
               <strong class="dashboard-panel-card__value" data-dashboard-metric="monthlyTarget">$32,000</strong>
-              <p class="dashboard-panel-card__text" data-dashboard-trend="monthlyTarget">76% of target is already covered by active and won deals.</p>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="monthlyTarget">
+                76% of target is already covered by active and won deals.
+              </p>
             </article>
             <article class="dashboard-panel-card">
               <img
@@ -662,7 +670,9 @@
               />
               <span class="dashboard-panel-card__label">Hot Leads</span>
               <strong class="dashboard-panel-card__value" data-dashboard-metric="hotLeads">14</strong>
-              <p class="dashboard-panel-card__text" data-dashboard-trend="hotLeads">Leads with recent activity and high projected value.</p>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="hotLeads">
+                Leads with recent activity and high projected value.
+              </p>
             </article>
             <article class="dashboard-panel-card">
               <img
@@ -674,7 +684,9 @@
               />
               <span class="dashboard-panel-card__label">Follow-ups</span>
               <strong class="dashboard-panel-card__value" data-dashboard-metric="followUps">7</strong>
-              <p class="dashboard-panel-card__text" data-dashboard-trend="followUps">Tasks that need attention today or tomorrow.</p>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="followUps">
+                Tasks that need attention today or tomorrow.
+              </p>
             </article>
           </div>
 
@@ -713,7 +725,9 @@
               />
               <span class="dashboard-panel-card__label">Pipeline Health</span>
               <strong class="dashboard-panel-card__value" data-dashboard-metric="pipelineHealth">96%</strong>
-              <p class="dashboard-panel-card__text" data-dashboard-trend="pipelineHealth">Balanced pipeline across lead, contacted, and won stages.</p>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="pipelineHealth">
+                Balanced pipeline across lead, contacted, and won stages.
+              </p>
             </article>
             <article class="dashboard-panel-card">
               <img
@@ -725,7 +739,9 @@
               />
               <span class="dashboard-panel-card__label">Conversion</span>
               <strong class="dashboard-panel-card__value" data-dashboard-metric="conversionRate">38%</strong>
-              <p class="dashboard-panel-card__text" data-dashboard-trend="conversionRate">Demo conversion placeholder for the future client data module.</p>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="conversionRate">
+                Demo conversion placeholder for the future client data module.
+              </p>
             </article>
           </div>
           <section class="reports-visual-grid" aria-label="Report charts">
@@ -801,7 +817,9 @@
               />
               <span class="dashboard-panel-card__label">Pinned Clients</span>
               <strong class="dashboard-panel-card__value" data-dashboard-section-metric="favouriteCount">0</strong>
-              <p class="dashboard-panel-card__text" data-dashboard-section-text="favouriteCount">Pin high-value clients from the list below.</p>
+              <p class="dashboard-panel-card__text" data-dashboard-section-text="favouriteCount">
+                Pin high-value clients from the list below.
+              </p>
             </article>
           </div>
 
@@ -834,7 +852,9 @@
               <h3 class="card__title">Recent Activity</h3>
             </header>
             <div class="card__body activity-timeline js-activity-list" data-render-target="activity">
-              <p class="task-empty">No activity yet. Client updates, notes, reminders, tasks, and notifications will appear here.</p>
+              <p class="task-empty">
+                No activity yet. Client updates, notes, reminders, tasks, and notifications will appear here.
+              </p>
             </div>
           </article>
         </section>
@@ -976,7 +996,9 @@
               />
               <span class="dashboard-panel-card__label">Active users</span>
               <strong class="dashboard-panel-card__value">4</strong>
-              <p class="dashboard-panel-card__text">Team members who can be assigned CRM tasks and client follow-ups.</p>
+              <p class="dashboard-panel-card__text">
+                Team members who can be assigned CRM tasks and client follow-ups.
+              </p>
             </article>
             <article class="dashboard-panel-card">
               <img
@@ -988,7 +1010,9 @@
               />
               <span class="dashboard-panel-card__label">Inbox</span>
               <strong class="dashboard-panel-card__value">Messenger</strong>
-              <p class="dashboard-panel-card__text">Use Messenger to continue internal conversations with selected teammates.</p>
+              <p class="dashboard-panel-card__text">
+                Use Messenger to continue internal conversations with selected teammates.
+              </p>
             </article>
           </div>
         </section>
@@ -1054,6 +1078,7 @@
             </div>
           </header>
 
+          <!-- --- Task Board Columns --- -->
           <section class="task-board js-task-board" aria-label="Task status board">
             <article class="task-column task-column--todo" data-task-status="todo">
               <header class="task-column__header">
@@ -1237,6 +1262,8 @@
         </footer>
       </div>
     </section>
+
+    <!-- --- Task Details Modal --- -->
     <section
       class="modal"
       id="task-details-modal"
@@ -1376,6 +1403,7 @@
       </div>
     </section>
 
+    <!-- --- Notifications Modal --- -->
     <section class="modal" id="notifications-modal" aria-labelledby="notifications-title" aria-hidden="true" hidden>
       <div class="modal__dialog modal__dialog--notifications" role="dialog" aria-modal="true">
         <header class="modal__header">
@@ -1407,6 +1435,7 @@
         </footer>
       </div>
     </section>
+    <!-- --- Add Task Modal --- -->
     <section
       class="modal"
       id="add-task-modal"
@@ -1521,6 +1550,7 @@
         </footer>
       </div>
     </section>
+    <!-- --- Settings Modal --- -->
     <section
       class="modal"
       id="settings-modal"
@@ -1806,6 +1836,8 @@
         </form>
       </div>
     </section>
+
+    <!-- --- Account Deletion Modal --- -->
     <section
       class="modal"
       id="delete-account-modal"
@@ -1904,7 +1936,8 @@
             <p class="communication-chat__recipient-hint">
               Message will be saved to the selected teammate or department inbox.
             </p>
-          </div>          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
+          </div>
+          <div class="communication-chat__messages js-communication-chat-messages" aria-live="polite"></div>
         </div>
         <form class="modal__footer communication-chat__form js-communication-chat-form">
           <label class="visually-hidden" for="communication-chat-input">Message team</label>
@@ -1919,6 +1952,7 @@
       </div>
     </section>
 
+    <!-- --- Application Phone Modal --- -->
     <section
       class="modal phone-modal"
       id="phone-modal"
@@ -1932,7 +1966,9 @@
           <div>
             <p class="modal__eyebrow">Application phone</p>
             <h2 class="modal__title" id="phone-title">10X CRM Phone</h2>
-            <p class="modal__description">Demo dialer is call-ready, but real calling is disabled from configuration.</p>
+            <p class="modal__description">
+              Demo dialer is call-ready, but real calling is disabled from configuration.
+            </p>
           </div>
           <button class="icon-btn js-close-modal" type="button" aria-label="Close phone" data-modal-close>
             <img
@@ -1968,13 +2004,28 @@
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="9">9</button>
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="+">+</button>
               <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="0">0</button>
-              <button class="phone-dialer__key phone-dialer__key--backspace js-phone-delete" type="button" data-skip-delete-confirm aria-label="Delete last digit">
-                <img src="./assets/icons/Delete.svg" data-theme-src-dark="./assets/icons/Delete.svg" data-theme-src-light="./assets/icons/Delete-light-theme.svg" alt="" />
+              <button
+                class="phone-dialer__key phone-dialer__key--backspace js-phone-delete"
+                type="button"
+                data-skip-delete-confirm
+                aria-label="Delete last digit"
+              >
+                <img
+                  src="./assets/icons/Delete.svg"
+                  data-theme-src-dark="./assets/icons/Delete.svg"
+                  data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                  alt=""
+                />
               </button>
             </div>
             <div class="phone-dialer__actions">
               <button class="btn btn--primary btn--full phone-dialer__action js-phone-call" type="button">
-                <img src="./assets/icons/phone.svg" data-theme-src-dark="./assets/icons/phone.svg" data-theme-src-light="./assets/icons/phone-light-mode.svg" alt="" />
+                <img
+                  src="./assets/icons/phone.svg"
+                  data-theme-src-dark="./assets/icons/phone.svg"
+                  data-theme-src-light="./assets/icons/phone-light-mode.svg"
+                  alt=""
+                />
                 Call
               </button>
             </div>
@@ -1993,7 +2044,12 @@
                 <h3 class="phone-dialer__subtitle">Call Essentials</h3>
               </div>
               <label class="visually-hidden" for="phone-note">Call note</label>
-              <textarea class="input input--textarea js-phone-note" id="phone-note" rows="5" placeholder="Write important details from this call"></textarea>
+              <textarea
+                class="input input--textarea js-phone-note"
+                id="phone-note"
+                rows="5"
+                placeholder="Write important details from this call"
+              ></textarea>
               <button class="btn btn--secondary btn--full" type="submit">Save Call Note</button>
             </form>
           </aside>
@@ -2001,6 +2057,7 @@
       </div>
     </section>
 
+    <!-- --- 10X SensAI Modal --- -->
     <section
       class="modal communication-modal sensai-modal"
       id="ai-chat-modal"
@@ -2029,7 +2086,9 @@
           <div>
             <p class="modal__eyebrow">CRM helper agent</p>
             <h2 class="modal__title" id="ai-chat-title">10X SensAI</h2>
-            <p class="modal__description">Ask SensAI about clients, tasks, activity, reminders, or today&apos;s CRM focus.</p>
+            <p class="modal__description">
+              Ask SensAI about clients, tasks, activity, reminders, or today&apos;s CRM focus.
+            </p>
           </div>
           <button class="icon-btn js-close-modal" type="button" aria-label="Close 10X SensAI" data-modal-close>
             <img
@@ -2056,6 +2115,8 @@
         </form>
       </div>
     </section>
+
+    <!-- --- Global Delete Confirmation Modal --- -->
     <section
       class="modal destructive-confirm js-destructive-confirm"
       id="global-delete-confirm-modal"
@@ -2089,6 +2150,7 @@
       </div>
     </section>
 
+    <!-- --- JavaScript Entry Point --- -->
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>

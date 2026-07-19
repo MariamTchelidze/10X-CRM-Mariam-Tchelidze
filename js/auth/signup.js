@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Sign Up Form Logic --- */
 const signupPage = document.querySelector(".signupPage");
 
 initSignup();
@@ -12,7 +13,7 @@ function initSignup() {
   const validation = window.crmValidation;
   const form = document.querySelector(".js-signup-form");
 
-  /* ---  check if  all the modules aand form class works fine if not stop the function  --- */
+  /* ---  check if  all the modules and form class works fine if not stop the function  --- */
   if (!constants || !storage || !validation || !form) return;
 
   const fullNameInput = form.querySelector("#signup-full-name");

@@ -1,8 +1,11 @@
 "use strict";
 
+/* --- Theme Aware Select Icons --- */
 (function initIconSelects() {
+  /* --- Select icon preview follows the active theme. --- */
   const getTheme = () => (document.body.dataset.theme === "light" ? "light" : "dark");
 
+  /* --- Reads the selected option icon and paints the custom preview. --- */
   const updateSelectIcon = (select) => {
     const wrapper = select.closest(".js-icon-select") || select.parentElement;
     const option = select.selectedOptions[0];

@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Settings and Account Danger Zone --- */
 (function initSettingsPanel() {
   const STORAGE_KEY = "crm_app_settings";
   const SESSION_KEY = "crm_session";
@@ -28,6 +29,7 @@
   const customThemePanel = document.querySelector(".js-custom-theme-panel");
   const deleteAccountForm = document.querySelector(".js-delete-account-form");
 
+  /* --- Storage helpers keep settings safe even if saved JSON breaks. --- */
   const readSettings = () => {
     try {
       const storedSettings = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -64,6 +66,7 @@
     }
   };
 
+  /* --- Appearance helpers apply theme, font size, accent, and custom mode. --- */
   const applyAccentColor = (color) => {
     document.body.style.setProperty("--color-primary", color);
   };
@@ -111,6 +114,7 @@
     }
   };
 
+  /* --- Account deletion helpers verify the current password before clearing data. --- */
   const getStoredAccountPassword = () => {
     try {
       const session = JSON.parse(localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY) || "{}");
@@ -149,6 +153,7 @@
     }
   };
 
+  /* --- Runtime settings state starts from localStorage and updates through the form. --- */
   let settings = readSettings();
   applySettings(settings);
   setTheme(settings.themeMode === "custom" ? settings.customTheme : settings.themeMode);

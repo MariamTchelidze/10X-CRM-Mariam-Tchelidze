@@ -1,6 +1,8 @@
 "use strict";
 
+/* --- Shared Authentication Validation Rules --- */
 (function initValidationHelpers() {
+  /* --- Email must have an allowed demo domain and a valid local/domain shape. --- */
   const emailIsValid = (email) => {
     const allowedDomains = [".com", ".net", ".org"];
     const normalized = email.trim().toLowerCase();
@@ -16,6 +18,7 @@
     );
   };
 
+  /* --- Passwords are limited to Latin letters, numbers, and safe symbols. --- */
   const passwordIsValid = (password) => {
     const allowedCharacters = /^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/;
 
@@ -27,6 +30,7 @@
     );
   };
 
+  /* --- Field errors are rendered near their matching input. --- */
   const getErrorElement = (input) => {
     return document.querySelector(`[data-error-for="${input.id}"]`);
   };

@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Dashboard Section Navigation --- */
 (function initDashboardSections() {
   const SECTION_META = {
     overview: { eyebrow: "Overview", title: "Dashboard" },

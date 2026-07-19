@@ -1,9 +1,12 @@
 "use strict";
 
+/* --- Profile Avatar Upload Preview --- */
 (function initProfileAvatar() {
+  /* --- Avatar constants control localStorage key and accepted preview size. --- */
   const AVATAR_KEY = "crm_profile_avatar";
   const MAX_FILE_SIZE = 1024 * 1024;
 
+  /* --- DOM references collect upload, preview, initials, remove button, and status text. --- */
   const input = document.querySelector(".js-profile-avatar-input");
   const image = document.querySelector(".js-profile-avatar-image");
   const initials = document.querySelector(".js-profile-avatar-initials");
@@ -13,6 +16,7 @@
 
   if (!input || !image || !initials) return;
 
+  /* --- Message helpers avoid stacking repeated upload status messages. --- */
   const clearMessageTimer = () => {
     if (!messageTimerId) return;
 
@@ -36,6 +40,7 @@
     }, type === "error" ? 4200 : 2400);
   };
 
+  /* --- Storage helpers persist or remove the selected image preview. --- */
   const saveAvatar = (src) => {
     try {
       localStorage.setItem(AVATAR_KEY, src);
@@ -52,6 +57,7 @@
     }
   };
 
+  /* --- Preview helper switches between image and initials state. --- */
   const showAvatar = (src) => {
     if (!src) {
       image.hidden = true;
@@ -73,6 +79,7 @@
     }
   };
 
+  /* --- File-change handler validates and previews the uploaded image immediately. --- */
   const handleAvatarChange = () => {
     const file = input.files && input.files[0];
 

@@ -1,17 +1,21 @@
 "use strict";
 
+/* --- Client Card Renderer --- */
 (function initClientCardRenderer() {
+  /* --- Currency formatter keeps every client value visually consistent. --- */
   const moneyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0,
   });
 
+  /* --- Safely writes text into cloned template elements. --- */
   const setText = (card, selector, value) => {
     const element = card.querySelector(selector);
     if (element) element.textContent = value;
   };
 
+  /* --- Builds one client card from template data and returns it to the list. --- */
   const renderClientCard = (client) => {
     const template = document.getElementById("client-card-template");
     const card = template.content.firstElementChild.cloneNode(true);

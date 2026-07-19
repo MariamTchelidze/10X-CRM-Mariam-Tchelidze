@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Messenger and 10X SensAI Controller --- */
 (function initCommunicationModals() {
   const teamForm = document.querySelector(".js-communication-chat-form");
   const teamMessages = document.querySelector(".js-communication-chat-messages");
@@ -45,6 +46,7 @@
     }
   };
 
+  /* --- Local Storage Helpers --- */
   const readArray = (key) => {
     try {
       const value = JSON.parse(localStorage.getItem(key) || "[]");
@@ -62,6 +64,7 @@
       minute: "2-digit",
     });
 
+  /* --- CRM Context for SensAI Replies --- */
   const getCrmContext = () => {
     const clients = readArray(window.crmConstants?.CLIENTS_KEY || "crm_clients");
     const tasks = readArray(TASKS_KEY);
@@ -460,6 +463,7 @@
     window.crmNotifications?.add("10X SensAI replied with CRM guidance.");
   };
 
+  /* --- SensAI Prompt Submit Flow --- */
   aiForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     sendSensaiPrompt(aiInput.value);

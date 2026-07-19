@@ -1,13 +1,18 @@
 "use strict";
 
+/* --- Application Phone Dialer --- */
 (function initPhoneDialer() {
+  /* --- Phone modal references connect display, keypad, queue, and call notes. --- */
   const dialer = document.querySelector(".js-phone-dialer");
   if (!dialer) return;
 
+  /* --- Call config keeps real calling disabled until the exam/demo needs it. --- */
   const PHONE_CONFIG = {
     callingEnabled: false,
     demoNumber: "+995574431557",
   };
+
+  /* --- Storage keys connect client phone numbers with saved call notes. --- */
   const CLIENTS_KEY = window.crmConstants?.CLIENTS_KEY || "crm_clients";
   const CALL_NOTES_KEY = "crm_call_notes";
 
@@ -18,6 +23,7 @@
   const queueList = dialer.querySelector(".js-phone-queue");
   const noteForm = dialer.querySelector(".js-phone-note-form");
   const noteInput = dialer.querySelector(".js-phone-note");
+  /* --- Runtime phone state tracks the dialed number and selected client. --- */
   let currentNumber = "";
   let selectedClient = null;
 
@@ -29,6 +35,7 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  /* --- Phone State Helpers --- */
   const readArray = (key) => {
     try {
       const value = JSON.parse(localStorage.getItem(key) || "[]");
@@ -46,6 +53,7 @@
     }
   };
 
+  /* --- Number helpers clean and display phone input like a simple dialer. --- */
   const normalizeNumber = (value) => {
     const text = String(value || "").trim();
     const prefix = text.startsWith("+") ? "+" : "";
@@ -72,6 +80,7 @@
   const getClientsWithPhones = () =>
     readArray(CLIENTS_KEY).filter((client) => normalizeNumber(client.phone));
 
+  /* --- Call Queue Rendering --- */
   const renderQueue = () => {
     const clients = getClientsWithPhones().slice(0, 6);
 
@@ -95,6 +104,7 @@
       .join("");
   };
 
+  /* --- Keypad helpers add digits, plus sign, backspace, and full clear behavior. --- */
   const addKey = (key) => {
     if (key === "+" && normalizeNumber(currentNumber)) return;
 

@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Page Transition Helpers --- */
 (function initPageTransition() {
   const EXIT_DURATION = 440;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

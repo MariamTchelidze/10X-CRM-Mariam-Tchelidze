@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Dashboard Widget Renderers --- */
 (function initDashboardWidgets() {
   const isProtectedPage = document.querySelector(".dashboardPage, .clientsPage, .profilePage");
 

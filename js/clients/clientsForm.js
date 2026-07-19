@@ -1,6 +1,8 @@
 "use strict";
 
+/* --- Client Form Validation Helpers --- */
 (function initClientFormHelpers() {
+  /* --- Converts form fields into the client object used by state and storage. --- */
   const getFormClient = (form) => {
     const formData = new FormData(form);
     const notesText = String(formData.get("notes") || "").trim();
@@ -20,6 +22,7 @@
     };
   };
 
+  /* --- Validates required client fields and prevents duplicate emails. --- */
   const validateClient = (form, client, clients, ignoredClientId = null) => {
     const validation = window.crmValidation;
     let isValid = true;

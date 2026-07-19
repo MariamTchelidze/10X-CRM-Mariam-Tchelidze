@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Profile Page Controller --- */
 const profilePage = document.querySelector(".profilePage");
 
 initProfile();
@@ -7,6 +8,7 @@ initProfile();
 function initProfile() {
   if (!profilePage) return;
 
+  /* --- Shared modules connect profile to auth users, clients, validation, and API reset. --- */
   const constants = window.crmConstants;
   const storage = window.crmStorage;
   const validation = window.crmValidation;
@@ -21,6 +23,7 @@ function initProfile() {
 
   if (!constants || !storage || !validation || !passwordForm) return;
 
+  /* --- Form references collect editable profile and password fields. --- */
   const profileNameInput = profileForm?.querySelector("#profile-name");
   const profileEmailInput = profileForm?.querySelector("#profile-email");
   const profileCompanyInput = profileForm?.querySelector("#profile-company");
@@ -32,10 +35,12 @@ function initProfile() {
   const newPasswordInput = passwordForm.querySelector("#new-password");
   const confirmPasswordInput = passwordForm.querySelector("#confirm-new-password");
 
+  /* --- Account helpers read the active session and matching stored user. --- */
   const getUsers = () => storage.read(constants.USERS_KEY, []);
 
   const getSession = () => storage.read(constants.SESSION_KEY, null);
 
+  /* --- Current User Helpers --- */
   const getCurrentUser = () => {
     const session = getSession();
     const users = getUsers();
@@ -45,6 +50,7 @@ function initProfile() {
     return users.find((user) => user.id === session.userId || user.email === session.email) || null;
   };
 
+  /* --- Display helpers format profile initials, dates, and safe HTML. --- */
   const getInitials = (name = "") => {
     if (data?.getInitials) return data.getInitials(name);
 
@@ -74,6 +80,7 @@ function initProfile() {
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+  /* --- Dynamic Call History Rendering --- */
   const renderCallHistory = () => {
     const container = document.querySelector(".js-profile-call-history");
     if (!container) return;
@@ -118,6 +125,7 @@ function initProfile() {
       .join("");
   };
 
+  /* --- Statistics helper derives private profile KPIs from CRM clients. --- */
   const updateProfileStats = () => {
     const clients = storage.read(constants.CLIENTS_KEY, []);
     const leads = clients.filter((client) => client.status === "lead").length;
@@ -132,6 +140,7 @@ function initProfile() {
     document.querySelector('[data-profile-stat="kpi"]')?.replaceChildren(String(kpi));
   };
 
+  /* --- Profile Rendering --- */
   const renderProfile = () => {
     const currentUser = getCurrentUser();
 
@@ -158,6 +167,7 @@ function initProfile() {
 
   window.addEventListener("crm:call-note-saved", renderCallHistory);
 
+  /* --- Call-note delete helpers manage one focused confirmation modal. --- */
   const openCallNoteDeleteModal = (noteId) => {
     pendingCallNoteId = noteId;
     callNoteDeleteModal.hidden = false;

@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Theme and Accent Controller --- */
 (function initThemeController() {
   const THEME_KEY = "crm_theme";
   const THEMES = {

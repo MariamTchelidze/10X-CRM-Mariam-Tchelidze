@@ -1,5 +1,6 @@
 "use strict";
 
+/* --- Login Form Logic --- */
 const loginPage = document.querySelector(".loginPage");
 
 initLogin();
@@ -7,6 +8,7 @@ initLogin();
 function initLogin() {
   if (!loginPage) return;
 
+  /* --- Shared modules handle storage, routes, and validation helpers. --- */
   const constants = window.crmConstants;
   const storage = window.crmStorage;
   const validation = window.crmValidation;
@@ -14,6 +16,7 @@ function initLogin() {
 
   if (!constants || !storage || !validation || !form) return;
 
+  /* --- Login inputs are collected once so validation and submit logic can reuse them. --- */
   const emailInput = form.querySelector("#login-email");
   const passwordInput = form.querySelector("#login-password");
 
@@ -22,6 +25,7 @@ function initLogin() {
 
     validation.clearFormErrors(form);
 
+    /* --- Submitted values are normalized before comparing with saved users. --- */
     const email = emailInput.value.trim().toLowerCase();
     const password = passwordInput.value;
     const users = storage.read(constants.USERS_KEY, []);
@@ -39,6 +43,7 @@ function initLogin() {
 
     if (!isValid) return;
 
+    /* --- A matching user creates the browser session for protected pages. --- */
     const user = users.find((item) => item.email.toLowerCase() === email && item.password === password);
 
     if (!user) {
