@@ -346,7 +346,7 @@
                       alt=""
                       class="sidebar__icon"
                     />
-                    <span>AI Chat</span>
+                    <span>10X SensAI</span>
                   </button>
                 </div>
               </details>
@@ -1185,21 +1185,36 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
     </section>
 
     <section
-      class="modal communication-modal"
+      class="modal communication-modal sensai-modal"
       id="ai-chat-modal"
       aria-labelledby="ai-chat-title"
       aria-hidden="true"
       data-modal-initial-focus="#ai-chat-input"
       hidden
     >
-      <div class="modal__dialog modal__dialog--chat" role="dialog" aria-modal="true">
-        <header class="modal__header">
-          <div>
-            <p class="modal__eyebrow">AI Assistant</p>
-            <h2 class="modal__title" id="ai-chat-title">AI Chat</h2>
-            <p class="modal__description">Ask for CRM help. The conversation is saved locally in this browser.</p>
+      <div class="modal__dialog modal__dialog--chat modal__dialog--sensai" role="dialog" aria-modal="true">
+        <header class="modal__header sensai-header">
+          <div class="sensai-avatar sensai-avatar--idle js-sensai-avatar" aria-hidden="true">
+            <span class="sensai-avatar__aura"></span>
+            <span class="sensai-avatar__headband">10X</span>
+            <span class="sensai-avatar__head">
+              <span class="sensai-avatar__screen">
+                <span class="sensai-avatar__eye"></span>
+                <span class="sensai-avatar__eye"></span>
+                <span class="sensai-avatar__mouth"></span>
+              </span>
+            </span>
+            <span class="sensai-avatar__scarf"></span>
+            <span class="sensai-avatar__body">
+              <span class="sensai-avatar__badge"></span>
+            </span>
           </div>
-          <button class="icon-btn js-close-modal" type="button" aria-label="Close AI chat" data-modal-close>
+          <div>
+            <p class="modal__eyebrow">CRM helper agent</p>
+            <h2 class="modal__title" id="ai-chat-title">10X SensAI</h2>
+            <p class="modal__description">Ask SensAI about clients, tasks, activity, reminders, or today&apos;s CRM focus.</p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close 10X SensAI" data-modal-close>
             <img
               src="./assets/icons/close.svg"
               data-theme-src-dark="./assets/icons/close.svg"
@@ -1208,11 +1223,19 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
             />
           </button>
         </header>
-        <div class="modal__body communication-chat__messages js-ai-chat-messages" aria-live="polite"></div>
-        <form class="modal__footer communication-chat__form js-ai-chat-form">
-          <label class="visually-hidden" for="ai-chat-input">Ask the AI assistant</label>
-          <input class="input js-ai-chat-input" id="ai-chat-input" type="text" placeholder="Ask: create a follow-up task for Alpha Group" />
-          <button class="btn btn--primary" type="submit">Send</button>
+        <div class="modal__body sensai-chat">
+          <div class="sensai-suggestions js-sensai-suggestions" aria-label="SensAI suggestions"></div>
+          <div class="communication-chat__messages sensai-chat__messages js-ai-chat-messages" aria-live="polite"></div>
+        </div>
+        <form class="modal__footer communication-chat__form sensai-chat__form js-ai-chat-form">
+          <label class="visually-hidden" for="ai-chat-input">Ask 10X SensAI</label>
+          <input
+            class="input js-ai-chat-input"
+            id="ai-chat-input"
+            type="text"
+            placeholder="Ask SensAI: show overdue tasks"
+          />
+          <button class="btn btn--primary" type="submit">Ask SensAI</button>
         </form>
       </div>
     </section>

@@ -476,3 +476,247 @@ body[data-theme="light"] .modal {
     max-width: 100%;
   }
 }
+
+.modal__dialog--sensai {
+  width: min(82rem, 100%);
+}
+
+.sensai-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.sensai-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 8.4rem;
+  height: 9.2rem;
+  filter: drop-shadow(0 1rem 2rem rgb(0 0 0 / 24%));
+  animation: sensai-float 3.4s ease-in-out infinite;
+}
+
+.sensai-avatar__aura {
+  position: absolute;
+  inset: 0.4rem;
+  border-radius: 45% 55% 50% 50%;
+  background: radial-gradient(circle, var(--color-soft-primary), transparent 64%);
+  animation: sensai-glow 2.4s ease-in-out infinite;
+}
+
+.sensai-avatar__head {
+  position: absolute;
+  top: 1.6rem;
+  width: 6.2rem;
+  height: 5.4rem;
+  border-radius: 42% 42% 32% 32%;
+  background: linear-gradient(145deg, #75a5ff, #315bd8);
+  box-shadow: inset 0 -0.6rem 0 rgb(0 0 0 / 14%);
+}
+
+.sensai-avatar__headband {
+  position: absolute;
+  top: 0.9rem;
+  z-index: 2;
+  padding: 0.2rem 0.7rem;
+  border: 0.1rem solid color-mix(in srgb, var(--color-primary) 70%, #ffffff);
+  border-radius: $radius-full;
+  background: color-mix(in srgb, var(--color-surface) 84%, transparent);
+  color: var(--color-primary);
+  font-size: 1rem;
+  font-weight: $fw-bold;
+  letter-spacing: 0.08em;
+}
+
+.sensai-avatar__screen {
+  position: absolute;
+  inset: 1.35rem 1rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 0.18rem solid color-mix(in srgb, var(--color-primary) 60%, #9ec2ff);
+  border-radius: $radius-md;
+  background: #10243a;
+  box-shadow: 0 0 1.6rem color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
+
+.sensai-avatar__eye {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: #aeeaff;
+  animation: sensai-blink 4s infinite;
+}
+
+.sensai-avatar__mouth {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.7rem;
+  width: 1rem;
+  height: 0.25rem;
+  border-radius: $radius-full;
+  background: #aeeaff;
+}
+
+.sensai-avatar__scarf {
+  position: absolute;
+  top: 5.9rem;
+  width: 5.6rem;
+  height: 1.3rem;
+  border-radius: $radius-full;
+  background: var(--color-primary);
+  transform: rotate(-4deg);
+  animation: sensai-scarf 2.8s ease-in-out infinite;
+}
+
+.sensai-avatar__body {
+  position: absolute;
+  bottom: 0.8rem;
+  width: 4.8rem;
+  height: 3.3rem;
+  border-radius: 1.8rem 1.8rem 1rem 1rem;
+  background: linear-gradient(145deg, #5f8fff, #254fc4);
+}
+
+.sensai-avatar__badge {
+  position: absolute;
+  inset: 1rem 1.4rem;
+  border-radius: $radius-full;
+  background: color-mix(in srgb, var(--color-primary) 78%, #ffffff);
+}
+
+.sensai-avatar--thinking .sensai-avatar__screen {
+  animation: sensai-thinking 0.8s ease-in-out infinite;
+}
+
+.sensai-avatar--speaking .sensai-avatar__mouth {
+  animation: sensai-speaking 0.24s ease-in-out infinite;
+}
+
+.sensai-chat {
+  display: grid;
+  gap: $space-lg;
+}
+
+.sensai-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-sm;
+}
+
+.sensai-suggestion {
+  min-height: 3.4rem;
+  padding: 0.6rem 1rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-full;
+  background: var(--color-elevated);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: $fw-semibold;
+  transition:
+    border-color $transition,
+    color $transition,
+    background-color $transition,
+    transform $transition;
+}
+
+.sensai-suggestion:hover,
+.sensai-suggestion:focus-visible {
+  border-color: var(--color-primary);
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  outline: none;
+  transform: translateY(-0.1rem);
+}
+
+.sensai-chat__messages {
+  max-height: 38rem;
+  overflow: auto;
+}
+
+@keyframes sensai-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-0.6rem);
+  }
+}
+
+@keyframes sensai-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes sensai-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  95% {
+    transform: scaleY(0.15);
+  }
+}
+
+@keyframes sensai-scarf {
+  0%,
+  100% {
+    transform: rotate(-4deg) translateX(0);
+  }
+
+  50% {
+    transform: rotate(-1deg) translateX(0.25rem);
+  }
+}
+
+@keyframes sensai-thinking {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-0.25rem);
+  }
+}
+
+@keyframes sensai-speaking {
+  0%,
+  100% {
+    width: 1rem;
+  }
+
+  50% {
+    width: 1.6rem;
+  }
+}
+
+@include media(mobile) {
+  .sensai-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .sensai-avatar {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .sensai-chat__form {
+    grid-template-columns: 1fr;
+  }
+}
+
