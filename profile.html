@@ -450,6 +450,7 @@
               <div>
                 <p class="card__eyebrow">Personal details</p>
                 <h2 class="card__title" id="profile-card-title">Edit Profile</h2>
+                <p class="card__description">Member since <span class="js-profile-member-since">--</span></p>
               </div>
               <div class="profile-avatar-block">
                 <div class="profile-avatar" id="profile-avatar-preview" aria-live="polite">
@@ -508,7 +509,7 @@
 
               <div class="field">
                 <label for="profile-email" class="field__label">Email</label>
-                <input id="profile-email" name="email" class="input" type="email" value="mariam@example.com" required />
+                <input id="profile-email" name="email" class="input" type="email" value="mariam@example.com" readonly />
                 <p class="form-error" id="profile-email-error" data-error-for="profile-email" hidden></p>
               </div>
 
@@ -751,8 +752,7 @@ Building a vanilla JavaScript CRM for the 10X course project.</textarea
         </header>
         <div class="modal__body">
           <p>
-            This will clear local demo data for users, session, clients, and theme when the JavaScript reset is
-            implemented.
+            This will reset only the CRM clients database from the API. Your account, session, password, and theme will stay unchanged.
           </p>
         </div>
         <footer class="modal__footer">
