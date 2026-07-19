@@ -478,29 +478,29 @@
             <article class="stats-card" data-stat="clients">
               <img src="./assets/icons/users.svg" alt="" class="stats-card__icon" />
               <p class="stats-card__label">Total Clients</p>
-              <strong class="stats-card__value" id="stats-total">128</strong>
-              <span class="stats-card__trend">12 new this week</span>
+              <strong class="stats-card__value" id="stats-total" data-dashboard-metric="totalClients">128</strong>
+              <span class="stats-card__trend" data-dashboard-trend="totalClients">12 new this week</span>
             </article>
 
             <article class="stats-card" data-stat="active">
               <img src="./assets/icons/folder.svg" alt="" class="stats-card__icon" />
               <p class="stats-card__label">Active Deals</p>
-              <strong class="stats-card__value" id="stats-active">42</strong>
-              <span class="stats-card__trend">8 need follow-up</span>
+              <strong class="stats-card__value" id="stats-active" data-dashboard-metric="activeDeals">42</strong>
+              <span class="stats-card__trend" data-dashboard-trend="activeDeals">8 need follow-up</span>
             </article>
 
             <article class="stats-card" data-stat="revenue">
               <img src="./assets/icons/statistics.svg" alt="" class="stats-card__icon" />
               <p class="stats-card__label">Won Revenue</p>
-              <strong class="stats-card__value" id="stats-revenue">$24,500</strong>
-              <span class="stats-card__trend">18 closed deals</span>
+              <strong class="stats-card__value" id="stats-revenue" data-dashboard-metric="wonRevenue">$24,500</strong>
+              <span class="stats-card__trend" data-dashboard-trend="wonRevenue">18 closed deals</span>
             </article>
 
             <article class="stats-card" data-stat="pending">
               <img src="./assets/icons/clock.svg" alt="" class="stats-card__icon" />
               <p class="stats-card__label">Pending Tasks</p>
-              <strong class="stats-card__value" id="stats-pending">7</strong>
-              <span class="stats-card__trend">3 due today</span>
+              <strong class="stats-card__value" id="stats-pending" data-dashboard-metric="pendingTasks">7</strong>
+              <span class="stats-card__trend" data-dashboard-trend="pendingTasks">3 due today</span>
             </article>
           </section>
 
@@ -633,8 +633,8 @@
                 class="dashboard-panel-card__icon"
               />
               <span class="dashboard-panel-card__label">Monthly Target</span>
-              <strong class="dashboard-panel-card__value">$32,000</strong>
-              <p class="dashboard-panel-card__text">76% of target is already covered by active and won deals.</p>
+              <strong class="dashboard-panel-card__value" data-dashboard-metric="monthlyTarget">$32,000</strong>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="monthlyTarget">76% of target is already covered by active and won deals.</p>
             </article>
             <article class="dashboard-panel-card">
               <img
@@ -645,8 +645,8 @@
                 class="dashboard-panel-card__icon"
               />
               <span class="dashboard-panel-card__label">Hot Leads</span>
-              <strong class="dashboard-panel-card__value">14</strong>
-              <p class="dashboard-panel-card__text">Leads with recent activity and high projected value.</p>
+              <strong class="dashboard-panel-card__value" data-dashboard-metric="hotLeads">14</strong>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="hotLeads">Leads with recent activity and high projected value.</p>
             </article>
             <article class="dashboard-panel-card">
               <img
@@ -657,8 +657,8 @@
                 class="dashboard-panel-card__icon"
               />
               <span class="dashboard-panel-card__label">Follow-ups</span>
-              <strong class="dashboard-panel-card__value">7</strong>
-              <p class="dashboard-panel-card__text">Tasks that need attention today or tomorrow.</p>
+              <strong class="dashboard-panel-card__value" data-dashboard-metric="followUps">7</strong>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="followUps">Tasks that need attention today or tomorrow.</p>
             </article>
           </div>
 
@@ -666,7 +666,7 @@
             <header class="card__header">
               <h3 class="card__title">Sales Focus</h3>
             </header>
-            <div class="card__body dashboard-list">
+            <div class="card__body dashboard-list" id="sales-focus-list" data-render-target="sales-focus">
               <div class="dashboard-list__item">
                 <span class="status-badge status-badge--lead">Lead</span>
                 <strong>Alpha Group</strong>
@@ -710,8 +710,8 @@
                 class="dashboard-panel-card__icon"
               />
               <span class="dashboard-panel-card__label">Pipeline Health</span>
-              <strong class="dashboard-panel-card__value">96%</strong>
-              <p class="dashboard-panel-card__text">Balanced pipeline across lead, contacted, and won stages.</p>
+              <strong class="dashboard-panel-card__value" data-dashboard-metric="pipelineHealth">96%</strong>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="pipelineHealth">Balanced pipeline across lead, contacted, and won stages.</p>
             </article>
             <article class="dashboard-panel-card">
               <img
@@ -722,8 +722,8 @@
                 class="dashboard-panel-card__icon"
               />
               <span class="dashboard-panel-card__label">Conversion</span>
-              <strong class="dashboard-panel-card__value">38%</strong>
-              <p class="dashboard-panel-card__text">Demo conversion placeholder for the future client data module.</p>
+              <strong class="dashboard-panel-card__value" data-dashboard-metric="conversionRate">38%</strong>
+              <p class="dashboard-panel-card__text" data-dashboard-trend="conversionRate">Demo conversion placeholder for the future client data module.</p>
             </article>
           </div>
           <section class="reports-visual-grid" aria-label="Report charts">

@@ -154,15 +154,27 @@
 
     const type = canvas.dataset.chartType;
     const colors = ["#ff6b1a", "#4c8fea", "#55b975", "#ee5c4c"];
-    const values = type === "line" ? [18, 24, 21, 30, 38, 44] : type === "pie" ? [18, 7, 5] : [48, 31, 18, 7];
-    const labels = type === "line" ? ["Jan", "Feb", "Mar", "Apr", "May", "Jun"] : type === "pie" ? ["Won", "Lost", "Pending"] : ["Lead", "Contacted", "Won", "Lost"];
-    const max = Math.max(...values);
+    const metrics = window.crmDashboardData?.getMetrics?.();
+    const chartData = metrics?.chartData || {};
+    const values =
+      type === "line"
+        ? chartData.monthlyWonValues || [18, 24, 21, 30, 38, 44]
+        : type === "pie"
+          ? chartData.outcomeValues || [18, 7, 5]
+          : chartData.stageMix || [48, 31, 18, 7];
+    const labels =
+      type === "line"
+        ? chartData.monthlyWonLabels || ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+        : type === "pie"
+          ? chartData.outcomeLabels || ["Won", "Lost", "Active"]
+          : chartData.stageLabels || ["Lead", "Contacted", "Won", "Lost"];
+    const max = Math.max(...values, 1);
 
     context.font = "12px Inter, Arial, sans-serif";
     context.fillStyle = getComputedStyle(document.body).getPropertyValue("--color-text-muted") || "#8ea0b8";
 
     if (type === "pie") {
-      const total = values.reduce((sum, value) => sum + value, 0);
+      const total = values.reduce((sum, value) => sum + value, 0) || 1;
       let start = -Math.PI / 2;
       values.forEach((value, index) => {
         const slice = (value / total) * Math.PI * 2 * progress;
@@ -230,6 +242,7 @@
   scheduleCharts();
   window.addEventListener("resize", scheduleCharts);
   window.addEventListener("crm:themechange", scheduleCharts);
+  window.addEventListener("crm:dashboarddata:update", scheduleCharts);
   window.addEventListener("hashchange", scheduleCharts);
   document.addEventListener("click", (event) => {
     if (event.target.closest('[data-dashboard-section-link="reports"]')) {

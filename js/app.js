@@ -7,6 +7,7 @@ import "./ui/theme.js";
 import "./ui/toast.js";
 import "./ui/pageTransition.js";
 import "./ui/liveHeader.js";
+import "./ui/liveClockModal.js";
 import "./ui/destructiveConfirm.js";
 import "./ui/iconSelect.js";
 import "./ui/notifications.js";

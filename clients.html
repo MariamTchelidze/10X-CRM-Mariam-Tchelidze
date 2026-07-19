@@ -711,6 +711,15 @@
               <dt>Status</dt>
               <dd id="details-status">
                 <span class="status-badge" data-details-status>Lead</span>
+                <form class="client-status-editor js-client-status-form" aria-label="Change client status">
+                  <select class="input select-field js-client-status-select" aria-label="Client status">
+                    <option value="lead">Lead</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="won">Won</option>
+                    <option value="lost">Lost</option>
+                  </select>
+                  <button class="btn btn--secondary" type="submit">Update</button>
+                </form>
               </dd>
             </div>
             <div>
@@ -771,8 +780,9 @@
 
           <div class="reminder-panel">
             <label for="client-reminder" class="field__label">Reminder</label>
-            <input id="client-reminder" class="input" type="datetime-local" />
+            <input id="client-reminder" class="input js-client-reminder-input" type="datetime-local" />
             <button class="btn btn--ghost js-set-reminder" type="button">Set Reminder</button>
+            <p class="reminder-panel__status js-client-reminder-status" aria-live="polite"></p>
           </div>
 
           <section class="client-notes" aria-labelledby="client-notes-title">

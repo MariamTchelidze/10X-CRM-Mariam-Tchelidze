@@ -285,6 +285,18 @@
   font-weight: $fw-semibold;
 }
 
+.client-status-editor {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) auto;
+  gap: $space-sm;
+  margin-top: $space-md;
+}
+
+.client-status-editor .btn {
+  min-height: 3.8rem;
+  padding-inline: 1.2rem;
+}
+
 .client-details dd,
 .client-details__company,
 .client-note-card__text,
@@ -316,6 +328,23 @@
 
 .client-details .reminder-panel {
   gap: $space-md;
+}
+
+.reminder-panel__status {
+  color: var(--color-text-muted);
+  font-size: 1.3rem;
+}
+
+.reminder-panel__status[data-state="scheduled"] {
+  color: var(--color-blue);
+}
+
+.reminder-panel__status[data-state="sent"] {
+  color: var(--color-success);
+}
+
+.reminder-panel__status[data-state="error"] {
+  color: var(--color-danger);
 }
 
 .client-notes {
@@ -529,6 +558,7 @@
   }
 
   .note-form__controls,
+  .client-status-editor,
   .client-note-card__header {
     grid-template-columns: 1fr;
   }

@@ -16,7 +16,7 @@
     };
   };
 
-  const validateClient = (form, client, clients) => {
+  const validateClient = (form, client, clients, ignoredClientId = null) => {
     const validation = window.crmValidation;
     let isValid = true;
 
@@ -30,7 +30,11 @@
     if (!validation.emailIsValid(client.email)) {
       validation.setFieldError(form.querySelector("#client-email"), "Please enter a valid email address");
       isValid = false;
-    } else if (clients.some((item) => item.email.toLowerCase() === client.email)) {
+    } else if (
+      clients.some((item) =>
+        item.email.toLowerCase() === client.email && String(item.id) !== String(ignoredClientId),
+      )
+    ) {
       validation.setFieldError(form.querySelector("#client-email"), "A client with this email already exists");
       isValid = false;
     }

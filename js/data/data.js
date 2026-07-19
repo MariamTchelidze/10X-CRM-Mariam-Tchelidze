@@ -64,6 +64,25 @@
     return response.json();
   };
 
+  const updateClientRequest = async (clientId, client) => {
+    const response = await fetch(`${API_URL}/${clientId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        firstName: client.name,
+        email: client.email,
+        phone: client.phone,
+        company: { name: client.company },
+      }),
+    });
+
+    if (!response.ok && response.status !== 404) {
+      throw new Error("Client could not be updated.");
+    }
+
+    return response.status === 404 ? {} : response.json();
+  };
+
   const deleteClientRequest = async (clientId) => {
     const response = await fetch(`${API_URL}/${clientId}`, { method: "DELETE" });
 
@@ -75,6 +94,7 @@
   window.crmData = {
     fetchInitialClients,
     postClient,
+    updateClientRequest,
     deleteClientRequest,
     getInitials,
     formatStatus,

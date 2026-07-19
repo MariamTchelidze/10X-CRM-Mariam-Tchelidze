@@ -20,6 +20,11 @@ function initClients() {
   const error = document.getElementById("clients-error");
   const empty = document.getElementById("clients-empty");
   const form = document.querySelector(".js-client-form");
+  const openClientModalButton = document.querySelector(".js-open-client-modal");
+  const clientModalTitle = document.getElementById("client-modal-title");
+  const clientModalDescription = document.getElementById("client-modal-description");
+  const saveClientButton = document.querySelector(".js-save-client");
+  const clientNotesField = document.getElementById("client-notes")?.closest(".field");
   const retryButton = document.querySelector(".js-retry-clients");
   const searchInput = document.querySelector(".js-client-search");
   const sortSelect = document.querySelector(".js-client-sort");
@@ -40,13 +45,19 @@ function initClients() {
   const noteDeleteModal = document.getElementById("delete-note-modal");
   const noteDeleteMessage = document.querySelector(".js-delete-note-message");
   const confirmDeleteNoteButton = document.querySelector(".js-confirm-delete-note");
+  const reminderInput = document.querySelector(".js-client-reminder-input");
+  const setReminderButton = document.querySelector(".js-set-reminder");
+  const reminderStatus = document.querySelector(".js-client-reminder-status");
+  const clientStatusForm = document.querySelector(".js-client-status-form");
+  const clientStatusSelect = document.querySelector(".js-client-status-select");
 
   if (!list) return;
 
-  let clients = storage.read(constants.CLIENTS_KEY, []);
+  let clients = [];
   let activeStatus = "all";
   let pendingDeleteId = null;
   let pendingNoteDeleteId = null;
+  let editingClientId = null;
   const TASKS_KEY = "crm_tasks";
 
   const moneyFormatter = new Intl.NumberFormat("en-US", {
@@ -75,6 +86,56 @@ function initClients() {
     { value: "declined", label: "Declined" },
     { value: "processed", label: "Processed" },
   ];
+
+  const CLIENT_STATUSES = ["lead", "contacted", "won", "lost"];
+
+  const normalizeNote = (note = {}, index = 0) => {
+    const fallbackDate = note.date || note.createdAt || new Date().toLocaleString();
+
+    return {
+      ...note,
+      id: note.id || createId(`note-${index}`),
+      text: String(note.text || note.message || "").trim(),
+      author: note.author || "CRM User",
+      date: fallbackDate,
+      status: NOTE_STATUSES.some((status) => status.value === note.status) ? note.status : "",
+      taskId: note.taskId || "",
+      taskTitle: note.taskTitle || "",
+    };
+  };
+
+  const normalizeClient = (client = {}, index = 0) => {
+    const id = client.id || createId(`client-${index}`);
+    const status = CLIENT_STATUSES.includes(client.status) ? client.status : "lead";
+    const notes = Array.isArray(client.notes)
+      ? client.notes.map(normalizeNote).filter((note) => note.text)
+      : [];
+    const dealValue = Number(client.dealValue ?? client.value ?? 0);
+
+    return {
+      ...client,
+      id,
+      name: String(client.name || "Unnamed Client").trim(),
+      company: String(client.company || "No company").trim(),
+      email: String(client.email || "").trim().toLowerCase(),
+      phone: String(client.phone || "").trim(),
+      status,
+      dealValue: Number.isFinite(dealValue) ? dealValue : 0,
+      notes,
+      createdAt: client.createdAt || new Date().toISOString(),
+      reminderAt: client.reminderAt || "",
+      reminderNotified: Boolean(client.reminderNotified),
+    };
+  };
+
+  const normalizeClients = (items = []) => {
+    return (Array.isArray(items) ? items : []).map(normalizeClient);
+  };
+
+  const setClients = (items, shouldSave = true) => {
+    clients = normalizeClients(items);
+    if (shouldSave) saveClients();
+  };
 
   const setDetailText = (selector, value) => {
     const element = detailsModal?.querySelector(selector);
@@ -146,6 +207,50 @@ function initClients() {
   };
 
   const getNoteCountLabel = (count) => `${count} ${count === 1 ? "note" : "notes"}`;
+
+  const formatReminderDate = (value) => {
+    if (!value) return "";
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+
+    return date.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const getDateTimeLocalValue = (value) => {
+    if (!value) return "";
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+
+    const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return offsetDate.toISOString().slice(0, 16);
+  };
+
+  const renderReminderState = (client) => {
+    if (!reminderInput || !reminderStatus) return;
+
+    reminderInput.value = getDateTimeLocalValue(client?.reminderAt);
+
+    if (!client?.reminderAt) {
+      reminderStatus.textContent = "No reminder set for this client.";
+      reminderStatus.dataset.state = "empty";
+      return;
+    }
+
+    const reminderTime = new Date(client.reminderAt).getTime();
+    const isDue = reminderTime <= Date.now();
+
+    reminderStatus.textContent = client.reminderNotified || isDue
+      ? `Reminder sent: follow up with ${client.name}.`
+      : `Reminder set for ${formatReminderDate(client.reminderAt)}.`;
+    reminderStatus.dataset.state = client.reminderNotified || isDue ? "sent" : "scheduled";
+  };
 
   const getNoteById = (clientId, noteId) => {
     const client = getClientById(clientId);
@@ -293,7 +398,10 @@ function initClients() {
     setDetailText("[data-details-note-count-inline]", getNoteCountLabel(notes.length));
     renderClientNotes(notes);
     renderTaskOptions();
+    renderReminderState(client);
     if (noteError) noteError.hidden = true;
+
+    if (clientStatusSelect) clientStatusSelect.value = status;
 
     if (statusBadge) {
       statusBadge.textContent = data.formatStatus(status);
@@ -326,6 +434,8 @@ function initClients() {
   const saveClients = () => {
     storage.write(constants.CLIENTS_KEY, clients);
   };
+
+  setClients(storage.read(constants.CLIENTS_KEY, []));
 
   const updateSummary = () => {
     getSummaryElement("clients-count-total").textContent = clients.length;
@@ -376,23 +486,103 @@ function initClients() {
     updateSummary();
   };
 
+  const triggerClientReminder = (client) => {
+    if (!client || client.reminderNotified || !client.reminderAt) return;
+
+    window.crmNotifications?.add(`Follow up: ${client.name}`);
+    window.crmToast?.show(`Reminder: follow up with ${client.name}.`, "info");
+
+    updateClient(client.id, (item) => ({
+      ...item,
+      reminderNotified: true,
+    }));
+
+    if (detailsContent?.dataset.activeClientId === String(client.id)) {
+      renderReminderState(getClientById(client.id));
+    }
+  };
+
+  const checkClientReminders = () => {
+    const now = Date.now();
+
+    clients
+      .filter((client) => client.reminderAt && !client.reminderNotified)
+      .forEach((client) => {
+        const reminderTime = new Date(client.reminderAt).getTime();
+
+        if (!Number.isNaN(reminderTime) && reminderTime <= now) {
+          triggerClientReminder(client);
+        }
+      });
+  };
+
   const loadClients = async () => {
     if (clients.length) {
       renderClients();
+      checkClientReminders();
       return;
     }
 
     setLoading(true);
 
     try {
-      clients = await data.fetchInitialClients();
-      saveClients();
+      setClients(await data.fetchInitialClients());
       renderClients();
+      checkClientReminders();
       setLoading(false);
     } catch (error) {
       setError();
       window.crmToast?.show("Could not load clients. Check your connection and try again.", "error");
     }
+  };
+
+  const fillClientForm = (client) => {
+    if (!form || !client) return;
+
+    form.elements.name.value = client.name || "";
+    form.elements.company.value = client.company || "";
+    form.elements.email.value = client.email || "";
+    form.elements.phone.value = client.phone || "";
+    form.elements.status.value = client.status || "lead";
+    form.elements.value.value = Number(client.dealValue) || "";
+    form.elements.notes.value = "";
+    form.elements.status.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+
+  const setClientFormMode = (mode, client = null) => {
+    if (!form) return;
+
+    window.crmValidation?.clearFormErrors(form);
+    editingClientId = mode === "edit" ? String(client?.id || "") : null;
+
+    if (mode === "edit") {
+      fillClientForm(client);
+      if (clientModalTitle) clientModalTitle.textContent = "Edit Client";
+      if (clientModalDescription) {
+        clientModalDescription.textContent = "Update the selected client's main CRM details. Notes stay managed inside client details.";
+      }
+      if (saveClientButton) saveClientButton.textContent = "Save Changes";
+      if (clientNotesField) clientNotesField.hidden = true;
+      return;
+    }
+
+    form.reset();
+    form.elements.status.dispatchEvent(new Event("change", { bubbles: true }));
+    if (clientModalTitle) clientModalTitle.textContent = "Add Client";
+    if (clientModalDescription) {
+      clientModalDescription.textContent = "Add the main client details now. Notes can be added here or managed later from client details.";
+    }
+    if (saveClientButton) saveClientButton.textContent = "Save Client";
+    if (clientNotesField) clientNotesField.hidden = false;
+  };
+
+  const openEditClientModal = (clientId) => {
+    const client = getClientById(clientId);
+
+    if (!client) return;
+
+    setClientFormMode("edit", client);
+    openClientModalButton?.click();
   };
 
   const closeClientModal = () => {
@@ -431,20 +621,58 @@ function initClients() {
 
     const draft = formHelpers.getFormClient(form);
 
-    if (!formHelpers.validateClient(form, draft, clients)) return;
+    if (!formHelpers.validateClient(form, draft, clients, editingClientId)) return;
+
+    if (editingClientId) {
+      try {
+        await data.updateClientRequest?.(editingClientId, draft);
+        updateClient(editingClientId, (client) => ({
+          ...client,
+          name: draft.name,
+          company: draft.company,
+          email: draft.email,
+          phone: draft.phone,
+          status: draft.status,
+          dealValue: draft.dealValue,
+        }));
+
+        const updatedClient = getClientById(editingClientId);
+        if (detailsContent?.dataset.activeClientId === String(editingClientId)) {
+          renderClientDetails(updatedClient);
+        }
+
+        renderClients();
+        setClientFormMode("add");
+        closeClientModal();
+        window.crmToast?.show("Client updated successfully.", "success");
+      } catch (error) {
+        window.crmToast?.show("Client could not be updated.", "error");
+      }
+
+      return;
+    }
 
     try {
       const apiClient = await data.postClient(draft);
       const client = {
         ...draft,
         id: apiClient.id || window.crypto?.randomUUID?.() || Date.now(),
+        notes: draft.notes.map((note) => ({
+          id: createId("note"),
+          text: note.text,
+          author: getCurrentUserName(),
+          date: note.date || new Date().toLocaleString(),
+          status: "",
+          taskId: "",
+          taskTitle: "",
+        })),
         createdAt: new Date().toISOString(),
       };
 
       clients.unshift(client);
       saveClients();
       renderClients();
-      form.reset();
+      setClientFormMode("add");
       closeClientModal();
       window.crmToast?.show("Client added successfully.", "success");
     } catch (error) {
@@ -458,6 +686,11 @@ function initClients() {
     const card = event.target.closest(".client-card");
 
     if (!card) return;
+
+    if (actionButton?.dataset.clientAction === "edit") {
+      openEditClientModal(card.dataset.clientId);
+      return;
+    }
 
     if (deleteButton) {
       pendingDeleteId = card.dataset.clientId || null;
@@ -554,6 +787,58 @@ function initClients() {
     renderClientDetails(updatedClient);
     renderClients();
     window.crmToast?.show("Client note added.", "success");
+  });
+
+  clientStatusForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const activeClientId = detailsContent?.dataset.activeClientId;
+    const nextStatus = clientStatusSelect?.value || "lead";
+
+    if (!activeClientId) return;
+
+    updateClient(activeClientId, (client) => ({
+      ...client,
+      status: nextStatus,
+    }));
+
+    const updatedClient = getClientById(activeClientId);
+    renderClientDetails(updatedClient);
+    renderClients();
+    window.crmToast?.show(`Client status changed to ${data.formatStatus(nextStatus)}.`, "success");
+  });
+
+  setReminderButton?.addEventListener("click", () => {
+    const activeClientId = detailsContent?.dataset.activeClientId;
+    const selectedValue = reminderInput?.value || "";
+    const reminderDate = new Date(selectedValue);
+
+    if (!activeClientId || !reminderInput || !reminderStatus) return;
+
+    if (!selectedValue || Number.isNaN(reminderDate.getTime())) {
+      reminderStatus.textContent = "Please choose a valid reminder date and time.";
+      reminderStatus.dataset.state = "error";
+      window.crmToast?.show("Please choose a valid reminder date and time.", "error");
+      return;
+    }
+
+    if (reminderDate.getTime() <= Date.now()) {
+      reminderStatus.textContent = "Reminder time must be in the future.";
+      reminderStatus.dataset.state = "error";
+      window.crmToast?.show("Reminder time must be in the future.", "error");
+      return;
+    }
+
+    updateClient(activeClientId, (client) => ({
+      ...client,
+      reminderAt: reminderDate.toISOString(),
+      reminderNotified: false,
+    }));
+
+    const updatedClient = getClientById(activeClientId);
+    renderReminderState(updatedClient);
+    renderClients();
+    window.crmToast?.show(`Reminder set for ${formatReminderDate(updatedClient.reminderAt)}.`, "success");
   });
 
   noteTaskSelect?.addEventListener("change", toggleNewTaskField);
@@ -676,6 +961,14 @@ function initClients() {
     });
   });
 
+  openClientModalButton?.addEventListener("click", () => {
+    if (!editingClientId) setClientFormMode("add");
+  });
+
+  document.querySelectorAll("#client-modal [data-modal-close]").forEach((button) => {
+    button.addEventListener("click", () => setClientFormMode("add"));
+  });
+
   retryButton?.addEventListener("click", loadClients);
   searchInput?.addEventListener("input", renderClients);
   sortSelect?.addEventListener("change", renderClients);
@@ -683,5 +976,6 @@ function initClients() {
     button.addEventListener("click", () => setActiveStatusFilter(button));
   });
 
+  window.setInterval(checkClientReminders, 30000);
   loadClients();
 }
