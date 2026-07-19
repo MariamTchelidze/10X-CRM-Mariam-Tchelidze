@@ -115,7 +115,7 @@ function initClients() {
       setLoading(false);
     } catch (error) {
       setError();
-      window.crmToast?.show("Clients could not be loaded.", "error");
+      window.crmToast?.show("Could not load clients. Check your connection and try again.", "error");
     }
   };
 
