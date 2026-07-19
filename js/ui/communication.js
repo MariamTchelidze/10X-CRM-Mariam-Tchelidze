@@ -313,15 +313,73 @@
     return { text: "I can help with clients, overdue tasks, pipeline summaries, countries/timezones, unread notifications, and today's CRM focus. You can also ask me to export all, lead, won, lost, or contacted clients as CSV." };
   };
 
-  let teamHistory = readHistory(TEAM_KEY, [
-    {
-      role: "team",
-      author: "Mariam",
-      recipient: "Sales Team",
-      text: "Please review today's hot leads.",
-      createdAt: new Date().toISOString(),
-    },
-  ]);
+  const DEFAULT_CONVERSATIONS = {
+    "Sales Team": [
+      {
+        role: "team",
+        author: "Mariam",
+        recipient: "Sales Team",
+        text: "Please review today's hot leads.",
+        createdAt: new Date().toISOString(),
+      },
+    ],
+    "Support Team": [],
+    "Account Manager": [],
+    "Mariam Tchelidze": [],
+  };
+
+  const getSelectedRecipient = () => recipientSelect?.value || "Sales Team";
+
+  const getAvailableRecipients = () => {
+    const options = Array.from(recipientSelect?.options || []);
+    const values = options.map((option) => option.value).filter(Boolean);
+    return values.length ? values : Object.keys(DEFAULT_CONVERSATIONS);
+  };
+
+  const normalizeConversationMap = (storedValue) => {
+    const conversations = Object.fromEntries(
+      Object.entries(DEFAULT_CONVERSATIONS).map(([recipient, history]) => [recipient, [...history]]),
+    );
+
+    if (Array.isArray(storedValue)) {
+      storedValue.forEach((message) => {
+        const recipient = message.recipient || "Sales Team";
+        conversations[recipient] = [...(conversations[recipient] || []), message];
+      });
+      return conversations;
+    }
+
+    if (storedValue && typeof storedValue === "object") {
+      Object.entries(storedValue).forEach(([recipient, history]) => {
+        conversations[recipient] = Array.isArray(history) ? history : [];
+      });
+    }
+
+    getAvailableRecipients().forEach((recipient) => {
+      conversations[recipient] = conversations[recipient] || [];
+    });
+
+    return conversations;
+  };
+
+  const readConversationMap = () => {
+    try {
+      return normalizeConversationMap(JSON.parse(localStorage.getItem(TEAM_KEY) || "null"));
+    } catch (error) {
+      return normalizeConversationMap(null);
+    }
+  };
+
+  const saveConversationMap = (conversations) => {
+    try {
+      localStorage.setItem(TEAM_KEY, JSON.stringify(conversations));
+    } catch (error) {
+      // Messenger keeps the active thread visible even if storage is unavailable.
+    }
+  };
+
+  let teamConversations = readConversationMap();
+  let activeRecipient = getSelectedRecipient();
   let aiHistory = readHistory(AI_KEY, readHistory(LEGACY_AI_KEY, [
     {
       role: "assistant",
@@ -331,30 +389,43 @@
     },
   ]));
 
-  renderMessages(teamMessages, teamHistory, "No team messages yet.");
+  const renderActiveConversation = () => {
+    const history = teamConversations[activeRecipient] || [];
+    renderMessages(teamMessages, history, `No messages with ${activeRecipient} yet.`);
+    if (teamInput) teamInput.placeholder = `Message ${activeRecipient}`;
+  };
+
+  renderActiveConversation();
   renderMessages(aiMessages, aiHistory, "No SensAI messages yet.");
   renderSuggestions();
+
+  recipientSelect?.addEventListener("change", () => {
+    activeRecipient = getSelectedRecipient();
+    teamConversations[activeRecipient] = teamConversations[activeRecipient] || [];
+    renderActiveConversation();
+  });
 
   teamForm?.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const text = teamInput.value.trim();
-    const recipient = recipientSelect?.value || "Sales Team";
+    const messageText = teamInput.value.trim();
+    const recipient = getSelectedRecipient();
 
-    if (!text) return;
+    if (!messageText) return;
 
-    teamHistory = [
-      ...teamHistory,
+    activeRecipient = recipient;
+    teamConversations[recipient] = [
+      ...(teamConversations[recipient] || []),
       {
         role: "user",
         author: "You",
         recipient,
-        text,
+        text: messageText,
         createdAt: new Date().toISOString(),
       },
     ];
-    saveHistory(TEAM_KEY, teamHistory);
-    renderMessages(teamMessages, teamHistory, "No team messages yet.");
+    saveConversationMap(teamConversations);
+    renderActiveConversation();
     teamInput.value = "";
     window.crmNotifications?.add(`New Messenger message sent to ${recipient}.`);
   });
