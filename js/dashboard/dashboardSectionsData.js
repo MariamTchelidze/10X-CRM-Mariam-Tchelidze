@@ -172,66 +172,217 @@
     updateThemeAssets(list);
   };
 
+  const getActivityConfig = (type) => {
+    const configs = {
+      client: {
+        source: "Clients",
+        section: "Clients page > Client card",
+        badge: "client",
+        actionLabel: "Open Clients",
+        actionHref: "./clients.html",
+      },
+      reminder: {
+        source: "Reminders",
+        section: "Clients page > Client details",
+        badge: "reminder",
+        actionLabel: "Open Clients",
+        actionHref: "./clients.html",
+      },
+      note: {
+        source: "Notes",
+        section: "Clients page > Client details modal",
+        badge: "note",
+        actionLabel: "Open Clients",
+        actionHref: "./clients.html",
+      },
+      task: {
+        source: "Tasks",
+        section: "Dashboard > Task Board",
+        badge: "task",
+        actionLabel: "Open Task Board",
+        actionHref: "./dashboard.html#tasks",
+      },
+      notification: {
+        source: "Notifications",
+        section: "Header > Notifications modal",
+        badge: "notification",
+        actionLabel: "Open Notifications",
+        actionHref: "./dashboard.html#activity",
+      },
+    };
+
+    return configs[type] || configs.client;
+  };
+
+  const createActivity = ({ type, icon, title, summary, status, relatedLabel, date, description, details = [], actionHref, actionLabel }) => {
+    const config = getActivityConfig(type);
+
+    return {
+      id: `activity-${type}-${date?.getTime?.() || Date.now()}-${Math.floor(Math.random() * 10000)}`,
+      type,
+      icon,
+      title,
+      summary,
+      status,
+      relatedLabel,
+      date,
+      source: config.source,
+      section: config.section,
+      badge: config.badge,
+      description,
+      details,
+      actionHref: actionHref || config.actionHref,
+      actionLabel: actionLabel || config.actionLabel,
+    };
+  };
+
   const createActivityItems = () => {
     const metrics = getMetrics();
     const notifications = getNotifications();
     const activities = [];
 
     metrics.clients.forEach((client) => {
-      activities.push({
-        type: "client",
-        icon: "users",
-        title: `${client.name || "Client"} is ${STATUS_LABELS[client.status]}.`,
-        text: `${client.company || "No company"} - ${moneyFormatter.format(client.dealValue)}`,
-        date: getClientDate(client),
-      });
+      activities.push(
+        createActivity({
+          type: "client",
+          icon: "users",
+          title: `${client.name || "Client"} moved through the client pipeline`,
+          summary: `${client.company || "No company"} - ${STATUS_LABELS[client.status]} - ${moneyFormatter.format(client.dealValue)}`,
+          status: STATUS_LABELS[client.status],
+          relatedLabel: client.name || "Client",
+          date: getClientDate(client),
+          description: "This activity is computed from the current client record stored in crm_clients.",
+          details: [
+            ["Company", client.company || "No company added"],
+            ["Deal value", moneyFormatter.format(client.dealValue)],
+            ["Current status", STATUS_LABELS[client.status]],
+          ],
+        }),
+      );
 
       if (client.reminderAt) {
-        activities.push({
-          type: "reminder",
-          icon: "calendar",
-          title: `Reminder set for ${client.name || "client"}.`,
-          text: client.reminderNotified ? "Reminder already sent." : "Reminder waiting for due time.",
-          date: new Date(client.reminderAt),
-        });
+        const reminderDate = new Date(client.reminderAt);
+        activities.push(
+          createActivity({
+            type: "reminder",
+            icon: "calendar",
+            title: `Reminder ${client.reminderNotified ? "completed" : "scheduled"} for ${client.name || "client"}`,
+            summary: client.reminderNotified ? "Reminder already sent." : "Reminder waiting for due time.",
+            status: client.reminderNotified ? "Sent" : "Scheduled",
+            relatedLabel: client.name || "Client",
+            date: reminderDate,
+            description: "This reminder comes from the client detail modal reminder block.",
+            details: [
+              ["Reminder time", formatDateTime(reminderDate)],
+              ["Notification state", client.reminderNotified ? "Already notified" : "Waiting"],
+              ["Client", client.name || "Unknown client"],
+            ],
+          }),
+        );
       }
 
       client.notes.forEach((note) => {
-        activities.push({
-          type: "note",
-          icon: "chat",
-          title: `${note.author || "User"} added a note for ${client.name || "client"}.`,
-          text: note.status ? `Status: ${note.status}` : String(note.text || "").slice(0, 90),
-          date: new Date(note.date || note.createdAt || client.createdAt),
-        });
+        const noteDate = new Date(note.date || note.createdAt || client.createdAt);
+        activities.push(
+          createActivity({
+            type: "note",
+            icon: "chat",
+            title: `${note.author || "User"} added a client note`,
+            summary: note.status ? `Status: ${note.status}` : String(note.text || "").slice(0, 90),
+            status: note.status || "No status",
+            relatedLabel: client.name || "Client",
+            date: noteDate,
+            description: String(note.text || "No note text added."),
+            details: [
+              ["Client", client.name || "Unknown client"],
+              ["Author", note.author || "Unknown author"],
+              ["Attached task", note.taskTitle || note.taskId || "No task attached"],
+            ],
+            actionHref: note.taskId ? "./dashboard.html#tasks" : "./clients.html",
+            actionLabel: note.taskId ? "Open Task Board" : "Open Clients",
+          }),
+        );
       });
     });
 
     metrics.tasks.forEach((task) => {
       if (task.deleted) return;
-      activities.push({
-        type: "task",
-        icon: task.status === "done" ? "check-symbol" : "calendar",
-        title: `${task.title || "Task"} - ${task.status || "todo"}.`,
-        text: task.client ? `Client: ${task.client}` : task.description || "Task activity",
-        date: new Date(task.updatedAt || task.createdAt || task.dueAt || Date.now()),
-      });
+      const taskDate = new Date(task.updatedAt || task.createdAt || task.dueAt || Date.now());
+      activities.push(
+        createActivity({
+          type: "task",
+          icon: task.status === "done" ? "check-symbol" : "calendar",
+          title: task.title || "Task activity",
+          summary: task.client ? `Client: ${task.client}` : task.description || "Task activity",
+          status: task.status || "todo",
+          relatedLabel: task.client || "No client",
+          date: taskDate,
+          description: task.description || "No task description added.",
+          details: [
+            ["Priority", task.priority || "No priority"],
+            ["Assignee", task.assignee || "Unassigned"],
+            ["Due date", task.dueAt || task.dueDate || "No due date"],
+          ],
+        }),
+      );
     });
 
     notifications.forEach((notification) => {
-      activities.push({
-        type: "notification",
-        icon: "notification",
-        title: notification.message || "Notification",
-        text: notification.status === "read" || notification.read ? "Read notification" : "Unread notification",
-        date: new Date(notification.createdAt || Date.now()),
-      });
+      const notificationDate = new Date(notification.createdAt || Date.now());
+      activities.push(
+        createActivity({
+          type: "notification",
+          icon: "notification",
+          title: notification.message || "Notification",
+          summary: notification.status === "read" || notification.read ? "Read notification" : "Unread notification",
+          status: notification.status || (notification.read ? "read" : "unread"),
+          relatedLabel: notification.taskId ? "Linked task" : "General update",
+          date: notificationDate,
+          description: "This item comes from the notification storage used by task and reminder events.",
+          details: [
+            ["Notification ID", notification.id || "No ID"],
+            ["Linked task", notification.taskId || "No linked task"],
+            ["Selected", notification.selected ? "Yes" : "No"],
+          ],
+          actionHref: notification.taskId ? "./dashboard.html#tasks" : "./dashboard.html#activity",
+          actionLabel: notification.taskId ? "Open Task Board" : "Stay In Activity",
+        }),
+      );
     });
 
     return activities
       .filter((item) => !Number.isNaN(item.date.getTime()))
       .sort((a, b) => b.date - a.date)
       .slice(0, 8);
+  };
+
+  const renderActivityDetails = (activity) => {
+    const details = [
+      ["Source", activity.source],
+      ["Page / Section", activity.section],
+      ["Related item", activity.relatedLabel],
+      ["Status", activity.status],
+      ...activity.details,
+    ];
+
+    return `
+      <div class="activity-card__details" hidden>
+        <p class="activity-card__description">${escapeHtml(activity.description)}</p>
+        <dl class="activity-card__meta-list">
+          ${details
+            .map(
+              ([label, value]) => `
+                <div class="activity-card__meta-item">
+                  <dt>${escapeHtml(label)}</dt>
+                  <dd>${escapeHtml(value)}</dd>
+                </div>
+              `,
+            )
+            .join("")}
+        </dl>
+        <a class="btn btn--ghost btn--sm activity-card__link" href="${escapeHtml(activity.actionHref)}">${escapeHtml(activity.actionLabel)}</a>
+      </div>
+    `;
   };
 
   const renderActivity = () => {
@@ -247,13 +398,24 @@
     list.innerHTML = activities
       .map(
         (activity) => `
-          <div class="activity-timeline__item" data-activity-type="${escapeHtml(activity.type)}">
-            ${getIcon(activity.icon)}
-            <div>
-              <strong>${escapeHtml(activity.title)}</strong>
-              <span>${escapeHtml(activity.text)} - ${formatDateTime(activity.date)}</span>
-            </div>
-          </div>
+          <article class="activity-card activity-card--${escapeHtml(activity.badge)}" data-activity-id="${escapeHtml(activity.id)}">
+            <button class="activity-card__summary js-activity-toggle" type="button" aria-expanded="false">
+              <span class="activity-card__icon">${getIcon(activity.icon)}</span>
+              <span class="activity-card__content">
+                <span class="activity-card__topline">
+                  <span class="activity-card__badge">${escapeHtml(activity.source)}</span>
+                  <strong>${escapeHtml(activity.title)}</strong>
+                </span>
+                <span class="activity-card__summary-text">${escapeHtml(activity.summary)}</span>
+              </span>
+              <span class="activity-card__side">
+                <time>${formatDateTime(activity.date)}</time>
+                <span class="activity-card__status">${escapeHtml(activity.status)}</span>
+                <span class="activity-card__chevron" aria-hidden="true"></span>
+              </span>
+            </button>
+            ${renderActivityDetails(activity)}
+          </article>
         `,
       )
       .join("");
@@ -340,6 +502,19 @@
   };
 
   document.addEventListener("click", (event) => {
+    const activityToggle = event.target.closest(".js-activity-toggle");
+
+    if (activityToggle) {
+      const card = activityToggle.closest(".activity-card");
+      const details = card?.querySelector(".activity-card__details");
+      const isOpen = activityToggle.getAttribute("aria-expanded") === "true";
+
+      activityToggle.setAttribute("aria-expanded", String(!isOpen));
+      card?.classList.toggle("is-open", !isOpen);
+      if (details) details.hidden = isOpen;
+      return;
+    }
+
     const button = event.target.closest(".js-toggle-favourite");
     if (!button) return;
     setFavourite(button.dataset.clientId, button.dataset.favouriteAction === "add");

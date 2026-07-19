@@ -4028,6 +4028,223 @@ body.is-auth-page-leaving-up .auth {
     grid-template-columns: 1fr;
   }
 }
+.activity-timeline {
+  gap: 1.2rem;
+}
+
+.activity-card {
+  overflow: hidden;
+  border: 0.1rem solid var(--color-border);
+  border-left: 0.4rem solid var(--color-primary);
+  border-radius: 0.8rem;
+  background: var(--color-elevated);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.activity-card:hover,
+.activity-card:focus-within {
+  border-color: color-mix(in srgb, var(--color-primary) 60%, var(--color-border));
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-0.1rem);
+}
+
+.activity-card--task {
+  border-left-color: var(--color-task-progress);
+}
+
+.activity-card--client {
+  border-left-color: var(--color-primary);
+}
+
+.activity-card--note {
+  border-left-color: var(--color-secondary);
+}
+
+.activity-card--reminder {
+  border-left-color: var(--color-info);
+}
+
+.activity-card--notification {
+  border-left-color: var(--color-danger);
+}
+
+.activity-card__summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  width: 100%;
+  gap: 1.2rem;
+  padding: 1.6rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.activity-card__summary:focus-visible {
+  outline: 0.2rem solid var(--color-primary);
+  outline-offset: -0.2rem;
+}
+
+.activity-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 0.8rem;
+  background: var(--color-soft-primary);
+}
+
+.activity-card__icon img {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.activity-card__content,
+.activity-card__side,
+.activity-card__details,
+.activity-card__meta-list {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.activity-card__topline {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.activity-card__topline strong {
+  color: var(--color-text);
+}
+
+.activity-card__badge,
+.activity-card__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 2.4rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.activity-card__badge {
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  text-transform: uppercase;
+}
+
+.activity-card__summary-text,
+.activity-card__side time,
+.activity-card__description,
+.activity-card__meta-item dt {
+  color: var(--color-text-muted);
+}
+
+.activity-card__side {
+  justify-items: end;
+  min-width: 15rem;
+  text-align: right;
+}
+
+.activity-card__status {
+  background: color-mix(in srgb, var(--color-border) 42%, transparent);
+  color: var(--color-text-secondary);
+}
+
+.activity-card__chevron {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-right: 0.2rem solid var(--color-text-muted);
+  border-bottom: 0.2rem solid var(--color-text-muted);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.activity-card.is-open .activity-card__chevron {
+  transform: rotate(225deg);
+}
+
+.activity-card__details {
+  padding: 0 1.6rem 1.6rem 7.4rem;
+  border-top: 0.1rem solid var(--color-divider);
+  background: color-mix(in srgb, var(--color-card) 72%, transparent);
+}
+
+.activity-card__details[hidden] {
+  display: none;
+}
+
+.activity-card__description {
+  padding-top: 1.2rem;
+}
+
+.activity-card__meta-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.activity-card__meta-item {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.8rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.4rem;
+  background: var(--color-card);
+}
+
+.activity-card__meta-item dt {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.activity-card__meta-item dd {
+  margin: 0;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.activity-card__link {
+  justify-self: start;
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 768px) {
+  .activity-card__summary {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .activity-card__side {
+    grid-column: 2;
+    justify-items: start;
+    min-width: 0;
+    text-align: left;
+  }
+  .activity-card__details {
+    padding-left: 1.6rem;
+  }
+}
+@media (max-width: 480px) {
+  .activity-card__summary {
+    grid-template-columns: 1fr;
+  }
+  .activity-card__icon {
+    width: 3.8rem;
+    height: 3.8rem;
+  }
+  .activity-card__side {
+    grid-column: auto;
+  }
+  .activity-card__meta-list {
+    grid-template-columns: 1fr;
+  }
+}
 /* --- abstract --- */
 .summary-card {
   display: grid;
