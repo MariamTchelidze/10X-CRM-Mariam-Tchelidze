@@ -667,21 +667,7 @@
               <h3 class="card__title">Sales Focus</h3>
             </header>
             <div class="card__body dashboard-list" id="sales-focus-list" data-render-target="sales-focus">
-              <div class="dashboard-list__item">
-                <span class="status-badge status-badge--lead">Lead</span>
-                <strong>Alpha Group</strong>
-                <span>Prepare product demo and pricing notes.</span>
-              </div>
-              <div class="dashboard-list__item">
-                <span class="status-badge status-badge--contacted">Contacted</span>
-                <strong>Nino Consulting</strong>
-                <span>Send proposal update after discovery call.</span>
-              </div>
-              <div class="dashboard-list__item">
-                <span class="status-badge status-badge--won">Won</span>
-                <strong>Blue Tech</strong>
-                <span>Move handoff notes into files after onboarding.</span>
-              </div>
+              <p class="task-empty">Sales focus will appear after client data is loaded.</p>
             </div>
           </article>
         </section>
@@ -768,29 +754,8 @@
             <header class="card__header">
               <h3 class="card__title">Saved Reports</h3>
             </header>
-            <div class="card__body dashboard-list">
-              <div class="dashboard-list__item">
-                <img
-                  src="./assets/icons/txt-doc.svg"
-                  data-theme-src-dark="./assets/icons/txt-doc.svg"
-                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
-                  alt=""
-                  class="dashboard-list__icon"
-                />
-                <strong>Weekly Client Status</strong>
-                <span>Lead, contacted, won, and lost totals.</span>
-              </div>
-              <div class="dashboard-list__item">
-                <img
-                  src="./assets/icons/txt-doc.svg"
-                  data-theme-src-dark="./assets/icons/txt-doc.svg"
-                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
-                  alt=""
-                  class="dashboard-list__icon"
-                />
-                <strong>Sales Target Overview</strong>
-                <span>Revenue and target progress summary.</span>
-              </div>
+            <div class="card__body dashboard-list js-saved-reports-list" data-render-target="saved-reports">
+              <p class="task-empty">Saved reports will be generated from current CRM data.</p>
             </div>
           </article>
         </section>
@@ -819,8 +784,8 @@
                 class="dashboard-panel-card__icon"
               />
               <span class="dashboard-panel-card__label">Pinned Clients</span>
-              <strong class="dashboard-panel-card__value">3</strong>
-              <p class="dashboard-panel-card__text">Important clients you want to reach quickly.</p>
+              <strong class="dashboard-panel-card__value" data-dashboard-section-metric="favouriteCount">0</strong>
+              <p class="dashboard-panel-card__text" data-dashboard-section-text="favouriteCount">Pin high-value clients from the list below.</p>
             </article>
           </div>
 
@@ -828,29 +793,8 @@
             <header class="card__header">
               <h3 class="card__title">Favourite Items</h3>
             </header>
-            <div class="card__body dashboard-list">
-              <div class="dashboard-list__item">
-                <img
-                  src="./assets/icons/star.svg"
-                  data-theme-src-dark="./assets/icons/star.svg"
-                  data-theme-src-light="./assets/icons/star-light-theme.svg"
-                  alt=""
-                  class="dashboard-list__icon"
-                />
-                <strong>Blue Tech</strong>
-                <span>Won client with onboarding follow-up.</span>
-              </div>
-              <div class="dashboard-list__item">
-                <img
-                  src="./assets/icons/star.svg"
-                  data-theme-src-dark="./assets/icons/star.svg"
-                  data-theme-src-light="./assets/icons/star-light-theme.svg"
-                  alt=""
-                  class="dashboard-list__icon"
-                />
-                <strong>Nino Consulting</strong>
-                <span>Contacted account waiting for proposal confirmation.</span>
-              </div>
+            <div class="card__body dashboard-list js-favourites-list" data-render-target="favourites">
+              <p class="task-empty">No favourites pinned yet.</p>
             </div>
           </article>
         </section>
@@ -873,46 +817,8 @@
             <header class="card__header">
               <h3 class="card__title">Recent Activity</h3>
             </header>
-            <div class="card__body activity-timeline">
-              <div class="activity-timeline__item">
-                <img
-                  src="./assets/icons/check-symbol.svg"
-                  data-theme-src-dark="./assets/icons/check-symbol.svg"
-                  data-theme-src-light="./assets/icons/check-symbol-light-theme.svg"
-                  alt=""
-                  class="activity-timeline__icon"
-                />
-                <div>
-                  <strong>Blue Tech moved to won.</strong>
-                  <span>Today, 09:20</span>
-                </div>
-              </div>
-              <div class="activity-timeline__item">
-                <img
-                  src="./assets/icons/chat.svg"
-                  data-theme-src-dark="./assets/icons/chat.svg"
-                  data-theme-src-light="./assets/icons/chat-light-theme.svg"
-                  alt=""
-                  class="activity-timeline__icon"
-                />
-                <div>
-                  <strong>Nino Consulting note added.</strong>
-                  <span>Yesterday, 17:45</span>
-                </div>
-              </div>
-              <div class="activity-timeline__item">
-                <img
-                  src="./assets/icons/calendar.svg"
-                  data-theme-src-dark="./assets/icons/calendar.svg"
-                  data-theme-src-light="./assets/icons/calendar-light-theme.svg"
-                  alt=""
-                  class="activity-timeline__icon"
-                />
-                <div>
-                  <strong>Alpha Group demo scheduled.</strong>
-                  <span>Yesterday, 12:10</span>
-                </div>
-              </div>
+            <div class="card__body activity-timeline js-activity-list" data-render-target="activity">
+              <p class="task-empty">No activity yet. Client updates, notes, reminders, tasks, and notifications will appear here.</p>
             </div>
           </article>
         </section>

@@ -33,6 +33,7 @@ import "./clients/clients.js";
 import "./dashboard/dashboard.js";
 import "./dashboard/sections.js";
 import "./dashboard/tasks.js";
+import "./dashboard/dashboardSectionsData.js";
 import "./dashboard/dashboardWidgets.js";
 
 import "./profile/profile.js";

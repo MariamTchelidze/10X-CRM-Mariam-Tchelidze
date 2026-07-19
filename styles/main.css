@@ -4006,6 +4006,28 @@ body.is-auth-page-leaving-up .auth {
     right: 1rem;
   }
 }
+.dashboard-list__item--with-action {
+  grid-template-columns: auto minmax(12rem, 0.45fr) minmax(0, 1fr) auto;
+}
+
+.dashboard-list__item--suggested {
+  border-style: dashed;
+}
+
+.dashboard-list__section-label {
+  margin: 0.4rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .dashboard-list__item--with-action {
+    grid-template-columns: 1fr;
+  }
+}
 /* --- abstract --- */
 .summary-card {
   display: grid;
