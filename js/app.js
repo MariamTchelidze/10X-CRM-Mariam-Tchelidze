@@ -12,6 +12,7 @@ import "./ui/destructiveConfirm.js";
 import "./ui/iconSelect.js";
 import "./ui/notifications.js";
 import "./ui/communication.js";
+import "./ui/phone.js";
 import "./components/passwordToggle.js";
 import "./components/pageSwap.js";
 

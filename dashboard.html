@@ -335,6 +335,22 @@
                   <button
                     class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
                     type="button"
+                    data-modal-target="#phone-modal"
+                    aria-haspopup="dialog"
+                    aria-controls="phone-modal"
+                  >
+                    <img
+                      src="./assets/icons/phone.svg"
+                      data-theme-src-dark="./assets/icons/phone.svg"
+                      data-theme-src-light="./assets/icons/phone-light-mode.svg"
+                      alt=""
+                      class="sidebar__icon"
+                    />
+                    <span>Phone</span>
+                  </button>
+                  <button
+                    class="sidebar__link sidebar__link--secondary sidebar-dropdown__link"
+                    type="button"
                     data-modal-target="#ai-chat-modal"
                     aria-haspopup="dialog"
                     aria-controls="ai-chat-modal"
@@ -1900,6 +1916,88 @@
           />
           <button class="btn btn--primary" type="submit">Send</button>
         </form>
+      </div>
+    </section>
+
+    <section
+      class="modal phone-modal"
+      id="phone-modal"
+      aria-labelledby="phone-title"
+      aria-hidden="true"
+      data-modal-initial-focus=".js-phone-key"
+      hidden
+    >
+      <div class="modal__dialog modal__dialog--phone" role="dialog" aria-modal="true">
+        <header class="modal__header phone-modal__header">
+          <div>
+            <p class="modal__eyebrow">Application phone</p>
+            <h2 class="modal__title" id="phone-title">10X CRM Phone</h2>
+            <p class="modal__description">Demo dialer is call-ready, but real calling is disabled from configuration.</p>
+          </div>
+          <button class="icon-btn js-close-modal" type="button" aria-label="Close phone" data-modal-close>
+            <img
+              src="./assets/icons/close.svg"
+              data-theme-src-dark="./assets/icons/close.svg"
+              data-theme-src-light="./assets/icons/close-light-theme.svg"
+              alt=""
+            />
+          </button>
+        </header>
+        <div class="modal__body phone-dialer js-phone-dialer">
+          <div class="phone-dialer__device">
+            <div class="phone-dialer__screen">
+              <img
+                class="phone-dialer__screen-icon"
+                src="./assets/icons/phone.svg"
+                data-theme-src-dark="./assets/icons/phone.svg"
+                data-theme-src-light="./assets/icons/phone-light-mode.svg"
+                alt=""
+              />
+              <output class="phone-dialer__number js-phone-display" aria-live="polite">Dial number</output>
+              <p class="phone-dialer__status js-phone-status">Choose a client or dial manually.</p>
+            </div>
+            <div class="phone-dialer__keys" aria-label="Phone keypad">
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="1">1</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="2">2</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="3">3</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="4">4</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="5">5</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="6">6</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="7">7</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="8">8</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="9">9</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="+">+</button>
+              <button class="phone-dialer__key js-phone-key" type="button" data-phone-key="0">0</button>
+              <button class="phone-dialer__key phone-dialer__key--backspace js-phone-delete" type="button" data-skip-delete-confirm aria-label="Delete last digit">
+                <img src="./assets/icons/Delete.svg" data-theme-src-dark="./assets/icons/Delete.svg" data-theme-src-light="./assets/icons/Delete-light-theme.svg" alt="" />
+              </button>
+            </div>
+            <div class="phone-dialer__actions">
+              <button class="btn btn--primary btn--full phone-dialer__action js-phone-call" type="button">
+                <img src="./assets/icons/phone.svg" data-theme-src-dark="./assets/icons/phone.svg" data-theme-src-light="./assets/icons/phone-light-mode.svg" alt="" />
+                Call
+              </button>
+            </div>
+          </div>
+          <aside class="phone-dialer__panel">
+            <section class="phone-dialer__queue" aria-labelledby="phone-queue-title">
+              <div class="phone-dialer__section-header">
+                <p class="modal__eyebrow">Call Queue</p>
+                <h3 class="phone-dialer__subtitle" id="phone-queue-title">Calls To Make</h3>
+              </div>
+              <div class="phone-dialer__queue-list js-phone-queue" aria-live="polite"></div>
+            </section>
+            <form class="phone-dialer__note-form js-phone-note-form">
+              <div class="phone-dialer__section-header">
+                <p class="modal__eyebrow">Call note</p>
+                <h3 class="phone-dialer__subtitle">Call Essentials</h3>
+              </div>
+              <label class="visually-hidden" for="phone-note">Call note</label>
+              <textarea class="input input--textarea js-phone-note" id="phone-note" rows="5" placeholder="Write important details from this call"></textarea>
+              <button class="btn btn--secondary btn--full" type="submit">Save Call Note</button>
+            </form>
+          </aside>
+        </div>
       </div>
     </section>
 

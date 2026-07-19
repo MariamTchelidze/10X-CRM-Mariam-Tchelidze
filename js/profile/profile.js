@@ -14,6 +14,10 @@ function initProfile() {
   const profileForm = document.querySelector(".js-profile-form");
   const passwordForm = document.querySelector(".js-password-form");
   const resetButton = document.querySelector(".js-confirm-reset");
+  const callNoteDeleteModal = document.querySelector(".js-call-note-delete-modal");
+  const callNoteDeleteConfirm = document.querySelector(".js-confirm-call-note-delete");
+  const callNoteDeleteCancelButtons = document.querySelectorAll(".js-cancel-call-note-delete");
+  let pendingCallNoteId = null;
 
   if (!constants || !storage || !validation || !passwordForm) return;
 
@@ -62,6 +66,58 @@ function initProfile() {
     });
   };
 
+  const escapeHtml = (value) =>
+    String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const renderCallHistory = () => {
+    const container = document.querySelector(".js-profile-call-history");
+    if (!container) return;
+
+    const notes = storage.read("crm_call_notes", []);
+
+    if (!notes.length) {
+      container.innerHTML = '<p class="profile-call-history__empty">No call notes saved yet.</p>';
+      return;
+    }
+
+    container.innerHTML = notes
+      .slice(0, 6)
+      .map(
+        (item) => `
+          <article class="profile-call-history__item">
+            <div class="profile-call-history__meta">
+              <div>
+                <strong>${escapeHtml(item.clientName || "Manual number")}</strong>
+                <span>${escapeHtml(item.company || item.phone || "No phone saved")}</span>
+              </div>
+              <button
+                class="icon-btn icon-btn--danger profile-call-history__delete js-delete-call-note"
+                type="button"
+                data-note-id="${escapeHtml(item.id)}"
+                data-skip-delete-confirm
+                aria-label="Delete call note"
+              >
+                <img
+                  src="./assets/icons/Delete.svg"
+                  data-theme-src-dark="./assets/icons/Delete.svg"
+                  data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                  alt=""
+                />
+              </button>
+            </div>
+            <p>${escapeHtml(item.note)}</p>
+            <time>${formatDate(item.createdAt)}</time>
+          </article>
+        `,
+      )
+      .join("");
+  };
+
   const updateProfileStats = () => {
     const clients = storage.read(constants.CLIENTS_KEY, []);
     const leads = clients.filter((client) => client.status === "lead").length;
@@ -97,7 +153,58 @@ function initProfile() {
 
     if (memberSinceElement) memberSinceElement.textContent = formatDate(currentUser.createdAt);
     updateProfileStats();
+    renderCallHistory();
   };
+
+  window.addEventListener("crm:call-note-saved", renderCallHistory);
+
+  const openCallNoteDeleteModal = (noteId) => {
+    pendingCallNoteId = noteId;
+    callNoteDeleteModal.hidden = false;
+    callNoteDeleteModal.dataset.modalState = "open";
+    callNoteDeleteModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    window.requestAnimationFrame(() => callNoteDeleteConfirm?.focus({ preventScroll: true }));
+  };
+
+  const closeCallNoteDeleteModal = () => {
+    if (!callNoteDeleteModal) return;
+
+    pendingCallNoteId = null;
+    callNoteDeleteModal.hidden = true;
+    callNoteDeleteModal.dataset.modalState = "closed";
+    callNoteDeleteModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  document.querySelector(".js-profile-call-history")?.addEventListener("click", (event) => {
+    const deleteButton = event.target.closest(".js-delete-call-note");
+    if (!deleteButton) return;
+
+    openCallNoteDeleteModal(deleteButton.dataset.noteId);
+  });
+
+  callNoteDeleteConfirm?.addEventListener("click", () => {
+    if (!pendingCallNoteId) return;
+
+    const notes = storage.read("crm_call_notes", []);
+    storage.write(
+      "crm_call_notes",
+      notes.filter((note) => note.id !== pendingCallNoteId),
+    );
+    closeCallNoteDeleteModal();
+    renderCallHistory();
+    window.crmToast?.show("Call note deleted", "success");
+  });
+
+  callNoteDeleteCancelButtons.forEach((button) => button.addEventListener("click", closeCallNoteDeleteModal));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && callNoteDeleteModal && !callNoteDeleteModal.hidden) {
+      event.preventDefault();
+      closeCallNoteDeleteModal();
+    }
+  });
 
   profileForm?.addEventListener("submit", (event) => {
     event.preventDefault();

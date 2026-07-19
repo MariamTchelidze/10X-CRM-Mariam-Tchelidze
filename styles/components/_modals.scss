@@ -375,7 +375,7 @@ body[data-theme="light"] .modal {
 }
 
 .modal__dialog--chat {
-  width: min(76rem, 100%);
+  width: min(44rem, 100%);
   min-height: min(70rem, calc(100dvh - 4rem));
 }
 
@@ -748,6 +748,210 @@ body[data-theme="light"] .modal {
   }
 
   .sensai-chat__form {
+    grid-template-columns: 1fr;
+  }
+}
+
+.modal__dialog--phone {
+  width: min(82rem, 100%);
+}
+
+.phone-modal__header {
+  align-items: flex-start;
+}
+
+.phone-dialer {
+  display: grid;
+  grid-template-columns: minmax(30rem, 42rem) minmax(0, 1fr);
+  gap: $space-xl;
+}
+
+.phone-dialer__device,
+.phone-dialer__panel {
+  padding: $space-xl;
+  border: 0.1rem solid color-mix(in srgb, var(--color-primary) 42%, var(--color-border));
+  border-radius: 2.4rem;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent),
+    var(--color-surface);
+  box-shadow: 0 2rem 5rem rgb(0 0 0 / 18%);
+}
+
+.phone-dialer__screen {
+  display: grid;
+  gap: $space-xs;
+  min-height: 12.4rem;
+  padding: $space-lg;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-lg;
+  background: var(--color-elevated);
+  text-align: center;
+}
+
+.phone-dialer__screen-icon {
+  justify-self: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  opacity: 0.78;
+}
+
+.phone-dialer__subtitle {
+  color: var(--color-text-primary);
+  font-size: 1.7rem;
+  font-weight: $fw-bold;
+}
+
+.phone-dialer__number {
+  color: var(--color-text-primary);
+  font-size: 2rem;
+  font-weight: $fw-bold;
+  letter-spacing: 0.05em;
+}
+
+.phone-dialer__number.is-empty {
+  color: var(--color-text-secondary);
+  font-size: 1.5rem;
+  letter-spacing: 0;
+}
+
+.phone-dialer__status {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+}
+
+.phone-dialer__status[data-state="warning"] {
+  color: #f59e0b;
+}
+
+.phone-dialer__status[data-state="error"] {
+  color: #ef4444;
+}
+
+.phone-dialer__status[data-state="success"] {
+  color: #22c55e;
+}
+
+.phone-dialer__keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-md;
+  margin-top: $space-lg;
+}
+
+.phone-dialer__key {
+  display: grid;
+  place-items: center;
+  min-height: 5.4rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: color-mix(in srgb, var(--color-elevated) 92%, var(--color-primary));
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.8rem;
+  font-weight: $fw-bold;
+  transition:
+    border-color $transition,
+    background-color $transition,
+    color $transition,
+    transform $transition;
+}
+
+.phone-dialer__key img {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.phone-dialer__key:hover,
+.phone-dialer__key:focus-visible {
+  border-color: var(--color-primary);
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  outline: none;
+  transform: translateY(-0.1rem);
+}
+
+.phone-dialer__actions {
+  margin-top: $space-lg;
+}
+
+.phone-dialer__action {
+  justify-content: center;
+}
+
+.phone-dialer__action img {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.phone-dialer__panel,
+.phone-dialer__note-form {
+  display: grid;
+  align-content: start;
+  gap: $space-md;
+}
+
+.phone-dialer__queue-list {
+  display: grid;
+  gap: $space-sm;
+  max-height: 25rem;
+  overflow: auto;
+}
+
+.phone-dialer__queue-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  width: 100%;
+  padding: $space-sm $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.phone-dialer__queue-item strong,
+.phone-dialer__queue-item small,
+.phone-dialer__queue-item em {
+  display: block;
+}
+
+.phone-dialer__queue-item small,
+.phone-dialer__queue-item em,
+.phone-dialer__empty {
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+  font-style: normal;
+}
+
+.phone-dialer__queue-item:hover,
+.phone-dialer__queue-item:focus-visible {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.phone-dialer__empty {
+  padding: $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+}
+
+@include media(tablet) {
+  .phone-dialer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@include media(mobile) {
+  .phone-dialer__device {
+    padding: $space-md;
+  }
+
+  .phone-dialer__actions {
     grid-template-columns: 1fr;
   }
 }
