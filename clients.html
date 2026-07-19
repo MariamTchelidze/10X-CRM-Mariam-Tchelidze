@@ -663,6 +663,15 @@
       </div>
     </section>
 
+    <button
+      class="visually-hidden js-open-client-details-helper"
+      type="button"
+      data-modal-target="#client-details-modal"
+      aria-controls="client-details-modal"
+    >
+      Open client details
+    </button>
+
     <section class="modal" id="client-details-modal" aria-labelledby="client-details-title" aria-hidden="true" hidden>
       <div class="modal__dialog" role="dialog" aria-modal="true">
         <header class="modal__header">
@@ -680,30 +689,83 @@
           </button>
         </header>
 
-        <div class="modal__body client-details" id="client-details-content">
+        <div class="modal__body client-details" id="client-details-content" data-active-client-id="">
+          <div class="client-details__summary">
+            <div class="client-details__avatar" data-details-initials aria-hidden="true">CL</div>
+            <div>
+              <p class="client-details__company" data-details-company>Company</p>
+              <p class="client-details__since">Client since <span data-details-created>--</span></p>
+            </div>
+          </div>
+
           <dl class="details-list">
             <div>
               <dt>Email</dt>
-              <dd id="details-email">client@example.com</dd>
+              <dd id="details-email" data-details-email>client@example.com</dd>
             </div>
             <div>
               <dt>Phone</dt>
-              <dd id="details-phone">+995 555 000 000</dd>
+              <dd id="details-phone" data-details-phone>+995 555 000 000</dd>
             </div>
             <div>
               <dt>Status</dt>
-              <dd id="details-status">Lead</dd>
+              <dd id="details-status">
+                <span class="status-badge" data-details-status>Lead</span>
+              </dd>
+            </div>
+            <div>
+              <dt>Deal Value</dt>
+              <dd data-details-value>$0</dd>
+            </div>
+            <div>
+              <dt>Notes</dt>
+              <dd data-details-note-count>0 notes</dd>
             </div>
           </dl>
 
-          <form class="note-form js-note-form" id="client-note-form">
-            <label for="client-note" class="field__label">Add Note</label>
-            <textarea
-              id="client-note"
-              class="input input--textarea"
-              rows="3"
-              placeholder="Write a dated note"
-            ></textarea>
+          <form class="note-form js-note-form" id="client-note-form" novalidate>
+            <div class="field field--full">
+              <label for="client-note" class="field__label">Add Note</label>
+              <textarea
+                id="client-note"
+                class="input input--textarea js-client-note-text"
+                rows="3"
+                placeholder="Write a dated note"
+                required
+              ></textarea>
+              <p class="form-error js-client-note-error" hidden></p>
+            </div>
+
+            <div class="note-form__controls">
+              <div class="field">
+                <label for="client-note-status" class="field__label">Status</label>
+                <select id="client-note-status" class="input select-field js-client-note-status">
+                  <option value="">No status</option>
+                  <option value="reviewed">Reviewed</option>
+                  <option value="approved">Approved</option>
+                  <option value="declined">Declined</option>
+                  <option value="processed">Processed</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="client-note-task" class="field__label">Attach task</label>
+                <select id="client-note-task" class="input select-field js-client-note-task">
+                  <option value="">No task attached</option>
+                </select>
+              </div>
+
+              <div class="field field--full js-client-note-new-task-field" hidden>
+                <label for="client-note-new-task" class="field__label">New task title</label>
+                <input
+                  id="client-note-new-task"
+                  class="input js-client-note-new-task"
+                  type="text"
+                  placeholder="Create a task for this note"
+                />
+              </div>
+            </div>
+
             <button class="btn btn--secondary" type="submit">Add Note</button>
           </form>
 
@@ -712,6 +774,16 @@
             <input id="client-reminder" class="input" type="datetime-local" />
             <button class="btn btn--ghost js-set-reminder" type="button">Set Reminder</button>
           </div>
+
+          <section class="client-notes" aria-labelledby="client-notes-title">
+            <div class="client-notes__header">
+              <h3 class="client-notes__title" id="client-notes-title">Notes</h3>
+              <span class="client-notes__count" data-details-note-count-inline>0 notes</span>
+            </div>
+            <div class="client-notes__list js-client-notes-list">
+              <p class="client-notes__empty">No notes yet.</p>
+            </div>
+          </section>
         </div>
       </div>
     </section>

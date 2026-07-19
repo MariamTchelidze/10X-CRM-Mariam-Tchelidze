@@ -13,6 +13,7 @@ function initTasks() {
 
   const TASKS_KEY = "crm_tasks";
   const NOTIFICATIONS_KEY = "crm_task_notifications";
+  const PENDING_TASK_KEY = "crm_pending_open_task";
   const CURRENT_USER = "Mariam Tchelidze";
   const statuses = ["todo", "in-progress", "overdue", "done"];
   const statusLabels = {
@@ -627,6 +628,18 @@ function initTasks() {
     document.querySelector(".js-open-task-details-helper")?.click();
   };
 
+  const openPendingTaskFromClientNote = () => {
+    if (!taskWorkspacePage || !board) return;
+
+    const pendingTaskId = sessionStorage.getItem(PENDING_TASK_KEY);
+
+    if (!pendingTaskId) return;
+
+    sessionStorage.removeItem(PENDING_TASK_KEY);
+    window.location.hash = "tasks";
+    window.requestAnimationFrame(() => openTaskDetails(pendingTaskId));
+  };
+
   const setFieldError = (fieldId, message) => {
     const errorElement = document.querySelector(`[data-error-for="${fieldId}"]`);
     const field = document.getElementById(fieldId);
@@ -1037,4 +1050,5 @@ function initTasks() {
 
   moveOverdueTasks(new Date());
   render();
+  openPendingTaskFromClientNote();
 }
