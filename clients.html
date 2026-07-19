@@ -630,6 +630,33 @@
           </div>
 
           <div class="field">
+            <label for="client-timezone" class="field__label">Country / Timezone</label>
+            <select id="client-timezone" name="timezone" class="input select-field">
+              <option value="" data-country="">Detect from phone or choose manually</option>
+              <option value="Pacific/Auckland" data-country="New Zealand">New Zealand - Auckland</option>
+              <option value="Asia/Tbilisi" data-country="Georgia">Georgia - Tbilisi</option>
+              <option value="America/New_York" data-country="United States / Canada">United States / Canada - Eastern</option>
+              <option value="Europe/London" data-country="United Kingdom">United Kingdom - London</option>
+              <option value="Europe/Berlin" data-country="Germany">Germany - Berlin</option>
+              <option value="Europe/Paris" data-country="France">France - Paris</option>
+              <option value="Europe/Rome" data-country="Italy">Italy - Rome</option>
+              <option value="Europe/Madrid" data-country="Spain">Spain - Madrid</option>
+              <option value="Europe/Amsterdam" data-country="Netherlands">Netherlands - Amsterdam</option>
+              <option value="Europe/Warsaw" data-country="Poland">Poland - Warsaw</option>
+              <option value="Europe/Istanbul" data-country="Turkey">Turkey - Istanbul</option>
+              <option value="Asia/Dubai" data-country="United Arab Emirates">United Arab Emirates - Dubai</option>
+              <option value="Asia/Kolkata" data-country="India">India - Kolkata</option>
+              <option value="Asia/Tokyo" data-country="Japan">Japan - Tokyo</option>
+              <option value="Asia/Seoul" data-country="South Korea">South Korea - Seoul</option>
+              <option value="Asia/Shanghai" data-country="China">China - Shanghai</option>
+              <option value="Australia/Sydney" data-country="Australia">Australia - Sydney</option>
+              <option value="America/Sao_Paulo" data-country="Brazil">Brazil - Sao Paulo</option>
+              <option value="America/Mexico_City" data-country="Mexico">Mexico - Mexico City</option>
+            </select>
+            <p class="field__hint">Used by Live Time Center. Phone code can auto-suggest it, but manual choice is more reliable.</p>
+          </div>
+
+          <div class="field">
             <label for="client-status" class="field__label">Status</label>
             <select id="client-status" name="status" class="input js-icon-select-control" required>
               <option value="lead" data-icon="./assets/icons/star.svg" data-icon-light="./assets/icons/star-light-theme.svg">Lead</option>
@@ -706,6 +733,10 @@
             <div>
               <dt>Phone</dt>
               <dd id="details-phone" data-details-phone>+995 555 000 000</dd>
+            </div>
+            <div>
+              <dt>Country / Timezone</dt>
+              <dd data-details-country-timezone>Not selected</dd>
             </div>
             <div>
               <dt>Status</dt>

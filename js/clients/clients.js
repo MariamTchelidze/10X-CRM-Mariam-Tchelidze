@@ -87,6 +87,46 @@ function initClients() {
     { value: "processed", label: "Processed" },
   ];
 
+  const CLIENT_TIMEZONES = [
+    { code: "+995", country: "Georgia", timezone: "Asia/Tbilisi" },
+    { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
+    { code: "+1", country: "United States / Canada", timezone: "America/New_York" },
+    { code: "+44", country: "United Kingdom", timezone: "Europe/London" },
+    { code: "+49", country: "Germany", timezone: "Europe/Berlin" },
+    { code: "+33", country: "France", timezone: "Europe/Paris" },
+    { code: "+39", country: "Italy", timezone: "Europe/Rome" },
+    { code: "+34", country: "Spain", timezone: "Europe/Madrid" },
+    { code: "+31", country: "Netherlands", timezone: "Europe/Amsterdam" },
+    { code: "+48", country: "Poland", timezone: "Europe/Warsaw" },
+    { code: "+90", country: "Turkey", timezone: "Europe/Istanbul" },
+    { code: "+971", country: "United Arab Emirates", timezone: "Asia/Dubai" },
+    { code: "+91", country: "India", timezone: "Asia/Kolkata" },
+    { code: "+81", country: "Japan", timezone: "Asia/Tokyo" },
+    { code: "+82", country: "South Korea", timezone: "Asia/Seoul" },
+    { code: "+86", country: "China", timezone: "Asia/Shanghai" },
+    { code: "+61", country: "Australia", timezone: "Australia/Sydney" },
+    { code: "+55", country: "Brazil", timezone: "America/Sao_Paulo" },
+    { code: "+52", country: "Mexico", timezone: "America/Mexico_City" },
+  ].sort((a, b) => b.code.length - a.code.length);
+
+  const normalizePhone = (phone = "") => String(phone).replace(/[^\d+]/g, "");
+
+  const detectClientTimezone = (phone = "") => {
+    const normalized = normalizePhone(phone);
+    if (!normalized.startsWith("+")) return null;
+    return CLIENT_TIMEZONES.find((item) => normalized.startsWith(item.code)) || null;
+  };
+
+  const getTimezoneLabel = (client) => {
+    const country = client?.country || "";
+    const timezone = client?.timezone || "";
+    if (country && timezone) return `${country} - ${timezone}`;
+    if (timezone) return timezone;
+
+    const detected = detectClientTimezone(client?.phone);
+    return detected ? `${detected.country} - ${detected.timezone}` : "Not selected";
+  };
+
   const CLIENT_STATUSES = ["lead", "contacted", "won", "lost"];
 
   const normalizeNote = (note = {}, index = 0) => {
@@ -119,6 +159,8 @@ function initClients() {
       company: String(client.company || "No company").trim(),
       email: String(client.email || "").trim().toLowerCase(),
       phone: String(client.phone || "").trim(),
+      country: String(client.country || detectClientTimezone(client.phone)?.country || "").trim(),
+      timezone: String(client.timezone || detectClientTimezone(client.phone)?.timezone || "").trim(),
       status,
       dealValue: Number.isFinite(dealValue) ? dealValue : 0,
       notes,
@@ -393,6 +435,7 @@ function initClients() {
     setDetailText("[data-details-created]", formatClientDate(client.createdAt));
     setDetailText("[data-details-email]", client.email || "No email");
     setDetailText("[data-details-phone]", client.phone || "No phone");
+    setDetailText("[data-details-country-timezone]", getTimezoneLabel(client));
     setDetailText("[data-details-value]", moneyFormatter.format(Number(client.dealValue) || 0));
     setDetailText("[data-details-note-count]", getNoteCountLabel(notes.length));
     setDetailText("[data-details-note-count-inline]", getNoteCountLabel(notes.length));
@@ -450,7 +493,7 @@ function initClients() {
 
     const filteredClients = clients.filter((client) => {
       const matchesStatus = activeStatus === "all" || client.status === activeStatus;
-      const searchableText = [client.name, client.company, client.email, client.phone].join(" ").toLowerCase();
+      const searchableText = [client.name, client.company, client.email, client.phone, client.country, client.timezone].join(" ").toLowerCase();
       const matchesSearch = !query || searchableText.includes(query);
 
       return matchesStatus && matchesSearch;
@@ -543,6 +586,7 @@ function initClients() {
     form.elements.company.value = client.company || "";
     form.elements.email.value = client.email || "";
     form.elements.phone.value = client.phone || "";
+    form.elements.timezone.value = client.timezone || detectClientTimezone(client.phone)?.timezone || "";
     form.elements.status.value = client.status || "lead";
     form.elements.value.value = Number(client.dealValue) || "";
     form.elements.notes.value = "";
@@ -567,6 +611,7 @@ function initClients() {
     }
 
     form.reset();
+    form.elements.timezone.value = "";
     form.elements.status.dispatchEvent(new Event("change", { bubbles: true }));
     if (clientModalTitle) clientModalTitle.textContent = "Add Client";
     if (clientModalDescription) {
@@ -616,6 +661,15 @@ function initClients() {
     renderClients();
   };
 
+  form?.elements.phone?.addEventListener("input", () => {
+    const detected = detectClientTimezone(form.elements.phone.value);
+    const timezoneSelect = form.elements.timezone;
+
+    if (detected && timezoneSelect && !timezoneSelect.value) {
+      timezoneSelect.value = detected.timezone;
+    }
+  });
+
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -632,6 +686,8 @@ function initClients() {
           company: draft.company,
           email: draft.email,
           phone: draft.phone,
+          country: draft.country,
+          timezone: draft.timezone,
           status: draft.status,
           dealValue: draft.dealValue,
         }));

@@ -4,12 +4,16 @@
   const getFormClient = (form) => {
     const formData = new FormData(form);
     const notesText = String(formData.get("notes") || "").trim();
+    const timezoneSelect = form.querySelector("#client-timezone");
+    const selectedTimezone = timezoneSelect?.selectedOptions?.[0];
 
     return {
       name: String(formData.get("name") || "").trim(),
       company: String(formData.get("company") || "").trim(),
       email: String(formData.get("email") || "").trim().toLowerCase(),
       phone: String(formData.get("phone") || "").trim(),
+      country: String(selectedTimezone?.dataset.country || "").trim(),
+      timezone: String(formData.get("timezone") || "").trim(),
       status: String(formData.get("status") || "lead"),
       dealValue: Number(formData.get("value")),
       notes: notesText ? [{ text: notesText, date: new Date().toLocaleString() }] : [],

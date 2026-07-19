@@ -10,6 +10,7 @@
 
   const PHONE_TIMEZONES = [
     { code: "+995", country: "Georgia", timezone: "Asia/Tbilisi" },
+    { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
     { code: "+1", country: "United States / Canada", timezone: "America/New_York" },
     { code: "+44", country: "United Kingdom", timezone: "Europe/London" },
     { code: "+49", country: "Germany", timezone: "Europe/Berlin" },
@@ -48,6 +49,24 @@
     const normalized = normalizePhone(phone);
     if (!normalized.startsWith("+")) return null;
     return PHONE_TIMEZONES.find((item) => normalized.startsWith(item.code)) || null;
+  };
+
+  const getClientTimezone = (client) => {
+    if (client?.country && client?.timezone) {
+      return {
+        country: client.country,
+        timezone: client.timezone,
+      };
+    }
+
+    if (client?.timezone) {
+      return {
+        country: client.timezone,
+        timezone: client.timezone,
+      };
+    }
+
+    return detectCountry(client?.phone);
   };
 
   const formatTime = (date, timezone, includeSeconds = true) =>
@@ -102,7 +121,7 @@
     let unknownCount = 0;
 
     readClients().forEach((client) => {
-      const match = detectCountry(client.phone);
+      const match = getClientTimezone(client);
       if (!match) {
         unknownCount += 1;
         return;
@@ -216,7 +235,7 @@
     if (!countries.length) {
       list.innerHTML = `
         <p class="task-empty">
-          No client country times detected yet. Add clients with international phone codes such as +995, +1, +44, +49, or +81.
+          No client country times detected yet. Choose a client country/timezone or add international phone codes such as +64, +995, +1, +44, +49, or +81.
           ${unknownCount ? `${unknownCount} client${unknownCount === 1 ? "" : "s"} had no recognized country code.` : ""}
         </p>
       `;
