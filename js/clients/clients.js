@@ -37,12 +37,16 @@ function initClients() {
   const noteNewTaskInput = document.querySelector(".js-client-note-new-task");
   const noteError = document.querySelector(".js-client-note-error");
   const notesList = document.querySelector(".js-client-notes-list");
+  const noteDeleteModal = document.getElementById("delete-note-modal");
+  const noteDeleteMessage = document.querySelector(".js-delete-note-message");
+  const confirmDeleteNoteButton = document.querySelector(".js-confirm-delete-note");
 
   if (!list) return;
 
   let clients = storage.read(constants.CLIENTS_KEY, []);
   let activeStatus = "all";
   let pendingDeleteId = null;
+  let pendingNoteDeleteId = null;
   const TASKS_KEY = "crm_tasks";
 
   const moneyFormatter = new Intl.NumberFormat("en-US", {
@@ -64,6 +68,13 @@ function initClients() {
   const createId = (prefix) => `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
   const PENDING_TASK_KEY = "crm_pending_open_task";
+  const NOTE_STATUSES = [
+    { value: "", label: "No status" },
+    { value: "reviewed", label: "Reviewed" },
+    { value: "approved", label: "Approved" },
+    { value: "declined", label: "Declined" },
+    { value: "processed", label: "Processed" },
+  ];
 
   const setDetailText = (selector, value) => {
     const element = detailsModal?.querySelector(selector);
@@ -136,6 +147,63 @@ function initClients() {
 
   const getNoteCountLabel = (count) => `${count} ${count === 1 ? "note" : "notes"}`;
 
+  const getNoteById = (clientId, noteId) => {
+    const client = getClientById(clientId);
+    const notes = Array.isArray(client?.notes) ? client.notes : [];
+
+    return notes.find((note) => String(note.id) === String(noteId)) || null;
+  };
+
+  const openNoteDeleteModal = (note) => {
+    if (!noteDeleteModal || !noteDeleteMessage || !note) return;
+
+    const attachedTask = note.taskId
+      ? getStoredTasks().find((task) => String(task.id) === String(note.taskId))
+      : null;
+    const noteStatus = note.status || "";
+    const processedStatus = noteStatus === "processed" || attachedTask?.status === "done"
+      ? noteStatus || "done"
+      : noteStatus;
+    const statusLabel = processedStatus ? data.formatStatus(processedStatus) : "No status";
+    const isProcessed = noteStatus === "processed" || attachedTask?.status === "done";
+
+    noteDeleteMessage.innerHTML = isProcessed
+      ? `The note you're trying to delete has <strong>${escapeHtml(statusLabel)}</strong> status. Are you sure you want to delete it? <strong>This action can't be undone.</strong>`
+      : `The note you're trying to delete isn't fully processed yet. Are you sure you want to delete it? <strong>This action can't be undone.</strong>`;
+
+    noteDeleteModal.hidden = false;
+    noteDeleteModal.dataset.modalState = "open";
+    noteDeleteModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    window.requestAnimationFrame(() => confirmDeleteNoteButton?.focus({ preventScroll: true }));
+  };
+
+  const closeNoteDeleteModal = () => {
+    if (!noteDeleteModal) return;
+
+    noteDeleteModal.hidden = true;
+    noteDeleteModal.dataset.modalState = "closed";
+    noteDeleteModal.setAttribute("aria-hidden", "true");
+    pendingNoteDeleteId = null;
+  };
+
+  const renderNoteStatusOptions = (selectedStatus = "") => {
+    return NOTE_STATUSES.map((status) => {
+      const selected = status.value === selectedStatus ? " selected" : "";
+
+      return `<option value="${escapeHtml(status.value)}"${selected}>${escapeHtml(status.label)}</option>`;
+    }).join("");
+  };
+
+  const updateNoteStatus = (clientId, noteId, nextStatus) => {
+    updateClient(clientId, (client) => ({
+      ...client,
+      notes: (Array.isArray(client.notes) ? client.notes : []).map((note) =>
+        String(note.id) === String(noteId) ? { ...note, status: nextStatus } : note,
+      ),
+    }));
+  };
+
   const renderClientNotes = (notes = []) => {
     if (!notesList) return;
 
@@ -152,6 +220,7 @@ function initClients() {
         const taskAction = note.taskId
           ? `<button class="client-note-card__task-action js-open-attached-task" type="button" data-task-id="${escapeHtml(note.taskId)}">Open attached task</button>`
           : "";
+        const noteId = escapeHtml(note.id || "");
 
         return `
           <article class="client-note-card">
@@ -166,7 +235,32 @@ function initClients() {
             </header>
             <p class="client-note-card__task">Task: ${escapeHtml(taskLabel)}</p>
             <p class="client-note-card__text">${escapeHtml(note.text)}</p>
-            ${taskAction}
+            <div class="client-note-card__actions">
+              ${taskAction}
+              <button
+                class="client-note-card__edit js-edit-note-status"
+                type="button"
+                data-note-id="${noteId}"
+              >
+                Edit status
+              </button>
+              <button
+                class="client-note-card__delete js-delete-client-note"
+                type="button"
+                data-note-id="${noteId}"
+                data-skip-delete-confirm
+              >
+                Delete note
+              </button>
+            </div>
+            <form class="client-note-card__status-editor js-note-status-editor" data-note-id="${noteId}" hidden>
+              <label class="visually-hidden" for="note-status-${noteId}">Note status</label>
+              <select class="input select-field js-note-status-select" id="note-status-${noteId}">
+                ${renderNoteStatusOptions(note.status || "")}
+              </select>
+              <button class="btn btn--secondary" type="submit">Save</button>
+              <button class="btn btn--ghost js-cancel-note-status" type="button">Cancel</button>
+            </form>
           </article>
         `;
       })
@@ -465,6 +559,46 @@ function initClients() {
   noteTaskSelect?.addEventListener("change", toggleNewTaskField);
 
   notesList?.addEventListener("click", (event) => {
+    const deleteNoteButton = event.target.closest(".js-delete-client-note");
+
+    if (deleteNoteButton) {
+      const activeClientId = detailsContent?.dataset.activeClientId;
+      const noteId = deleteNoteButton.dataset.noteId || "";
+      const note = getNoteById(activeClientId, noteId);
+
+      if (!note) return;
+
+      pendingNoteDeleteId = noteId;
+      openNoteDeleteModal(note);
+      return;
+    }
+
+    const editStatusButton = event.target.closest(".js-edit-note-status");
+
+    if (editStatusButton) {
+      const noteId = editStatusButton.dataset.noteId || "";
+      const editor = notesList.querySelector(`.js-note-status-editor[data-note-id="${CSS.escape(noteId)}"]`);
+
+      if (!editor) return;
+
+      editor.hidden = false;
+      editStatusButton.hidden = true;
+      editor.querySelector(".js-note-status-select")?.focus({ preventScroll: true });
+      return;
+    }
+
+    const cancelStatusButton = event.target.closest(".js-cancel-note-status");
+
+    if (cancelStatusButton) {
+      const editor = cancelStatusButton.closest(".js-note-status-editor");
+      const noteId = editor?.dataset.noteId || "";
+      const editButton = notesList.querySelector(`.js-edit-note-status[data-note-id="${CSS.escape(noteId)}"]`);
+
+      if (editor) editor.hidden = true;
+      if (editButton) editButton.hidden = false;
+      return;
+    }
+
     const taskButton = event.target.closest(".js-open-attached-task");
     const taskId = taskButton?.dataset.taskId;
 
@@ -472,6 +606,50 @@ function initClients() {
 
     sessionStorage.setItem(PENDING_TASK_KEY, taskId);
     window.location.href = "./dashboard.html#tasks";
+  });
+
+  notesList?.addEventListener("submit", (event) => {
+    const editor = event.target.closest(".js-note-status-editor");
+
+    if (!editor) return;
+
+    event.preventDefault();
+
+    const activeClientId = detailsContent?.dataset.activeClientId;
+    const noteId = editor.dataset.noteId || "";
+    const nextStatus = editor.querySelector(".js-note-status-select")?.value || "";
+
+    if (!activeClientId || !noteId) return;
+
+    updateNoteStatus(activeClientId, noteId, nextStatus);
+
+    const updatedClient = getClientById(activeClientId);
+    renderClientDetails(updatedClient);
+    renderClients();
+    window.crmToast?.show("Note status updated.", "success");
+  });
+
+  confirmDeleteNoteButton?.addEventListener("click", () => {
+    const activeClientId = detailsContent?.dataset.activeClientId;
+
+    if (!activeClientId || !pendingNoteDeleteId) return;
+
+    updateClient(activeClientId, (client) => ({
+      ...client,
+      notes: (Array.isArray(client.notes) ? client.notes : []).filter(
+        (note) => String(note.id) !== String(pendingNoteDeleteId),
+      ),
+    }));
+
+    const updatedClient = getClientById(activeClientId);
+    closeNoteDeleteModal();
+    renderClientDetails(updatedClient);
+    renderClients();
+    window.crmToast?.show("Client note deleted.", "success");
+  });
+
+  noteDeleteModal?.querySelectorAll(".js-close-note-delete").forEach((button) => {
+    button.addEventListener("click", closeNoteDeleteModal);
   });
 
   confirmDeleteButton?.addEventListener("click", async () => {

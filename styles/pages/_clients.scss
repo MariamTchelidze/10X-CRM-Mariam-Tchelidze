@@ -408,6 +408,14 @@
   color: var(--color-text);
 }
 
+.client-note-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-sm;
+  flex-wrap: wrap;
+}
+
 .client-note-card__task-action {
   justify-self: start;
   padding: 0.6rem 1rem;
@@ -429,6 +437,80 @@
   border-color: var(--color-accent);
   background: rgba(255, 107, 26, 0.18);
   transform: translateY(-0.1rem);
+}
+
+.client-note-card__edit {
+  padding: 0.6rem 1rem;
+  border: 0.1rem solid rgba(76, 143, 234, 0.32);
+  border-radius: $radius-full;
+  background: rgba(76, 143, 234, 0.1);
+  color: var(--color-blue);
+  font-size: 1.2rem;
+  font-weight: $fw-bold;
+  line-height: 1;
+  transition:
+    background $transition,
+    border-color $transition,
+    transform $transition;
+}
+
+.client-note-card__edit:hover,
+.client-note-card__edit:focus-visible {
+  border-color: var(--color-blue);
+  background: rgba(76, 143, 234, 0.18);
+  transform: translateY(-0.1rem);
+}
+
+.client-note-card__status-editor {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1fr) auto auto;
+  align-items: center;
+  gap: $space-sm;
+  padding: $space-sm;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+}
+
+.client-note-card__status-editor[hidden] {
+  display: none;
+}
+
+.client-note-card__status-editor .btn {
+  min-height: 3.8rem;
+  padding-inline: 1.2rem;
+}
+
+.client-note-card__delete {
+  padding: 0.6rem 1rem;
+  border: 0.1rem solid rgba(238, 92, 76, 0.32);
+  border-radius: $radius-full;
+  background: rgba(238, 92, 76, 0.1);
+  color: var(--color-danger);
+  font-size: 1.2rem;
+  font-weight: $fw-bold;
+  line-height: 1;
+  transition:
+    background $transition,
+    border-color $transition,
+    transform $transition;
+}
+
+.client-note-card__delete:hover,
+.client-note-card__delete:focus-visible {
+  border-color: var(--color-danger);
+  background: rgba(238, 92, 76, 0.18);
+  transform: translateY(-0.1rem);
+}
+
+.note-delete-modal__message {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.note-delete-modal__message strong {
+  color: var(--color-danger);
+  font-weight: 800;
 }
 
 @media (max-width: 640px) {
@@ -453,5 +535,9 @@
 
   .client-note-card__header {
     display: grid;
+  }
+
+  .client-note-card__status-editor {
+    grid-template-columns: 1fr;
   }
 }

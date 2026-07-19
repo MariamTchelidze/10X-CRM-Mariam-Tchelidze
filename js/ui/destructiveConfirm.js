@@ -16,6 +16,7 @@
     if (element.closest("#global-delete-confirm-modal")) return false;
     if (element.closest("#delete-client-modal")) return false;
     if (element.closest("#delete-task-modal")) return false;
+    if (element.closest("#delete-note-modal")) return false;
     if (element.dataset.taskAction === "delete") return false;
 
     const text = element.textContent || "";
