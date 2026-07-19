@@ -98,6 +98,28 @@
     sensaiAvatar.classList.add(`sensai-avatar--${state}`);
   };
 
+  const getCsvDownloadHref = (content) => {
+    const blob = new Blob([content], { type: "text/csv;charset=utf-8" });
+    return URL.createObjectURL(blob);
+  };
+
+  const renderAttachment = (attachment) => {
+    if (!attachment || attachment.type !== "csv") return "";
+
+    const href = getCsvDownloadHref(attachment.content);
+    return `
+      <div class="communication-message__attachment">
+        <div>
+          <strong>${escapeHtml(attachment.title)}</strong>
+          <span>${escapeHtml(attachment.description)}</span>
+        </div>
+        <a class="btn btn--secondary communication-message__download" href="${href}" download="${escapeHtml(attachment.filename)}">
+          Download CSV
+        </a>
+      </div>
+    `;
+  };
+
   const renderMessages = (container, history, emptyText) => {
     if (!container) return;
 
@@ -120,6 +142,7 @@
                 : ""
             }
             <p>${escapeHtml(message.text)}</p>
+            ${renderAttachment(message.attachment)}
           </article>
         `,
       )
@@ -129,7 +152,7 @@
 
   const getSuggestions = () => {
     const page = document.body.dataset.page || "";
-    const shared = ["Today's focus", "Show overdue tasks", "Summarize clients", "Unread notifications"];
+    const shared = ["Today's focus", "Show overdue tasks", "Export clients CSV", "Summarize clients", "Unread notifications"];
 
     if (page === "clients") return ["High-value leads", "Clients by country", "Follow-up reminders", ...shared];
     if (page === "profile") return ["My statistics", "What changed recently?", ...shared];
@@ -185,27 +208,109 @@
     return `Private stats preview: ${context.leads.length} leads, ${context.wonClients.length} successful contracts, ${context.lostClients.length} failed contracts, KPI ${kpi}%.`;
   };
 
+  const CLIENT_CSV_COLUMNS = [
+    ["name", "Name"],
+    ["company", "Company"],
+    ["email", "Email"],
+    ["phone", "Phone"],
+    ["status", "Status"],
+    ["dealValue", "Deal Value"],
+    ["country", "Country"],
+    ["timezone", "Timezone"],
+  ];
+
+  const CSV_STATUS_FILTERS = {
+    lead: "Lead",
+    leads: "Lead",
+    won: "Won",
+    lost: "Lost",
+    contacted: "Contacted",
+  };
+
+  const escapeCsvCell = (value) => {
+    const cell = String(value ?? "");
+    return /[",\n\r]/.test(cell) ? `"${cell.replaceAll('"', '""')}"` : cell;
+  };
+
+  const getCsvRequest = (prompt) => {
+    const text = prompt.toLowerCase();
+    const asksForCsv = text.includes("csv") || text.includes("export") || text.includes("download");
+    const asksForClients = text.includes("client") || text.includes("lead") || text.includes("won") || text.includes("lost");
+
+    if (!asksForCsv || !asksForClients) return null;
+
+    const statusKey = Object.keys(CSV_STATUS_FILTERS).find((key) => text.includes(key));
+    const status = statusKey ? CSV_STATUS_FILTERS[statusKey].toLowerCase() : "all";
+
+    return {
+      status,
+      label: status === "all" ? "all clients" : `${CSV_STATUS_FILTERS[statusKey]} clients`,
+    };
+  };
+
+  const getClientField = (client, key) => {
+    if (key === "dealValue") return Number(client.dealValue) || 0;
+    return client[key] || "";
+  };
+
+  const createClientsCsvAttachment = (context, request) => {
+    const clients =
+      request.status === "all"
+        ? context.clients
+        : context.clients.filter((client) => String(client.status || "").toLowerCase() === request.status);
+
+    const header = CLIENT_CSV_COLUMNS.map(([, label]) => escapeCsvCell(label)).join(",");
+    const rows = clients.map((client) =>
+      CLIENT_CSV_COLUMNS.map(([key]) => escapeCsvCell(getClientField(client, key))).join(","),
+    );
+    const csv = [header, ...rows].join("\n");
+    const date = new Date().toISOString().slice(0, 10);
+    const filename = `10x-crm-${request.status === "all" ? "clients" : `${request.status}-clients`}-${date}.csv`;
+
+    return {
+      clients,
+      attachment: {
+        type: "csv",
+        title: `${request.label} CSV`,
+        description: `${clients.length} record${clients.length === 1 ? "" : "s"} prepared from CRM client data.`,
+        filename,
+        content: csv,
+      },
+    };
+  };
+
+
   const getSensaiReply = (prompt) => {
     const context = getCrmContext();
     const text = prompt.toLowerCase();
+    const csvRequest = getCsvRequest(prompt);
 
-    if (text.includes("statistic") || text.includes("my statistics")) return getProfileStats(context);
-    if (text.includes("focus") || text.includes("today")) return getTodayFocus(context);
+    if (csvRequest) {
+      const { clients, attachment } = createClientsCsvAttachment(context, csvRequest);
+
+      return {
+        text: `I prepared ${clients.length} ${csvRequest.label} record${clients.length === 1 ? "" : "s"} as a CSV file.`,
+        attachment,
+      };
+    }
+
+    if (text.includes("statistic") || text.includes("my statistics")) return { text: getProfileStats(context) };
+    if (text.includes("focus") || text.includes("today")) return { text: getTodayFocus(context) };
     if (text.includes("overdue")) {
-      if (!context.overdueTasks.length) return "No overdue tasks found. Nice and clean.";
-      return `Overdue tasks: ${context.overdueTasks.map((task) => task.title || "Untitled task").join(", ")}.`;
+      if (!context.overdueTasks.length) return { text: "No overdue tasks found. Nice and clean." };
+      return { text: `Overdue tasks: ${context.overdueTasks.map((task) => task.title || "Untitled task").join(", ")}.` };
     }
-    if (text.includes("country") || text.includes("timezone") || text.includes("time zone")) return getClientsByCountry(context);
-    if (text.includes("client") || text.includes("pipeline") || text.includes("lead")) return summarizeClients(context);
+    if (text.includes("country") || text.includes("timezone") || text.includes("time zone")) return { text: getClientsByCountry(context) };
+    if (text.includes("client") || text.includes("pipeline") || text.includes("lead")) return { text: summarizeClients(context) };
     if (text.includes("notification") || text.includes("unread")) {
-      return `You have ${context.unreadNotifications.length} unread notification${context.unreadNotifications.length === 1 ? "" : "s"}.`;
+      return { text: `You have ${context.unreadNotifications.length} unread notification${context.unreadNotifications.length === 1 ? "" : "s"}.` };
     }
-    if (text.includes("activity")) return "Open Dashboard > Activity to see the structured timeline. I can explain any activity card after you expand it.";
+    if (text.includes("activity")) return { text: "Open Dashboard > Activity to see the structured timeline. I can explain any activity card after you expand it." };
     if (text.includes("task")) {
-      return `You have ${context.openTasks.length} open task${context.openTasks.length === 1 ? "" : "s"}. For creating tasks, I can draft the structure now; real backend AI can create it after confirmation later.`;
+      return { text: `You have ${context.openTasks.length} open task${context.openTasks.length === 1 ? "" : "s"}. For creating tasks, I can draft the structure now; real backend AI can create it after confirmation later.` };
     }
 
-    return "I can help with clients, overdue tasks, pipeline summaries, countries/timezones, unread notifications, and today's CRM focus.";
+    return { text: "I can help with clients, overdue tasks, pipeline summaries, countries/timezones, unread notifications, and today's CRM focus. You can also ask me to export all, lead, won, lost, or contacted clients as CSV." };
   };
 
   let teamHistory = readHistory(TEAM_KEY, [
@@ -272,7 +377,8 @@
       {
         role: "assistant",
         author: "10X SensAI",
-        text: reply,
+        text: reply.text,
+        attachment: reply.attachment || null,
         createdAt: new Date().toISOString(),
       },
     ];

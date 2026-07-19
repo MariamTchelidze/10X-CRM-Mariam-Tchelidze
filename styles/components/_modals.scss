@@ -477,6 +477,38 @@ body[data-theme="light"] .modal {
   }
 }
 
+
+
+.communication-message__attachment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  margin-top: $space-sm;
+  padding: $space-sm;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+}
+
+.communication-message__attachment strong,
+.communication-message__attachment span {
+  display: block;
+}
+
+.communication-message__attachment span {
+  margin-top: 0.2rem;
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+}
+
+.communication-message__download {
+  flex-shrink: 0;
+  min-height: 3.4rem;
+  padding-inline: 1.2rem;
+  white-space: nowrap;
+}
+
 .modal__dialog--sensai {
   width: min(82rem, 100%);
 }
