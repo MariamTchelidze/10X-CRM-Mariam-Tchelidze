@@ -4,6 +4,12 @@
   const API_URL = "https://dummyjson.com/users";
   const statuses = ["lead", "contacted", "won", "lost"];
 
+  const createApiError = (message, response) => {
+    const error = new Error(message);
+    error.status = response.status;
+    return error;
+  };
+
   const getInitials = (name = "") =>
     name
       .trim()
@@ -38,7 +44,7 @@
     const response = await fetch(`${API_URL}?limit=30`);
 
     if (!response.ok) {
-      throw new Error("Clients could not be loaded.");
+      throw createApiError("Clients could not be loaded.", response);
     }
 
     const data = await response.json();
@@ -58,7 +64,7 @@
     });
 
     if (!response.ok) {
-      throw new Error("Client could not be added.");
+      throw createApiError("Client could not be added.", response);
     }
 
     return response.json();
@@ -77,7 +83,7 @@
     });
 
     if (!response.ok && response.status !== 404) {
-      throw new Error("Client could not be updated.");
+      throw createApiError("Client could not be updated.", response);
     }
 
     return response.status === 404 ? {} : response.json();
@@ -87,7 +93,7 @@
     const response = await fetch(`${API_URL}/${clientId}`, { method: "DELETE" });
 
     if (!response.ok && response.status !== 404) {
-      throw new Error("Client could not be deleted.");
+      throw createApiError("Client could not be deleted.", response);
     }
   };
 

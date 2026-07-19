@@ -1,7 +1,5 @@
-import "./core/config.js";
 import "./core/constants.js";
 import "./core/storage.js";
-import "./core/router.js";
 
 import "./ui/theme.js";
 import "./ui/toast.js";
@@ -27,8 +25,6 @@ import "./data/data.js";
 
 import "./clients/clientsCard.js";
 import "./clients/clientsForm.js";
-import "./clients/filters.js";
-import "./clients/sort.js";
 import "./clients/clients.js";
 
 import "./dashboard/dashboard.js";
@@ -40,17 +36,8 @@ import "./dashboard/dashboardWidgets.js";
 import "./profile/profile.js";
 import "./profile/avatar.js";
 
-import "./ui/dropdown.js";
 import "./ui/modal.js";
-import "./ui/pagination.js";
-import "./ui/search.js";
 import "./ui/settings.js";
 import "./ui/sidebar.js";
-import "./ui/tabs.js";
 
-import "./ui/tooltip.js";
 
-import "./utils/dom.js";
-import "./utils/formatters.js";
-import "./utils/helpers.js";
-import "./utils/validators.js";

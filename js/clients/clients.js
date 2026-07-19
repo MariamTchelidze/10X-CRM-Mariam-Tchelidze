@@ -18,6 +18,7 @@ function initClients() {
   const list = document.getElementById("clients-list");
   const loading = document.getElementById("clients-loading");
   const error = document.getElementById("clients-error");
+  const errorMessage = document.querySelector(".js-clients-error-message");
   const empty = document.getElementById("clients-empty");
   const form = document.querySelector(".js-client-form");
   const openClientModalButton = document.querySelector(".js-open-client-modal");
@@ -59,6 +60,7 @@ function initClients() {
   let pendingNoteDeleteId = null;
   let editingClientId = null;
   const TASKS_KEY = "crm_tasks";
+  const DEFAULT_CLIENTS_ERROR = "Could not load clients. Check your connection and try again.";
 
   const moneyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -77,6 +79,26 @@ function initClients() {
       .replaceAll("'", "&#039;");
 
   const createId = (prefix) => `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+  const getAsyncErrorMessage = (error, fallback = DEFAULT_CLIENTS_ERROR) => {
+    if (!navigator.onLine) return "You appear to be offline. Check your connection and try again.";
+    return error?.status ? `${fallback} Status: ${error.status}.` : fallback;
+  };
+
+  const setButtonLoading = (button, isLoading, loadingText = "Loading...") => {
+    if (!button) return;
+
+    if (isLoading) {
+      if (!button.dataset.originalText) button.dataset.originalText = button.textContent;
+      button.textContent = loadingText;
+      button.disabled = true;
+      return;
+    }
+
+    button.textContent = button.dataset.originalText || button.textContent;
+    button.disabled = false;
+    delete button.dataset.originalText;
+  };
 
   const PENDING_TASK_KEY = "crm_pending_open_task";
   const NOTE_STATUSES = [
@@ -468,9 +490,10 @@ function initClients() {
     if (empty && isLoading) empty.hidden = true;
   };
 
-  const setError = () => {
+  const setError = (message = DEFAULT_CLIENTS_ERROR) => {
     if (loading) loading.hidden = true;
     if (error) error.hidden = false;
+    if (errorMessage) errorMessage.textContent = message;
     if (empty) empty.hidden = true;
   };
 
@@ -567,15 +590,19 @@ function initClients() {
     }
 
     setLoading(true);
+    setButtonLoading(retryButton, true, "Retrying...");
 
     try {
       setClients(await data.fetchInitialClients());
       renderClients();
       checkClientReminders();
       setLoading(false);
-    } catch (error) {
-      setError();
-      window.crmToast?.show("Could not load clients. Check your connection and try again.", "error");
+    } catch (loadError) {
+      const message = getAsyncErrorMessage(loadError);
+      setError(message);
+      window.crmToast?.show(message, "error");
+    } finally {
+      setButtonLoading(retryButton, false);
     }
   };
 
@@ -678,6 +705,8 @@ function initClients() {
     if (!formHelpers.validateClient(form, draft, clients, editingClientId)) return;
 
     if (editingClientId) {
+      setButtonLoading(saveClientButton, true, "Saving...");
+
       try {
         await data.updateClientRequest?.(editingClientId, draft);
         updateClient(editingClientId, (client) => ({
@@ -701,12 +730,17 @@ function initClients() {
         setClientFormMode("add");
         closeClientModal();
         window.crmToast?.show("Client updated successfully.", "success");
-      } catch (error) {
-        window.crmToast?.show("Client could not be updated.", "error");
+      } catch (updateError) {
+        window.crmToast?.show(getAsyncErrorMessage(updateError, "Client could not be updated."), "error");
+      } finally {
+        setButtonLoading(saveClientButton, false);
+        if (!editingClientId && saveClientButton) saveClientButton.textContent = "Save Client";
       }
 
       return;
     }
+
+    setButtonLoading(saveClientButton, true, "Adding...");
 
     try {
       const apiClient = await data.postClient(draft);
@@ -731,8 +765,10 @@ function initClients() {
       setClientFormMode("add");
       closeClientModal();
       window.crmToast?.show("Client added successfully.", "success");
-    } catch (error) {
-      window.crmToast?.show("Client could not be added.", "error");
+    } catch (addError) {
+      window.crmToast?.show(getAsyncErrorMessage(addError, "Client could not be added."), "error");
+    } finally {
+      setButtonLoading(saveClientButton, false);
     }
   });
 
@@ -996,6 +1032,8 @@ function initClients() {
   confirmDeleteButton?.addEventListener("click", async () => {
     if (!pendingDeleteId) return;
 
+    setButtonLoading(confirmDeleteButton, true, "Deleting...");
+
     try {
       await data.deleteClientRequest(pendingDeleteId);
       clients = clients.filter((client) => String(client.id) !== String(pendingDeleteId));
@@ -1003,9 +1041,10 @@ function initClients() {
       renderClients();
       closeDeleteModal();
       window.crmToast?.show("Client deleted.", "success");
-    } catch (error) {
-      window.crmToast?.show("Client could not be deleted.", "error");
+    } catch (deleteError) {
+      window.crmToast?.show(getAsyncErrorMessage(deleteError, "Client could not be deleted."), "error");
     } finally {
+      setButtonLoading(confirmDeleteButton, false);
       pendingDeleteId = null;
     }
   });

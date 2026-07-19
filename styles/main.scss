@@ -24,12 +24,8 @@
 @use "./components/toast";
 @use "./components/loaders";
 @use "./components/liveClockModal";
-@use "./components/annimations";
 @use "./components/utilities";
 /* --- layout --- */
-@use "./layout/footer";
-@use "./layout/header";
-@use "./layout/navigation";
 @use "./layout/sidebar";
 
 /* --- pages --- */

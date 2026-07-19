@@ -546,19 +546,19 @@
             <button class="filter-chip js-status-filter" type="button" data-status-filter="lost">Lost</button>
           </div>
 
-          <div class="state-panel" id="clients-loading" hidden>
+          <div class="state-panel" id="clients-loading" aria-live="polite" hidden>
             <span class="loader" aria-hidden="true"></span>
             <p>Loading clients...</p>
           </div>
 
-          <div class="state-panel state-panel--error" id="clients-error" hidden>
+          <div class="state-panel state-panel--error" id="clients-error" role="alert" aria-live="assertive" hidden>
             <img
               src="./assets/icons/warning.svg"
               data-theme-src-dark="./assets/icons/warning.svg"
               data-theme-src-light="./assets/icons/warning-light-theme.svg"
               alt=""
             />
-            <p>Could not load clients. Check your connection and try again.</p>
+            <p class="js-clients-error-message">Could not load clients. Check your connection and try again.</p>
             <button class="btn btn--secondary js-retry-clients" type="button">Retry</button>
           </div>
 
