@@ -16,7 +16,6 @@ function initTasks() {
   const TASKS_KEY = "crm_tasks";
   const NOTIFICATIONS_KEY = "crm_task_notifications";
   const PENDING_TASK_KEY = "crm_pending_open_task";
-  const CURRENT_USER = "Mariam Tchelidze";
   const statuses = ["todo", "in-progress", "overdue", "done"];
   const statusLabels = {
     todo: "To Do",
@@ -110,6 +109,50 @@ function initTasks() {
   const getArchivedTasks = () => tasks.filter((task) => task.archived && !task.deleted);
   const getDeletedTasks = () => tasks.filter((task) => task.deleted);
   const getTaskById = (taskId) => tasks.find((task) => task.id === taskId);
+  const getCurrentUserName = () => window.crmTeam?.getCurrentUserName?.() || "Account Owner";
+
+  const getTeamOptions = () => {
+    const members = window.crmTeam?.getAssignableMembers?.() || [];
+    const savedAssignees = tasks
+      .map((task) => task.assignee)
+      .filter((assignee) => assignee && assignee !== "Unassigned")
+      .map((assignee) => ({ value: assignee, label: assignee }));
+    const allOptions = [...members, ...savedAssignees];
+
+    return allOptions.filter((option, index, list) => {
+      const value = String(option.value || option.label || "").toLowerCase();
+      return value && list.findIndex((item) => String(item.value || item.label || "").toLowerCase() === value) === index;
+    });
+  };
+
+  const fillSelect = (select, options, placeholder) => {
+    if (!select) return;
+
+    const selectedValue = select.value;
+    select.innerHTML = `<option value="">${placeholder}</option>${options
+      .map((option) => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`)
+      .join("")}`;
+
+    if ([...select.options].some((option) => option.value === selectedValue)) {
+      select.value = selectedValue;
+    }
+  };
+
+  const populateTeamSelects = () => {
+    const options = getTeamOptions();
+
+    document.querySelectorAll(".js-task-assignee, .js-task-detail-assignee, .js-task-detail-assignee-control").forEach((select) => {
+      fillSelect(select, options, "Unassigned");
+    });
+
+    document.querySelectorAll(".js-task-comment-mention").forEach((select) => {
+      fillSelect(
+        select,
+        options.map((option) => ({ value: option.value, label: `@${option.label}` })),
+        "No mention",
+      );
+    });
+  };
 
   /* --- Display helpers protect generated task markup and format dates. --- */
   const escapeHtml = (value) => {
@@ -476,7 +519,8 @@ function initTasks() {
     const assigneeName = document.querySelector(".js-task-detail-assignee-name");
 
     if (assigneeControl) {
-      assigneeControl.value = task.assignee || "Mariam Tchelidze";
+      populateTeamSelects();
+      assigneeControl.value = task.assignee || "";
     }
 
     if (assigneeAvatar) {
@@ -492,6 +536,8 @@ function initTasks() {
   };
 
   const render = () => {
+    populateTeamSelects();
+
     if (taskWorkspacePage && board) {
       renderBoard();
       renderRecycleBin();
@@ -987,17 +1033,17 @@ function initTasks() {
 
     const nextComment = {
       id: createId("comment"),
-      author: CURRENT_USER,
+      author: getCurrentUserName(),
       mention,
       message,
       createdAt: new Date().toISOString(),
     };
 
     updateTask(task.id, { comments: [nextComment, ...task.comments] });
-    addNotification(`${CURRENT_USER} commented on ${task.title}${mention ? ` and mentioned ${mention}` : ""}.`, task.id);
+    addNotification(`${getCurrentUserName()} commented on ${task.title}${mention ? ` and mentioned ${mention}` : ""}.`, task.id);
     logTaskActivity({
       icon: "chat",
-      title: `${CURRENT_USER} commented on ${task.title}`,
+      title: `${getCurrentUserName()} commented on ${task.title}`,
       summary: mention ? `Mentioned ${mention}` : message.slice(0, 90),
       status: "Commented",
       relatedLabel: task.client || "Task",

@@ -2,6 +2,7 @@
 /* --- Core Helpers --- */
 import "./core/constants.js";
 import "./core/storage.js";
+import "./core/team.js";
 
 /* --- Shared UI Controllers --- */
 import "./ui/theme.js";

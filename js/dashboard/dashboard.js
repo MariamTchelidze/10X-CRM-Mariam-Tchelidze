@@ -212,15 +212,30 @@ function setText(selector, text) {
 
 function renderMetricCards(metrics) {
   setText('[data-dashboard-metric="totalClients"]', metrics.totalClients);
-  setText('[data-dashboard-trend="totalClients"]', `${metrics.recentClients.length} most recent shown below`);
+  setText(
+    '[data-dashboard-trend="totalClients"]',
+    metrics.totalClients ? `${metrics.recentClients.length} most recent shown below` : "No clients yet",
+  );
   setText('[data-dashboard-metric="activeDeals"]', metrics.activeDeals);
-  setText('[data-dashboard-trend="activeDeals"]', `${metrics.hotLeads} hot leads above $2,500`);
+  setText(
+    '[data-dashboard-trend="activeDeals"]',
+    metrics.activeDeals ? `${metrics.hotLeads} hot leads above ${moneyFormatter.format(HOT_LEAD_THRESHOLD)}` : "No active deals yet",
+  );
   setText('[data-dashboard-metric="wonRevenue"]', moneyFormatter.format(metrics.wonRevenue));
-  setText('[data-dashboard-trend="wonRevenue"]', `${metrics.wonCount} closed deal${metrics.wonCount === 1 ? "" : "s"}`);
+  setText(
+    '[data-dashboard-trend="wonRevenue"]',
+    metrics.wonCount ? `${metrics.wonCount} closed deal${metrics.wonCount === 1 ? "" : "s"}` : "No won revenue yet",
+  );
   setText('[data-dashboard-metric="pendingTasks"]', metrics.pendingTasks);
-  setText('[data-dashboard-trend="pendingTasks"]', `${metrics.dueToday} due today`);
+  setText(
+    '[data-dashboard-trend="pendingTasks"]',
+    metrics.pendingTasks ? `${metrics.dueToday} due today` : "No pending tasks yet",
+  );
   setText('[data-dashboard-metric="monthlyTarget"]', moneyFormatter.format(metrics.monthlyTarget));
-  setText('[data-dashboard-trend="monthlyTarget"]', `${metrics.monthlyTargetProgress}% of target is covered by won revenue.`);
+  setText(
+    '[data-dashboard-trend="monthlyTarget"]',
+    metrics.wonRevenue ? `${metrics.monthlyTargetProgress}% of target is covered by won revenue.` : "Add won deals to calculate target progress.",
+  );
   setText('[data-dashboard-metric="hotLeads"]', metrics.hotLeads);
   setText('[data-dashboard-trend="hotLeads"]', `Lead clients with deal value of ${moneyFormatter.format(HOT_LEAD_THRESHOLD)} or higher.`);
   setText('[data-dashboard-metric="followUps"]', metrics.followUps);

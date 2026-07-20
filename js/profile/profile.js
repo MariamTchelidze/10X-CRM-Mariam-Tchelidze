@@ -153,11 +153,8 @@ function initProfile() {
     if (profileNameInput) profileNameInput.value = currentUser.fullName || "";
     if (profileEmailInput) profileEmailInput.value = currentUser.email || "";
     if (profileCompanyInput) profileCompanyInput.value = currentUser.company || "";
-    if (profileRoleInput) profileRoleInput.value = currentUser.role || "Sales Manager";
-    if (profileBioInput) {
-      profileBioInput.value =
-        currentUser.bio || "Building a vanilla JavaScript CRM for the 10X course project.";
-    }
+    if (profileRoleInput) profileRoleInput.value = currentUser.role || "";
+    if (profileBioInput) profileBioInput.value = currentUser.bio || "";
     if (profileInitials) profileInitials.textContent = getInitials(currentUser.fullName || currentUser.email);
 
     if (memberSinceElement) memberSinceElement.textContent = formatDate(currentUser.createdAt);

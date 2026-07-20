@@ -66,13 +66,15 @@ function initSignup() {
 
     if (!isValid) return;
 
-    /* --- Demo user object saved in crm_users for the login flow. --- */
+    /* --- New account data is saved locally until the backend replaces browser storage. --- */
     const user = {
       id: Date.now(),
       fullName,
       email,
       password,
       company,
+      role: users.length ? "Member" : "Owner",
+      department: company || "Workspace",
       createdAt: new Date().toISOString(),
     };
 

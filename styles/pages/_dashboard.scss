@@ -403,6 +403,92 @@
   height: 1.9rem;
 }
 
+.team-member-list,
+.role-card-grid {
+  display: grid;
+  gap: $space-md;
+}
+
+.role-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.team-member-card,
+.role-card {
+  padding: $space-lg;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+  box-shadow: 0 0.8rem 1.8rem rgb(0 0 0 / 7%);
+}
+
+.team-member-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(16rem, 0.6fr);
+  align-items: center;
+  gap: $space-md;
+}
+
+.team-member-card__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  font-weight: $fw-bold;
+}
+
+.team-member-card__content {
+  display: grid;
+  gap: $space-xs;
+  min-width: 0;
+}
+
+.team-member-card__content strong,
+.role-card__title {
+  color: var(--color-text);
+}
+
+.team-member-card__content span,
+.team-member-card__meta,
+.role-card__permissions {
+  color: var(--color-text-muted);
+}
+
+.team-member-card__content span,
+.team-member-card__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role-card {
+  display: grid;
+  gap: $space-lg;
+}
+
+.role-card__header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: $space-md;
+}
+
+.role-card__title {
+  display: block;
+  margin-top: $space-xs;
+  font-size: 2rem;
+}
+
+.role-card__permissions {
+  display: grid;
+  gap: $space-sm;
+  padding-left: 1.8rem;
+}
+
 .stats-grid,
 .client-summary {
   display: grid;
@@ -536,7 +622,8 @@
   }
 
   .dashboard-grid,
-  .dashboard-panel-grid {
+  .dashboard-panel-grid,
+  .role-card-grid {
     grid-template-columns: 1fr;
   }
 
@@ -581,7 +668,9 @@
 
   .files-toolbar,
   .file-item--record,
-  .file-item__open {
+  .file-item__open,
+  .team-member-card,
+  .role-card__header {
     grid-template-columns: 1fr;
   }
 

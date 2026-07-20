@@ -6,10 +6,10 @@
   const dialer = document.querySelector(".js-phone-dialer");
   if (!dialer) return;
 
-  /* --- Call config keeps real calling disabled until the exam/demo needs it. --- */
+  /* --- Call config keeps browser tel links disabled until the user enables calling. --- */
   const PHONE_CONFIG = {
-    callingEnabled: true,
-    demoNumber: "+995574431557",
+    callingEnabled: false,
+    allowedNumber: "",
   };
 
   /* --- Storage keys connect client phone numbers with saved call notes. --- */
@@ -63,7 +63,6 @@
   const formatNumber = (value) => {
     const normalized = normalizeNumber(value);
     if (!normalized) return "Dial number";
-    if (normalized === PHONE_CONFIG.demoNumber) return "+995 574 431 557";
     return normalized.replace(/(.{4})/g, "$1 ").trim();
   };
 
@@ -147,14 +146,14 @@
     }
 
     if (!PHONE_CONFIG.callingEnabled) {
-      const message = "Calling is disabled in demo mode.";
+      const message = "Calling is disabled from configuration.";
       setStatus(message, "warning");
-      window.crmNotifications?.add("Phone call blocked because demo calling is disabled.");
+      window.crmNotifications?.add("Phone call blocked because calling is disabled.");
       window.crmActivity?.add({
         type: "phone",
         icon: "phone",
         title: "Phone call blocked",
-        summary: `${normalized} could not be called because demo calling is disabled.`,
+        summary: `${normalized} could not be called because calling is disabled.`,
         status: "Blocked",
         relatedLabel: selectedClient?.name || normalized,
         description: "The application phone prevented a real call because calling is disabled in configuration.",
@@ -164,15 +163,15 @@
       return;
     }
 
-    if (normalized !== PHONE_CONFIG.demoNumber) {
-      const message = "Calling is available only for the verified demo number.";
+    if (PHONE_CONFIG.allowedNumber && normalized !== PHONE_CONFIG.allowedNumber) {
+      const message = "Calling is available only for the configured number.";
       setStatus(message, "error");
       return;
     }
 
     const message = "Opening device phone app.";
     setStatus(message, "success");
-    window.crmNotifications?.add("CRM Phone started a demo call.");
+    window.crmNotifications?.add("CRM Phone started a call.");
     window.crmActivity?.add({
       type: "phone",
       icon: "phone",
@@ -184,7 +183,7 @@
       actionHref: "./dashboard.html",
       actionLabel: "Open Dashboard",
     });
-    window.location.href = `tel:${PHONE_CONFIG.demoNumber}`;
+    window.location.href = `tel:${normalized}`;
   });
 
   noteForm.addEventListener("submit", (event) => {

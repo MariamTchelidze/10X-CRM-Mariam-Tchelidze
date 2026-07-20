@@ -7,6 +7,8 @@
   const DEFAULT_ACCENT = "#ff6b1a";
   const ACCOUNT_STORAGE_KEYS = [
     "crm_users",
+    "crm_team_members",
+    "crm_team_roles",
     "crm_clients",
     "crm_files",
     "crm_activity",

@@ -3700,6 +3700,92 @@ body.is-auth-page-exiting .auth {
   height: 1.9rem;
 }
 
+.team-member-list,
+.role-card-grid {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.role-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.team-member-card,
+.role-card {
+  padding: 1.6rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.8rem;
+  background: var(--color-elevated);
+  box-shadow: 0 0.8rem 1.8rem rgba(0, 0, 0, 0.07);
+}
+
+.team-member-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto minmax(16rem, 0.6fr);
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.team-member-card__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 50%;
+  background: var(--color-soft-primary);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.team-member-card__content {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.team-member-card__content strong,
+.role-card__title {
+  color: var(--color-text);
+}
+
+.team-member-card__content span,
+.team-member-card__meta,
+.role-card__permissions {
+  color: var(--color-text-muted);
+}
+
+.team-member-card__content span,
+.team-member-card__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role-card {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.role-card__header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.role-card__title {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 2rem;
+}
+
+.role-card__permissions {
+  display: grid;
+  gap: 0.8rem;
+  padding-left: 1.8rem;
+}
+
 .stats-grid,
 .client-summary {
   display: grid;
@@ -3831,7 +3917,8 @@ body.is-auth-page-exiting .auth {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .dashboard-grid,
-  .dashboard-panel-grid {
+  .dashboard-panel-grid,
+  .role-card-grid {
     grid-template-columns: 1fr;
   }
   .sales-workspace__header,
@@ -3867,7 +3954,9 @@ body.is-auth-page-exiting .auth {
   }
   .files-toolbar,
   .file-item--record,
-  .file-item__open {
+  .file-item__open,
+  .team-member-card,
+  .role-card__header {
     grid-template-columns: 1fr;
   }
   .files-toolbar {

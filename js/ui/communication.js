@@ -318,37 +318,39 @@
     return { text: "I can help with clients, overdue tasks, pipeline summaries, countries/timezones, unread notifications, and today's CRM focus. You can also ask me to export all, lead, won, lost, or contacted clients as CSV." };
   };
 
-  const DEFAULT_CONVERSATIONS = {
-    "Sales Team": [
-      {
-        role: "team",
-        author: "Mariam",
-        recipient: "Sales Team",
-        text: "Please review today's hot leads.",
-        createdAt: new Date().toISOString(),
-      },
-    ],
-    "Support Team": [],
-    "Account Manager": [],
-    "Mariam Tchelidze": [],
+  const getTeamRecipients = () => {
+    const members = window.crmTeam?.getAssignableMembers?.() || [];
+    return members.map((member) => member.label || member.value).filter(Boolean);
   };
 
-  const getSelectedRecipient = () => recipientSelect?.value || "Sales Team";
+  const populateRecipientSelect = () => {
+    if (!recipientSelect) return;
+
+    const selectedValue = recipientSelect.value;
+    const recipients = getTeamRecipients();
+
+    recipientSelect.innerHTML = recipients.length
+      ? recipients.map((recipient) => `<option value="${escapeHtml(recipient)}">${escapeHtml(recipient)}</option>`).join("")
+      : '<option value="">No team users yet</option>';
+
+    if (recipients.includes(selectedValue)) {
+      recipientSelect.value = selectedValue;
+    }
+  };
+
+  const getSelectedRecipient = () => recipientSelect?.value || getTeamRecipients()[0] || "";
 
   const getAvailableRecipients = () => {
-    const options = Array.from(recipientSelect?.options || []);
-    const values = options.map((option) => option.value).filter(Boolean);
-    return values.length ? values : Object.keys(DEFAULT_CONVERSATIONS);
+    return getTeamRecipients();
   };
 
   const normalizeConversationMap = (storedValue) => {
-    const conversations = Object.fromEntries(
-      Object.entries(DEFAULT_CONVERSATIONS).map(([recipient, history]) => [recipient, [...history]]),
-    );
+    const conversations = {};
 
     if (Array.isArray(storedValue)) {
       storedValue.forEach((message) => {
-        const recipient = message.recipient || "Sales Team";
+        const recipient = message.recipient || getSelectedRecipient();
+        if (!recipient) return;
         conversations[recipient] = [...(conversations[recipient] || []), message];
       });
       return conversations;
@@ -383,6 +385,7 @@
     }
   };
 
+  populateRecipientSelect();
   let teamConversations = readConversationMap();
   let activeRecipient = getSelectedRecipient();
   let aiHistory = readHistory(AI_KEY, readHistory(LEGACY_AI_KEY, [
@@ -403,8 +406,10 @@
 
   const renderActiveConversation = () => {
     const history = teamConversations[activeRecipient] || [];
-    renderMessages(teamMessages, history, `No messages with ${activeRecipient} yet.`);
-    if (teamInput) teamInput.placeholder = `Message ${activeRecipient}`;
+    renderMessages(teamMessages, history, activeRecipient ? `No messages with ${activeRecipient} yet.` : "No team users are available yet.");
+    if (teamInput) teamInput.placeholder = activeRecipient ? `Message ${activeRecipient}` : "Add a team user first";
+    if (teamInput) teamInput.disabled = !activeRecipient;
+    teamForm?.querySelector('button[type="submit"]')?.toggleAttribute("disabled", !activeRecipient);
   };
 
   renderActiveConversation();
@@ -423,7 +428,7 @@
     const messageText = teamInput.value.trim();
     const recipient = getSelectedRecipient();
 
-    if (!messageText) return;
+    if (!messageText || !recipient) return;
 
     activeRecipient = recipient;
     teamConversations[recipient] = [
