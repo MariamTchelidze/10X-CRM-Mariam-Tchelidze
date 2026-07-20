@@ -14,7 +14,8 @@
     if (!preview || !option) return;
 
     const icon = getTheme() === "light" ? option.dataset.iconLight || option.dataset.icon : option.dataset.icon;
-    preview.style.setProperty("--select-icon", icon ? `url("${icon}")` : "none");
+    const iconUrl = icon ? new URL(icon, window.location.href).href : "";
+    preview.style.setProperty("--select-icon", iconUrl ? `url("${iconUrl}")` : "none");
   };
 
   document.querySelectorAll(".js-icon-select select, .js-icon-select-control").forEach((select) => {

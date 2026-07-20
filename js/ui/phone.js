@@ -8,7 +8,7 @@
 
   /* --- Call config keeps real calling disabled until the exam/demo needs it. --- */
   const PHONE_CONFIG = {
-    callingEnabled: false,
+    callingEnabled: true,
     demoNumber: "+995574431557",
   };
 
@@ -77,8 +77,7 @@
     status.dataset.state = type;
   };
 
-  const getClientsWithPhones = () =>
-    readArray(CLIENTS_KEY).filter((client) => normalizeNumber(client.phone));
+  const getClientsWithPhones = () => readArray(CLIENTS_KEY).filter((client) => normalizeNumber(client.phone));
 
   /* --- Call Queue Rendering --- */
   const renderQueue = () => {
