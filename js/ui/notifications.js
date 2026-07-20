@@ -158,6 +158,25 @@
       render();
     }
 
+    if (event.target.closest(".js-select-read-notifications")) {
+      let selectedCount = 0;
+
+      notifications = readNotifications().map((notification) => {
+        const isRead = notification.status === "read" || notification.read;
+
+        if (isRead) selectedCount += 1;
+
+        return { ...notification, selected: isRead };
+      });
+
+      saveNotifications(notifications);
+      render();
+      window.crmToast?.show(
+        selectedCount ? "All read notifications selected." : "No read notifications to select.",
+        selectedCount ? "success" : "info",
+      );
+    }
+
     if (event.target.closest(".js-delete-selected-notifications")) {
       notifications = readNotifications().filter((notification) => !notification.selected);
       saveNotifications(notifications);
