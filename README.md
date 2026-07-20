@@ -77,7 +77,7 @@ DummyJSON does not permanently save newly created local clients. If a locally ad
 
 ## Live Demo
 
-Live demo link: add the final Netlify or Vercel URL here before submission.
+Live demo link: https://10-x-crm-mariam-tchelidze.vercel.app/index.html
 
 ## Test Account
 
