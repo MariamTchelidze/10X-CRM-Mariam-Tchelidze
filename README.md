@@ -2,14 +2,14 @@
 
 ## About
 
-10X CRM is a vanilla JavaScript CRM platform built for the 10X course exam project. The app helps a sales user register, log in, manage client leads, review CRM dashboard information, and keep local demo data inside the browser.
+10X CRM is a vanilla JavaScript CRM platform built for the 10X course exam project. The app helps a sales user register, log in, manage client leads, review CRM dashboard information, and keep project data inside the browser.
 
 The project is intentionally built without a backend so the main JavaScript concepts are visible and easy to explain: DOM rendering, form validation, localStorage state, fetch requests, event listeners, and responsive UI behavior.
 
 ## Features
 
 - Sign up with validation for full name, email, duplicate email, password, and confirm password.
-- Log in with saved demo users and create a `crm_session` in localStorage.
+- Log in with registered users and create a `crm_session` in localStorage.
 - Auth guard for protected pages: Dashboard, Clients, and Profile.
 - Logout flow that removes only the active session.
 - Dark and light theme support with persisted theme preference.
@@ -58,7 +58,7 @@ The project is intentionally built without a backend so the main JavaScript conc
 
 The project follows the PRD localStorage keys:
 
-- `crm_users` - registered demo users.
+- `crm_users` - registered users for the frontend learning flow.
 - `crm_session` - current logged-in user session.
 - `crm_clients` - client data loaded from API and changed by the app.
 - `crm_theme` - selected theme.
@@ -73,7 +73,7 @@ The Clients page uses DummyJSON:
 - `POST https://dummyjson.com/users/add`
 - `DELETE https://dummyjson.com/users/{id}`
 
-DummyJSON does not permanently save newly created local clients. If a locally added client receives a fake API id, delete behavior still updates local CRM state so the demo stays consistent.
+DummyJSON does not permanently save newly created local clients. If a locally added client receives a temporary API id, delete behavior still updates local CRM state so the frontend flow stays consistent.
 
 ## Live Demo
 
@@ -85,9 +85,9 @@ Because this is a localStorage-based educational project, the evaluator can crea
 
 Suggested test values:
 
-- Full Name: `Demo User`
-- Email: `demo@example.com`
-- Password: `demo1234`
+- Full Name: `Test User`
+- Email: `test@example.com`
+- Password: `test1234`
 
 ## Exam Notes
 

@@ -28,20 +28,27 @@
     const chartData = metrics?.chartData || {};
     const values =
       type === "line"
-        ? chartData.monthlyWonValues || [18, 24, 21, 30, 38, 44]
+        ? chartData.monthlyWonValues || []
         : type === "pie"
-          ? chartData.outcomeValues || [18, 7, 5]
-          : chartData.stageMix || [48, 31, 18, 7];
+          ? chartData.outcomeValues || []
+          : chartData.stageMix || [];
     const labels =
       type === "line"
-        ? chartData.monthlyWonLabels || ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+        ? chartData.monthlyWonLabels || []
         : type === "pie"
-          ? chartData.outcomeLabels || ["Won", "Lost", "Active"]
-          : chartData.stageLabels || ["Lead", "Contacted", "Won", "Lost"];
+          ? chartData.outcomeLabels || []
+          : chartData.stageLabels || [];
     const max = Math.max(...values, 1);
 
     context.font = "12px Inter, Arial, sans-serif";
     context.fillStyle = getComputedStyle(document.body).getPropertyValue("--color-text-muted") || "#8ea0b8";
+
+    if (!values.length || values.every((value) => Number(value) === 0)) {
+      context.textAlign = "center";
+      context.fillText("No chart data yet", rect.width / 2, rect.height / 2);
+      context.textAlign = "start";
+      return;
+    }
 
     if (type === "pie") {
       const total = values.reduce((sum, value) => sum + value, 0) || 1;
