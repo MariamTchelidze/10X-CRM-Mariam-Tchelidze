@@ -8,6 +8,7 @@
   const ACCOUNT_STORAGE_KEYS = [
     "crm_users",
     "crm_clients",
+    "crm_files",
     "crm_activity",
     "crm_profile_avatar",
     "crm_tasks",

@@ -3627,6 +3627,79 @@ body.is-auth-page-exiting .auth {
   font-size: 1.6rem;
 }
 
+.files-workspace {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.files-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 1.2rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.files-toolbar__field {
+  display: grid;
+  gap: 0.4rem;
+  width: min(28rem, 100%);
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.file-item--record {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.2rem;
+  box-shadow: 0 0.8rem 1.8rem rgba(0, 0, 0, 0.07);
+}
+
+.file-item__open {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.2rem;
+  min-width: 0;
+  text-align: left;
+}
+
+.file-item__content {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.file-item__title,
+.file-item__meta,
+.file-item__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-item__description {
+  color: var(--color-text-secondary);
+  font-size: 1.3rem;
+}
+
+.file-item__delete {
+  align-self: center;
+}
+
+.file-item__delete img {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
 .stats-grid,
 .client-summary {
   display: grid;
@@ -3791,6 +3864,21 @@ body.is-auth-page-exiting .auth {
   }
   .dashboard-list__item {
     grid-template-columns: 1fr;
+  }
+  .files-toolbar,
+  .file-item--record,
+  .file-item__open {
+    grid-template-columns: 1fr;
+  }
+  .files-toolbar {
+    display: grid;
+    align-items: stretch;
+  }
+  .files-toolbar__field {
+    width: 100%;
+  }
+  .file-item__delete {
+    justify-self: start;
   }
   .sales-controls,
   .sales-stage-grid,
@@ -4573,7 +4661,9 @@ body.is-auth-page-exiting .auth {
 }
 
 .file-item--interactive:hover,
-.file-item--interactive:focus-visible {
+.file-item--interactive:focus-visible,
+.file-item--record:hover,
+.file-item--record:focus-within {
   border-color: var(--color-primary);
   transform: translateY(-0.2rem);
 }
@@ -4588,7 +4678,7 @@ body.is-auth-page-exiting .auth {
 
 .spreadsheet-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(14rem, 1fr));
+  grid-template-columns: repeat(var(--spreadsheet-columns, 5), minmax(14rem, 1fr));
   min-width: 72rem;
   border: 0.1rem solid var(--color-border);
   border-radius: 0.8rem;

@@ -949,7 +949,7 @@
               <p class="card__eyebrow">Account documents</p>
               <h2 class="dashboard-section__title" id="files-title">Files</h2>
             </div>
-            <button class="btn btn--ghost" type="button" disabled>
+            <button class="btn btn--ghost" type="button" disabled title="Backend upload will be connected later">
               <img
                 src="./assets/icons/upload.svg"
                 data-theme-src-dark="./assets/icons/upload.svg"
@@ -962,91 +962,37 @@
           </header>
 
           <article class="card">
-            <header class="card__header">
-              <h3 class="card__title">Imported Files</h3>
+            <header class="card__header card__header--split">
+              <div>
+                <h3 class="card__title">CRM Files</h3>
+                <p class="card__subtitle">Export live CRM data and reopen compatible CSV files inside the workspace.</p>
+              </div>
             </header>
-            <div class="card__body file-list">
-              <article class="file-item">
-                <img
-                  src="./assets/icons/document.svg"
-                  data-theme-src-dark="./assets/icons/document.svg"
-                  data-theme-src-light="./assets/icons/document-light-theme.svg"
-                  alt=""
-                  class="file-item__icon"
-                />
-                <div>
-                  <h3 class="file-item__title">10X-CRM-Exam-PRD.md</h3>
-                  <p class="file-item__meta">Project document - assets/document</p>
-                </div>
-              </article>
-              <article class="file-item">
-                <img
-                  src="./assets/icons/txt-doc.svg"
-                  data-theme-src-dark="./assets/icons/txt-doc.svg"
-                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
-                  alt=""
-                  class="file-item__icon"
-                />
-                <div>
-                  <h3 class="file-item__title">ai-log.md</h3>
-                  <p class="file-item__meta">AI usage notes - assets/document</p>
-                </div>
-              </article>
-              <article class="file-item">
-                <img
-                  src="./assets/icons/txt-doc.svg"
-                  data-theme-src-dark="./assets/icons/txt-doc.svg"
-                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
-                  alt=""
-                  class="file-item__icon"
-                />
-                <div>
-                  <h3 class="file-item__title">glossary.md</h3>
-                  <p class="file-item__meta">Technical English package - assets/document</p>
-                </div>
-              </article>
-              <article class="file-item">
-                <img
-                  src="./assets/icons/txt-doc.svg"
-                  data-theme-src-dark="./assets/icons/txt-doc.svg"
-                  data-theme-src-light="./assets/icons/txt-doc-light-theme.svg"
-                  alt=""
-                  class="file-item__icon"
-                />
-                <div>
-                  <h3 class="file-item__title">research-note.md</h3>
-                  <p class="file-item__meta">Research source note - assets/document</p>
-                </div>
-              </article>
-              <article
-                class="file-item file-item--interactive js-open-spreadsheet"
-                tabindex="0"
-                role="button"
-                data-file-name="clients-pipeline.csv"
-                data-file-type="csv"
-              >
-                <img
-                  src="./assets/icons/data.svg"
-                  data-theme-src-dark="./assets/icons/data.svg"
-                  data-theme-src-light="./assets/icons/data-light-theme.svg"
-                  alt=""
-                  class="file-item__icon"
-                />
-                <div>
-                  <h3 class="file-item__title">clients-pipeline.csv</h3>
-                  <p class="file-item__meta">Editable spreadsheet - CRM sample data</p>
-                </div>
-              </article>
-              <button class="btn btn--primary file-list__export js-export-file" type="button">
-                <img
-                  src="./assets/icons/download.svg"
-                  data-theme-src-dark="./assets/icons/download.svg"
-                  data-theme-src-light="./assets/icons/download-light-theme.svg"
-                  alt=""
-                  class="btn__icon"
-                />
-                <span>Export File</span>
-              </button>
+            <div class="card__body files-workspace">
+              <div class="files-toolbar" aria-label="File export controls">
+                <label class="files-toolbar__field" for="file-export-type">
+                  <span>Export source</span>
+                  <select class="input select-field js-file-export-type" id="file-export-type">
+                    <option value="clients">Clients CSV</option>
+                    <option value="sales">Sales Pipeline CSV</option>
+                    <option value="tasks">Tasks CSV</option>
+                    <option value="activity">Activity CSV</option>
+                  </select>
+                </label>
+                <button class="btn btn--primary file-list__export js-export-file" type="button">
+                  <img
+                    src="./assets/icons/download.svg"
+                    data-theme-src-dark="./assets/icons/download.svg"
+                    data-theme-src-light="./assets/icons/download-light-theme.svg"
+                    alt=""
+                    class="btn__icon"
+                  />
+                  <span>Export File</span>
+                </button>
+              </div>
+              <div class="file-list js-file-list" aria-live="polite">
+                <p class="task-empty">No files yet. Export CRM data to create your first file.</p>
+              </div>
             </div>
           </article>
         </section>
