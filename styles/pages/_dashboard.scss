@@ -1168,6 +1168,7 @@
 .notification-item {
   display: grid;
   gap: $space-xs;
+  min-width: 0;
   padding: $space-md;
   border: 0.1rem solid var(--color-border);
   border-radius: $radius-md;
@@ -1180,13 +1181,17 @@
 }
 
 .notification-item__message {
+  min-width: 0;
   color: var(--color-text);
   font-weight: $fw-semibold;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .notification-item__time {
   color: var(--color-text-muted);
   font-size: 1.2rem;
+  white-space: nowrap;
 }
 
 @include media(laptop) {
@@ -1569,10 +1574,23 @@
 
 .notification-item {
   grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
 }
 
 .notification-item__select {
   display: inline-flex;
+}
+
+@include media(mobile) {
+  .notification-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .notification-item__time {
+    grid-column: 2;
+    white-space: normal;
+  }
 }
 
 .workspace-widget {

@@ -1171,14 +1171,14 @@ body[data-theme=light] .modal {
 
 .modal__dialog--notifications .modal__footer {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(11.6rem, 1fr));
   justify-content: stretch;
   gap: 0.8rem;
 }
 
 .modal__dialog--notifications .modal__footer .btn {
   width: 100%;
-  min-width: 11.6rem;
+  min-width: 0;
   white-space: normal;
 }
 
@@ -4457,6 +4457,7 @@ body.is-auth-page-exiting .auth {
 .notification-item {
   display: grid;
   gap: 0.4rem;
+  min-width: 0;
   padding: 1.2rem;
   border: 0.1rem solid var(--color-border);
   border-radius: 0.8rem;
@@ -4469,13 +4470,17 @@ body.is-auth-page-exiting .auth {
 }
 
 .notification-item__message {
+  min-width: 0;
   color: var(--color-text);
   font-weight: 600;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .notification-item__time {
   color: var(--color-text-muted);
   font-size: 1.2rem;
+  white-space: nowrap;
 }
 
 @media (max-width: 1024px) {
@@ -4843,12 +4848,23 @@ body.is-auth-page-exiting .auth {
 
 .notification-item {
   grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
 }
 
 .notification-item__select {
   display: inline-flex;
 }
 
+@media (max-width: 480px) {
+  .notification-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+  .notification-item__time {
+    grid-column: 2;
+    white-space: normal;
+  }
+}
 .workspace-widget {
   position: fixed;
   right: 2rem;

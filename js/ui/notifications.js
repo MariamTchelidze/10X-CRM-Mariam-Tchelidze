@@ -52,6 +52,63 @@
     });
   };
 
+  /* --- Current language helpers keep stored notifications in English and translate only the UI output. --- */
+  const getLanguage = () => window.crmI18n?.getLanguage?.() || document.documentElement.lang || "en";
+  const isGeorgian = () => getLanguage() === "ka";
+
+  const notificationUiText = (english, georgian) => (isGeorgian() ? georgian : english);
+
+  const translateNotificationMessage = (message) => {
+    const text = String(message || "");
+
+    if (!isGeorgian()) return text;
+
+    const exactMessages = {
+      "New call note saved to Profile Call History.": "პროფილის ზარების ისტორიაში ახალი ზარის შენიშვნა შეინახა.",
+      "Phone call blocked because calling is disabled.": "ზარი დაიბლოკა, რადგან დარეკვა გამორთულია.",
+      "CRM Phone started a call.": "CRM ტელეფონმა ზარი დაიწყო.",
+      "10X SensAI replied with CRM guidance.": "10X SensAI-მ CRM რეკომენდაცია დაგიბრუნათ.",
+    };
+
+    if (exactMessages[text]) return exactMessages[text];
+
+    const dynamicMessages = [
+      {
+        pattern: /^New Messenger message sent to (.+)\.$/,
+        render: ([, recipient]) => `Messenger-ის ახალი შეტყობინება გაიგზავნა: ${recipient}.`,
+      },
+      {
+        pattern: /^New task assigned to (.+): (.+)$/,
+        render: ([, assignee, taskTitle]) => `ახალი დავალება მიენიჭა ${assignee}-ს: ${taskTitle}`,
+      },
+      {
+        pattern: /^(.+) was reassigned to (.+)\.$/,
+        render: ([, taskTitle, assignee]) => `${taskTitle} გადაეცა ${assignee}-ს.`,
+      },
+      {
+        pattern: /^(.+) commented on (.+) and mentioned (.+)\.$/,
+        render: ([, author, taskTitle, teammate]) => `${author}-მა დატოვა კომენტარი ${taskTitle}-ზე და მონიშნა ${teammate}.`,
+      },
+      {
+        pattern: /^(.+) commented on (.+)\.$/,
+        render: ([, author, taskTitle]) => `${author}-მა დატოვა კომენტარი ${taskTitle}-ზე.`,
+      },
+      {
+        pattern: /^Follow up: (.+)$/,
+        render: ([, clientName]) => `შეხსენება: ${clientName}`,
+      },
+    ];
+
+    const match = dynamicMessages
+      .map(({ pattern, render }) => {
+        const result = text.match(pattern);
+        return result ? render(result) : "";
+      })
+      .find(Boolean);
+
+    return match || text;
+  };
+
   /* --- Runtime notification state mirrors localStorage for quick rendering. --- */
   let notifications = readNotifications();
 
@@ -73,7 +130,7 @@
 
     document.querySelectorAll(".js-notification-list").forEach((list) => {
       if (!notifications.length) {
-        list.innerHTML = '<p class="task-empty">No notifications yet.</p>';
+        list.innerHTML = `<p class="task-empty">${notificationUiText("No notifications yet.", "შეტყობინებები ჯერ არ არის.")}</p>`;
         return;
       }
 
@@ -84,9 +141,9 @@
               data-notification-id="${notification.id}"
               data-notification-task-id="${escapeHtml(notification.taskId || "")}">
               <span class="notification-item__select" data-skip-delete-confirm>
-                <input class="js-notification-select" type="checkbox" data-notification-id="${notification.id}" ${notification.selected ? "checked" : ""} aria-label="Select notification" />
+                <input class="js-notification-select" type="checkbox" data-notification-id="${notification.id}" ${notification.selected ? "checked" : ""} aria-label="${notificationUiText("Select notification", "შეტყობინების მონიშვნა")}" />
               </span>
-              <span class="notification-item__message">${escapeHtml(notification.message)}</span>
+              <span class="notification-item__message">${escapeHtml(translateNotificationMessage(notification.message))}</span>
               <time class="notification-item__time">${formatDateTime(notification.createdAt)}</time>
             </article>
           `,
@@ -172,7 +229,9 @@
       saveNotifications(notifications);
       render();
       window.crmToast?.show(
-        selectedCount ? "All read notifications selected." : "No read notifications to select.",
+        selectedCount
+          ? notificationUiText("All read notifications selected.", "ყველა წაკითხული შეტყობინება მონიშნულია.")
+          : notificationUiText("No read notifications to select.", "წაკითხული შეტყობინებები მოსანიშნად არ არის."),
         selectedCount ? "success" : "info",
       );
     }
@@ -193,6 +252,8 @@
   window.addEventListener("storage", (event) => {
     if (event.key === STORAGE_KEY) render();
   });
+
+  window.addEventListener("crm:languagechange", render);
 
   window.crmNotifications = { add, render };
   render();
