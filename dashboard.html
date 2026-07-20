@@ -703,12 +703,77 @@
             </article>
           </div>
 
-          <article class="card">
-            <header class="card__header">
-              <h3 class="card__title">Sales Focus</h3>
+          <article class="card sales-workspace">
+            <header class="card__header card__header--split sales-workspace__header">
+              <div>
+                <h3 class="card__title">Sales Pipeline</h3>
+                <p class="card__subtitle">Track target progress, active opportunities, and high-value deals from live CRM data.</p>
+              </div>
+              <div class="sales-controls" aria-label="Sales controls">
+                <label class="sales-controls__field" for="sales-target-input">
+                  <span>Target</span>
+                  <input
+                    class="input sales-controls__input js-sales-target-input"
+                    id="sales-target-input"
+                    type="number"
+                    min="0"
+                    step="500"
+                    inputmode="numeric"
+                  />
+                </label>
+                <label class="sales-controls__field" for="sales-status-filter">
+                  <span>Status</span>
+                  <select class="input select-field sales-controls__select js-sales-status-filter" id="sales-status-filter">
+                    <option value="all">All deals</option>
+                    <option value="lead">Lead</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="won">Won</option>
+                    <option value="lost">Lost</option>
+                  </select>
+                </label>
+                <label class="sales-controls__field" for="sales-sort-select">
+                  <span>Sort</span>
+                  <select class="input select-field sales-controls__select js-sales-sort-select" id="sales-sort-select">
+                    <option value="value-desc">Highest value</option>
+                    <option value="value-asc">Lowest value</option>
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="name">Client name</option>
+                  </select>
+                </label>
+              </div>
             </header>
-            <div class="card__body dashboard-list" id="sales-focus-list" data-render-target="sales-focus">
-              <p class="task-empty">Sales focus will appear after client data is loaded.</p>
+
+            <div class="card__body sales-workspace__body">
+              <section class="sales-stage-grid js-sales-stage-summary" aria-label="Sales stage summary"></section>
+
+              <div class="sales-workspace__columns">
+                <section class="sales-focus-panel" aria-labelledby="sales-focus-title">
+                  <div class="sales-subheader">
+                    <div>
+                      <p class="card__eyebrow">Priority focus</p>
+                      <h4 class="sales-subheader__title" id="sales-focus-title">Sales Focus</h4>
+                    </div>
+                    <span class="status-badge status-badge--neutral js-sales-focus-count">0 active</span>
+                  </div>
+                  <div class="dashboard-list sales-focus-list" id="sales-focus-list" data-render-target="sales-focus">
+                    <p class="task-empty">Sales focus will appear after client data is loaded.</p>
+                  </div>
+                </section>
+
+                <section class="sales-deals-panel" aria-labelledby="sales-deals-title">
+                  <div class="sales-subheader">
+                    <div>
+                      <p class="card__eyebrow">Deal table</p>
+                      <h4 class="sales-subheader__title" id="sales-deals-title">All Sales Deals</h4>
+                    </div>
+                    <span class="status-badge status-badge--neutral js-sales-deal-count">0 deals</span>
+                  </div>
+                  <div class="sales-deal-list js-sales-deal-list" aria-live="polite">
+                    <p class="task-empty">Add clients to build your sales pipeline.</p>
+                  </div>
+                </section>
+              </div>
             </div>
           </article>
         </section>

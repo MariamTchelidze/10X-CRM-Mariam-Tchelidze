@@ -10,6 +10,7 @@
 
   const TASKS_KEY = "crm_tasks";
   const FAVOURITES_KEY = "crm_favourites";
+  const SALES_SETTINGS_KEY = "crm_sales_settings";
   const MONTHLY_TARGET = 32000;
   const STATUS_LABELS = {
     lead: "Lead",
@@ -63,6 +64,13 @@
   const getTasks = () => readArray(TASKS_KEY);
   const getFavourites = () => readArray(FAVOURITES_KEY);
   const getActivityLog = () => readArray(constants.ACTIVITY_KEY);
+  const getSalesSettings = () => {
+    const settings = storage.read(SALES_SETTINGS_KEY, {});
+    const target = Number(settings?.monthlyTarget);
+    return {
+      monthlyTarget: Number.isFinite(target) && target >= 0 ? target : MONTHLY_TARGET,
+    };
+  };
 
   const formatDateTime = (value) => {
     const date = new Date(value);
@@ -79,6 +87,7 @@
   const getMetrics = () => {
     const clients = getClients();
     const tasks = getTasks();
+    const salesSettings = getSalesSettings();
     const counts = { lead: 0, contacted: 0, won: 0, lost: 0 };
 
     clients.forEach((client) => {
@@ -102,7 +111,8 @@
       dueTasks,
       pipelineHealth: total ? Math.round(((counts.lead + counts.contacted + counts.won) / total) * 100) : 0,
       conversion: total ? Math.round((counts.won / total) * 100) : 0,
-      targetProgress: Math.min(Math.round((wonRevenue / MONTHLY_TARGET) * 100), 100),
+      monthlyTarget: salesSettings.monthlyTarget,
+      targetProgress: salesSettings.monthlyTarget ? Math.min(Math.round((wonRevenue / salesSettings.monthlyTarget) * 100), 100) : 0,
     };
   };
 
@@ -149,7 +159,7 @@
       },
       {
         title: "Sales Target Overview",
-        text: `${moneyFormatter.format(metrics.wonRevenue)} won revenue, ${metrics.targetProgress}% of ${moneyFormatter.format(MONTHLY_TARGET)} target.`,
+        text: `${moneyFormatter.format(metrics.wonRevenue)} won revenue, ${metrics.targetProgress}% of ${moneyFormatter.format(metrics.monthlyTarget)} target.`,
       },
       {
         title: "Task Workload Summary",

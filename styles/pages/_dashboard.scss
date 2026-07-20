@@ -88,6 +88,212 @@
   line-height: 1.1;
 }
 
+.card__subtitle {
+  margin-top: $space-xs;
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+}
+
+.sales-workspace {
+  overflow: hidden;
+}
+
+.sales-workspace__header {
+  align-items: flex-start;
+  gap: $space-xl;
+}
+
+.sales-controls {
+  display: grid;
+  grid-template-columns: minmax(11rem, 13rem) minmax(13rem, 15rem) minmax(16rem, 18rem);
+  gap: $space-md;
+  align-items: end;
+  padding: $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: rgb(255 255 255 / 2%);
+}
+
+.sales-controls__field {
+  display: grid;
+  gap: $space-xs;
+  min-width: 0;
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: $fw-bold;
+}
+
+.sales-controls__input,
+.sales-controls__select {
+  min-width: 0;
+  min-height: 4rem;
+  border-radius: $radius-sm;
+  font-weight: $fw-semibold;
+}
+
+.sales-controls__input:focus,
+.sales-controls__select:focus {
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 0.1rem var(--color-primary),
+    0 0.8rem 1.8rem rgb(0 0 0 / 12%);
+  outline: none;
+}
+
+.sales-controls__select {
+  cursor: pointer;
+}
+
+.sales-workspace__body,
+.sales-focus-panel,
+.sales-deals-panel {
+  display: grid;
+  gap: $space-lg;
+}
+
+.sales-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $space-md;
+}
+
+.sales-stage-card {
+  position: relative;
+  display: grid;
+  gap: $space-xs;
+  padding: $space-lg;
+  overflow: hidden;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+  box-shadow: 0 1rem 2.2rem rgb(0 0 0 / 8%);
+}
+
+.sales-stage-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.4rem;
+  background: var(--color-primary);
+}
+
+.sales-stage-card--contacted::before {
+  background: var(--color-secondary);
+}
+
+.sales-stage-card--won::before {
+  background: var(--color-success);
+}
+
+.sales-stage-card--lost::before {
+  background: var(--color-danger);
+}
+
+.sales-stage-card__label,
+.sales-stage-card__meta,
+.sales-deal-card__company,
+.sales-deal-card__meta small {
+  color: var(--color-text-muted);
+}
+
+.sales-stage-card__value {
+  color: var(--color-text);
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.sales-workspace__columns {
+  display: grid;
+  grid-template-columns: minmax(28rem, 0.75fr) minmax(0, 1.25fr);
+  gap: $space-xl;
+  align-items: start;
+}
+
+.sales-subheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+}
+
+.sales-subheader__title {
+  color: var(--color-text);
+  font-size: 1.8rem;
+}
+
+.sales-focus-item {
+  grid-template-columns: auto minmax(12rem, 0.6fr) minmax(0, 1fr);
+}
+
+.sales-focus-item > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.sales-deal-list {
+  display: grid;
+  gap: $space-md;
+}
+
+.sales-deal-card {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(24rem, 1.2fr) auto;
+  align-items: center;
+  gap: $space-md;
+  padding: $space-md;
+  border: 0.1rem solid var(--color-border);
+  border-left: 0.4rem solid var(--color-primary);
+  border-radius: $radius-md;
+  background: var(--color-elevated);
+  box-shadow: 0 0.8rem 1.8rem rgb(0 0 0 / 7%);
+}
+
+.sales-deal-card--contacted {
+  border-left-color: var(--color-secondary);
+}
+
+.sales-deal-card--won {
+  border-left-color: var(--color-success);
+}
+
+.sales-deal-card--lost {
+  border-left-color: var(--color-danger);
+}
+
+.sales-deal-card__main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: $space-md;
+}
+
+.sales-deal-card__title {
+  color: var(--color-text);
+  font-size: 1.6rem;
+}
+
+.sales-deal-card__meta {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.45fr) minmax(0, 1fr);
+  gap: $space-md;
+  color: var(--color-text-secondary);
+}
+
+.sales-deal-card__meta span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.sales-deal-card__meta small {
+  font-size: 1.1rem;
+  font-weight: $fw-bold;
+  text-transform: uppercase;
+}
+
+.sales-deal-card__link {
+  justify-self: end;
+}
+
 .dashboard-list,
 .file-list,
 .activity-timeline {
@@ -264,6 +470,21 @@
   .dashboard-panel-grid {
     grid-template-columns: 1fr;
   }
+
+  .sales-workspace__header,
+  .sales-workspace__columns,
+  .sales-deal-card {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-controls,
+  .sales-stage-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sales-deal-card__link {
+    justify-self: start;
+  }
 }
 
 @include media(tablet) {
@@ -287,6 +508,18 @@
 
   .dashboard-list__item {
     grid-template-columns: 1fr;
+  }
+
+  .sales-controls,
+  .sales-stage-grid,
+  .sales-focus-item,
+  .sales-deal-card__main,
+  .sales-deal-card__meta {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-controls {
+    padding: $space-sm;
   }
 }
 

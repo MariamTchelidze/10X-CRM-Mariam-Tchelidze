@@ -2,7 +2,9 @@
 const dashboardPage = document.querySelector(".dashboardPage");
 
 const TASKS_KEY = "crm_tasks";
+const SALES_SETTINGS_KEY = "crm_sales_settings";
 const MONTHLY_TARGET = 32000;
+const HOT_LEAD_THRESHOLD = 2500;
 const STATUS_ORDER = ["lead", "contacted", "won", "lost"];
 const STATUS_LABELS = {
   lead: "Lead",
@@ -23,6 +25,7 @@ function initDashboard() {
   if (!dashboardPage) return;
 
   renderDashboard();
+  bindSalesControls();
   window.addEventListener("storage", renderDashboard);
   window.addEventListener("crm:tasks:update", renderDashboard);
 }
@@ -85,6 +88,28 @@ function getStoredTasks() {
   return Array.isArray(storedTasks) ? storedTasks : [];
 }
 
+function getSalesSettings() {
+  const storage = window.crmStorage;
+  const settings = storage?.read(SALES_SETTINGS_KEY, {});
+  const target = Number(settings?.monthlyTarget);
+
+  return {
+    monthlyTarget: Number.isFinite(target) && target >= 0 ? target : MONTHLY_TARGET,
+    statusFilter: settings?.statusFilter || "all",
+    sortBy: settings?.sortBy || "value-desc",
+  };
+}
+
+function saveSalesSettings(nextSettings) {
+  const storage = window.crmStorage;
+  if (!storage) return;
+
+  storage.write(SALES_SETTINGS_KEY, {
+    ...getSalesSettings(),
+    ...nextSettings,
+  });
+}
+
 function getLastSixMonths() {
   const now = new Date();
   return Array.from({ length: 6 }, (_, index) => {
@@ -100,10 +125,13 @@ function getLastSixMonths() {
 function getDashboardMetrics() {
   const clients = getStoredClients();
   const tasks = getStoredTasks();
+  const salesSettings = getSalesSettings();
   const statusCounts = STATUS_ORDER.reduce((counts, status) => ({ ...counts, [status]: 0 }), {});
+  const stageRevenue = STATUS_ORDER.reduce((totals, status) => ({ ...totals, [status]: 0 }), {});
 
   clients.forEach((client) => {
     statusCounts[client.status] += 1;
+    stageRevenue[client.status] += client.dealValue;
   });
 
   const totalClients = clients.length;
@@ -114,15 +142,16 @@ function getDashboardMetrics() {
   const pendingTasks = activeTasks.filter((task) => task.status !== "done").length;
   const todayKey = new Date().toISOString().slice(0, 10);
   const dueToday = activeTasks.filter((task) => String(task.dueDate || "").slice(0, 10) === todayKey).length;
-  const hotLeads = clients.filter((client) => client.status === "lead" && client.dealValue >= 2500).length;
+  const hotLeads = clients.filter((client) => client.status === "lead" && client.dealValue >= HOT_LEAD_THRESHOLD).length;
   const pipelineHealth = totalClients ? Math.round(((statusCounts.lead + statusCounts.contacted + statusCounts.won) / totalClients) * 100) : 0;
   const conversionRate = totalClients ? Math.round((statusCounts.won / totalClients) * 100) : 0;
-  const monthlyTargetProgress = Math.min(Math.round((wonRevenue / MONTHLY_TARGET) * 100), 100);
+  const monthlyTargetProgress = salesSettings.monthlyTarget ? Math.min(Math.round((wonRevenue / salesSettings.monthlyTarget) * 100), 100) : 0;
   const recentClients = [...clients].sort((a, b) => getClientDate(b) - getClientDate(a)).slice(0, 5);
   const salesFocus = [...clients]
     .filter((client) => client.status !== "lost")
     .sort((a, b) => b.dealValue - a.dealValue)
     .slice(0, 3);
+  const salesDeals = getFilteredSalesDeals(clients, salesSettings);
   const monthlyWon = getLastSixMonths();
 
   wonClients.forEach((client) => {
@@ -143,11 +172,15 @@ function getDashboardMetrics() {
     followUps: dueToday || pendingTasks,
     pipelineHealth,
     conversionRate,
-    monthlyTarget: MONTHLY_TARGET,
+    monthlyTarget: salesSettings.monthlyTarget,
     monthlyTargetProgress,
     statusCounts,
+    stageRevenue,
     recentClients,
     salesFocus,
+    salesDeals,
+    tasks,
+    salesSettings,
     chartData: {
       stageMix: STATUS_ORDER.map((status) => statusCounts[status]),
       stageLabels: STATUS_ORDER.map((status) => STATUS_LABELS[status]),
@@ -157,6 +190,19 @@ function getDashboardMetrics() {
       outcomeLabels: ["Won", "Lost", "Active"],
     },
   };
+}
+
+function getFilteredSalesDeals(clients, settings) {
+  const statusFilter = STATUS_ORDER.includes(settings.statusFilter) ? settings.statusFilter : "all";
+  const filteredClients = statusFilter === "all" ? [...clients] : clients.filter((client) => client.status === statusFilter);
+
+  return filteredClients.sort((a, b) => {
+    if (settings.sortBy === "value-asc") return a.dealValue - b.dealValue;
+    if (settings.sortBy === "newest") return getClientDate(b) - getClientDate(a);
+    if (settings.sortBy === "oldest") return getClientDate(a) - getClientDate(b);
+    if (settings.sortBy === "name") return String(a.name || "").localeCompare(String(b.name || ""));
+    return b.dealValue - a.dealValue;
+  });
 }
 
 function setText(selector, text) {
@@ -176,7 +222,7 @@ function renderMetricCards(metrics) {
   setText('[data-dashboard-metric="monthlyTarget"]', moneyFormatter.format(metrics.monthlyTarget));
   setText('[data-dashboard-trend="monthlyTarget"]', `${metrics.monthlyTargetProgress}% of target is covered by won revenue.`);
   setText('[data-dashboard-metric="hotLeads"]', metrics.hotLeads);
-  setText('[data-dashboard-trend="hotLeads"]', "Lead clients with deal value of $2,500 or higher.");
+  setText('[data-dashboard-trend="hotLeads"]', `Lead clients with deal value of ${moneyFormatter.format(HOT_LEAD_THRESHOLD)} or higher.`);
   setText('[data-dashboard-metric="followUps"]', metrics.followUps);
   setText('[data-dashboard-trend="followUps"]', `${metrics.pendingTasks} active task${metrics.pendingTasks === 1 ? "" : "s"} still need attention.`);
   setText('[data-dashboard-metric="pipelineHealth"]', `${metrics.pipelineHealth}%`);
@@ -223,9 +269,58 @@ function renderRecentClients(metrics) {
     .join("");
 }
 
+function getClientOpenTasks(client, tasks) {
+  const clientName = String(client.name || "").toLowerCase();
+  const clientCompany = String(client.company || "").toLowerCase();
+
+  return tasks.filter((task) => {
+    if (task.archived || task.deleted || task.status === "done") return false;
+    const taskClient = String(task.client || "").toLowerCase();
+    return taskClient && (taskClient === clientName || taskClient === clientCompany);
+  });
+}
+
+function getSalesNextStep(client, tasks) {
+  const openTasks = getClientOpenTasks(client, tasks);
+
+  if (!openTasks.length) return "No open follow-up";
+  const sortedTasks = [...openTasks].sort((a, b) => new Date(a.dueDate || a.dueAt || 0) - new Date(b.dueDate || b.dueAt || 0));
+  const task = sortedTasks[0];
+  const dueDate = task.dueDate ? ` - due ${new Date(task.dueDate).toLocaleDateString("en-GB")}` : "";
+  return `${task.title || "Follow up"}${dueDate}`;
+}
+
+function renderSalesControls(metrics) {
+  const targetInput = document.querySelector(".js-sales-target-input");
+  const statusFilter = document.querySelector(".js-sales-status-filter");
+  const sortSelect = document.querySelector(".js-sales-sort-select");
+
+  if (targetInput && document.activeElement !== targetInput) targetInput.value = String(metrics.monthlyTarget);
+  if (statusFilter) statusFilter.value = metrics.salesSettings.statusFilter;
+  if (sortSelect) sortSelect.value = metrics.salesSettings.sortBy;
+}
+
+function renderSalesStages(metrics) {
+  const container = document.querySelector(".js-sales-stage-summary");
+  if (!container) return;
+
+  container.innerHTML = STATUS_ORDER.map(
+    (status) => `
+      <article class="sales-stage-card sales-stage-card--${status}">
+        <span class="sales-stage-card__label">${STATUS_LABELS[status]}</span>
+        <strong class="sales-stage-card__value">${metrics.statusCounts[status]}</strong>
+        <span class="sales-stage-card__meta">${moneyFormatter.format(metrics.stageRevenue[status])}</span>
+      </article>
+    `,
+  ).join("");
+}
+
 function renderSalesFocus(metrics) {
   const list = document.getElementById("sales-focus-list");
+  const count = document.querySelector(".js-sales-focus-count");
   if (!list) return;
+
+  if (count) count.textContent = `${metrics.salesFocus.length} active`;
 
   if (!metrics.salesFocus.length) {
     list.innerHTML = '<p class="task-empty">No active sales focus yet.</p>';
@@ -235,14 +330,82 @@ function renderSalesFocus(metrics) {
   list.innerHTML = metrics.salesFocus
     .map(
       (client) => `
-        <div class="dashboard-list__item">
+        <div class="dashboard-list__item sales-focus-item">
           <span class="status-badge status-badge--${client.status}">${STATUS_LABELS[client.status]}</span>
-          <strong>${escapeHtml(client.name)}</strong>
-          <span>${escapeHtml(client.company || "Company not added")} - ${moneyFormatter.format(client.dealValue)}</span>
+          <div>
+            <strong>${escapeHtml(client.name)}</strong>
+            <span>${escapeHtml(client.company || "Company not added")}</span>
+          </div>
+          <span>${moneyFormatter.format(client.dealValue)} - ${escapeHtml(getSalesNextStep(client, metrics.tasks))}</span>
         </div>
       `,
     )
     .join("");
+}
+
+function renderSalesDeals(metrics) {
+  const list = document.querySelector(".js-sales-deal-list");
+  const count = document.querySelector(".js-sales-deal-count");
+  if (!list) return;
+
+  if (count) count.textContent = `${metrics.salesDeals.length} deal${metrics.salesDeals.length === 1 ? "" : "s"}`;
+
+  if (!metrics.salesDeals.length) {
+    const text =
+      metrics.totalClients === 0
+        ? "No deals yet. Add your first client to start the sales pipeline."
+        : "No deals match the selected sales filter.";
+    list.innerHTML = `<p class="task-empty">${text}</p>`;
+    return;
+  }
+
+  list.innerHTML = metrics.salesDeals
+    .map(
+      (client) => `
+        <article class="sales-deal-card sales-deal-card--${client.status}">
+          <div class="sales-deal-card__main">
+            <span class="status-badge status-badge--${client.status}">${STATUS_LABELS[client.status]}</span>
+            <div>
+              <h5 class="sales-deal-card__title">${escapeHtml(client.name)}</h5>
+              <p class="sales-deal-card__company">${escapeHtml(client.company || "Company not added")}</p>
+            </div>
+          </div>
+          <div class="sales-deal-card__meta">
+            <span>
+              <small>Value</small>
+              ${moneyFormatter.format(client.dealValue)}
+            </span>
+            <span>
+              <small>Next step</small>
+              ${escapeHtml(getSalesNextStep(client, metrics.tasks))}
+            </span>
+          </div>
+          <a class="btn btn--ghost btn--sm sales-deal-card__link" href="./clients.html">Open Client</a>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function bindSalesControls() {
+  const targetInput = document.querySelector(".js-sales-target-input");
+  const statusFilter = document.querySelector(".js-sales-status-filter");
+  const sortSelect = document.querySelector(".js-sales-sort-select");
+
+  targetInput?.addEventListener("change", () => {
+    saveSalesSettings({ monthlyTarget: Math.max(Number(targetInput.value) || 0, 0) });
+    renderDashboard();
+  });
+
+  statusFilter?.addEventListener("change", () => {
+    saveSalesSettings({ statusFilter: statusFilter.value });
+    renderDashboard();
+  });
+
+  sortSelect?.addEventListener("change", () => {
+    saveSalesSettings({ sortBy: sortSelect.value });
+    renderDashboard();
+  });
 }
 
 function renderDashboard() {
@@ -251,7 +414,10 @@ function renderDashboard() {
   renderMetricCards(metrics);
   renderPipeline(metrics);
   renderRecentClients(metrics);
+  renderSalesControls(metrics);
+  renderSalesStages(metrics);
   renderSalesFocus(metrics);
+  renderSalesDeals(metrics);
 
   window.crmDashboardData = {
     getMetrics: getDashboardMetrics,
