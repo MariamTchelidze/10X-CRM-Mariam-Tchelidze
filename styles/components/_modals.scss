@@ -376,6 +376,31 @@ body[data-theme="light"] .modal {
   max-height: none;
 }
 
+.modal__dialog--notifications .modal__footer {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  justify-content: stretch;
+  gap: $space-sm;
+}
+
+.modal__dialog--notifications .modal__footer .btn {
+  width: 100%;
+  min-width: 11.6rem;
+  white-space: normal;
+}
+
+@include media(tablet) {
+  .modal__dialog--notifications .modal__footer {
+    align-items: stretch;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .modal__dialog--notifications .modal__footer .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 .modal__dialog--chat {
   width: min(76rem, calc(100vw - 3.2rem));
   min-height: min(70rem, calc(100dvh - 4rem));

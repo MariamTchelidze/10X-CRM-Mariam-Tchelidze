@@ -125,12 +125,12 @@
       const session = JSON.parse(localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY) || "{}");
       const users = JSON.parse(localStorage.getItem("crm_users") || "[]");
       const currentUser = Array.isArray(users)
-        ? users.find((user) => user.email && user.email === session.email) || users[0]
+        ? users.find((user) => user.id === session.userId || (user.email && user.email === session.email))
         : null;
 
-      return currentUser?.password || session.password || "10xcrm";
+      return currentUser?.password || "";
     } catch (error) {
-      return "10xcrm";
+      return "";
     }
   };
 
@@ -256,6 +256,11 @@
 
     if (!password) {
       setDeleteAccountError("Please enter your password.");
+      return;
+    }
+
+    if (!storedPassword) {
+      setDeleteAccountError("Your account could not be verified. Please log in again.");
       return;
     }
 

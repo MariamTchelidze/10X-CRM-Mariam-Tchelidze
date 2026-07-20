@@ -14,7 +14,6 @@ function initTasks() {
 
   /* --- Task constants define storage, statuses, labels, and priorities. --- */
   const TASKS_KEY = "crm_tasks";
-  const NOTIFICATIONS_KEY = "crm_task_notifications";
   const PENDING_TASK_KEY = "crm_pending_open_task";
   const statuses = ["todo", "in-progress", "overdue", "done"];
   const statusLabels = {
@@ -100,10 +99,8 @@ function initTasks() {
 
   /* --- Saved state starts from localStorage and remains empty until users create tasks. --- */
   let tasks = readJson(TASKS_KEY, []).map(normalizeTask);
-  let notifications = readJson(NOTIFICATIONS_KEY, []);
 
   const saveTasks = () => saveJson(TASKS_KEY, tasks);
-  const saveNotifications = () => saveJson(NOTIFICATIONS_KEY, notifications);
 
   const getActiveTasks = () => tasks.filter((task) => !task.archived && !task.deleted);
   const getArchivedTasks = () => tasks.filter((task) => task.archived && !task.deleted);
@@ -203,20 +200,7 @@ function initTasks() {
 
   /* --- Notification helper records task events for the notification modal. --- */
   const addNotification = (message, taskId = "") => {
-    notifications = [
-      {
-        id: createId("notification"),
-        message,
-        taskId,
-        read: false,
-        status: "unread",
-        selected: false,
-        createdAt: new Date().toISOString(),
-      },
-      ...notifications,
-    ];
-    saveNotifications();
-    renderNotifications();
+    window.crmNotifications?.add(message, taskId);
   };
 
   const logTaskActivity = (entry) => {
@@ -295,7 +279,7 @@ function initTasks() {
     return card;
   };
 
-  /* --- Render helpers repaint profile summaries, archive, board, recycle bin, and notifications. --- */
+  /* --- Render helpers repaint profile summaries, archive, board, and recycle bin. --- */
   const renderSummary = () => {
     const counts = getTaskCounts();
 
@@ -400,39 +384,6 @@ function initTasks() {
       `;
       recycleList.append(item);
     });
-  };
-
-  const renderNotifications = () => {
-    const unreadCount = notifications.filter((notification) => !(notification.read || notification.status === "read")).length;
-    const counter = document.querySelector(".js-notification-count");
-    const list = document.querySelector(".js-notification-list");
-
-    if (counter) {
-      counter.textContent = String(unreadCount);
-      counter.hidden = unreadCount === 0;
-    }
-
-    if (!list) return;
-
-    if (!notifications.length) {
-      list.innerHTML = '<p class="task-empty">No notifications yet.</p>';
-      return;
-    }
-
-    list.innerHTML = notifications
-      .map(
-        (notification) => `
-          <article tabindex="0" role="button" class="notification-item js-notification-item${notification.read || notification.status === "read" ? "" : " notification-item--unread"}"
-            data-notification-id="${notification.id}"
-            data-notification-task-id="${escapeHtml(notification.taskId)}">
-            <span class="notification-item__select" data-skip-delete-confirm>
-              <input class="js-notification-select" type="checkbox" data-notification-id="${notification.id}" ${notification.selected ? "checked" : ""} aria-label="Select notification" />
-            </span>
-            <span class="notification-item__message">${escapeHtml(notification.message)}</span>
-            <time class="notification-item__time">${formatDateTime(notification.createdAt)}</time>
-          </article>`,
-      )
-      .join("");
   };
 
   const renderChecklist = (task) => {
@@ -541,7 +492,6 @@ function initTasks() {
     if (taskWorkspacePage && board) {
       renderBoard();
       renderRecycleBin();
-      renderNotifications();
     }
 
     if (taskSummaryPage || summary) {
@@ -1056,56 +1006,10 @@ function initTasks() {
     commentsForm.reset();
   });
 
-  document.addEventListener("click", (event) => {
-    if (event.target.closest(".js-notification-select")) return;
-
-    const notificationItem = event.target.closest(".js-notification-item");
-
-    if (!notificationItem) return;
-
-    const notificationId = notificationItem.dataset.notificationId;
-    const taskId = notificationItem.dataset.notificationTaskId;
-
-    notifications = notifications.map((notification) =>
-      notification.id === notificationId ? { ...notification, read: true, status: "read" } : notification,
-    );
-    saveNotifications();
-    renderNotifications();
-
-    if (taskId) {
-      openTaskDetails(taskId);
-    }
+  document.addEventListener("crm:open-task", (event) => {
+    const taskId = event.detail?.taskId;
+    if (taskId) openTaskDetails(taskId);
   });
-
-  document.querySelector(".js-clear-notifications")?.addEventListener("click", () => {
-    notifications = notifications.map((notification) => ({ ...notification, read: true, status: "read" }));
-    saveNotifications();
-    renderNotifications();
-  });
-
-  document.addEventListener("change", (event) => {
-    const checkbox = event.target.closest(".js-notification-select");
-
-    if (!checkbox) return;
-
-    notifications = notifications.map((notification) =>
-      notification.id === checkbox.dataset.notificationId ? { ...notification, selected: checkbox.checked } : notification,
-    );
-    saveNotifications();
-  });
-
-  document.querySelector(".js-delete-selected-notifications")?.addEventListener("click", () => {
-    notifications = notifications.filter((notification) => !notification.selected);
-    saveNotifications();
-    renderNotifications();
-  });
-
-  document.querySelector(".js-delete-read-notifications")?.addEventListener("click", () => {
-    notifications = notifications.filter((notification) => !(notification.read || notification.status === "read"));
-    saveNotifications();
-    renderNotifications();
-  });
-
 
   document.querySelector(".js-move-task-recycle")?.addEventListener("click", () => {
     if (!pendingDeleteTaskId) return;

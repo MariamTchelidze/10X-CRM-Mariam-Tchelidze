@@ -2,6 +2,7 @@
 /* --- Core Helpers --- */
 import "./core/constants.js";
 import "./core/storage.js";
+import "./auth/authGuard.js";
 import "./core/team.js";
 
 /* --- Shared UI Controllers --- */
@@ -24,7 +25,6 @@ import "./components/pageSwap.js";
 
 /* --- Authentication Pages --- */
 import "./auth/validation.js";
-import "./auth/authGuard.js";
 import "./auth/forgotPassword.js";
 import "./auth/logout.js";
 import "./auth/login.js";

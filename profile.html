@@ -6,7 +6,14 @@
     <title>Profile | 10X CRM</title>
     <!-- --- Early Auth Redirect --- -->
     <script>
-      if (!localStorage.getItem("crm_session")) {
+      try {
+        const session = JSON.parse(localStorage.getItem("crm_session") || "null");
+        if (!session || (!session.userId && !session.email)) {
+          localStorage.removeItem("crm_session");
+          window.location.replace("./index.html");
+        }
+      } catch (error) {
+        localStorage.removeItem("crm_session");
         window.location.replace("./index.html");
       }
     </script>
