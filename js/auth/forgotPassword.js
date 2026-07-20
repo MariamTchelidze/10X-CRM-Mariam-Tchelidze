@@ -1,5 +1,6 @@
-/* --- Forgot Password Page Logic --- */
 "use strict";
+
+/* --- Forgot Password Page Logic --- */
 const forgotPasswordPage = document.querySelector(".forgotPasswordPage");
 
 initForgotPassword();
@@ -7,80 +8,80 @@ initForgotPassword();
 function initForgotPassword() {
   if (!forgotPasswordPage) return;
 
-  (function initForgotPasswordForm() {
-    /* --- DOM references collect the recovery form and feedback elements. --- */
+  /* --- DOM references collect the recovery form and feedback elements. --- */
   const form = document.querySelector(".js-forgot-password-form");
 
-    if (!form) return;
+  if (!form) return;
 
-    const emailInput = form.querySelector(".js-forgot-email");
-    const submitButton = form.querySelector(".js-forgot-password-submit");
-    const statusMessage = form.querySelector(".js-forgot-password-status");
-    const emailError = document.querySelector("[data-error-for='forgot-email']");
+  const emailInput = form.querySelector(".js-forgot-email");
+  const submitButton = form.querySelector(".js-forgot-password-submit");
+  const statusMessage = form.querySelector(".js-forgot-password-status");
+  const emailError = document.querySelector("[data-error-for='forgot-email']");
 
-    const setEmailError = (message) => {
-      if (!emailError || !emailInput) return;
+  /* --- Field helpers show validation errors beside the email input. --- */
+  const setEmailError = (message) => {
+    if (!emailError || !emailInput) return;
 
-      emailError.textContent = message;
-      emailError.hidden = !message;
-      emailInput.classList.toggle("input--error", Boolean(message));
-    };
+    emailError.textContent = message;
+    emailError.hidden = !message;
+    emailInput.classList.toggle("input--error", Boolean(message));
+  };
 
-    const showSuccess = () => {
-      if (!statusMessage) return;
+  const showSuccess = () => {
+    if (!statusMessage) return;
 
-      statusMessage.hidden = false;
-    };
+    statusMessage.hidden = false;
+  };
 
-    const hideSuccess = () => {
-      if (!statusMessage) return;
+  const hideSuccess = () => {
+    if (!statusMessage) return;
 
-      statusMessage.hidden = true;
-    };
+    statusMessage.hidden = true;
+  };
 
-    const validateEmail = () => {
-      if (!emailInput) return false;
+  /* --- Email validation reuses the shared CRM auth validator. --- */
+  const validateEmail = () => {
+    if (!emailInput) return false;
 
-      const email = emailInput.value.trim();
+    const email = emailInput.value.trim();
 
-      if (!email) {
-        setEmailError("Please enter your email address.");
-        return false;
-      }
+    if (!email) {
+      setEmailError("Please enter your email address.");
+      return false;
+    }
 
-      if (!window.crmValidation?.emailIsValid(email)) {
-        setEmailError("Please enter a valid email address.");
-        return false;
-      }
+    if (!window.crmValidation?.emailIsValid(email)) {
+      setEmailError("Please enter a valid email address.");
+      return false;
+    }
 
-      setEmailError("");
-      return true;
-    };
+    setEmailError("");
+    return true;
+  };
 
-    emailInput?.addEventListener("input", () => {
-      setEmailError("");
-      hideSuccess();
-    });
+  emailInput?.addEventListener("input", () => {
+    setEmailError("");
+    hideSuccess();
+  });
 
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      hideSuccess();
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    hideSuccess();
 
-      if (!validateEmail()) return;
+    if (!validateEmail()) return;
 
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = "Reset Link Sent";
-      }
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Reset Link Sent";
+    }
 
-      showSuccess();
+    showSuccess();
 
-      window.setTimeout(() => {
-        if (!submitButton) return;
+    window.setTimeout(() => {
+      if (!submitButton) return;
 
-        submitButton.disabled = false;
-        submitButton.textContent = "Send Reset Link";
-      }, 1800);
-    });
-  })();
+      submitButton.disabled = false;
+      submitButton.textContent = "Send Reset Link";
+    }, 1800);
+  });
 }

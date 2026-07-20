@@ -2015,60 +2015,45 @@ body[data-theme=light] .modal {
 }
 .auth {
   backface-visibility: hidden;
-  transform: translate3d(0, 0, 0);
+  opacity: 0;
+  transform: scale(0.992);
+  transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
-body.is-auth-page-exiting-left,
-body.is-auth-page-entering-from-right {
-  overflow-x: clip;
+body.is-auth-page-ready .auth {
+  opacity: 1;
+  transform: scale(1);
 }
 
-body.is-auth-page-exiting-left {
+body.is-auth-page-exiting {
   pointer-events: none;
 }
 
-body.is-auth-page-exiting-left .auth {
-  opacity: 0.98;
-  transform: translate3d(-100%, 0, 0);
-  transition: transform 0.56s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.36s ease;
-  will-change: transform, opacity;
-}
-
-body.is-auth-page-entering-from-right .auth {
-  opacity: 0.98;
-  transform: translate3d(100%, 0, 0);
-}
-
-body.is-auth-page-entering-from-right.is-auth-page-enter-ready .auth {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition: transform 0.58s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.36s ease;
-  will-change: transform, opacity;
+body.is-auth-page-exiting .auth {
+  opacity: 0;
+  transform: scale(0.992);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.is-auth-page-exiting-left .auth,
-  body.is-auth-page-entering-from-right .auth,
-  body.is-auth-page-entering-from-right.is-auth-page-enter-ready .auth {
+  .auth,
+  body.is-auth-page-ready .auth,
+  body.is-auth-page-exiting .auth {
     opacity: 1;
     transform: none;
     transition: none;
   }
 }
-body.is-auth-page-leaving-up {
-  overflow: hidden;
+body.is-auth-page-exiting {
   pointer-events: none;
 }
 
-body.is-auth-page-leaving-up .auth {
+body.is-auth-page-exiting .auth {
   opacity: 0;
-  transform: translate3d(0, -100%, 0);
-  transition: transform 0.44s cubic-bezier(0.32, 0, 0.67, 0), opacity 0.3s ease;
-  will-change: transform, opacity;
+  transform: scale(0.992);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.is-auth-page-leaving-up .auth {
+  body.is-auth-page-exiting .auth {
     opacity: 1;
     transform: none;
     transition: none;

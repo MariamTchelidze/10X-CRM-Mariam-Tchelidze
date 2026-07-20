@@ -8,14 +8,16 @@ initSignup();
 function initSignup() {
   if (!signupPage) return;
 
+  /* --- Shared modules keep auth storage and validation consistent. --- */
   const constants = window.crmConstants;
   const storage = window.crmStorage;
   const validation = window.crmValidation;
   const form = document.querySelector(".js-signup-form");
 
-  /* ---  check if  all the modules and form class works fine if not stop the function  --- */
+  /* --- Stop early if a required module or form is missing on this page. --- */
   if (!constants || !storage || !validation || !form) return;
 
+  /* --- Form fields are collected once for validation and account creation. --- */
   const fullNameInput = form.querySelector("#signup-full-name");
   const companyInput = form.querySelector("#signup-company");
   const emailInput = form.querySelector("#signup-email");
@@ -27,6 +29,7 @@ function initSignup() {
 
     validation.clearFormErrors(form);
 
+    /* --- Submitted values are cleaned before validation and storage. --- */
     const fullName = fullNameInput.value.trim();
     const company = companyInput.value.trim();
     const email = emailInput.value.trim().toLowerCase();
@@ -63,6 +66,7 @@ function initSignup() {
 
     if (!isValid) return;
 
+    /* --- Demo user object saved in crm_users for the login flow. --- */
     const user = {
       id: Date.now(),
       fullName,
@@ -77,6 +81,6 @@ function initSignup() {
 
     window.setTimeout(() => {
       window.location.href = constants.PAGES.login;
-    }, 1500);
+    }, 900);
   });
 }

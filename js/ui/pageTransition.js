@@ -2,7 +2,7 @@
 
 /* --- Page Transition Helpers --- */
 (function initPageTransition() {
-  const EXIT_DURATION = 440;
+  const EXIT_DURATION = 160;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const transitionTo = (destination, options = {}) => {
@@ -14,7 +14,7 @@
       return;
     }
 
-    document.body.classList.add("is-auth-page-leaving-up");
+    document.body.classList.add("is-auth-page-exiting");
 
     window.setTimeout(() => {
       beforeRedirect?.();
