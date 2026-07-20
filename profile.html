@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile | 10X CRM</title>
+    <!-- --- Early Auth Redirect --- -->
+    <script>
+      if (!localStorage.getItem("crm_session")) {
+        window.location.replace("./index.html");
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="./assets/icons/Logo-dark-theme.svg" />
     <link rel="stylesheet" href="./styles/main.css" />
   </head>
