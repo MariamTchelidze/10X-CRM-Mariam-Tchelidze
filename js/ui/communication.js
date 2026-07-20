@@ -11,6 +11,8 @@
   const aiInput = document.querySelector(".js-ai-chat-input");
   const sensaiAvatar = document.querySelector(".js-sensai-avatar");
   const sensaiSuggestions = document.querySelector(".js-sensai-suggestions");
+  const clearTeamChatButton = document.querySelector(".js-clear-team-chat");
+  const clearAiChatButton = document.querySelector(".js-clear-ai-chat");
 
   if (!teamForm && !aiForm) return;
 
@@ -392,6 +394,13 @@
     },
   ]));
 
+  const getDefaultAiMessage = () => ({
+    role: "assistant",
+    author: "10X SensAI",
+    text: "SensAI online. Ask me about your clients, tasks, reminders, notifications, or today's focus.",
+    createdAt: new Date().toISOString(),
+  });
+
   const renderActiveConversation = () => {
     const history = teamConversations[activeRecipient] || [];
     renderMessages(teamMessages, history, `No messages with ${activeRecipient} yet.`);
@@ -480,12 +489,30 @@
       summary: prompt.slice(0, 90),
       status: "Answered",
       relatedLabel: "10X SensAI",
-      description: response.text,
+      description: reply.text,
       details: [["Prompt", prompt]],
       actionHref: "./dashboard.html",
       actionLabel: "Open Dashboard",
     });
   };
+
+  clearTeamChatButton?.addEventListener("click", () => {
+    const recipient = getSelectedRecipient();
+    teamConversations[recipient] = [];
+    saveConversationMap(teamConversations);
+    activeRecipient = recipient;
+    renderActiveConversation();
+    window.crmToast?.show(`Messenger history with ${recipient} cleared.`, "success");
+  });
+
+  clearAiChatButton?.addEventListener("click", () => {
+    aiHistory = [getDefaultAiMessage()];
+    saveHistory(AI_KEY, aiHistory);
+    localStorage.removeItem(LEGACY_AI_KEY);
+    renderMessages(aiMessages, aiHistory, "No SensAI messages yet.");
+    setSensaiState("idle");
+    window.crmToast?.show("10X SensAI chat history cleared.", "success");
+  });
 
   /* --- SensAI Prompt Submit Flow --- */
   aiForm?.addEventListener("submit", (event) => {

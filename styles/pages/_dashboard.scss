@@ -1457,6 +1457,17 @@
   grid-template-columns: auto minmax(0, 1fr) auto;
 }
 
+.communication-modal__header-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  margin-left: auto;
+}
+
+.communication-modal__header-actions .btn {
+  min-height: 3.8rem;
+}
+
 .task-checklist__actions {
   display: flex;
   gap: $space-xs;

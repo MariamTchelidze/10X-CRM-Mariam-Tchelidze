@@ -4708,6 +4708,17 @@ body.is-auth-page-exiting .auth {
   grid-template-columns: auto minmax(0, 1fr) auto;
 }
 
+.communication-modal__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-left: auto;
+}
+
+.communication-modal__header-actions .btn {
+  min-height: 3.8rem;
+}
+
 .task-checklist__actions {
   display: flex;
   gap: 0.4rem;

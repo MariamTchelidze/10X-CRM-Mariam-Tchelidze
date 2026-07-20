@@ -15,6 +15,7 @@
     "crm_task_notifications",
     "crm_team_chat_history",
     "crm_ai_chat_history",
+    "crm_sensai_chat_history",
     "crm_sales_settings",
     "crm_theme",
     STORAGE_KEY,
