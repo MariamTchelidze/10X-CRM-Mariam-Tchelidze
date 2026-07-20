@@ -1,15 +1,10 @@
 .auth {
   backface-visibility: hidden;
-  opacity: 0;
-  transform: scale(0.992);
-  transition:
-    opacity 0.18s ease,
-    transform 0.18s ease;
-}
-
-body.is-auth-page-ready .auth {
   opacity: 1;
-  transform: scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 body.is-auth-page-exiting {
@@ -17,13 +12,12 @@ body.is-auth-page-exiting {
 }
 
 body.is-auth-page-exiting .auth {
-  opacity: 0;
-  transform: scale(0.992);
+  opacity: 0.18;
+  transform: translate3d(0, -0.4rem, 0) scale(0.998);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .auth,
-  body.is-auth-page-ready .auth,
   body.is-auth-page-exiting .auth {
     opacity: 1;
     transform: none;

@@ -3,8 +3,8 @@ body.is-auth-page-exiting {
 }
 
 body.is-auth-page-exiting .auth {
-  opacity: 0;
-  transform: scale(0.992);
+  opacity: 0.18;
+  transform: translate3d(0, -0.4rem, 0) scale(0.998);
 }
 
 @media (prefers-reduced-motion: reduce) {

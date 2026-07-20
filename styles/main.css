@@ -1170,7 +1170,7 @@ body[data-theme=light] .modal {
 }
 
 .modal__dialog--chat {
-  width: min(76rem, calc(100vw - 3.2rem));
+  width: min(76rem, 100vw - 3.2rem);
   min-height: min(70rem, 100dvh - 4rem);
 }
 
@@ -1224,7 +1224,7 @@ body[data-theme=light] .modal {
 .communication-chat__form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1.2rem;
+  gap: 0.8rem;
 }
 
 .communication-message {
@@ -2062,14 +2062,9 @@ body[data-theme=light] .modal {
 }
 .auth {
   backface-visibility: hidden;
-  opacity: 0;
-  transform: scale(0.992);
-  transition: opacity 0.18s ease, transform 0.18s ease;
-}
-
-body.is-auth-page-ready .auth {
   opacity: 1;
-  transform: scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 body.is-auth-page-exiting {
@@ -2077,13 +2072,12 @@ body.is-auth-page-exiting {
 }
 
 body.is-auth-page-exiting .auth {
-  opacity: 0;
-  transform: scale(0.992);
+  opacity: 0.18;
+  transform: translate3d(0, -0.4rem, 0) scale(0.998);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .auth,
-  body.is-auth-page-ready .auth,
   body.is-auth-page-exiting .auth {
     opacity: 1;
     transform: none;
@@ -2095,8 +2089,8 @@ body.is-auth-page-exiting {
 }
 
 body.is-auth-page-exiting .auth {
-  opacity: 0;
-  transform: scale(0.992);
+  opacity: 0.18;
+  transform: translate3d(0, -0.4rem, 0) scale(0.998);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2880,7 +2874,7 @@ body.is-auth-page-exiting .auth {
 .sidebar-dropdown__menu {
   display: grid;
   gap: 0.4rem;
-  margin-top: 0.4rem;
+  margin-top: 0.2rem;
   padding: 0 0 0 3.2rem;
   border-left: 0.1rem solid color-mix(in srgb, var(--color-primary) 34%, transparent);
 }

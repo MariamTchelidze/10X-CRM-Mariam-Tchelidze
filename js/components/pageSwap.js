@@ -3,7 +3,7 @@
 /* --- Auth Page Soft Navigation --- */
 (function initAuthPageSwap() {
   /* --- Short timing keeps auth links responsive while still feeling polished. --- */
-  const EXIT_DURATION = 140;
+  const EXIT_DURATION = 180;
   const links = document.querySelectorAll(".js-auth-link[data-auth-target]");
   const authPage = document.querySelector(".auth[data-auth-page]");
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

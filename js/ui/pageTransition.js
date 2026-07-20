@@ -2,7 +2,7 @@
 
 /* --- Page Transition Helpers --- */
 (function initPageTransition() {
-  const EXIT_DURATION = 160;
+  const EXIT_DURATION = 190;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const transitionTo = (destination, options = {}) => {
