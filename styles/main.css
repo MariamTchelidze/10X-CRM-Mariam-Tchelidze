@@ -2778,13 +2778,25 @@ body.is-auth-page-exiting .auth {
     display: none;
   }
 }
+.sidebar__item--dropdown {
+  width: 100%;
+}
+
 .sidebar-dropdown {
   display: grid;
   gap: 0.4rem;
 }
 
+.sidebar-dropdown[open] .sidebar-dropdown__summary {
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  color: var(--color-text);
+}
+
 .sidebar-dropdown__summary {
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  width: 100%;
   cursor: pointer;
   list-style: none;
 }
@@ -2796,23 +2808,50 @@ body.is-auth-page-exiting .auth {
 .sidebar-dropdown__label {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
   gap: 1.2rem;
 }
 
+.sidebar-dropdown__label span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .sidebar-dropdown__arrow {
-  width: 1.4rem;
-  height: 1.4rem;
-  transition: transform 0.2s ease;
+  width: 1.6rem;
+  height: 1.6rem;
+  justify-self: end;
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-dropdown__summary:hover .sidebar-dropdown__arrow {
+  opacity: 1;
 }
 
 .sidebar-dropdown__menu {
   display: grid;
   gap: 0.4rem;
-  padding-left: 1.2rem;
+  margin-top: 0.4rem;
+  padding: 0 0 0 3.2rem;
+  border-left: 0.1rem solid color-mix(in srgb, var(--color-primary) 34%, transparent);
 }
 
 .sidebar-dropdown__link {
   min-height: 3.8rem;
+  padding-inline: 1.2rem 0.8rem;
+  color: var(--color-text-muted);
+  font-size: 1.35rem;
+}
+
+.sidebar-dropdown__link:hover {
+  color: var(--color-text);
+}
+
+.sidebar-dropdown__link .sidebar__icon {
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
 .welcome-panel__subtitle {
@@ -2985,9 +3024,11 @@ body.is-auth-page-exiting .auth {
     grid-template-columns: 1fr;
     gap: 0.8rem;
   }
-  .sidebar__link,
-  .sidebar-dropdown__summary {
+  .sidebar__link {
     justify-content: flex-start;
+  }
+  .sidebar-dropdown__summary {
+    justify-content: initial;
   }
   .sidebar__link span {
     display: inline;
