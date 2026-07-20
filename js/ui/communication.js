@@ -431,6 +431,18 @@
     renderActiveConversation();
     teamInput.value = "";
     window.crmNotifications?.add(`New Messenger message sent to ${recipient}.`);
+    window.crmActivity?.add({
+      type: "communication",
+      icon: "chat",
+      title: `Messenger message sent to ${recipient}`,
+      summary: messageText.slice(0, 90),
+      status: "Sent",
+      relatedLabel: recipient,
+      description: messageText,
+      details: [["Recipient", recipient]],
+      actionHref: "./dashboard.html",
+      actionLabel: "Open Dashboard",
+    });
   });
 
   const sendSensaiPrompt = (text) => {
@@ -461,6 +473,18 @@
     setSensaiState("speaking");
     window.setTimeout(() => setSensaiState("idle"), 900);
     window.crmNotifications?.add("10X SensAI replied with CRM guidance.");
+    window.crmActivity?.add({
+      type: "communication",
+      icon: "chat",
+      title: "10X SensAI replied",
+      summary: prompt.slice(0, 90),
+      status: "Answered",
+      relatedLabel: "10X SensAI",
+      description: response.text,
+      details: [["Prompt", prompt]],
+      actionHref: "./dashboard.html",
+      actionLabel: "Open Dashboard",
+    });
   };
 
   /* --- SensAI Prompt Submit Flow --- */

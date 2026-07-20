@@ -239,6 +239,16 @@ function initClients() {
     return currentUser?.fullName || session?.email || "CRM User";
   };
 
+  const logClientActivity = (entry) => {
+    window.crmActivity?.add({
+      type: entry.type || "client",
+      icon: entry.icon || "users",
+      actionHref: "./clients.html",
+      actionLabel: "Open Clients",
+      ...entry,
+    });
+  };
+
   /* --- Task helpers attach client notes to existing or newly created tasks. --- */
   const getStoredTasks = () => storage.read(TASKS_KEY, []);
 
@@ -752,6 +762,18 @@ function initClients() {
         renderClients();
         setClientFormMode("add");
         closeClientModal();
+        logClientActivity({
+          title: `${updatedClient.name} client details updated`,
+          summary: `${updatedClient.company || "No company"} - ${data.formatStatus(updatedClient.status)}`,
+          status: "Updated",
+          relatedLabel: updatedClient.name,
+          description: "Client main information was edited from the client manager modal.",
+          details: [
+            ["Company", updatedClient.company || "No company"],
+            ["Email", updatedClient.email || "No email"],
+            ["Status", data.formatStatus(updatedClient.status)],
+          ],
+        });
         window.crmToast?.show("Client updated successfully.", "success");
       } catch (updateError) {
         window.crmToast?.show(getAsyncErrorMessage(updateError, "Client could not be updated."), "error");
@@ -787,6 +809,18 @@ function initClients() {
       renderClients();
       setClientFormMode("add");
       closeClientModal();
+      logClientActivity({
+        title: `${client.name} added as a client`,
+        summary: `${client.company || "No company"} - ${data.formatStatus(client.status)}`,
+        status: "Created",
+        relatedLabel: client.name,
+        description: "A new client was added from the Add Client modal.",
+        details: [
+          ["Company", client.company || "No company"],
+          ["Email", client.email || "No email"],
+          ["Deal value", moneyFormatter.format(client.dealValue)],
+        ],
+      });
       window.crmToast?.show("Client added successfully.", "success");
     } catch (addError) {
       window.crmToast?.show(getAsyncErrorMessage(addError, "Client could not be added."), "error");
@@ -903,6 +937,22 @@ function initClients() {
     toggleNewTaskField();
     renderClientDetails(updatedClient);
     renderClients();
+    logClientActivity({
+      type: "note",
+      icon: "chat",
+      title: `${note.author} added a note for ${updatedClient?.name || "client"}`,
+      summary: note.status ? `Status: ${data.formatStatus(note.status)}` : text.slice(0, 90),
+      status: note.status ? data.formatStatus(note.status) : "No status",
+      relatedLabel: updatedClient?.name || "Client",
+      description: text,
+      actionHref: note.taskId ? "./dashboard.html#tasks" : "./clients.html",
+      actionLabel: note.taskId ? "Open Task Board" : "Open Clients",
+      details: [
+        ["Client", updatedClient?.name || "Unknown client"],
+        ["Author", note.author],
+        ["Attached task", note.taskTitle || "No task attached"],
+      ],
+    });
     window.crmToast?.show("Client note added.", "success");
   });
 
@@ -922,6 +972,14 @@ function initClients() {
     const updatedClient = getClientById(activeClientId);
     renderClientDetails(updatedClient);
     renderClients();
+    logClientActivity({
+      title: `${updatedClient?.name || "Client"} status changed`,
+      summary: `Client status changed to ${data.formatStatus(nextStatus)}.`,
+      status: data.formatStatus(nextStatus),
+      relatedLabel: updatedClient?.name || "Client",
+      description: "Client pipeline status was updated from the client details modal.",
+      details: [["New status", data.formatStatus(nextStatus)]],
+    });
     window.crmToast?.show(`Client status changed to ${data.formatStatus(nextStatus)}.`, "success");
   });
 
@@ -955,6 +1013,19 @@ function initClients() {
     const updatedClient = getClientById(activeClientId);
     renderReminderState(updatedClient);
     renderClients();
+    logClientActivity({
+      type: "reminder",
+      icon: "calendar",
+      title: `Reminder set for ${updatedClient?.name || "client"}`,
+      summary: `Reminder set for ${formatReminderDate(updatedClient.reminderAt)}.`,
+      status: "Scheduled",
+      relatedLabel: updatedClient?.name || "Client",
+      description: "A follow-up reminder was scheduled from the client details modal.",
+      details: [
+        ["Client", updatedClient?.name || "Unknown client"],
+        ["Reminder time", formatReminderDate(updatedClient.reminderAt)],
+      ],
+    });
     window.crmToast?.show(`Reminder set for ${formatReminderDate(updatedClient.reminderAt)}.`, "success");
   });
 
@@ -1026,8 +1097,22 @@ function initClients() {
     updateNoteStatus(activeClientId, noteId, nextStatus);
 
     const updatedClient = getClientById(activeClientId);
+    const updatedNote = getNoteById(activeClientId, noteId);
     renderClientDetails(updatedClient);
     renderClients();
+    logClientActivity({
+      type: "note",
+      icon: "chat",
+      title: `Note status updated for ${updatedClient?.name || "client"}`,
+      summary: `Note status changed to ${nextStatus ? data.formatStatus(nextStatus) : "No status"}.`,
+      status: nextStatus ? data.formatStatus(nextStatus) : "No status",
+      relatedLabel: updatedClient?.name || "Client",
+      description: updatedNote?.text || "Client note status was updated.",
+      details: [
+        ["Client", updatedClient?.name || "Unknown client"],
+        ["Note status", nextStatus ? data.formatStatus(nextStatus) : "No status"],
+      ],
+    });
     window.crmToast?.show("Note status updated.", "success");
   });
 
@@ -1035,6 +1120,8 @@ function initClients() {
     const activeClientId = detailsContent?.dataset.activeClientId;
 
     if (!activeClientId || !pendingNoteDeleteId) return;
+
+    const deletedNote = getNoteById(activeClientId, pendingNoteDeleteId);
 
     updateClient(activeClientId, (client) => ({
       ...client,
@@ -1047,6 +1134,16 @@ function initClients() {
     closeNoteDeleteModal();
     renderClientDetails(updatedClient);
     renderClients();
+    logClientActivity({
+      type: "note",
+      icon: "chat",
+      title: `Note deleted for ${updatedClient?.name || "client"}`,
+      summary: deletedNote?.status ? `Deleted note had ${data.formatStatus(deletedNote.status)} status.` : "Client note deleted.",
+      status: "Deleted",
+      relatedLabel: updatedClient?.name || "Client",
+      description: deletedNote?.text || "A client note was deleted.",
+      details: [["Client", updatedClient?.name || "Unknown client"]],
+    });
     window.crmToast?.show("Client note deleted.", "success");
   });
 
@@ -1062,10 +1159,19 @@ function initClients() {
 
     try {
       await data.deleteClientRequest(pendingDeleteId);
+      const deletedClient = getClientById(pendingDeleteId);
       clients = clients.filter((client) => String(client.id) !== String(pendingDeleteId));
       saveClients();
       renderClients();
       closeDeleteModal();
+      logClientActivity({
+        title: `${deletedClient?.name || "Client"} deleted`,
+        summary: `${deletedClient?.company || "Client record"} was removed from the clients list.`,
+        status: "Deleted",
+        relatedLabel: deletedClient?.name || "Client",
+        description: "A client record was deleted from the clients page.",
+        details: [["Client", deletedClient?.name || "Unknown client"]],
+      });
       window.crmToast?.show("Client deleted.", "success");
     } catch (deleteError) {
       window.crmToast?.show(getAsyncErrorMessage(deleteError, "Client could not be deleted."), "error");

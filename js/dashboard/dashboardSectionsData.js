@@ -9,7 +9,6 @@
   if (!dashboardPage || !storage || !constants) return;
 
   const TASKS_KEY = "crm_tasks";
-  const NOTIFICATIONS_KEY = "crm_task_notifications";
   const FAVOURITES_KEY = "crm_favourites";
   const MONTHLY_TARGET = 32000;
   const STATUS_LABELS = {
@@ -53,11 +52,6 @@
     return Number(String(value || "").replace(/[^\d.-]/g, "")) || 0;
   };
 
-  const getClientDate = (client) => {
-    const date = new Date(client.updatedAt || client.createdAt || client.date || client.id);
-    return Number.isNaN(date.getTime()) ? new Date(0) : date;
-  };
-
   const getClients = () =>
     readArray(constants.CLIENTS_KEY).map((client) => ({
       ...client,
@@ -67,8 +61,8 @@
     }));
 
   const getTasks = () => readArray(TASKS_KEY);
-  const getNotifications = () => readArray(NOTIFICATIONS_KEY);
   const getFavourites = () => readArray(FAVOURITES_KEY);
+  const getActivityLog = () => readArray(constants.ACTIVITY_KEY);
 
   const formatDateTime = (value) => {
     const date = new Date(value);
@@ -121,6 +115,8 @@
       "check-symbol": "check-symbol-light-theme.svg",
       users: "users-light-mode.svg",
       notification: "notification-light-theme.svg",
+      phone: "phone-light-mode.svg",
+      recycle: "recycle-light-mode.svg",
     };
     return `
       <img
@@ -212,16 +208,37 @@
         actionLabel: "Open Notifications",
         actionHref: "./dashboard.html#activity",
       },
+      phone: {
+        source: "Phone",
+        section: "Application phone",
+        badge: "note",
+        actionLabel: "Open Profile",
+        actionHref: "./profile.html",
+      },
+      communication: {
+        source: "Communication",
+        section: "Messenger / SensAI",
+        badge: "notification",
+        actionLabel: "Open Dashboard",
+        actionHref: "./dashboard.html",
+      },
+      general: {
+        source: "CRM",
+        section: "Workspace",
+        badge: "client",
+        actionLabel: "Open Activity",
+        actionHref: "./dashboard.html#activity",
+      },
     };
 
-    return configs[type] || configs.client;
+    return configs[type] || configs.general;
   };
 
-  const createActivity = ({ type, icon, title, summary, status, relatedLabel, date, description, details = [], actionHref, actionLabel }) => {
+  const createActivity = ({ id, type, icon, title, summary, status, relatedLabel, date, description, details = [], actionHref, actionLabel }) => {
     const config = getActivityConfig(type);
 
     return {
-      id: `activity-${type}-${date?.getTime?.() || Date.now()}-${Math.floor(Math.random() * 10000)}`,
+      id: id || `activity-${type}-${date?.getTime?.() || Date.now()}-${Math.floor(Math.random() * 10000)}`,
       type,
       icon,
       title,
@@ -240,120 +257,23 @@
   };
 
   const createActivityItems = () => {
-    const metrics = getMetrics();
-    const notifications = getNotifications();
-    const activities = [];
-
-    metrics.clients.forEach((client) => {
-      activities.push(
+    return getActivityLog()
+      .map((entry) =>
         createActivity({
-          type: "client",
-          icon: "users",
-          title: `${client.name || "Client"} moved through the client pipeline`,
-          summary: `${client.company || "No company"} - ${STATUS_LABELS[client.status]} - ${moneyFormatter.format(client.dealValue)}`,
-          status: STATUS_LABELS[client.status],
-          relatedLabel: client.name || "Client",
-          date: getClientDate(client),
-          description: "This activity is computed from the current client record stored in crm_clients.",
-          details: [
-            ["Company", client.company || "No company added"],
-            ["Deal value", moneyFormatter.format(client.dealValue)],
-            ["Current status", STATUS_LABELS[client.status]],
-          ],
+          id: entry.id,
+          type: entry.type || "general",
+          icon: entry.icon || "clock",
+          title: entry.title || "CRM activity",
+          summary: entry.summary || "Account activity was recorded.",
+          status: entry.status || "Updated",
+          relatedLabel: entry.relatedLabel || "CRM",
+          date: new Date(entry.createdAt || entry.date || Date.now()),
+          description: entry.description || entry.summary || "Account activity was recorded.",
+          details: Array.isArray(entry.details) ? entry.details : [],
+          actionHref: entry.actionHref,
+          actionLabel: entry.actionLabel,
         }),
-      );
-
-      if (client.reminderAt) {
-        const reminderDate = new Date(client.reminderAt);
-        activities.push(
-          createActivity({
-            type: "reminder",
-            icon: "calendar",
-            title: `Reminder ${client.reminderNotified ? "completed" : "scheduled"} for ${client.name || "client"}`,
-            summary: client.reminderNotified ? "Reminder already sent." : "Reminder waiting for due time.",
-            status: client.reminderNotified ? "Sent" : "Scheduled",
-            relatedLabel: client.name || "Client",
-            date: reminderDate,
-            description: "This reminder comes from the client detail modal reminder block.",
-            details: [
-              ["Reminder time", formatDateTime(reminderDate)],
-              ["Notification state", client.reminderNotified ? "Already notified" : "Waiting"],
-              ["Client", client.name || "Unknown client"],
-            ],
-          }),
-        );
-      }
-
-      client.notes.forEach((note) => {
-        const noteDate = new Date(note.date || note.createdAt || client.createdAt);
-        activities.push(
-          createActivity({
-            type: "note",
-            icon: "chat",
-            title: `${note.author || "User"} added a client note`,
-            summary: note.status ? `Status: ${note.status}` : String(note.text || "").slice(0, 90),
-            status: note.status || "No status",
-            relatedLabel: client.name || "Client",
-            date: noteDate,
-            description: String(note.text || "No note text added."),
-            details: [
-              ["Client", client.name || "Unknown client"],
-              ["Author", note.author || "Unknown author"],
-              ["Attached task", note.taskTitle || note.taskId || "No task attached"],
-            ],
-            actionHref: note.taskId ? "./dashboard.html#tasks" : "./clients.html",
-            actionLabel: note.taskId ? "Open Task Board" : "Open Clients",
-          }),
-        );
-      });
-    });
-
-    metrics.tasks.forEach((task) => {
-      if (task.deleted) return;
-      const taskDate = new Date(task.updatedAt || task.createdAt || task.dueAt || Date.now());
-      activities.push(
-        createActivity({
-          type: "task",
-          icon: task.status === "done" ? "check-symbol" : "calendar",
-          title: task.title || "Task activity",
-          summary: task.client ? `Client: ${task.client}` : task.description || "Task activity",
-          status: task.status || "todo",
-          relatedLabel: task.client || "No client",
-          date: taskDate,
-          description: task.description || "No task description added.",
-          details: [
-            ["Priority", task.priority || "No priority"],
-            ["Assignee", task.assignee || "Unassigned"],
-            ["Due date", task.dueAt || task.dueDate || "No due date"],
-          ],
-        }),
-      );
-    });
-
-    notifications.forEach((notification) => {
-      const notificationDate = new Date(notification.createdAt || Date.now());
-      activities.push(
-        createActivity({
-          type: "notification",
-          icon: "notification",
-          title: notification.message || "Notification",
-          summary: notification.status === "read" || notification.read ? "Read notification" : "Unread notification",
-          status: notification.status || (notification.read ? "read" : "unread"),
-          relatedLabel: notification.taskId ? "Linked task" : "General update",
-          date: notificationDate,
-          description: "This item comes from the notification storage used by task and reminder events.",
-          details: [
-            ["Notification ID", notification.id || "No ID"],
-            ["Linked task", notification.taskId || "No linked task"],
-            ["Selected", notification.selected ? "Yes" : "No"],
-          ],
-          actionHref: notification.taskId ? "./dashboard.html#tasks" : "./dashboard.html#activity",
-          actionLabel: notification.taskId ? "Open Task Board" : "Stay In Activity",
-        }),
-      );
-    });
-
-    return activities
+      )
       .filter((item) => !Number.isNaN(item.date.getTime()))
       .sort((a, b) => b.date - a.date)
       .slice(0, 8);
@@ -526,6 +446,7 @@
   window.addEventListener("storage", renderAll);
   window.addEventListener("crm:dashboarddata:update", renderAll);
   window.addEventListener("crm:tasks:update", renderAll);
+  window.addEventListener("crm:activity:update", renderActivity);
 
   renderAll();
 })();

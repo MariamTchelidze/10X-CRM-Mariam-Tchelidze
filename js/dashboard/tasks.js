@@ -176,6 +176,16 @@ function initTasks() {
     renderNotifications();
   };
 
+  const logTaskActivity = (entry) => {
+    window.crmActivity?.add({
+      type: "task",
+      icon: entry.icon || "calendar",
+      actionHref: "./dashboard.html#tasks",
+      actionLabel: "Open Task Board",
+      ...entry,
+    });
+  };
+
   /* --- Summary helpers calculate task totals and checklist progress. --- */
   const getTaskCounts = () => {
     return getActiveTasks().reduce(
@@ -548,17 +558,39 @@ function initTasks() {
   };
 
   const moveTaskToRecycle = (taskId) => {
+    const task = getTaskById(taskId);
+
     updateTask(taskId, {
       archived: false,
       deleted: true,
       deletedAt: new Date().toISOString(),
     });
+
+    logTaskActivity({
+      icon: "recycle",
+      title: `${task?.title || "Task"} moved to recycle bin`,
+      summary: task?.client ? `Client: ${task.client}` : "Task moved to recycle bin.",
+      status: "Recycled",
+      relatedLabel: task?.client || "Task",
+      description: "A task was moved to the recycle bin and can still be restored.",
+    });
   };
 
   const deleteTaskPermanently = (taskId) => {
+    const task = getTaskById(taskId);
+
     tasks = tasks.filter((task) => task.id !== taskId);
     saveTasks();
     render();
+
+    logTaskActivity({
+      icon: "Delete",
+      title: `${task?.title || "Task"} deleted permanently`,
+      summary: "Task removed from everywhere.",
+      status: "Deleted",
+      relatedLabel: task?.client || "Task",
+      description: "A task was permanently deleted from the board.",
+    });
   };
 
 
@@ -676,6 +708,18 @@ function initTasks() {
     tasks = [nextTask, ...tasks];
     saveTasks();
     addNotification(`New task assigned to ${nextTask.assignee}: ${nextTask.title}`, nextTask.id);
+    logTaskActivity({
+      title: `${nextTask.title} created`,
+      summary: `${nextTask.client} - assigned to ${nextTask.assignee}`,
+      status: "Created",
+      relatedLabel: nextTask.client,
+      description: nextTask.description || "A new task was created from the task board.",
+      details: [
+        ["Priority", nextTask.priority],
+        ["Assignee", nextTask.assignee],
+        ["Due date", nextTask.dueDate],
+      ],
+    });
     render();
     addTaskForm.reset();
     closeAddTaskModal();
@@ -719,7 +763,16 @@ function initTasks() {
 
     event.preventDefault();
     dropzone.classList.remove("is-drag-over");
+    const task = getTaskById(draggedTaskId);
     updateTask(draggedTaskId, { status: dropzone.dataset.taskDropzone });
+    logTaskActivity({
+      icon: dropzone.dataset.taskDropzone === "done" ? "check-symbol" : "calendar",
+      title: `${task?.title || "Task"} moved to ${statusLabels[dropzone.dataset.taskDropzone]}`,
+      summary: task?.client ? `Client: ${task.client}` : "Task status changed.",
+      status: statusLabels[dropzone.dataset.taskDropzone] || "Updated",
+      relatedLabel: task?.client || "Task",
+      description: "A task card was moved between board columns.",
+    });
   });
 
   document.addEventListener("click", (event) => {
@@ -737,15 +790,39 @@ function initTasks() {
     }
 
     if (actionButton.dataset.taskAction === "archive") {
+      const task = getTaskById(taskId);
       updateTask(taskId, { archived: true });
+      logTaskActivity({
+        title: `${task?.title || "Task"} archived`,
+        summary: task?.client ? `Client: ${task.client}` : "Task archived.",
+        status: "Archived",
+        relatedLabel: task?.client || "Task",
+        description: "A task was archived from the task board.",
+      });
     }
 
     if (actionButton.dataset.taskAction === "restore") {
+      const task = getTaskById(taskId);
       updateTask(taskId, { archived: false });
+      logTaskActivity({
+        title: `${task?.title || "Task"} restored`,
+        summary: task?.client ? `Client: ${task.client}` : "Task restored.",
+        status: "Restored",
+        relatedLabel: task?.client || "Task",
+        description: "A task was restored from the archive.",
+      });
     }
 
     if (actionButton.dataset.taskAction === "restore-from-recycle") {
+      const task = getTaskById(taskId);
       updateTask(taskId, { deleted: false, deletedAt: "" });
+      logTaskActivity({
+        title: `${task?.title || "Task"} restored from recycle bin`,
+        summary: task?.client ? `Client: ${task.client}` : "Task restored.",
+        status: "Restored",
+        relatedLabel: task?.client || "Task",
+        description: "A task was restored from the recycle bin.",
+      });
     }
 
     if (actionButton.dataset.taskAction === "delete") {
@@ -918,6 +995,18 @@ function initTasks() {
 
     updateTask(task.id, { comments: [nextComment, ...task.comments] });
     addNotification(`${CURRENT_USER} commented on ${task.title}${mention ? ` and mentioned ${mention}` : ""}.`, task.id);
+    logTaskActivity({
+      icon: "chat",
+      title: `${CURRENT_USER} commented on ${task.title}`,
+      summary: mention ? `Mentioned ${mention}` : message.slice(0, 90),
+      status: "Commented",
+      relatedLabel: task.client || "Task",
+      description: message,
+      details: [
+        ["Task", task.title],
+        ["Mention", mention || "No mention"],
+      ],
+    });
     commentsForm.reset();
   });
 

@@ -5,6 +5,7 @@ window.crmConstants = {
   USERS_KEY: "crm_users",
   SESSION_KEY: "crm_session",
   CLIENTS_KEY: "crm_clients",
+  ACTIVITY_KEY: "crm_activity",
   THEME_KEY: "crm_theme",
   PAGES: {
     login: "index.html",

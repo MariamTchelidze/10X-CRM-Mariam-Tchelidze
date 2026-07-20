@@ -150,6 +150,17 @@
       const message = "Calling is disabled in demo mode.";
       setStatus(message, "warning");
       window.crmNotifications?.add("Phone call blocked because demo calling is disabled.");
+      window.crmActivity?.add({
+        type: "phone",
+        icon: "phone",
+        title: "Phone call blocked",
+        summary: `${normalized} could not be called because demo calling is disabled.`,
+        status: "Blocked",
+        relatedLabel: selectedClient?.name || normalized,
+        description: "The application phone prevented a real call because calling is disabled in configuration.",
+        actionHref: "./dashboard.html",
+        actionLabel: "Open Dashboard",
+      });
       return;
     }
 
@@ -162,6 +173,17 @@
     const message = "Opening device phone app.";
     setStatus(message, "success");
     window.crmNotifications?.add("CRM Phone started a demo call.");
+    window.crmActivity?.add({
+      type: "phone",
+      icon: "phone",
+      title: "CRM Phone call started",
+      summary: `Calling ${selectedClient?.name || normalized}.`,
+      status: "Started",
+      relatedLabel: selectedClient?.name || normalized,
+      description: "A phone call was started from the CRM application phone.",
+      actionHref: "./dashboard.html",
+      actionLabel: "Open Dashboard",
+    });
     window.location.href = `tel:${PHONE_CONFIG.demoNumber}`;
   });
 
@@ -192,6 +214,21 @@
     setStatus("Call note saved to Profile Call History.", "success");
     window.dispatchEvent(new CustomEvent("crm:call-note-saved", { detail: nextNote }));
     window.crmNotifications?.add("New call note saved to Profile Call History.");
+    window.crmActivity?.add({
+      type: "phone",
+      icon: "phone",
+      title: "Call note saved",
+      summary: `${nextNote.company || nextNote.phone} - ${note.slice(0, 70)}`,
+      status: "Saved",
+      relatedLabel: nextNote.company || nextNote.phone,
+      description: note,
+      details: [
+        ["Phone", nextNote.phone],
+        ["Client", nextNote.company || "No selected client"],
+      ],
+      actionHref: "./profile.html",
+      actionLabel: "Open Profile",
+    });
   });
 
   renderQueue();
