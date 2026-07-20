@@ -43,7 +43,10 @@ The project is intentionally built without a backend so the main JavaScript conc
 - `js/core/` - shared constants and storage helpers.
 - `js/ui/` - theme, modal, toast, live header, sidebar, settings, and shared UI behavior.
 - `styles/` - SCSS architecture for abstracts, base, components, layout, pages, and themes.
-- `assets/document/` - exam documentation files.
+- `assets/document/` - exam documentation files:
+  - `ai-log.md` - AI assistance log and project decision notes.
+  - `glossary.md` - CRM and JavaScript terminology for exam preparation.
+  - `research.md` - research summary for localStorage, Fetch API, and frontend persistence.
 
 ## How to Run
 
