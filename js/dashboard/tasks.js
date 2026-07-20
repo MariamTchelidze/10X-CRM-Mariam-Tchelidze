@@ -12,7 +12,7 @@ function initTasks() {
 
   if (!board && !summary) return;
 
-  /* --- Task constants define storage, statuses, labels, priorities, and demo data. --- */
+  /* --- Task constants define storage, statuses, labels, and priorities. --- */
   const TASKS_KEY = "crm_tasks";
   const NOTIFICATIONS_KEY = "crm_task_notifications";
   const PENDING_TASK_KEY = "crm_pending_open_task";
@@ -32,76 +32,6 @@ function initTasks() {
   };
 
   const getPriorityColor = (priority) => priorityColors[priority] || priorityColors.Low;
-  const defaultTasks = [
-    {
-      id: "task-follow-up",
-      title: "Follow up with Alpha Group",
-      client: "Alpha Group",
-      description: "Send pricing notes after the product demo.",
-      dueDate: "Today",
-      priority: "High",
-      assignee: "Mariam Tchelidze",
-      color: "#ee5c4c",
-      subtasks: [
-        { id: "subtask-follow-up-1", text: "Prepare notes", done: true },
-        { id: "subtask-follow-up-2", text: "Send pricing email", done: false },
-      ],
-      comments: [],
-      status: "todo",
-      archived: false,
-    },
-    {
-      id: "task-contract",
-      title: "Prepare contract draft",
-      client: "Nova Studio",
-      description: "Move proposal details into the agreement template.",
-      dueDate: "Tomorrow",
-      priority: "Medium",
-      assignee: "Sales Team",
-      color: "#ff6b1a",
-      subtasks: [
-        { id: "subtask-contract-1", text: "Collect company details", done: false },
-        { id: "subtask-contract-2", text: "Draft agreement", done: false },
-      ],
-      comments: [],
-      status: "in-progress",
-      archived: false,
-    },
-    {
-      id: "task-overdue-report",
-      title: "Send overdue report",
-      client: "Internal",
-      description: "Share last week's sales report with the team.",
-      dueDate: "Overdue by 2 days",
-      priority: "High",
-      assignee: "Account Manager",
-      color: "#ee5c4c",
-      subtasks: [
-        { id: "subtask-overdue-1", text: "Export report", done: true },
-        { id: "subtask-overdue-2", text: "Send summary", done: false },
-      ],
-      comments: [],
-      status: "overdue",
-      archived: false,
-    },
-    {
-      id: "task-update-profile",
-      title: "Update CRM profile",
-      client: "10X CRM Demo",
-      description: "Check profile details and avatar preview.",
-      dueDate: "Completed",
-      priority: "Low",
-      assignee: "Mariam Tchelidze",
-      color: "#4c8fea",
-      subtasks: [
-        { id: "subtask-profile-1", text: "Review profile", done: true },
-        { id: "subtask-profile-2", text: "Save updates", done: true },
-      ],
-      comments: [],
-      status: "done",
-      archived: false,
-    },
-  ];
 
   /* --- Runtime state tracks the open task, drag item, delete target, and edited checklist item. --- */
   let activeTaskId = null;
@@ -169,8 +99,8 @@ function initTasks() {
     };
   };
 
-  /* --- Saved state starts from localStorage, falling back to demo task data. --- */
-  let tasks = readJson(TASKS_KEY, defaultTasks).map(normalizeTask);
+  /* --- Saved state starts from localStorage and remains empty until users create tasks. --- */
+  let tasks = readJson(TASKS_KEY, []).map(normalizeTask);
   let notifications = readJson(NOTIFICATIONS_KEY, []);
 
   const saveTasks = () => saveJson(TASKS_KEY, tasks);
@@ -631,11 +561,6 @@ function initTasks() {
     render();
   };
 
-  const resetTasks = () => {
-    tasks = defaultTasks.map(normalizeTask);
-    saveTasks();
-    render();
-  };
 
   const openTaskDetails = (taskId) => {
     const task = getTaskById(taskId);
@@ -1064,7 +989,6 @@ function initTasks() {
   });
   addTaskForm?.addEventListener("submit", createTaskFromForm);
   addTaskForm?.addEventListener("input", clearTaskFormErrors);
-  document.querySelector(".js-task-reset")?.addEventListener("click", resetTasks);
   window.addEventListener("crm:clocktick", (event) => moveOverdueTasks(event.detail?.now || new Date()));
   window.setInterval(() => moveOverdueTasks(new Date()), 30000);
 
