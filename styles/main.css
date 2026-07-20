@@ -1123,7 +1123,7 @@ body[data-theme=light] .modal {
 }
 
 .modal__dialog--chat {
-  width: min(44rem, 100%);
+  width: min(76rem, calc(100vw - 3.2rem));
   min-height: min(70rem, 100dvh - 4rem);
 }
 
@@ -1141,7 +1141,7 @@ body[data-theme=light] .modal {
 
 .communication-chat__recipient-row {
   display: grid;
-  grid-template-columns: minmax(20rem, 28rem) minmax(0, 1fr);
+  grid-template-columns: minmax(24rem, 32rem) minmax(26rem, 1fr);
   align-items: end;
   gap: 1.2rem;
   padding: 1.2rem;
@@ -1171,12 +1171,13 @@ body[data-theme=light] .modal {
   display: grid;
   align-content: start;
   gap: 1.2rem;
-  min-height: 32rem;
+  min-height: 36rem;
 }
 
 .communication-chat__form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.2rem;
 }
 
 .communication-message {
