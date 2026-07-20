@@ -397,30 +397,37 @@
             <span>Settings</span>
           </button>
 
-          <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
-            <span class="theme-toggle__track" aria-hidden="true">
-              <span class="theme-toggle__icon theme-toggle__icon--moon">
-                <img
-                  src="./assets/icons/moon.svg"
-                  data-theme-src-dark="./assets/icons/moon.svg"
-                  data-theme-src-light="./assets/icons/moon-light-theme.svg"
-                  alt=""
-                />
-              </span>
+          <div class="appearance-controls" aria-label="Appearance controls">
+            <button class="theme-toggle js-theme-toggle" type="button" aria-label="Switch theme">
+              <span class="theme-toggle__track" aria-hidden="true">
+                <span class="theme-toggle__icon theme-toggle__icon--moon">
+                  <img
+                    src="./assets/icons/moon.svg"
+                    data-theme-src-dark="./assets/icons/moon.svg"
+                    data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                    alt=""
+                  />
+                </span>
 
-              <span class="theme-toggle__icon theme-toggle__icon--sun">
-                <img
-                  src="./assets/icons/sun.svg"
-                  data-theme-src-dark="./assets/icons/sun.svg"
-                  data-theme-src-light="./assets/icons/sun-light-theme.svg"
-                  alt=""
-                />
-              </span>
+                <span class="theme-toggle__icon theme-toggle__icon--sun">
+                  <img
+                    src="./assets/icons/sun.svg"
+                    data-theme-src-dark="./assets/icons/sun.svg"
+                    data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                    alt=""
+                  />
+                </span>
 
-              <span class="theme-toggle__thumb"></span>
-            </span>
-            <span class="visually-hidden js-theme-label">Dark</span>
-          </button>
+                <span class="theme-toggle__thumb"></span>
+              </span>
+              <span class="visually-hidden js-theme-label">Dark</span>
+            </button>
+
+            <div class="language-toggle" role="group" aria-label="Language">
+              <button class="language-toggle__button js-language-toggle" type="button" data-language="en" aria-pressed="true">EN</button>
+              <button class="language-toggle__button js-language-toggle" type="button" data-language="ka" aria-pressed="false">KA</button>
+            </div>
+          </div>
 
           <button class="btn btn--ghost btn--full js-logout-btn" id="logout-btn" type="button">
             <img
@@ -1628,7 +1635,7 @@
                 />
                 <span class="settings-option__content">
                   <span class="settings-option__title">Custom</span>
-                  <span class="settings-option__text">Theme + accent color</span>
+                  <span class="settings-option__text">Accent color only</span>
                 </span>
               </label>
             </div>
@@ -1716,35 +1723,7 @@
             aria-describedby="custom-theme-note"
           >
             <legend class="settings-group__legend">Custom Appearance</legend>
-            <p class="settings-group__hint" id="custom-theme-note">Available only when Custom theme is selected.</p>
-            <div class="settings-options settings-options--two">
-              <label class="settings-option" for="settings-custom-theme-dark">
-                <input
-                  class="settings-option__input js-settings-custom-theme"
-                  id="settings-custom-theme-dark"
-                  type="radio"
-                  name="settings-custom-theme"
-                  value="dark"
-                />
-                <span class="settings-option__content">
-                  <span class="settings-option__title">Dark Base</span>
-                  <span class="settings-option__text">Custom accent on dark UI</span>
-                </span>
-              </label>
-              <label class="settings-option" for="settings-custom-theme-light">
-                <input
-                  class="settings-option__input js-settings-custom-theme"
-                  id="settings-custom-theme-light"
-                  type="radio"
-                  name="settings-custom-theme"
-                  value="light"
-                />
-                <span class="settings-option__content">
-                  <span class="settings-option__title">Light Base</span>
-                  <span class="settings-option__text">Custom accent on light UI</span>
-                </span>
-              </label>
-            </div>
+            <p class="settings-group__hint" id="custom-theme-note">Uses the current Dark or Light base and unlocks accent colors.</p>
             <div class="settings-color-row">
               <label class="settings-color-field" for="settings-accent-color">
                 <span class="settings-color-field__label">Accent color</span>

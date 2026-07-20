@@ -550,11 +550,11 @@
     padding: 7.2rem $space-xl $space-xl;
     border-right: 0.1rem solid var(--color-border);
     border-bottom: 0;
-    background: color-mix(in srgb, var(--color-sidebar) 94%, transparent);
+    background: var(--color-sidebar);
+    color: var(--color-text);
     box-shadow: var(--shadow-lg);
     transform: translate3d(-105%, 0, 0);
     transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-    backdrop-filter: blur(1.4rem);
   }
 
   body.is-sidebar-open .sidebar {

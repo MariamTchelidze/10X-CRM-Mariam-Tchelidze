@@ -6,6 +6,7 @@ import "./core/storage.js";
 /* --- Shared UI Controllers --- */
 import "./ui/theme.js";
 import "./ui/toast.js";
+import "./ui/translations.js";
 import "./ui/pageTransition.js";
 import "./ui/liveHeader.js";
 import "./ui/liveClockModal.js";

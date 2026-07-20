@@ -210,6 +210,50 @@
 body[data-theme="light"] .theme-toggle__thumb {
   transform: translateX(4rem);
 }
+
+.appearance-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+}
+
+.appearance-controls--auth {
+  justify-content: flex-end;
+}
+
+.language-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 3.2rem;
+  padding: 0.3rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: $radius-full;
+  background: var(--color-card);
+}
+
+.language-toggle__button {
+  @include button-reset;
+  min-width: 3.4rem;
+  height: 2.6rem;
+  padding-inline: 0.8rem;
+  border-radius: $radius-full;
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  font-weight: $fw-bold;
+  transition:
+    background-color $transition,
+    color $transition,
+    box-shadow $transition;
+}
+
+.language-toggle__button:hover,
+.language-toggle__button--active {
+  background: var(--color-primary);
+  color: #ffffff;
+  box-shadow: 0 0.4rem 1rem rgb(0 0 0 / 12%);
+}
 @include media(mobile) {
   .btn {
     width: 100%;

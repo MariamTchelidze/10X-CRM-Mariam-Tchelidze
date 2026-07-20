@@ -14,30 +14,37 @@
     <!-- --- Sign Up Page Layout --- -->
     <main class="auth auth--signup" data-auth-page="signup">
       <div class="auth__tools" aria-label="Page tools">
-        <button class="theme-toggle theme-toggle--compact js-theme-toggle" type="button" aria-label="Switch theme">
-          <span class="theme-toggle__track" aria-hidden="true">
-            <span class="theme-toggle__icon theme-toggle__icon--moon">
-              <img
-                src="./assets/icons/moon.svg"
-                data-theme-src-dark="./assets/icons/moon.svg"
-                data-theme-src-light="./assets/icons/moon-light-theme.svg"
-                alt=""
-              />
-            </span>
+        <div class="appearance-controls appearance-controls--auth" aria-label="Appearance controls">
+          <button class="theme-toggle theme-toggle--compact js-theme-toggle" type="button" aria-label="Switch theme">
+            <span class="theme-toggle__track" aria-hidden="true">
+              <span class="theme-toggle__icon theme-toggle__icon--moon">
+                <img
+                  src="./assets/icons/moon.svg"
+                  data-theme-src-dark="./assets/icons/moon.svg"
+                  data-theme-src-light="./assets/icons/moon-light-theme.svg"
+                  alt=""
+                />
+              </span>
 
-            <span class="theme-toggle__icon theme-toggle__icon--sun">
-              <img
-                src="./assets/icons/sun.svg"
-                data-theme-src-dark="./assets/icons/sun.svg"
-                data-theme-src-light="./assets/icons/sun-light-theme.svg"
-                alt=""
-              />
-            </span>
+              <span class="theme-toggle__icon theme-toggle__icon--sun">
+                <img
+                  src="./assets/icons/sun.svg"
+                  data-theme-src-dark="./assets/icons/sun.svg"
+                  data-theme-src-light="./assets/icons/sun-light-theme.svg"
+                  alt=""
+                />
+              </span>
 
-            <span class="theme-toggle__thumb"></span>
-          </span>
-          <span class="visually-hidden js-theme-label">Dark</span>
-        </button>
+              <span class="theme-toggle__thumb"></span>
+            </span>
+            <span class="visually-hidden js-theme-label">Dark</span>
+          </button>
+
+          <div class="language-toggle" role="group" aria-label="Language">
+            <button class="language-toggle__button js-language-toggle" type="button" data-language="en" aria-pressed="true">EN</button>
+            <button class="language-toggle__button js-language-toggle" type="button" data-language="ka" aria-pressed="false">KA</button>
+          </div>
+        </div>
       </div>
 
       <div class="auth__container">

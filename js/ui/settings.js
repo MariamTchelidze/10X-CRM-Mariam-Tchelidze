@@ -101,7 +101,6 @@
     applyAccentColor(activeAccent);
 
     setChecked(".js-settings-theme", settings.themeMode);
-    setChecked(".js-settings-custom-theme", settings.customTheme);
     setChecked(".js-settings-font", settings.fontSize);
     setChecked(".js-settings-density", settings.density);
     setChecked(".js-settings-language", settings.language);
@@ -182,9 +181,8 @@
         settings = {
           ...settings,
           themeMode: "custom",
-          customTheme: settings.customTheme || document.body.dataset.theme || "dark",
+          customTheme: document.body.dataset.theme === "light" ? "light" : "dark",
         };
-        setTheme(settings.customTheme);
         applySettings(settings);
         saveSettings(settings);
         document.querySelector(".js-settings-accent")?.focus({ preventScroll: true });
@@ -202,14 +200,6 @@
       return;
     }
 
-    if (target.matches(".js-settings-custom-theme")) {
-      settings = { ...settings, customTheme: target.value };
-
-      if (settings.themeMode === "custom") {
-        setTheme(target.value);
-      }
-    }
-
     if (target.matches(".js-settings-font")) {
       settings = { ...settings, fontSize: target.value };
     }
@@ -220,6 +210,7 @@
 
     if (target.matches(".js-settings-language")) {
       settings = { ...settings, language: target.value };
+      window.crmI18n?.setLanguage(settings.language);
     }
 
     if (target.matches(".js-settings-accent")) {
