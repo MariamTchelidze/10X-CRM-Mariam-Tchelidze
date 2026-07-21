@@ -8,8 +8,8 @@
 
   /* --- Call config keeps browser tel links disabled until the user enables calling. --- */
   const PHONE_CONFIG = {
-    callingEnabled: false,
-    allowedNumber: "",
+    callingEnabled: true,
+    allowedNumber: "+995557776627",
   };
 
   /* --- Storage keys connect client phone numbers with saved call notes. --- */
