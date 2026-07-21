@@ -113,12 +113,44 @@
     return requestJson(`/clients/${clientId}`, { method: "DELETE" });
   };
 
+  /* --- Task API Requests --- */
+  const fetchTasks = async () => {
+    const data = await requestJson("/tasks");
+    return data.tasks || [];
+  };
+
+  const postTask = async (task) => {
+    const data = await requestJson("/tasks", {
+      method: "POST",
+      body: JSON.stringify(task),
+    });
+
+    return data.task;
+  };
+
+  const updateTaskRequest = async (taskId, task) => {
+    const data = await requestJson(`/tasks/${taskId}`, {
+      method: "PATCH",
+      body: JSON.stringify(task),
+    });
+
+    return data.task;
+  };
+
+  const deleteTaskRequest = async (taskId) => {
+    return requestJson(`/tasks/${taskId}`, { method: "DELETE" });
+  };
+
   window.crmData = {
     authRequest,
     fetchInitialClients,
     postClient,
     updateClientRequest,
     deleteClientRequest,
+    fetchTasks,
+    postTask,
+    updateTaskRequest,
+    deleteTaskRequest,
     getInitials,
     formatStatus,
   };

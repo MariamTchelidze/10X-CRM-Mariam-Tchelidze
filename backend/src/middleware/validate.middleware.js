@@ -1,5 +1,6 @@
 import { ApiError } from "../utils/ApiError.js";
 import { CLIENT_STATUSES } from "../constants/clientStatuses.js";
+import { TASK_STATUSES } from "../constants/taskStatuses.js";
 
 const emailPattern = /^\S+@\S+\.(com|net|org)$/i;
 const latinPasswordPattern = /^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/;
@@ -74,6 +75,33 @@ export const validateClient = (request, response, next) => {
     if (!Number.isFinite(parsedValue) || parsedValue < 0) {
       throw new ApiError(400, "Deal value must be a positive number.");
     }
+  }
+
+  next();
+};
+
+export const validateTask = (request, response, next) => {
+  const { title, client, dueAt, priority, status } = request.body;
+  const isCreateRequest = request.method === "POST";
+
+  if ((isCreateRequest || title !== undefined) && !String(title || "").trim()) {
+    throw new ApiError(400, "Task title is required.");
+  }
+
+  if ((isCreateRequest || client !== undefined) && !String(client || "").trim()) {
+    throw new ApiError(400, "Client name is required.");
+  }
+
+  if (dueAt !== undefined && dueAt && Number.isNaN(new Date(dueAt).getTime())) {
+    throw new ApiError(400, "Task deadline must be a valid date.");
+  }
+
+  if (priority !== undefined && !["High", "Medium", "Low"].includes(priority)) {
+    throw new ApiError(400, "Priority must be High, Medium, or Low.");
+  }
+
+  if (status !== undefined && !TASK_STATUSES.includes(status)) {
+    throw new ApiError(400, "Task status must be todo, in-progress, overdue, or done.");
   }
 
   next();

@@ -6,6 +6,7 @@ import { getDatabaseStatus } from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
 import clientRoutes from "./routes/client.routes.js";
+import taskRoutes from "./routes/task.routes.js";
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.get("/api/health", (request, response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/clients", clientRoutes);
+app.use("/api/tasks", taskRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -14,6 +14,7 @@ function initTasks() {
 
   /* --- Task constants define storage, statuses, labels, and priorities. --- */
   const TASKS_KEY = "crm_tasks";
+  const data = window.crmData;
   const PENDING_TASK_KEY = "crm_pending_open_task";
   const statuses = ["todo", "in-progress", "overdue", "done"];
   const statusLabels = {
@@ -78,18 +79,28 @@ function initTasks() {
     }
 
     return {
-      id: subtask.id || createId("subtask"),
+      id: subtask.id || subtask._id || createId("subtask"),
       text: subtask.text || "",
       done: Boolean(subtask.done),
     };
   };
 
+  const normalizeComment = (comment = {}) => ({
+    ...comment,
+    id: comment.id || comment._id || createId("comment"),
+    author: comment.author || "CRM User",
+    mention: comment.mention || "",
+    message: comment.message || "",
+    createdAt: comment.createdAt || new Date().toISOString(),
+  });
+
   const normalizeTask = (task) => {
     return {
       ...task,
+      id: task.id || task._id || createId("task"),
       color: getPriorityColor(task.priority),
       subtasks: Array.isArray(task.subtasks) ? task.subtasks.map(normalizeSubtask).filter((item) => item.text) : [],
-      comments: Array.isArray(task.comments) ? task.comments : [],
+      comments: Array.isArray(task.comments) ? task.comments.map(normalizeComment).filter((item) => item.message) : [],
       archived: Boolean(task.archived),
       deleted: Boolean(task.deleted),
       deletedAt: task.deletedAt || "",
@@ -101,6 +112,24 @@ function initTasks() {
   let tasks = readJson(TASKS_KEY, []).map(normalizeTask);
 
   const saveTasks = () => saveJson(TASKS_KEY, tasks);
+
+  const replaceTaskFromBackend = (taskId, apiTask) => {
+    if (!apiTask) return;
+
+    tasks = tasks.map((task) => (task.id === taskId ? normalizeTask(apiTask) : task));
+    saveTasks();
+    render();
+  };
+
+  const syncTaskToBackend = (task) => {
+    if (!task?.id || !data?.updateTaskRequest) return;
+
+    data.updateTaskRequest(task.id, task)
+      .then((apiTask) => replaceTaskFromBackend(task.id, apiTask))
+      .catch((error) => {
+        window.crmToast?.show(error.message || "Task was saved locally, but backend sync failed.", "error");
+      });
+  };
 
   const getActiveTasks = () => tasks.filter((task) => !task.archived && !task.deleted);
   const getArchivedTasks = () => tasks.filter((task) => task.archived && !task.deleted);
@@ -506,10 +535,21 @@ function initTasks() {
   };
 
   /* --- Task mutation helpers update one task and persist the board. --- */
-  const updateTask = (taskId, updates) => {
-    tasks = tasks.map((task) => (task.id === taskId ? normalizeTask({ ...task, ...updates }) : task));
+  const updateTask = (taskId, updates, shouldSync = true) => {
+    let updatedTask = null;
+
+    tasks = tasks.map((task) => {
+      if (task.id !== taskId) return task;
+
+      updatedTask = normalizeTask({ ...task, ...updates });
+      return updatedTask;
+    });
     saveTasks();
     render();
+
+    if (shouldSync && updatedTask) {
+      syncTaskToBackend(updatedTask);
+    }
   };
 
 
@@ -578,6 +618,10 @@ function initTasks() {
     tasks = tasks.filter((task) => task.id !== taskId);
     saveTasks();
     render();
+
+    data?.deleteTaskRequest?.(taskId).catch((error) => {
+      window.crmToast?.show(error.message || "Task was deleted locally, but backend delete failed.", "error");
+    });
 
     logTaskActivity({
       icon: "Delete",
@@ -670,7 +714,7 @@ function initTasks() {
     document.querySelector("#add-task-modal [data-modal-close]")?.click();
   };
 
-  const createTaskFromForm = (event) => {
+  const createTaskFromForm = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(addTaskForm);
@@ -701,24 +745,46 @@ function initTasks() {
       deletedAt: "",
     };
 
-    tasks = [nextTask, ...tasks];
-    saveTasks();
-    addNotification(`New task assigned to ${nextTask.assignee}: ${nextTask.title}`, nextTask.id);
-    logTaskActivity({
-      title: `${nextTask.title} created`,
-      summary: `${nextTask.client} - assigned to ${nextTask.assignee}`,
-      status: "Created",
-      relatedLabel: nextTask.client,
-      description: nextTask.description || "A new task was created from the task board.",
-      details: [
-        ["Priority", nextTask.priority],
-        ["Assignee", nextTask.assignee],
-        ["Due date", nextTask.dueDate],
-      ],
-    });
+    try {
+      const apiTask = await data?.postTask?.(nextTask);
+      const savedTask = normalizeTask(apiTask || nextTask);
+
+      tasks = [savedTask, ...tasks];
+      saveTasks();
+      addNotification(`New task assigned to ${savedTask.assignee}: ${savedTask.title}`, savedTask.id);
+      logTaskActivity({
+        title: `${savedTask.title} created`,
+        summary: `${savedTask.client} - assigned to ${savedTask.assignee}`,
+        status: "Created",
+        relatedLabel: savedTask.client,
+        description: savedTask.description || "A new task was created from the task board.",
+        details: [
+          ["Priority", savedTask.priority],
+          ["Assignee", savedTask.assignee],
+          ["Due date", savedTask.dueDate],
+        ],
+      });
+      render();
+      addTaskForm.reset();
+      closeAddTaskModal();
+    } catch (error) {
+      window.crmToast?.show(error.message || "Task could not be created.", "error");
+    }
+  };
+
+  const loadTasks = async () => {
+    try {
+      if (data?.fetchTasks) {
+        tasks = (await data.fetchTasks()).map(normalizeTask);
+        saveTasks();
+      }
+    } catch (error) {
+      window.crmToast?.show(error.message || "Tasks could not be loaded from backend.", "error");
+    }
+
+    moveOverdueTasks(new Date());
     render();
-    addTaskForm.reset();
-    closeAddTaskModal();
+    openPendingTaskFromClientNote();
   };
 
   document.addEventListener("dragstart", (event) => {
@@ -1031,7 +1097,5 @@ function initTasks() {
   window.addEventListener("crm:clocktick", (event) => moveOverdueTasks(event.detail?.now || new Date()));
   window.setInterval(() => moveOverdueTasks(new Date()), 30000);
 
-  moveOverdueTasks(new Date());
-  render();
-  openPendingTaskFromClientNote();
+  loadTasks();
 }

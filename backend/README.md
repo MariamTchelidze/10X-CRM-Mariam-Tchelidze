@@ -2,7 +2,7 @@
 
 This folder will contain the Node.js, Express, MongoDB, and phone-service backend for the CRM.
 
-Current step: Clients API is wired.
+Current step: Tasks API is wired.
 
 ## Environment Setup
 
@@ -46,7 +46,7 @@ Planned build order:
 2. MongoDB connection. Done.
 3. Auth API. Done.
 4. Clients API. Done.
-5. Tasks, notes, reminders, notifications, and activities.
+5. Tasks API. Done.
 6. Messenger API.
 7. Phone service integration.
 
@@ -165,5 +165,79 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 ```http
 DELETE http://localhost:5000/api/clients/CLIENT_ID
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+## Tasks API Test Order
+
+All task endpoints require the login token:
+
+```http
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### List tasks
+
+```http
+GET http://localhost:5000/api/tasks
+```
+
+Optional filters:
+
+```text
+?status=todo&archived=false&deleted=false
+```
+
+### Create task
+
+```http
+POST http://localhost:5000/api/tasks
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "title": "Follow up with Alpha Group",
+  "client": "Alpha Group",
+  "description": "Send pricing notes after the demo.",
+  "dueDate": "Jul 24, 2026",
+  "dueAt": "2026-07-24T19:59:59.000Z",
+  "priority": "High",
+  "status": "todo",
+  "assignee": "James Carter",
+  "subtasks": [
+    { "text": "Prepare offer", "done": false },
+    { "text": "Send email", "done": false }
+  ],
+  "comments": []
+}
+```
+
+### Update task
+
+```http
+PATCH http://localhost:5000/api/tasks/TASK_ID
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "status": "in-progress",
+  "comments": [
+    {
+      "author": "James Carter",
+      "mention": "Sales Team",
+      "message": "Started working on the offer."
+    }
+  ]
+}
+```
+
+### Delete task permanently
+
+```http
+DELETE http://localhost:5000/api/tasks/TASK_ID
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
