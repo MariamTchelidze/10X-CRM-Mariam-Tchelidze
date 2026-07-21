@@ -652,10 +652,6 @@
     grid-template-columns: 1fr;
   }
 
-  .task-archive-item {
-    grid-template-columns: 1fr;
-  }
-
   .welcome-panel,
   .dashboard-section__header {
     align-items: stretch;
@@ -910,34 +906,6 @@
   gap: $space-md;
 }
 
-.task-archive-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: $space-md;
-  padding: $space-md;
-  border: 0.1rem solid var(--color-border);
-  border-radius: $radius-md;
-  background: var(--color-elevated);
-}
-
-.task-archive-item__title {
-  color: var(--color-text);
-  font-weight: $fw-semibold;
-}
-
-.task-archive-item__meta {
-  color: var(--color-text-muted);
-  font-size: 1.3rem;
-}
-
-.task-archive-item__actions {
-  display: flex;
-  align-items: center;
-  gap: $space-sm;
-}
-
-
 /* task-board-responsive-overrides */
 @include media(laptop) {
   .task-board {
@@ -951,10 +919,6 @@
   }
 
   .task-board {
-    grid-template-columns: 1fr;
-  }
-
-  .task-archive-item {
     grid-template-columns: 1fr;
   }
 }
@@ -975,18 +939,6 @@
 
 .task-card {
   border-left: 0.4rem solid var(--task-accent, var(--color-primary));
-}
-
-.task-card__subtasks {
-  display: grid;
-  gap: $space-xs;
-  padding-left: $space-lg;
-  color: var(--color-text-secondary);
-  font-size: 1.3rem;
-}
-
-.task-card__subtask::marker {
-  color: var(--task-accent, var(--color-primary));
 }
 
 .task-form {
@@ -1114,55 +1066,10 @@
   gap: $space-md;
 }
 
-.task-checklist__item {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: $space-sm;
-  padding: $space-sm;
-  border: 0.1rem solid var(--color-border);
-  border-radius: $radius-md;
-  background: var(--color-card);
-}
-
-.task-checklist__checkbox:checked + .task-checklist__text {
-  color: var(--color-text-muted);
-  text-decoration: line-through;
-}
-
 .task-inline-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: $space-sm;
-}
-
-.task-comment {
-  display: grid;
-  gap: $space-xs;
-  padding: $space-md;
-  border: 0.1rem solid var(--color-border);
-  border-radius: $radius-md;
-  background: var(--color-card);
-}
-
-.task-comment__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-sm;
-  color: var(--color-text);
-  font-size: 1.3rem;
-}
-
-.task-comment__header time,
-.task-comment__message {
-  color: var(--color-text-secondary);
-}
-
-.task-comment__mention {
-  color: var(--color-primary);
-  font-size: 1.3rem;
-  font-weight: $fw-semibold;
 }
 
 .notification-item {
@@ -1205,7 +1112,6 @@
 }
 
 @include media(mobile) {
-  .task-checklist__item,
   .task-inline-form {
     grid-template-columns: 1fr;
   }
@@ -1389,84 +1295,6 @@
   gap: $space-md;
 }
 
-.recycle-task-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: $space-md;
-  padding: $space-md;
-  border: 0.1rem solid var(--color-border);
-  border-radius: $radius-md;
-  background: var(--color-elevated);
-}
-
-.recycle-task-item__title {
-  color: var(--color-text);
-  font-weight: $fw-semibold;
-}
-
-.recycle-task-item__meta {
-  color: var(--color-text-muted);
-  font-size: 1.3rem;
-}
-
-.recycle-task-item__actions {
-  display: flex;
-  align-items: center;
-  gap: $space-sm;
-  flex-wrap: wrap;
-}
-
-.delete-choice__button {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: $space-md;
-  padding: $space-lg;
-  border: 0.1rem solid var(--color-border);
-  border-radius: $radius-md;
-  background: var(--color-elevated);
-  color: var(--color-text);
-  cursor: pointer;
-  text-align: left;
-  transition:
-    border-color $transition,
-    background-color $transition;
-}
-
-.delete-choice__button:hover,
-.delete-choice__button:focus-visible {
-  border-color: var(--color-primary);
-  background: var(--color-soft-primary);
-  outline: none;
-}
-
-.delete-choice__button--danger:hover,
-.delete-choice__button--danger:focus-visible {
-  border-color: var(--color-danger);
-}
-
-.delete-choice__button img {
-  width: 2.4rem;
-  height: 2.4rem;
-}
-
-.delete-choice__button strong,
-.delete-choice__button small {
-  display: block;
-}
-
-.delete-choice__button small {
-  margin-top: $space-xs;
-  color: var(--color-text-muted);
-}
-
-@include media(tablet) {
-  .recycle-task-item {
-    grid-template-columns: 1fr;
-  }
-}
-
 
 .reports-visual-grid {
   display: grid;
@@ -1544,10 +1372,6 @@
   font-weight: $fw-semibold;
 }
 
-.task-checklist__item {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-}
-
 .communication-modal__header-actions {
   display: flex;
   align-items: center;
@@ -1557,16 +1381,6 @@
 
 .communication-modal__header-actions .btn {
   min-height: 3.8rem;
-}
-
-.task-checklist__actions {
-  display: flex;
-  gap: $space-xs;
-  flex-wrap: wrap;
-}
-
-.task-checklist__edit-input {
-  min-height: 3.6rem;
 }
 
 .notification-item {

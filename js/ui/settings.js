@@ -26,10 +26,6 @@
   ];
   const DEFAULTS = {
     themeMode: "dark",
-    customTheme: "dark",
-    fontSize: "medium",
-    density: "comfortable",
-    language: "en",
     accentColor: DEFAULT_ACCENT,
   };
 
@@ -50,9 +46,6 @@
         ...DEFAULTS,
         ...storedSettings,
         themeMode,
-        customTheme: "dark",
-        fontSize: "medium",
-        density: "comfortable",
         accentColor: DEFAULT_ACCENT,
       };
     } catch (error) {
@@ -108,8 +101,6 @@
   };
 
   const applySettings = (settings) => {
-    document.documentElement.dataset.fontSize = "medium";
-    document.body.dataset.density = "comfortable";
     document.documentElement.lang = "en";
     applyAccentColor(DEFAULT_ACCENT);
 
@@ -167,9 +158,6 @@
     settings = {
       ...settings,
       themeMode: changedTheme,
-      customTheme: "dark",
-      fontSize: "medium",
-      density: "comfortable",
       accentColor: DEFAULT_ACCENT,
     };
     applySettings(settings);
@@ -184,9 +172,6 @@
         settings = {
           ...settings,
           themeMode: document.body.dataset.theme === "light" ? "light" : "dark",
-          customTheme: "dark",
-          fontSize: "medium",
-          density: "comfortable",
           accentColor: DEFAULT_ACCENT,
         };
         applySettings(settings);
@@ -198,9 +183,6 @@
       settings = {
         ...settings,
         themeMode: target.value,
-        customTheme: "dark",
-        fontSize: "medium",
-        density: "comfortable",
         accentColor: DEFAULT_ACCENT,
       };
       setTheme(target.value);
@@ -210,7 +192,6 @@
     }
 
     if (target.matches(".js-settings-font")) {
-      settings = { ...settings, fontSize: "medium" };
       applySettings(settings);
       saveSettings(settings);
       showFutureSettingsToast();
@@ -218,7 +199,6 @@
     }
 
     if (target.matches(".js-settings-density")) {
-      settings = { ...settings, density: "comfortable" };
       applySettings(settings);
       saveSettings(settings);
       showFutureSettingsToast();
@@ -226,8 +206,7 @@
     }
 
     if (target.matches(".js-settings-language")) {
-      settings = { ...settings, language: "en" };
-      window.crmI18n?.setLanguage(settings.language);
+      window.crmI18n?.setLanguage("en");
       applySettings(settings);
       saveSettings(settings);
       return;
