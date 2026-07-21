@@ -773,31 +773,34 @@ function initTasks() {
       deletedAt: "",
     };
 
-    try {
-      const apiTask = await data?.postTask?.(nextTask);
-      const savedTask = normalizeTask(apiTask || nextTask);
+    let savedTask = normalizeTask(nextTask);
 
-      tasks = [savedTask, ...tasks];
-      saveTasks();
-      addNotification(`New task assigned to ${savedTask.assignee}: ${savedTask.title}`, savedTask.id);
-      logTaskActivity({
-        title: `${savedTask.title} created`,
-        summary: `${savedTask.client} - assigned to ${savedTask.assignee}`,
-        status: "Created",
-        relatedLabel: savedTask.client,
-        description: savedTask.description || "A new task was created from the task board.",
-        details: [
-          ["Priority", savedTask.priority],
-          ["Assignee", savedTask.assignee],
-          ["Due date", savedTask.dueDate],
-        ],
-      });
-      render();
-      addTaskForm.reset();
-      closeAddTaskModal();
+    try {
+      if (data?.postTask) {
+        savedTask = normalizeTask((await data.postTask(nextTask)) || nextTask);
+      }
     } catch (error) {
-      window.crmToast?.show(error.message || "Task could not be created.", "error");
+      window.crmToast?.show("Backend is unavailable. Task was saved locally.", "info");
     }
+
+    tasks = [savedTask, ...tasks];
+    saveTasks();
+    addNotification(`New task assigned to ${savedTask.assignee}: ${savedTask.title}`, savedTask.id);
+    logTaskActivity({
+      title: `${savedTask.title} created`,
+      summary: `${savedTask.client} - assigned to ${savedTask.assignee}`,
+      status: "Created",
+      relatedLabel: savedTask.client,
+      description: savedTask.description || "A new task was created from the task board.",
+      details: [
+        ["Priority", savedTask.priority],
+        ["Assignee", savedTask.assignee],
+        ["Due date", savedTask.dueDate],
+      ],
+    });
+    render();
+    addTaskForm.reset();
+    closeAddTaskModal();
   };
 
   const loadTasks = async () => {
