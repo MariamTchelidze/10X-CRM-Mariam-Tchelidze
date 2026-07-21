@@ -23,6 +23,8 @@
   const TASKS_KEY = "crm_tasks";
   const NOTIFICATIONS_KEY = "crm_task_notifications";
   const FAVOURITES_KEY = "crm_favourites";
+  const MESSENGER_EXAM_SAFE_MODE = true;
+  const MESSENGER_INACTIVE_MESSAGE = "This is a prepared UI for future messenger integration.";
   const SENSAI_INACTIVE_MESSAGE = "This is a prepared UI for future AI integration.";
 
   const escapeHtml = (value) =>
@@ -379,6 +381,11 @@
   };
 
   const loadTeamConversations = async () => {
+    if (MESSENGER_EXAM_SAFE_MODE) {
+      renderActiveConversation();
+      return;
+    }
+
     if (!data?.fetchMessages) return;
 
     try {
@@ -392,7 +399,7 @@
   };
 
   populateRecipientSelect();
-  let teamConversations = readConversationMap();
+  let teamConversations = MESSENGER_EXAM_SAFE_MODE ? normalizeConversationMap(null) : readConversationMap();
   let activeRecipient = getSelectedRecipient();
   let aiHistory = readHistory(AI_KEY, readHistory(LEGACY_AI_KEY, [
     {
@@ -438,6 +445,26 @@
     if (!messageText || !recipient) return;
 
     activeRecipient = recipient;
+
+    if (MESSENGER_EXAM_SAFE_MODE) {
+      teamConversations[recipient] = [
+        ...(teamConversations[recipient] || []),
+        {
+          id: createMessageId(),
+          conversation: recipient,
+          role: "system",
+          author: "Messenger",
+          recipient,
+          text: MESSENGER_INACTIVE_MESSAGE,
+          createdAt: new Date().toISOString(),
+        },
+      ];
+      renderActiveConversation();
+      teamInput.value = "";
+      window.crmToast?.show(MESSENGER_INACTIVE_MESSAGE, "info");
+      return;
+    }
+
     const nextMessage = {
       id: createMessageId(),
       conversation: recipient,
@@ -528,6 +555,12 @@
     saveConversationMap(teamConversations);
     activeRecipient = recipient;
     renderActiveConversation();
+
+    if (MESSENGER_EXAM_SAFE_MODE) {
+      window.crmToast?.show("Messenger demo history cleared.", "success");
+      return;
+    }
+
     data?.clearMessageConversation?.(recipient)
       .then((conversations) => {
         teamConversations = normalizeConversationMap(conversations);
