@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { env } from "./config/env.js";
+import { getDatabaseStatus } from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -40,6 +41,7 @@ app.get("/api/health", (request, response) => {
     status: "success",
     message: "10X CRM backend is running.",
     environment: env.nodeEnv,
+    database: getDatabaseStatus(),
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
   });

@@ -1,7 +1,10 @@
 import app from "./src/app.js";
+import { connectDatabase } from "./src/config/db.js";
 import { env } from "./src/config/env.js";
 
-const startServer = () => {
+const startServer = async () => {
+  await connectDatabase();
+
   const server = app.listen(env.port, () => {
     console.log(`10X CRM backend running on port ${env.port}`);
   });
@@ -17,4 +20,7 @@ const startServer = () => {
   });
 };
 
-startServer();
+startServer().catch((error) => {
+  console.error("Failed to start backend:", error.message);
+  process.exit(1);
+});
