@@ -7,8 +7,9 @@
   const clockElement = document.querySelector(".js-live-clock");
   const timezoneElement = document.querySelector(".js-live-timezone");
   const greetingElement = document.querySelector(".js-dynamic-greeting");
+  const greetingNameElement = document.querySelector("#dashboard-greeting");
 
-  if (!dateElement && !clockElement && !greetingElement) return;
+  if (!dateElement && !clockElement && !greetingElement && !greetingNameElement) return;
 
   /* --- Day-part ranges drive the greeting and weather-style icon. --- */
   const dayParts = [
@@ -20,6 +21,22 @@
   ];
 
   const getDayPart = (hour) => dayParts.find((part) => hour >= part.from && hour < part.to) || dayParts[0];
+
+  /* --- Active user name comes from the current session instead of hardcoded dashboard text. --- */
+  const getCurrentUserName = () => {
+    const teamName = window.crmTeam?.getCurrentUserName?.();
+    if (teamName && teamName !== "Account Owner") return teamName;
+
+    try {
+      const session = JSON.parse(localStorage.getItem("crm_session") || "null");
+      const users = JSON.parse(localStorage.getItem("crm_users") || "[]");
+      const user = Array.isArray(users) ? users.find((item) => item.id === session?.userId || item.email === session?.email) : null;
+
+      return user?.fullName || user?.name || session?.email || "Account Owner";
+    } catch (error) {
+      return "Account Owner";
+    }
+  };
 
   const formatDate = (date) =>
     date.toLocaleDateString("en-GB", {
@@ -58,6 +75,10 @@
         <span>${dayPart.label},</span>
         <img class="welcome-panel__greeting-icon" src="${dayPart.icon}" alt="" aria-hidden="true" />
       `;
+    }
+
+    if (greetingNameElement) {
+      greetingNameElement.textContent = getCurrentUserName();
     }
 
     window.dispatchEvent(new CustomEvent("crm:clocktick", { detail: { now } }));
