@@ -2,7 +2,7 @@
 
 /* --- API Environment Detection --- */
 const localApiBaseUrl = "http://localhost:5000/api";
-const productionApiBaseUrl = "https://10-x-crm-mariam-tchelidze-backend.onrender.com/api";
+const productionApiBaseUrl = "https://one0x-crm-mariam-tchelidze-1.onrender.com/api";
 const localHostnames = ["localhost", "127.0.0.1", ""];
 const isLocalFrontend = localHostnames.includes(window.location.hostname) || window.location.protocol === "file:";
 
