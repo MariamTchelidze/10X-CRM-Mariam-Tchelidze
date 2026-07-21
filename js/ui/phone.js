@@ -11,6 +11,7 @@
     callingEnabled: false,
     allowedNumber: "",
   };
+  const PHONE_INACTIVE_MESSAGE = "CRM Phone is prepared for future Twilio integration.";
 
   /* --- Storage keys connect client phone numbers with saved call notes. --- */
   const CLIENTS_KEY = window.crmConstants?.CLIENTS_KEY || "crm_clients";
@@ -141,22 +142,22 @@
     const normalized = normalizeNumber(currentNumber);
 
     if (!normalized) {
-      setStatus("Enter a number before calling.", "error");
+      setStatus(PHONE_INACTIVE_MESSAGE, "warning");
       return;
     }
 
     if (!PHONE_CONFIG.callingEnabled) {
-      const message = "Calling is disabled from configuration.";
+      const message = PHONE_INACTIVE_MESSAGE;
       setStatus(message, "warning");
-      window.crmNotifications?.add("Phone call blocked because calling is disabled.");
+      window.crmNotifications?.add("CRM Phone is prepared for future Twilio integration.");
       window.crmActivity?.add({
         type: "phone",
         icon: "phone",
-        title: "Phone call blocked",
-        summary: `${normalized} could not be called because calling is disabled.`,
-        status: "Blocked",
+        title: "CRM Phone demo opened",
+        summary: `${normalized} was prepared for a future Twilio call.`,
+        status: "Prepared UI",
         relatedLabel: selectedClient?.name || normalized,
-        description: "The application phone prevented a real call because calling is disabled in configuration.",
+        description: PHONE_INACTIVE_MESSAGE,
         actionHref: "./dashboard.html",
         actionLabel: "Open Dashboard",
       });
