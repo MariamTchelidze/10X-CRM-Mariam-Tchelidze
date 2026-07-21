@@ -24,7 +24,13 @@
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
+  const hasApiSession = () => Boolean(getSession()?.token);
+
   const requestJson = async (endpoint, options = {}) => {
+    if (options.requireAuth !== false && !hasApiSession()) {
+      throw new Error("Login is required before calling this API.");
+    }
+
     const response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
       headers: {
@@ -46,6 +52,7 @@
   const authRequest = async (endpoint, body) => {
     return requestJson(endpoint, {
       method: "POST",
+      requireAuth: false,
       body: JSON.stringify(body),
     });
   };
@@ -249,6 +256,7 @@
   };
 
   window.crmData = {
+    hasApiSession,
     authRequest,
     fetchInitialClients,
     postClient,

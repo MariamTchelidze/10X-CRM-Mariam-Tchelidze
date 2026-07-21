@@ -130,7 +130,7 @@
   });
 
   const loadNotifications = async () => {
-    if (!data?.fetchNotifications) return;
+    if (!data?.fetchNotifications || !data?.hasApiSession?.()) return;
 
     try {
       replaceFromBackend(await data.fetchNotifications());

@@ -37,7 +37,7 @@
   });
 
   const load = async () => {
-    if (!data?.fetchActivity) return read();
+    if (!data?.fetchActivity || !data?.hasApiSession?.()) return read();
 
     try {
       const entries = (await data.fetchActivity()).map(normalizeEntry);
