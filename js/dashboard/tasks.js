@@ -20,6 +20,7 @@ function initTasks() {
   const TASK_ARCHIVE_DISABLED_MESSAGE = "Archive is disabled in exam-safe mode.";
   const TASK_DELETE_DISABLED_MESSAGE = "Delete is disabled in exam-safe mode.";
   const TASK_CHECKLIST_DISABLED_MESSAGE = "Checklist is disabled in exam-safe mode.";
+  const TASK_COMMENTS_DISABLED_MESSAGE = "Task comments are prepared for future team collaboration.";
   const statuses = ["todo", "in-progress", "overdue", "done"];
   const statusLabels = {
     todo: "To Do",
@@ -484,6 +485,19 @@ function initTasks() {
   const renderComments = (task) => {
     const commentsList = document.querySelector(".js-task-comments");
     const commentsCount = document.querySelector(".js-task-comment-count");
+
+    if (TASK_EXAM_SAFE_MODE) {
+      if (commentsCount) {
+        commentsCount.textContent = "Prepared UI";
+      }
+
+      if (commentsList) {
+        commentsList.innerHTML =
+          '<p class="task-empty">Task comments are prepared for future team collaboration.</p>';
+      }
+
+      return;
+    }
 
     if (commentsCount) {
       commentsCount.textContent = `${task.comments.length} comments`;
@@ -1103,6 +1117,12 @@ function initTasks() {
     if (error) {
       error.hidden = true;
       error.textContent = "";
+    }
+
+    if (TASK_EXAM_SAFE_MODE) {
+      commentsForm.reset();
+      showExamSafeTaskToast(TASK_COMMENTS_DISABLED_MESSAGE);
+      return;
     }
 
     if (!task || !message) {

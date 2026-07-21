@@ -228,41 +228,18 @@
     const modal = ensureModal();
     const list = modal.querySelector(".js-client-time-list");
     const count = modal.querySelector(".js-client-time-count");
-    const { countries, unknownCount } = getCountryGroups();
 
     if (count) {
-      count.textContent = `${countries.length} countr${countries.length === 1 ? "y" : "ies"}`;
+      count.textContent = "Future API";
     }
 
-    if (!countries.length) {
+    if (list) {
       list.innerHTML = `
         <p class="task-empty">
-          No client country times detected yet. Choose a client country/timezone or add international phone codes such as +64, +995, +1, +44, +49, or +81.
-          ${unknownCount ? `${unknownCount} client${unknownCount === 1 ? "" : "s"} had no recognized country code.` : ""}
+          Client world clock is prepared for future timezone API integration.
         </p>
       `;
-      return;
     }
-
-    list.innerHTML = countries
-      .map((item) => {
-        const callStatus = getCallStatus(now, item.timezone);
-        return `
-          <article class="client-time-card client-time-card--${callStatus.state}">
-            <div>
-              <h4 class="client-time-card__country">${escapeHtml(item.country)}</h4>
-              <p class="client-time-card__meta">${escapeHtml(item.timezone)} - ${escapeHtml(getTimezoneOffset(item.timezone, now))}</p>
-              <p class="client-time-card__clients">${item.clients.length} client${item.clients.length === 1 ? "" : "s"}</p>
-            </div>
-            <div class="client-time-card__timebox">
-              <strong class="client-time-card__time">${formatTime(now, item.timezone, false)}</strong>
-              <span class="client-time-card__date">${escapeHtml(formatDate(now, item.timezone))}</span>
-              <span class="client-time-card__status">${callStatus.label}</span>
-            </div>
-          </article>
-        `;
-      })
-      .join("");
   };
 
   const renderClock = (event) => {
