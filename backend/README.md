@@ -2,7 +2,7 @@
 
 This folder will contain the Node.js, Express, MongoDB, and phone-service backend for the CRM.
 
-Current step: Auth API is wired.
+Current step: Clients API is wired.
 
 ## Environment Setup
 
@@ -45,7 +45,7 @@ Planned build order:
 1. Express server setup. Done.
 2. MongoDB connection. Done.
 3. Auth API. Done.
-4. Clients API.
+4. Clients API. Done.
 5. Tasks, notes, reminders, notifications, and activities.
 6. Messenger API.
 7. Phone service integration.
@@ -97,3 +97,73 @@ Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
 Expected result: `200 OK` with the logged-in user's account data.
+
+## Clients API Test Order
+
+All clients endpoints require the login token:
+
+```http
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### List clients
+
+```http
+GET http://localhost:5000/api/clients
+```
+
+Optional filters:
+
+```text
+?status=lead&search=alpha&sort=value-desc
+```
+
+### Create client
+
+```http
+POST http://localhost:5000/api/clients
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "name": "Alpha Group",
+  "company": "Alpha Group LLC",
+  "email": "alpha@example.com",
+  "phone": "+995 574 431 557",
+  "country": "Georgia",
+  "timezone": "Asia/Tbilisi",
+  "status": "lead",
+  "dealValue": 2500
+}
+```
+
+### Get one client
+
+```http
+GET http://localhost:5000/api/clients/CLIENT_ID
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### Update client
+
+```http
+PATCH http://localhost:5000/api/clients/CLIENT_ID
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "status": "contacted",
+  "dealValue": 3000
+}
+```
+
+### Delete client
+
+```http
+DELETE http://localhost:5000/api/clients/CLIENT_ID
+Authorization: Bearer YOUR_TOKEN_HERE
+```

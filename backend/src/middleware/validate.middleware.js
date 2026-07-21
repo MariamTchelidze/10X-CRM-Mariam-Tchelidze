@@ -1,4 +1,5 @@
 import { ApiError } from "../utils/ApiError.js";
+import { CLIENT_STATUSES } from "../constants/clientStatuses.js";
 
 const emailPattern = /^\S+@\S+\.(com|net|org)$/i;
 const latinPasswordPattern = /^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/;
@@ -38,6 +39,41 @@ export const validateLogin = (request, response, next) => {
 
   if (!password) {
     throw new ApiError(400, "Password is required.");
+  }
+
+  next();
+};
+
+export const validateClient = (request, response, next) => {
+  const { name, company, email, phone, status, dealValue } = request.body;
+  const isCreateRequest = request.method === "POST";
+
+  if ((isCreateRequest || name !== undefined) && String(name || "").trim().length < 3) {
+    throw new ApiError(400, "Client name must contain at least 3 characters.");
+  }
+
+  if ((isCreateRequest || company !== undefined) && !String(company || "").trim()) {
+    throw new ApiError(400, "Company is required.");
+  }
+
+  if ((isCreateRequest || email !== undefined) && !emailPattern.test(String(email || "").trim())) {
+    throw new ApiError(400, "Client email must be valid and end with .com, .net, or .org.");
+  }
+
+  if (phone !== undefined && String(phone).trim() && String(phone).trim().length < 6) {
+    throw new ApiError(400, "Phone number looks too short.");
+  }
+
+  if (status !== undefined && !CLIENT_STATUSES.includes(status)) {
+    throw new ApiError(400, "Client status must be lead, contacted, won, or lost.");
+  }
+
+  if (dealValue !== undefined) {
+    const parsedValue = Number(dealValue);
+
+    if (!Number.isFinite(parsedValue) || parsedValue < 0) {
+      throw new ApiError(400, "Deal value must be a positive number.");
+    }
   }
 
   next();
