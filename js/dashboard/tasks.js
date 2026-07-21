@@ -16,6 +16,10 @@ function initTasks() {
   const TASKS_KEY = "crm_tasks";
   const data = window.crmData;
   const PENDING_TASK_KEY = "crm_pending_open_task";
+  const TASK_EXAM_SAFE_MODE = true;
+  const TASK_ARCHIVE_DISABLED_MESSAGE = "Archive is disabled in exam-safe mode.";
+  const TASK_DELETE_DISABLED_MESSAGE = "Delete is disabled in exam-safe mode.";
+  const TASK_CHECKLIST_DISABLED_MESSAGE = "Checklist is disabled in exam-safe mode.";
   const statuses = ["todo", "in-progress", "overdue", "done"];
   const statusLabels = {
     todo: "To Do",
@@ -31,6 +35,7 @@ function initTasks() {
   };
 
   const getPriorityColor = (priority) => priorityColors[priority] || priorityColors.Low;
+  const showExamSafeTaskToast = (message) => window.crmToast?.show(message, "info");
 
   /* --- Runtime state tracks the open task, drag item, delete target, and edited checklist item. --- */
   let activeTaskId = null;
@@ -262,6 +267,8 @@ function initTasks() {
   };
 
   const getSubtasksMarkup = (task) => {
+    if (TASK_EXAM_SAFE_MODE) return "";
+
     const { done, total } = getChecklistProgress(task);
 
     if (!total) return "";
@@ -418,6 +425,25 @@ function initTasks() {
   const renderChecklist = (task) => {
     const checklist = document.querySelector(".js-task-checklist");
     const progress = document.querySelector(".js-task-checklist-progress");
+    const addChecklistInput = addSubtaskForm?.querySelector(".js-new-subtask");
+
+    if (TASK_EXAM_SAFE_MODE) {
+      if (progress) {
+        progress.textContent = "Prepared UI";
+      }
+
+      if (addChecklistInput) {
+        addChecklistInput.value = "";
+        addChecklistInput.placeholder = "Checklist is prepared for future task workflow.";
+      }
+
+      if (checklist) {
+        checklist.innerHTML = '<p class="task-empty">Checklist is prepared for future task workflow.</p>';
+      }
+
+      return;
+    }
+
     const { done, total } = getChecklistProgress(task);
 
     if (progress) {
@@ -721,11 +747,18 @@ function initTasks() {
 
     if (!validateTaskForm(formData)) return;
 
-    const subtasks = String(formData.get("subtasks") || "")
-      .split("\n")
-      .map((subtask) => subtask.trim())
-      .filter(Boolean)
-      .map((text) => ({ id: createId("subtask"), text, done: false }));
+    const checklistText = String(formData.get("subtasks") || "").trim();
+    const subtasks = TASK_EXAM_SAFE_MODE
+      ? []
+      : checklistText
+          .split("\n")
+          .map((subtask) => subtask.trim())
+          .filter(Boolean)
+          .map((text) => ({ id: createId("subtask"), text, done: false }));
+
+    if (TASK_EXAM_SAFE_MODE && checklistText) {
+      showExamSafeTaskToast(TASK_CHECKLIST_DISABLED_MESSAGE);
+    }
 
     const nextTask = {
       id: createId("task"),
@@ -852,6 +885,11 @@ function initTasks() {
     }
 
     if (actionButton.dataset.taskAction === "archive") {
+      if (TASK_EXAM_SAFE_MODE) {
+        showExamSafeTaskToast(TASK_ARCHIVE_DISABLED_MESSAGE);
+        return;
+      }
+
       const task = getTaskById(taskId);
       updateTask(taskId, { archived: true });
       logTaskActivity({
@@ -888,10 +926,20 @@ function initTasks() {
     }
 
     if (actionButton.dataset.taskAction === "delete") {
+      if (TASK_EXAM_SAFE_MODE) {
+        showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
+        return;
+      }
+
       openDeleteTaskModal(taskId);
     }
 
     if (actionButton.dataset.taskAction === "delete-permanent") {
+      if (TASK_EXAM_SAFE_MODE) {
+        showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
+        return;
+      }
+
       deleteTaskPermanently(taskId);
     }
   });
@@ -929,6 +977,11 @@ function initTasks() {
     const task = getTaskById(activeTaskId);
 
     if (!text || !task) return;
+    if (TASK_EXAM_SAFE_MODE) {
+      input.value = "";
+      showExamSafeTaskToast(TASK_CHECKLIST_DISABLED_MESSAGE);
+      return;
+    }
 
     updateTask(task.id, {
       subtasks: [...task.subtasks, { id: createId("subtask"), text, done: false }],
@@ -940,6 +993,11 @@ function initTasks() {
     const checkbox = event.target.closest(".js-subtask-toggle");
 
     if (!checkbox || !activeTaskId) return;
+    if (TASK_EXAM_SAFE_MODE) {
+      checkbox.checked = !checkbox.checked;
+      showExamSafeTaskToast(TASK_CHECKLIST_DISABLED_MESSAGE);
+      return;
+    }
 
     const subtaskItem = checkbox.closest("[data-subtask-id]");
     const task = getTaskById(activeTaskId);
@@ -957,6 +1015,10 @@ function initTasks() {
     const removeButton = event.target.closest(".js-remove-subtask");
 
     if (!removeButton || !activeTaskId) return;
+    if (TASK_EXAM_SAFE_MODE) {
+      showExamSafeTaskToast(TASK_CHECKLIST_DISABLED_MESSAGE);
+      return;
+    }
 
     const subtaskItem = removeButton.closest("[data-subtask-id]");
     const task = getTaskById(activeTaskId);
@@ -975,6 +1037,10 @@ function initTasks() {
     const cancelButton = event.target.closest(".js-cancel-subtask-edit");
 
     if (!activeTaskId || (!editButton && !saveButton && !cancelButton)) return;
+    if (TASK_EXAM_SAFE_MODE) {
+      showExamSafeTaskToast(TASK_CHECKLIST_DISABLED_MESSAGE);
+      return;
+    }
 
     const subtaskItem = event.target.closest("[data-subtask-id]");
     const task = getTaskById(activeTaskId);
@@ -1079,6 +1145,12 @@ function initTasks() {
 
   document.querySelector(".js-move-task-recycle")?.addEventListener("click", () => {
     if (!pendingDeleteTaskId) return;
+    if (TASK_EXAM_SAFE_MODE) {
+      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
+      pendingDeleteTaskId = null;
+      document.querySelector("#delete-task-modal [data-modal-close]")?.click();
+      return;
+    }
 
     moveTaskToRecycle(pendingDeleteTaskId);
     pendingDeleteTaskId = null;
@@ -1087,6 +1159,12 @@ function initTasks() {
 
   document.querySelector(".js-delete-task-permanently")?.addEventListener("click", () => {
     if (!pendingDeleteTaskId) return;
+    if (TASK_EXAM_SAFE_MODE) {
+      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
+      pendingDeleteTaskId = null;
+      document.querySelector("#delete-task-modal [data-modal-close]")?.click();
+      return;
+    }
 
     deleteTaskPermanently(pendingDeleteTaskId);
     pendingDeleteTaskId = null;

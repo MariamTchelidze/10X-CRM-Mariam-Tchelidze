@@ -12,10 +12,10 @@
     allowedNumber: "",
   };
   const PHONE_INACTIVE_MESSAGE = "CRM Phone is prepared for future Twilio integration.";
+  const PHONE_NOTE_INACTIVE_MESSAGE = "Call notes are prepared for future Twilio integration.";
 
-  /* --- Storage keys connect client phone numbers with saved call notes. --- */
+  /* --- Storage key connects the dialer with client phone numbers. --- */
   const CLIENTS_KEY = window.crmConstants?.CLIENTS_KEY || "crm_clients";
-  const CALL_NOTES_KEY = "crm_call_notes";
 
   const display = dialer.querySelector(".js-phone-display");
   const status = dialer.querySelector(".js-phone-status");
@@ -43,14 +43,6 @@
       return Array.isArray(value) ? value : [];
     } catch (error) {
       return [];
-    }
-  };
-
-  const writeArray = (key, value) => {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      // The current page still updates even if storage is unavailable.
     }
   };
 
@@ -191,44 +183,15 @@
     event.preventDefault();
 
     const note = noteInput.value.trim();
-    const normalized = normalizeNumber(currentNumber);
 
     if (!note) {
       setStatus("Write a note before saving.", "error");
       return;
     }
 
-    const notes = readArray(CALL_NOTES_KEY);
-    const nextNote = {
-      id: `call-note-${Date.now()}`,
-      clientId: selectedClient?.id || null,
-      clientName: selectedClient?.name || "Manual number",
-      company: selectedClient?.company || "",
-      phone: normalized,
-      note,
-      createdAt: new Date().toISOString(),
-    };
-
-    writeArray(CALL_NOTES_KEY, [nextNote, ...notes]);
     noteInput.value = "";
-    setStatus("Call note saved to Profile Call History.", "success");
-    window.dispatchEvent(new CustomEvent("crm:call-note-saved", { detail: nextNote }));
-    window.crmNotifications?.add("New call note saved to Profile Call History.");
-    window.crmActivity?.add({
-      type: "phone",
-      icon: "phone",
-      title: "Call note saved",
-      summary: `${nextNote.company || nextNote.phone} - ${note.slice(0, 70)}`,
-      status: "Saved",
-      relatedLabel: nextNote.company || nextNote.phone,
-      description: note,
-      details: [
-        ["Phone", nextNote.phone],
-        ["Client", nextNote.company || "No selected client"],
-      ],
-      actionHref: "./profile.html",
-      actionLabel: "Open Profile",
-    });
+    setStatus(PHONE_NOTE_INACTIVE_MESSAGE, "warning");
+    window.crmToast?.show(PHONE_NOTE_INACTIVE_MESSAGE, "info");
   });
 
   renderQueue();
