@@ -8,8 +8,8 @@
 
   /* --- Call config keeps browser tel links disabled until the user enables calling. --- */
   const PHONE_CONFIG = {
-    callingEnabled: true,
-    allowedNumber: "+995557776627",
+    callingEnabled: false,
+    allowedNumber: "",
   };
 
   /* --- Storage keys connect client phone numbers with saved call notes. --- */
@@ -71,13 +71,6 @@
     display.classList.toggle("is-empty", !normalizeNumber(currentNumber));
   };
 
-  const removeLastDigit = () => {
-    currentNumber = normalizeNumber(currentNumber).slice(0, -1);
-    selectedClient = null;
-    setStatus(currentNumber ? "Last digit removed." : "Number cleared.", "muted");
-    updateDisplay();
-  };
-
   const setStatus = (message, type = "muted") => {
     status.textContent = message;
     status.dataset.state = type;
@@ -119,29 +112,6 @@
     updateDisplay();
   };
 
-  const addPastedNumber = (value) => {
-    const pastedNumber = normalizeNumber(value);
-
-    if (!pastedNumber) return;
-
-    if (pastedNumber.startsWith("+")) {
-      currentNumber = pastedNumber;
-    } else {
-      currentNumber = `${normalizeNumber(currentNumber)}${pastedNumber}`;
-    }
-
-    selectedClient = null;
-    setStatus("Number pasted.", "muted");
-    updateDisplay();
-  };
-
-  const shouldIgnoreKeyboardEvent = (event) => {
-    const target = event.target;
-    const tagName = target?.tagName?.toLowerCase();
-
-    return tagName === "input" || tagName === "textarea" || tagName === "select" || target?.isContentEditable;
-  };
-
   dialer.addEventListener("click", (event) => {
     const key = event.target.closest(".js-phone-key");
     const clientButton = event.target.closest(".js-phone-client");
@@ -161,45 +131,10 @@
   });
 
   deleteButton.addEventListener("click", () => {
-    removeLastDigit();
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (!dialer.offsetParent || shouldIgnoreKeyboardEvent(event)) return;
-
-    if (/^[0-9]$/.test(event.key)) {
-      event.preventDefault();
-      addKey(event.key);
-      return;
-    }
-
-    if (event.key === "+") {
-      event.preventDefault();
-      addKey("+");
-      return;
-    }
-
-    if (event.key === "Backspace") {
-      event.preventDefault();
-      removeLastDigit();
-      return;
-    }
-
-    if (event.key === "Enter") {
-      event.preventDefault();
-      callButton.click();
-    }
-  });
-
-  document.addEventListener("paste", (event) => {
-    if (!dialer.offsetParent || shouldIgnoreKeyboardEvent(event)) return;
-
-    const pastedText = event.clipboardData?.getData("text") || "";
-
-    if (!normalizeNumber(pastedText)) return;
-
-    event.preventDefault();
-    addPastedNumber(pastedText);
+    currentNumber = normalizeNumber(currentNumber).slice(0, -1);
+    selectedClient = null;
+    setStatus(currentNumber ? "Last digit removed." : "Number cleared.", "muted");
+    updateDisplay();
   });
 
   callButton.addEventListener("click", () => {
