@@ -390,37 +390,18 @@ function initTasks() {
   const renderRecycleBin = () => {
     const recycleList = document.querySelector(".js-recycle-bin-list");
     const recycleCount = document.querySelector(".js-recycle-count");
-    const deletedTasks = getDeletedTasks();
 
     if (recycleCount) {
-      recycleCount.textContent = `${deletedTasks.length} deleted`;
+      recycleCount.textContent = "Future feature";
     }
 
     if (!recycleList) return;
 
-    if (!deletedTasks.length) {
-      recycleList.innerHTML = '<p class="task-empty">Recycle bin is empty.</p>';
-      return;
-    }
-
-    recycleList.innerHTML = "";
-    deletedTasks.forEach((task) => {
-      const item = document.createElement("article");
-      item.className = "recycle-task-item";
-      item.dataset.taskId = task.id;
-      item.innerHTML = `
-        <div>
-          <h4 class="recycle-task-item__title">${escapeHtml(task.title)}</h4>
-          <p class="recycle-task-item__meta">${escapeHtml(task.client)} | ${escapeHtml(task.priority)} | ${escapeHtml(task.dueDate)}</p>
-        </div>
-        <div class="recycle-task-item__actions">
-          <button class="task-card__button task-card__button--primary" type="button" data-task-action="open">Open</button>
-          <button class="task-card__button" type="button" data-task-action="restore-from-recycle">Restore</button>
-          <button class="task-card__button task-card__button--danger" type="button" data-task-action="delete-permanent">Delete Permanently</button>
-        </div>
-      `;
-      recycleList.append(item);
-    });
+    recycleList.innerHTML = `
+      <p class="task-empty">
+        Recycle Bin is prepared for future task recovery. In exam-safe mode, tasks are not moved here.
+      </p>
+    `;
   };
 
   const renderChecklist = (task) => {
