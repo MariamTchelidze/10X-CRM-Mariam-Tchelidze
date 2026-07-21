@@ -4,6 +4,7 @@ import morgan from "morgan";
 import { env } from "./config/env.js";
 import { getDatabaseStatus } from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -46,6 +47,8 @@ app.get("/api/health", (request, response) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+app.use("/api/auth", authRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
