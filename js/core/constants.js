@@ -1,5 +1,11 @@
 "use strict";
 
+/* --- API Environment Detection --- */
+const localApiBaseUrl = "http://localhost:5000/api";
+const productionApiBaseUrl = "https://10-x-crm-mariam-tchelidze-backend.onrender.com/api";
+const localHostnames = ["localhost", "127.0.0.1", ""];
+const isLocalFrontend = localHostnames.includes(window.location.hostname) || window.location.protocol === "file:";
+
 /* --- Shared Local Storage Keys --- */
 window.crmConstants = {
   USERS_KEY: "crm_users",
@@ -10,7 +16,7 @@ window.crmConstants = {
   FILES_KEY: "crm_files",
   ACTIVITY_KEY: "crm_activity",
   THEME_KEY: "crm_theme",
-  API_BASE_URL: window.CRM_API_BASE_URL || "http://localhost:5000/api",
+  API_BASE_URL: window.CRM_API_BASE_URL || (isLocalFrontend ? localApiBaseUrl : productionApiBaseUrl),
   PAGES: {
     login: "index.html",
     signup: "signup.html",

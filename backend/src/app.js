@@ -14,18 +14,22 @@ import settingRoutes from "./routes/setting.routes.js";
 
 const app = express();
 
+const normalizeOrigin = (origin = "") => origin.replace(/\/$/, "");
+
 const allowedOrigins = [
-  env.clientUrl,
+  ...env.clientUrl.split(","),
   "http://localhost:5500",
   "http://127.0.0.1:5500",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-].filter(Boolean);
+]
+  .map((origin) => normalizeOrigin(origin.trim()))
+  .filter(Boolean);
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) {
         callback(null, true);
         return;
       }
