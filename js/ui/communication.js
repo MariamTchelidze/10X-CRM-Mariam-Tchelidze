@@ -13,6 +13,7 @@
   const sensaiSuggestions = document.querySelector(".js-sensai-suggestions");
   const clearTeamChatButton = document.querySelector(".js-clear-team-chat");
   const clearAiChatButton = document.querySelector(".js-clear-ai-chat");
+  const data = window.crmData;
 
   if (!teamForm && !aiForm) return;
 
@@ -65,6 +66,14 @@
       hour: "2-digit",
       minute: "2-digit",
     });
+
+  const createMessageId = () => {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+      return `message-${window.crypto.randomUUID()}`;
+    }
+
+    return `message-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  };
 
   /* --- CRM Context for SensAI Replies --- */
   const getCrmContext = () => {
@@ -344,21 +353,33 @@
     return getTeamRecipients();
   };
 
+  const normalizeTeamMessage = (message = {}) => ({
+    ...message,
+    id: message.id || message._id || createMessageId(),
+    conversation: message.conversation || message.recipient || getSelectedRecipient(),
+    role: message.role || "user",
+    author: message.author || "You",
+    recipient: message.recipient || message.conversation || getSelectedRecipient(),
+    text: message.text || "",
+    createdAt: message.createdAt || new Date().toISOString(),
+  });
+
   const normalizeConversationMap = (storedValue) => {
     const conversations = {};
 
     if (Array.isArray(storedValue)) {
       storedValue.forEach((message) => {
-        const recipient = message.recipient || getSelectedRecipient();
+        const normalizedMessage = normalizeTeamMessage(message);
+        const recipient = normalizedMessage.conversation || normalizedMessage.recipient;
         if (!recipient) return;
-        conversations[recipient] = [...(conversations[recipient] || []), message];
+        conversations[recipient] = [...(conversations[recipient] || []), normalizedMessage];
       });
       return conversations;
     }
 
     if (storedValue && typeof storedValue === "object") {
       Object.entries(storedValue).forEach(([recipient, history]) => {
-        conversations[recipient] = Array.isArray(history) ? history : [];
+        conversations[recipient] = Array.isArray(history) ? history.map(normalizeTeamMessage) : [];
       });
     }
 
@@ -382,6 +403,19 @@
       localStorage.setItem(TEAM_KEY, JSON.stringify(conversations));
     } catch (error) {
       // Messenger keeps the active thread visible even if storage is unavailable.
+    }
+  };
+
+  const loadTeamConversations = async () => {
+    if (!data?.fetchMessages) return;
+
+    try {
+      teamConversations = normalizeConversationMap(await data.fetchMessages());
+      teamConversations[activeRecipient] = teamConversations[activeRecipient] || [];
+      saveConversationMap(teamConversations);
+      renderActiveConversation();
+    } catch (error) {
+      renderActiveConversation();
     }
   };
 
@@ -413,6 +447,7 @@
   };
 
   renderActiveConversation();
+  loadTeamConversations();
   renderMessages(aiMessages, aiHistory, "No SensAI messages yet.");
   renderSuggestions();
 
@@ -431,19 +466,33 @@
     if (!messageText || !recipient) return;
 
     activeRecipient = recipient;
-    teamConversations[recipient] = [
-      ...(teamConversations[recipient] || []),
-      {
-        role: "user",
-        author: "You",
-        recipient,
-        text: messageText,
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    const nextMessage = {
+      id: createMessageId(),
+      conversation: recipient,
+      role: "user",
+      author: "You",
+      recipient,
+      text: messageText,
+      createdAt: new Date().toISOString(),
+    };
+
+    teamConversations[recipient] = [...(teamConversations[recipient] || []), nextMessage];
     saveConversationMap(teamConversations);
     renderActiveConversation();
     teamInput.value = "";
+    data?.postMessage?.(nextMessage)
+      .then((apiMessage) => {
+        if (!apiMessage) return;
+
+        teamConversations[recipient] = (teamConversations[recipient] || []).map((message) =>
+          message.id === nextMessage.id ? normalizeTeamMessage(apiMessage) : message,
+        );
+        saveConversationMap(teamConversations);
+        renderActiveConversation();
+      })
+      .catch((error) => {
+        window.crmToast?.show(error.message || "Messenger message was saved locally, but backend sync failed.", "error");
+      });
     window.crmNotifications?.add(`New Messenger message sent to ${recipient}.`);
     window.crmActivity?.add({
       type: "communication",
@@ -507,6 +556,14 @@
     saveConversationMap(teamConversations);
     activeRecipient = recipient;
     renderActiveConversation();
+    data?.clearMessageConversation?.(recipient)
+      .then((conversations) => {
+        teamConversations = normalizeConversationMap(conversations);
+        teamConversations[recipient] = teamConversations[recipient] || [];
+        saveConversationMap(teamConversations);
+        renderActiveConversation();
+      })
+      .catch(() => {});
     window.crmToast?.show(`Messenger history with ${recipient} cleared.`, "success");
   });
 

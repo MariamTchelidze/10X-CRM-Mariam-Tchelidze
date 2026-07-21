@@ -2,7 +2,7 @@
 
 This folder will contain the Node.js, Express, MongoDB, and phone-service backend for the CRM.
 
-Current step: Notifications and Activity APIs are wired.
+Current step: Messenger API is wired.
 
 ## Environment Setup
 
@@ -48,7 +48,7 @@ Planned build order:
 4. Clients API. Done.
 5. Tasks API. Done.
 6. Notifications and Activity APIs. Done.
-7. Messenger API.
+7. Messenger API. Done.
 8. Phone service integration.
 
 ## Auth API Test Order
@@ -340,5 +340,53 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 ```http
 DELETE http://localhost:5000/api/activity
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+## Messenger API Test Order
+
+All messenger endpoints require the login token:
+
+```http
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### List conversations
+
+```http
+GET http://localhost:5000/api/messages
+```
+
+Expected result: a `conversations` object where each key is a teammate or department name.
+
+### Send message
+
+```http
+POST http://localhost:5000/api/messages
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "conversation": "Sales Team",
+  "role": "user",
+  "author": "You",
+  "recipient": "Sales Team",
+  "text": "Please review today's hot leads."
+}
+```
+
+### Clear one conversation
+
+```http
+DELETE http://localhost:5000/api/messages/Sales%20Team
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### Clear all messenger history
+
+```http
+DELETE http://localhost:5000/api/messages
 Authorization: Bearer YOUR_TOKEN_HERE
 ```

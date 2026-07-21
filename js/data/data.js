@@ -205,6 +205,34 @@
     return data.activities || [];
   };
 
+  /* --- Messenger API Requests --- */
+  const fetchMessages = async () => {
+    const data = await requestJson("/messages");
+    return data.conversations || {};
+  };
+
+  const postMessage = async (message) => {
+    const data = await requestJson("/messages", {
+      method: "POST",
+      body: JSON.stringify(message),
+    });
+
+    return data.message;
+  };
+
+  const clearMessageConversation = async (conversation) => {
+    const data = await requestJson(`/messages/${encodeURIComponent(conversation)}`, {
+      method: "DELETE",
+    });
+
+    return data.conversations || {};
+  };
+
+  const clearAllMessages = async () => {
+    const data = await requestJson("/messages", { method: "DELETE" });
+    return data.conversations || {};
+  };
+
   window.crmData = {
     authRequest,
     fetchInitialClients,
@@ -225,6 +253,10 @@
     fetchActivity,
     postActivity,
     clearActivityRequest,
+    fetchMessages,
+    postMessage,
+    clearMessageConversation,
+    clearAllMessages,
     getInitials,
     formatStatus,
   };
