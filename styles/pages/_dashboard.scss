@@ -1535,10 +1535,7 @@
   background: var(--color-card);
   color: var(--color-text-secondary);
   outline: none;
-}
-
-.spreadsheet-cell:focus {
-  box-shadow: inset 0 0 0 0.2rem var(--color-primary);
+  white-space: nowrap;
 }
 
 .spreadsheet-cell--header {
