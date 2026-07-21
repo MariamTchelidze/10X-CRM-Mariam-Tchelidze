@@ -1,4 +1,10 @@
 import { User } from "../models/User.js";
+import { Activity } from "../models/Activity.js";
+import { Client } from "../models/Client.js";
+import { Message } from "../models/Message.js";
+import { Notification } from "../models/Notification.js";
+import { Setting } from "../models/Setting.js";
+import { Task } from "../models/Task.js";
 import { hashPassword, comparePasswords } from "../services/auth.service.js";
 import { createAccessToken } from "../services/token.service.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -71,5 +77,36 @@ export const getMe = asyncHandler(async (request, response) => {
   response.status(200).json({
     status: "success",
     user: buildUserResponse(request.user),
+  });
+});
+
+export const deleteAccount = asyncHandler(async (request, response) => {
+  const password = request.body.password;
+  const user = await User.findById(request.user._id).select("+password");
+
+  if (!user) {
+    throw new ApiError(401, "The user connected to this session no longer exists.");
+  }
+
+  const passwordIsCorrect = await comparePasswords(password, user.password);
+
+  if (!passwordIsCorrect) {
+    throw new ApiError(401, "Password does not match this account.");
+  }
+
+  await Promise.all([
+    Client.deleteMany({ owner: user._id }),
+    Task.deleteMany({ owner: user._id }),
+    Notification.deleteMany({ owner: user._id }),
+    Activity.deleteMany({ owner: user._id }),
+    Message.deleteMany({ owner: user._id }),
+    Setting.deleteMany({ owner: user._id }),
+  ]);
+
+  await user.deleteOne();
+
+  response.status(200).json({
+    status: "success",
+    message: "Account deleted successfully.",
   });
 });

@@ -57,6 +57,13 @@
     });
   };
 
+  const deleteAccountRequest = async (password) => {
+    return requestJson("/auth/me", {
+      method: "DELETE",
+      body: JSON.stringify({ password }),
+    });
+  };
+
   /* --- Small display helpers keep API cards readable. --- */
   const getInitials = (name = "") =>
     name
@@ -258,6 +265,7 @@
   window.crmData = {
     hasApiSession,
     authRequest,
+    deleteAccountRequest,
     fetchInitialClients,
     postClient,
     updateClientRequest,

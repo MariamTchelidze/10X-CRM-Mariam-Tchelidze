@@ -4,6 +4,7 @@
 (function initSettingsPanel() {
   const STORAGE_KEY = "crm_app_settings";
   const SESSION_KEY = "crm_session";
+  const data = window.crmData;
   const DEFAULT_ACCENT = "#ff6b1a";
   const ACCOUNT_STORAGE_KEYS = [
     "crm_users",
@@ -116,21 +117,6 @@
 
     if (accentInput) {
       accentInput.value = settings.accentColor;
-    }
-  };
-
-  /* --- Account deletion helpers verify the current password before clearing data. --- */
-  const getStoredAccountPassword = () => {
-    try {
-      const session = JSON.parse(localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY) || "{}");
-      const users = JSON.parse(localStorage.getItem("crm_users") || "[]");
-      const currentUser = Array.isArray(users)
-        ? users.find((user) => user.id === session.userId || (user.email && user.email === session.email))
-        : null;
-
-      return currentUser?.password || "";
-    } catch (error) {
-      return "";
     }
   };
 
@@ -248,28 +234,40 @@
     setDeleteAccountError("");
   });
 
-  deleteAccountForm?.addEventListener("submit", (event) => {
+  deleteAccountForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const password = deleteAccountForm.querySelector(".js-delete-account-password")?.value.trim();
-    const storedPassword = getStoredAccountPassword();
+    const submitButton = deleteAccountForm.querySelector("[type='submit']");
 
     if (!password) {
       setDeleteAccountError("Please enter your password.");
       return;
     }
 
-    if (!storedPassword) {
+    if (!data?.hasApiSession?.() || !data?.deleteAccountRequest) {
       setDeleteAccountError("Your account could not be verified. Please log in again.");
       return;
     }
 
-    if (password !== storedPassword) {
-      setDeleteAccountError("Password does not match this account.");
-      return;
-    }
+    try {
+      setDeleteAccountError("");
 
-    clearAccountData();
-    window.location.href = "./index.html";
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Deleting...";
+      }
+
+      await data.deleteAccountRequest(password);
+      clearAccountData();
+      window.location.href = "./index.html";
+    } catch (error) {
+      setDeleteAccountError(error.message || "Password does not match this account.");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Delete Account";
+      }
+    }
   });
 })();
