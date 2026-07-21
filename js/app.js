@@ -23,15 +23,15 @@ import "./ui/phone.js";
 import "./components/passwordToggle.js";
 import "./components/pageSwap.js";
 
+/* --- Data Layer --- */
+import "./data/data.js";
+
 /* --- Authentication Pages --- */
 import "./auth/validation.js";
 import "./auth/forgotPassword.js";
 import "./auth/logout.js";
 import "./auth/login.js";
 import "./auth/signup.js";
-
-/* --- Data Layer --- */
-import "./data/data.js";
 
 /* --- Clients Feature --- */
 import "./clients/clientsCard.js";

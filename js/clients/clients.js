@@ -166,7 +166,7 @@ function initClients() {
 
     return {
       ...note,
-      id: note.id || createId(`note-${index}`),
+      id: note.id || note._id || createId(`note-${index}`),
       text: String(note.text || note.message || "").trim(),
       author: note.author || "CRM User",
       date: fallbackDate,
@@ -177,7 +177,7 @@ function initClients() {
   };
 
   const normalizeClient = (client = {}, index = 0) => {
-    const id = client.id || createId(`client-${index}`);
+    const id = client.id || client._id || createId(`client-${index}`);
     const status = CLIENT_STATUSES.includes(client.status) ? client.status : "lead";
     const notes = Array.isArray(client.notes)
       ? client.notes.map(normalizeNote).filter((note) => note.text)
@@ -461,11 +461,25 @@ function initClients() {
   };
 
   /* --- State update helper changes one client, then saves the whole list. --- */
-  const updateClient = (clientId, updater) => {
+  const persistClientUpdate = (client) => {
+    if (!client?.id || !data.updateClientRequest) return;
+
+    data.updateClientRequest(client.id, client).catch((error) => {
+      window.crmToast?.show(getAsyncErrorMessage(error, "Client change was saved locally, but backend sync failed."), "error");
+    });
+  };
+
+  const updateClient = (clientId, updater, shouldSync = true) => {
+    let updatedClient = null;
+
     clients = clients.map((client) =>
-      String(client.id) === String(clientId) ? updater(client) : client,
+      String(client.id) === String(clientId) ? (updatedClient = updater(client)) : client,
     );
     saveClients();
+
+    if (shouldSync && updatedClient) {
+      persistClientUpdate(updatedClient);
+    }
   };
 
   /* --- Client Details Modal Rendering --- */
@@ -613,12 +627,6 @@ function initClients() {
 
   /* --- API Load and Reminder Checks --- */
   const loadClients = async () => {
-    if (clients.length) {
-      renderClients();
-      checkClientReminders();
-      return;
-    }
-
     setLoading(true);
     setButtonLoading(retryButton, true, "Retrying...");
 
@@ -741,9 +749,10 @@ function initClients() {
       setButtonLoading(saveClientButton, true, "Saving...");
 
       try {
-        await data.updateClientRequest?.(editingClientId, draft);
-        updateClient(editingClientId, (client) => ({
+        const apiClient = await data.updateClientRequest?.(editingClientId, draft);
+        updateClient(editingClientId, (client) => normalizeClient({
           ...client,
+          ...(apiClient || {}),
           name: draft.name,
           company: draft.company,
           email: draft.email,
@@ -752,7 +761,7 @@ function initClients() {
           timezone: draft.timezone,
           status: draft.status,
           dealValue: draft.dealValue,
-        }));
+        }), false);
 
         const updatedClient = getClientById(editingClientId);
         if (detailsContent?.dataset.activeClientId === String(editingClientId)) {
@@ -789,9 +798,8 @@ function initClients() {
 
     try {
       const apiClient = await data.postClient(draft);
-      const client = {
-        ...draft,
-        id: apiClient.id || window.crypto?.randomUUID?.() || Date.now(),
+      const client = normalizeClient({
+        ...(apiClient || draft),
         notes: draft.notes.map((note) => ({
           id: createId("note"),
           text: note.text,
@@ -801,8 +809,8 @@ function initClients() {
           taskId: "",
           taskTitle: "",
         })),
-        createdAt: new Date().toISOString(),
-      };
+        createdAt: apiClient?.createdAt || new Date().toISOString(),
+      });
 
       clients.unshift(client);
       saveClients();

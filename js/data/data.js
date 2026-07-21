@@ -1,9 +1,11 @@
 "use strict";
 
-/* --- DummyJSON Client API Layer --- */
+/* --- CRM API Layer --- */
 (function initCrmData() {
-  /* --- API constants define the demo endpoint and CRM status rotation. --- */
-  const API_URL = "https://dummyjson.com/users";
+  /* --- API constants define backend endpoints and fallback status helpers. --- */
+  const constants = window.crmConstants;
+  const storage = window.crmStorage;
+  const API_URL = constants?.API_BASE_URL || "http://localhost:5000/api";
   const statuses = ["lead", "contacted", "won", "lost"];
 
   /* --- Adds response status to errors so UI can show better feedback. --- */
@@ -11,6 +13,41 @@
     const error = new Error(message);
     error.status = response.status;
     return error;
+  };
+
+  /* --- Auth helpers attach the saved backend token to protected API requests. --- */
+  const getSession = () => storage?.read(constants?.SESSION_KEY, null) || null;
+
+  const getAuthHeaders = () => {
+    const token = getSession()?.token;
+
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
+  const requestJson = async (endpoint, options = {}) => {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...getAuthHeaders(),
+        ...(options.headers || {}),
+      },
+    });
+
+    const payload = response.status === 204 ? null : await response.json().catch(() => null);
+
+    if (!response.ok) {
+      throw createApiError(payload?.message || "Request failed.", response);
+    }
+
+    return payload;
+  };
+
+  const authRequest = async (endpoint, body) => {
+    return requestJson(endpoint, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
   };
 
   /* --- Small display helpers keep API cards readable. --- */
@@ -47,66 +84,37 @@
 
   /* --- Client API Requests --- */
   const fetchInitialClients = async () => {
-    const response = await fetch(`${API_URL}?limit=30`);
-
-    if (!response.ok) {
-      throw createApiError("Clients could not be loaded.", response);
-    }
-
-    const data = await response.json();
-    return (data.users || []).map(mapApiUserToClient);
+    const data = await requestJson("/clients");
+    return data.clients || [];
   };
 
-  /* --- POST creates a demo client remotely, then the app saves local CRM fields. --- */
+  /* --- POST creates a client in MongoDB for the active account. --- */
   const postClient = async (client) => {
-    const response = await fetch(`${API_URL}/add`, {
+    const data = await requestJson("/clients", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: client.name,
-        email: client.email,
-        phone: client.phone,
-        company: { name: client.company },
-      }),
+      body: JSON.stringify(client),
     });
 
-    if (!response.ok) {
-      throw createApiError("Client could not be added.", response);
-    }
-
-    return response.json();
+    return data.client;
   };
 
-  /* --- PUT updates API-backed clients and tolerates local-only demo IDs. --- */
+  /* --- PATCH updates the selected MongoDB client. --- */
   const updateClientRequest = async (clientId, client) => {
-    const response = await fetch(`${API_URL}/${clientId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: client.name,
-        email: client.email,
-        phone: client.phone,
-        company: { name: client.company },
-      }),
+    const data = await requestJson(`/clients/${clientId}`, {
+      method: "PATCH",
+      body: JSON.stringify(client),
     });
 
-    if (!response.ok && response.status !== 404) {
-      throw createApiError("Client could not be updated.", response);
-    }
-
-    return response.status === 404 ? {} : response.json();
+    return data.client;
   };
 
-  /* --- DELETE removes API clients and lets local-only clients be removed locally. --- */
+  /* --- DELETE removes the selected MongoDB client. --- */
   const deleteClientRequest = async (clientId) => {
-    const response = await fetch(`${API_URL}/${clientId}`, { method: "DELETE" });
-
-    if (!response.ok && response.status !== 404) {
-      throw createApiError("Client could not be deleted.", response);
-    }
+    return requestJson(`/clients/${clientId}`, { method: "DELETE" });
   };
 
   window.crmData = {
+    authRequest,
     fetchInitialClients,
     postClient,
     updateClientRequest,

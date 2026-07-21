@@ -10,6 +10,7 @@ window.crmConstants = {
   FILES_KEY: "crm_files",
   ACTIVITY_KEY: "crm_activity",
   THEME_KEY: "crm_theme",
+  API_BASE_URL: window.CRM_API_BASE_URL || "http://localhost:5000/api",
   PAGES: {
     login: "index.html",
     signup: "signup.html",
