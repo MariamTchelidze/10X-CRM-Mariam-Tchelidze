@@ -38,10 +38,9 @@ function initTasks() {
   const getPriorityColor = (priority) => priorityColors[priority] || priorityColors.Low;
   const showExamSafeTaskToast = (message) => window.crmToast?.show(message, "info");
 
-  /* --- Runtime state tracks the open task, drag item, delete target, and edited checklist item. --- */
+  /* --- Runtime state tracks the open task, drag item, and edited checklist item. --- */
   let activeTaskId = null;
   let draggedTaskId = null;
-  let pendingDeleteTaskId = null;
   let editingSubtaskId = null;
 
   /* --- DOM references collect task modals, forms, and board controls. --- */
@@ -608,53 +607,6 @@ function initTasks() {
     }
   };
 
-  /* --- Delete helpers choose recycle-bin or permanent removal behavior. --- */
-  const openDeleteTaskModal = (taskId) => {
-    pendingDeleteTaskId = taskId;
-    document.querySelector(".js-open-delete-task-helper")?.click();
-  };
-
-  const moveTaskToRecycle = (taskId) => {
-    const task = getTaskById(taskId);
-
-    updateTask(taskId, {
-      archived: false,
-      deleted: true,
-      deletedAt: new Date().toISOString(),
-    });
-
-    logTaskActivity({
-      icon: "recycle",
-      title: `${task?.title || "Task"} moved to recycle bin`,
-      summary: task?.client ? `Client: ${task.client}` : "Task moved to recycle bin.",
-      status: "Recycled",
-      relatedLabel: task?.client || "Task",
-      description: "A task was moved to the recycle bin and can still be restored.",
-    });
-  };
-
-  const deleteTaskPermanently = (taskId) => {
-    const task = getTaskById(taskId);
-
-    tasks = tasks.filter((task) => task.id !== taskId);
-    saveTasks();
-    render();
-
-    data?.deleteTaskRequest?.(taskId).catch((error) => {
-      window.crmToast?.show(error.message || "Task was deleted locally, but backend delete failed.", "error");
-    });
-
-    logTaskActivity({
-      icon: "Delete",
-      title: `${task?.title || "Task"} deleted permanently`,
-      summary: "Task removed from everywhere.",
-      status: "Deleted",
-      relatedLabel: task?.client || "Task",
-      description: "A task was permanently deleted from the board.",
-    });
-  };
-
-
   const openTaskDetails = (taskId) => {
     const task = getTaskById(taskId);
 
@@ -776,7 +728,7 @@ function initTasks() {
     let savedTask = normalizeTask(nextTask);
 
     try {
-      if (data?.postTask) {
+      if (!TASK_EXAM_SAFE_MODE && data?.postTask) {
         savedTask = normalizeTask((await data.postTask(nextTask)) || nextTask);
       }
     } catch (error) {
@@ -805,7 +757,7 @@ function initTasks() {
 
   const loadTasks = async () => {
     try {
-      if (data?.fetchTasks) {
+      if (!TASK_EXAM_SAFE_MODE && data?.fetchTasks) {
         tasks = (await data.fetchTasks()).map(normalizeTask);
         saveTasks();
       }
@@ -911,34 +863,12 @@ function initTasks() {
       });
     }
 
-    if (actionButton.dataset.taskAction === "restore-from-recycle") {
-      const task = getTaskById(taskId);
-      updateTask(taskId, { deleted: false, deletedAt: "" });
-      logTaskActivity({
-        title: `${task?.title || "Task"} restored from recycle bin`,
-        summary: task?.client ? `Client: ${task.client}` : "Task restored.",
-        status: "Restored",
-        relatedLabel: task?.client || "Task",
-        description: "A task was restored from the recycle bin.",
-      });
-    }
-
     if (actionButton.dataset.taskAction === "delete") {
-      if (TASK_EXAM_SAFE_MODE) {
-        showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
-        return;
-      }
-
-      openDeleteTaskModal(taskId);
+      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
     }
 
     if (actionButton.dataset.taskAction === "delete-permanent") {
-      if (TASK_EXAM_SAFE_MODE) {
-        showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
-        return;
-      }
-
-      deleteTaskPermanently(taskId);
+      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
     }
   });
 
@@ -1147,33 +1077,6 @@ function initTasks() {
     if (taskId) openTaskDetails(taskId);
   });
 
-  document.querySelector(".js-move-task-recycle")?.addEventListener("click", () => {
-    if (!pendingDeleteTaskId) return;
-    if (TASK_EXAM_SAFE_MODE) {
-      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
-      pendingDeleteTaskId = null;
-      document.querySelector("#delete-task-modal [data-modal-close]")?.click();
-      return;
-    }
-
-    moveTaskToRecycle(pendingDeleteTaskId);
-    pendingDeleteTaskId = null;
-    document.querySelector("#delete-task-modal [data-modal-close]")?.click();
-  });
-
-  document.querySelector(".js-delete-task-permanently")?.addEventListener("click", () => {
-    if (!pendingDeleteTaskId) return;
-    if (TASK_EXAM_SAFE_MODE) {
-      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
-      pendingDeleteTaskId = null;
-      document.querySelector("#delete-task-modal [data-modal-close]")?.click();
-      return;
-    }
-
-    deleteTaskPermanently(pendingDeleteTaskId);
-    pendingDeleteTaskId = null;
-    document.querySelector("#delete-task-modal [data-modal-close]")?.click();
-  });
   addTaskForm?.addEventListener("submit", createTaskFromForm);
   addTaskForm?.addEventListener("input", clearTaskFormErrors);
   window.addEventListener("crm:clocktick", (event) => moveOverdueTasks(event.detail?.now || new Date()));

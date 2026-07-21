@@ -9,7 +9,6 @@
   if (!dashboardPage || !storage || !constants) return;
 
   const TASKS_KEY = "crm_tasks";
-  const FAVOURITES_KEY = "crm_favourites";
   const SALES_SETTINGS_KEY = "crm_sales_settings";
   const MONTHLY_TARGET = 32000;
   const STATUS_LABELS = {
@@ -39,10 +38,6 @@
     return Array.isArray(value) ? value : [];
   };
 
-  const writeArray = (key, value) => {
-    storage.write(key, Array.isArray(value) ? value : []);
-  };
-
   const normalizeStatus = (status) => {
     const normalized = String(status || "lead").toLowerCase();
     return STATUS_LABELS[normalized] ? normalized : "lead";
@@ -62,7 +57,6 @@
     }));
 
   const getTasks = () => readArray(TASKS_KEY);
-  const getFavourites = () => readArray(FAVOURITES_KEY);
   const getActivityLog = () => readArray(constants.ACTIVITY_KEY);
   const getSalesSettings = () => {
     const settings = storage.read(SALES_SETTINGS_KEY, {});
@@ -153,27 +147,17 @@
 
     const metrics = getMetrics();
     const reports = [
-      {
-        title: "Client Status Summary",
-        text: `${metrics.counts.lead} lead, ${metrics.counts.contacted} contacted, ${metrics.counts.won} won, ${metrics.counts.lost} lost.`,
-      },
-      {
-        title: "Sales Target Overview",
-        text: `${moneyFormatter.format(metrics.wonRevenue)} won revenue, ${metrics.targetProgress}% of ${moneyFormatter.format(metrics.monthlyTarget)} target.`,
-      },
-      {
-        title: "Task Workload Summary",
-        text: `${metrics.openTasks.length} open task${metrics.openTasks.length === 1 ? "" : "s"} and ${metrics.dueTasks.length} task${metrics.dueTasks.length === 1 ? "" : "s"} needing attention.`,
-      },
+      ["Client Status Summary", `${metrics.total} clients: ${metrics.counts.lead} lead, ${metrics.counts.contacted} contacted, ${metrics.counts.won} won, ${metrics.counts.lost} lost.`],
+      ["Sales Target Overview", `${moneyFormatter.format(metrics.wonRevenue)} won revenue, ${metrics.targetProgress}% of monthly target.`],
     ];
 
     list.innerHTML = reports
       .map(
-        (report) => `
+        ([title, text]) => `
           <div class="dashboard-list__item">
             ${getIcon("txt-doc")}
-            <strong>${escapeHtml(report.title)}</strong>
-            <span>${escapeHtml(report.text)}</span>
+            <strong>${escapeHtml(title)}</strong>
+            <span>${escapeHtml(text)}</span>
           </div>
         `,
       )
@@ -230,7 +214,6 @@
       title,
       summary,
       status,
-      relatedLabel,
       date,
       source: config.source,
       badge: config.badge,
@@ -290,77 +273,18 @@
     updateThemeAssets(list);
   };
 
-  const isFavourite = (clientId) => getFavourites().some((item) => item.type === "client" && String(item.id) === String(clientId));
-
-  const setFavourite = (clientId, shouldPin) => {
-    const favourites = getFavourites().filter((item) => !(item.type === "client" && String(item.id) === String(clientId)));
-    if (shouldPin) favourites.unshift({ type: "client", id: clientId, createdAt: new Date().toISOString() });
-    writeArray(FAVOURITES_KEY, favourites);
-    renderFavourites();
-    renderActivity();
-  };
-
   const renderFavourites = () => {
     const list = document.querySelector(".js-favourites-list");
     const count = document.querySelector('[data-dashboard-section-metric="favouriteCount"]');
     const text = document.querySelector('[data-dashboard-section-text="favouriteCount"]');
     if (!list) return;
 
-    const metrics = getMetrics();
-    const favourites = getFavourites();
-    const pinnedClients = favourites
-      .filter((item) => item.type === "client")
-      .map((item) => metrics.clients.find((client) => String(client.id) === String(item.id)))
-      .filter(Boolean);
-    const suggestions = metrics.clients
-      .filter((client) => !isFavourite(client.id))
-      .sort((a, b) => b.dealValue - a.dealValue)
-      .slice(0, pinnedClients.length ? 3 : 5);
-
-    if (count) count.textContent = pinnedClients.length;
+    if (count) count.textContent = "Future";
     if (text) {
-      text.textContent = pinnedClients.length
-        ? `${pinnedClients.length} pinned client${pinnedClients.length === 1 ? "" : "s"} saved for quick access.`
-        : "Pin high-value clients from the list below.";
+      text.textContent = "Favourites is prepared for future saved clients and pinned workspace items.";
     }
 
-    if (!pinnedClients.length && !suggestions.length) {
-      list.innerHTML = '<p class="task-empty">No clients available to pin yet.</p>';
-      return;
-    }
-
-    const pinnedMarkup = pinnedClients
-      .map(
-        (client) => `
-          <div class="dashboard-list__item dashboard-list__item--with-action">
-            ${getIcon("star")}
-            <strong>${escapeHtml(client.name)}</strong>
-            <span>${escapeHtml(client.company || "No company")} - ${STATUS_LABELS[client.status]} - ${moneyFormatter.format(client.dealValue)}</span>
-            <button class="btn btn--ghost btn--sm js-toggle-favourite" type="button" data-client-id="${escapeHtml(client.id)}" data-favourite-action="remove">Remove</button>
-          </div>
-        `,
-      )
-      .join("");
-
-    const suggestionMarkup = suggestions
-      .map(
-        (client) => `
-          <div class="dashboard-list__item dashboard-list__item--with-action dashboard-list__item--suggested">
-            ${getIcon("star")}
-            <strong>${escapeHtml(client.name)}</strong>
-            <span>${escapeHtml(client.company || "No company")} - suggested from ${moneyFormatter.format(client.dealValue)} value</span>
-            <button class="btn btn--secondary btn--sm js-toggle-favourite" type="button" data-client-id="${escapeHtml(client.id)}" data-favourite-action="add">Pin</button>
-          </div>
-        `,
-      )
-      .join("");
-
-    list.innerHTML = `
-      ${pinnedMarkup}
-      ${suggestions.length ? '<p class="dashboard-list__section-label">Suggested clients</p>' : ""}
-      ${suggestionMarkup}
-    `;
-    updateThemeAssets(list);
+    list.innerHTML = '<p class="task-empty">Favourites is prepared for future saved clients and pinned workspace items.</p>';
   };
 
   const renderAll = () => {
@@ -368,12 +292,6 @@
     renderActivity();
     renderFavourites();
   };
-
-  document.addEventListener("click", (event) => {
-    const button = event.target.closest(".js-toggle-favourite");
-    if (!button) return;
-    setFavourite(button.dataset.clientId, button.dataset.favouriteAction === "add");
-  });
 
   window.addEventListener("storage", renderAll);
   window.addEventListener("crm:dashboarddata:update", renderAll);

@@ -12,23 +12,9 @@
     return !canvas.closest("[hidden]") && rect.width > 20 && rect.height > 20;
   };
 
-  const getChartItems = (canvas) => {
+  const getChartItems = () => {
     const metrics = window.crmDashboardData?.getMetrics?.();
     const chartData = metrics?.chartData || {};
-
-    if (canvas.dataset.chartType === "line") {
-      return (chartData.monthlyWonLabels || []).map((label, index) => ({
-        label,
-        value: Number(chartData.monthlyWonValues?.[index]) || 0,
-      }));
-    }
-
-    if (canvas.dataset.chartType === "pie") {
-      return (chartData.outcomeLabels || []).map((label, index) => ({
-        label,
-        value: Number(chartData.outcomeValues?.[index]) || 0,
-      }));
-    }
 
     return (chartData.stageLabels || []).map((label, index) => ({
       label,
@@ -52,7 +38,7 @@
   const drawBarChart = (canvas) => {
     if (!isCanvasReady(canvas)) return;
 
-    const items = getChartItems(canvas);
+    const items = getChartItems();
     const { context, width, height } = prepareCanvas(canvas);
     const textColor = getComputedStyle(document.body).getPropertyValue("--color-text-muted") || "#8ea0b8";
     const maxValue = Math.max(...items.map((item) => item.value), 1);
