@@ -185,66 +185,42 @@
     const configs = {
       client: {
         source: "Clients",
-        section: "Clients page > Client card",
         badge: "client",
-        actionLabel: "Open Clients",
-        actionHref: "./clients.html",
       },
       reminder: {
         source: "Reminders",
-        section: "Clients page > Client details",
         badge: "reminder",
-        actionLabel: "Open Clients",
-        actionHref: "./clients.html",
       },
       note: {
         source: "Notes",
-        section: "Clients page > Client details modal",
         badge: "note",
-        actionLabel: "Open Clients",
-        actionHref: "./clients.html",
       },
       task: {
         source: "Tasks",
-        section: "Dashboard > Task Board",
         badge: "task",
-        actionLabel: "Open Task Board",
-        actionHref: "./dashboard.html#tasks",
       },
       notification: {
         source: "Notifications",
-        section: "Header > Notifications modal",
         badge: "notification",
-        actionLabel: "Open Notifications",
-        actionHref: "./dashboard.html#activity",
       },
       phone: {
         source: "Phone",
-        section: "Application phone",
         badge: "note",
-        actionLabel: "Open Profile",
-        actionHref: "./profile.html",
       },
       communication: {
         source: "Communication",
-        section: "Messenger / SensAI",
         badge: "notification",
-        actionLabel: "Open Dashboard",
-        actionHref: "./dashboard.html",
       },
       general: {
         source: "CRM",
-        section: "Workspace",
         badge: "client",
-        actionLabel: "Open Activity",
-        actionHref: "./dashboard.html#activity",
       },
     };
 
     return configs[type] || configs.general;
   };
 
-  const createActivity = ({ id, type, icon, title, summary, status, relatedLabel, date, description, details = [], actionHref, actionLabel }) => {
+  const createActivity = ({ id, type, icon, title, summary, status, date }) => {
     const config = getActivityConfig(type);
 
     return {
@@ -257,12 +233,7 @@
       relatedLabel,
       date,
       source: config.source,
-      section: config.section,
       badge: config.badge,
-      description,
-      details,
-      actionHref: actionHref || config.actionHref,
-      actionLabel: actionLabel || config.actionLabel,
     };
   };
 
@@ -276,46 +247,12 @@
           title: entry.title || "CRM activity",
           summary: entry.summary || "Account activity was recorded.",
           status: entry.status || "Updated",
-          relatedLabel: entry.relatedLabel || "CRM",
           date: new Date(entry.createdAt || entry.date || Date.now()),
-          description: entry.description || entry.summary || "Account activity was recorded.",
-          details: Array.isArray(entry.details) ? entry.details : [],
-          actionHref: entry.actionHref,
-          actionLabel: entry.actionLabel,
         }),
       )
       .filter((item) => !Number.isNaN(item.date.getTime()))
       .sort((a, b) => b.date - a.date)
       .slice(0, 8);
-  };
-
-  const renderActivityDetails = (activity) => {
-    const details = [
-      ["Source", activity.source],
-      ["Page / Section", activity.section],
-      ["Related item", activity.relatedLabel],
-      ["Status", activity.status],
-      ...activity.details,
-    ];
-
-    return `
-      <div class="activity-card__details" hidden>
-        <p class="activity-card__description">${escapeHtml(activity.description)}</p>
-        <dl class="activity-card__meta-list">
-          ${details
-            .map(
-              ([label, value]) => `
-                <div class="activity-card__meta-item">
-                  <dt>${escapeHtml(label)}</dt>
-                  <dd>${escapeHtml(value)}</dd>
-                </div>
-              `,
-            )
-            .join("")}
-        </dl>
-        <a class="btn btn--ghost btn--sm activity-card__link" href="${escapeHtml(activity.actionHref)}">${escapeHtml(activity.actionLabel)}</a>
-      </div>
-    `;
   };
 
   const renderActivity = () => {
@@ -332,7 +269,7 @@
       .map(
         (activity) => `
           <article class="activity-card activity-card--${escapeHtml(activity.badge)}" data-activity-id="${escapeHtml(activity.id)}">
-            <button class="activity-card__summary js-activity-toggle" type="button" aria-expanded="false">
+            <div class="activity-card__summary">
               <span class="activity-card__icon">${getIcon(activity.icon)}</span>
               <span class="activity-card__content">
                 <span class="activity-card__topline">
@@ -344,10 +281,8 @@
               <span class="activity-card__side">
                 <time>${formatDateTime(activity.date)}</time>
                 <span class="activity-card__status">${escapeHtml(activity.status)}</span>
-                <span class="activity-card__chevron" aria-hidden="true"></span>
               </span>
-            </button>
-            ${renderActivityDetails(activity)}
+            </div>
           </article>
         `,
       )
@@ -435,19 +370,6 @@
   };
 
   document.addEventListener("click", (event) => {
-    const activityToggle = event.target.closest(".js-activity-toggle");
-
-    if (activityToggle) {
-      const card = activityToggle.closest(".activity-card");
-      const details = card?.querySelector(".activity-card__details");
-      const isOpen = activityToggle.getAttribute("aria-expanded") === "true";
-
-      activityToggle.setAttribute("aria-expanded", String(!isOpen));
-      card?.classList.toggle("is-open", !isOpen);
-      if (details) details.hidden = isOpen;
-      return;
-    }
-
     const button = event.target.closest(".js-toggle-favourite");
     if (!button) return;
     setFavourite(button.dataset.clientId, button.dataset.favouriteAction === "add");
