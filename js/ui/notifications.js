@@ -4,6 +4,7 @@
 (function initGlobalNotifications() {
   /* --- Notification storage key is shared with tasks and communication events. --- */
   const STORAGE_KEY = "crm_task_notifications";
+  const data = window.crmData;
 
   /* --- Notification Storage --- */
   const readNotifications = () => {
@@ -50,6 +51,14 @@
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const replaceFromBackend = (items) => {
+    if (!Array.isArray(items)) return;
+
+    notifications = items.map(normalizeNotification);
+    saveNotifications(notifications);
+    render();
   };
 
   /* --- Current language helpers keep stored notifications in English and translate only the UI output. --- */
@@ -115,9 +124,20 @@
   /* --- Normalizer gives each notification consistent id, status, date, and task link. --- */
   const normalizeNotification = (notification) => ({
     ...notification,
+    id: notification.id || notification._id || createId(),
     status: notification.status || (notification.read ? "read" : "unread"),
     selected: Boolean(notification.selected),
   });
+
+  const loadNotifications = async () => {
+    if (!data?.fetchNotifications) return;
+
+    try {
+      replaceFromBackend(await data.fetchNotifications());
+    } catch (error) {
+      render();
+    }
+  };
 
   const render = () => {
     notifications = readNotifications().map(normalizeNotification);
@@ -154,8 +174,7 @@
 
   /* --- Public add helper lets other modules create notifications. --- */
   const add = (message, taskId = "") => {
-    notifications = [
-      {
+    const nextNotification = {
         id: createId(),
         message,
         taskId,
@@ -163,11 +182,23 @@
         status: "unread",
         selected: false,
         createdAt: new Date().toISOString(),
-      },
-      ...readNotifications(),
-    ];
+      };
+
+    notifications = [nextNotification, ...readNotifications()];
     saveNotifications(notifications);
     render();
+
+    data?.postNotification?.(nextNotification)
+      .then((apiNotification) => {
+        if (!apiNotification) return;
+
+        notifications = readNotifications().map((notification) =>
+          notification.id === nextNotification.id ? normalizeNotification(apiNotification) : notification,
+        );
+        saveNotifications(notifications);
+        render();
+      })
+      .catch(() => {});
   };
 
   document.addEventListener("click", (event) => {
@@ -181,6 +212,8 @@
     );
     saveNotifications(notifications);
     render();
+
+    data?.updateNotificationRequest?.(item.dataset.notificationId, { read: true }).catch(() => {});
 
     if (item.dataset.notificationTaskId && document.querySelector(".js-open-task-details-helper")) {
       document.dispatchEvent(new CustomEvent("crm:open-task", { detail: { taskId: item.dataset.notificationTaskId } }));
@@ -206,6 +239,8 @@
     );
     saveNotifications(notifications);
     render();
+
+    data?.updateNotificationRequest?.(checkbox.dataset.notificationId, { selected: checkbox.checked }).catch(() => {});
   });
 
   document.addEventListener("click", (event) => {
@@ -213,6 +248,7 @@
       notifications = readNotifications().map((notification) => ({ ...notification, read: true, status: "read" }));
       saveNotifications(notifications);
       render();
+      data?.markAllNotificationsRead?.().then(replaceFromBackend).catch(() => {});
     }
 
     if (event.target.closest(".js-select-read-notifications")) {
@@ -228,6 +264,7 @@
 
       saveNotifications(notifications);
       render();
+      data?.selectReadNotifications?.().then(replaceFromBackend).catch(() => {});
       window.crmToast?.show(
         selectedCount
           ? notificationUiText("All read notifications selected.", "ყველა წაკითხული შეტყობინება მონიშნულია.")
@@ -240,12 +277,14 @@
       notifications = readNotifications().filter((notification) => !notification.selected);
       saveNotifications(notifications);
       render();
+      data?.deleteSelectedNotifications?.().then(replaceFromBackend).catch(() => {});
     }
 
     if (event.target.closest(".js-delete-read-notifications")) {
       notifications = readNotifications().filter((notification) => !(notification.status === "read" || notification.read));
       saveNotifications(notifications);
       render();
+      data?.deleteReadNotifications?.().then(replaceFromBackend).catch(() => {});
     }
   });
 
@@ -255,6 +294,7 @@
 
   window.addEventListener("crm:languagechange", render);
 
-  window.crmNotifications = { add, render };
+  window.crmNotifications = { add, render, load: loadNotifications };
   render();
+  loadNotifications();
 })();

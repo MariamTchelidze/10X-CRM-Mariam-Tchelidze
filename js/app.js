@@ -5,6 +5,9 @@ import "./core/storage.js";
 import "./auth/authGuard.js";
 import "./core/team.js";
 
+/* --- Data Layer --- */
+import "./data/data.js";
+
 /* --- Shared UI Controllers --- */
 import "./ui/theme.js";
 import "./ui/toast.js";
@@ -22,9 +25,6 @@ import "./ui/phone.js";
 /* --- Small Reusable Components --- */
 import "./components/passwordToggle.js";
 import "./components/pageSwap.js";
-
-/* --- Data Layer --- */
-import "./data/data.js";
 
 /* --- Authentication Pages --- */
 import "./auth/validation.js";

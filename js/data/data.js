@@ -141,6 +141,70 @@
     return requestJson(`/tasks/${taskId}`, { method: "DELETE" });
   };
 
+  /* --- Notification API Requests --- */
+  const fetchNotifications = async () => {
+    const data = await requestJson("/notifications");
+    return data.notifications || [];
+  };
+
+  const postNotification = async (notification) => {
+    const data = await requestJson("/notifications", {
+      method: "POST",
+      body: JSON.stringify(notification),
+    });
+
+    return data.notification;
+  };
+
+  const updateNotificationRequest = async (notificationId, notification) => {
+    const data = await requestJson(`/notifications/${notificationId}`, {
+      method: "PATCH",
+      body: JSON.stringify(notification),
+    });
+
+    return data.notification;
+  };
+
+  const markAllNotificationsRead = async () => {
+    const data = await requestJson("/notifications/mark-all-read", { method: "PATCH" });
+    return data.notifications || [];
+  };
+
+  const selectReadNotifications = async () => {
+    const data = await requestJson("/notifications/select-read", { method: "PATCH" });
+    return data.notifications || [];
+  };
+
+  const deleteSelectedNotifications = async () => {
+    const data = await requestJson("/notifications/selected", { method: "DELETE" });
+    return data.notifications || [];
+  };
+
+  const deleteReadNotifications = async () => {
+    const data = await requestJson("/notifications/read", { method: "DELETE" });
+    return data.notifications || [];
+  };
+
+  /* --- Activity API Requests --- */
+  const fetchActivity = async () => {
+    const data = await requestJson("/activity");
+    return data.activities || [];
+  };
+
+  const postActivity = async (activity) => {
+    const data = await requestJson("/activity", {
+      method: "POST",
+      body: JSON.stringify(activity),
+    });
+
+    return data.activity;
+  };
+
+  const clearActivityRequest = async () => {
+    const data = await requestJson("/activity", { method: "DELETE" });
+    return data.activities || [];
+  };
+
   window.crmData = {
     authRequest,
     fetchInitialClients,
@@ -151,6 +215,16 @@
     postTask,
     updateTaskRequest,
     deleteTaskRequest,
+    fetchNotifications,
+    postNotification,
+    updateNotificationRequest,
+    markAllNotificationsRead,
+    selectReadNotifications,
+    deleteSelectedNotifications,
+    deleteReadNotifications,
+    fetchActivity,
+    postActivity,
+    clearActivityRequest,
     getInitials,
     formatStatus,
   };

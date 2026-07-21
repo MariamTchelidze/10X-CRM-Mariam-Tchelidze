@@ -7,6 +7,8 @@ import { errorHandler, notFound } from "./middleware/error.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
 import clientRoutes from "./routes/client.routes.js";
 import taskRoutes from "./routes/task.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
+import activityRoutes from "./routes/activity.routes.js";
 
 const app = express();
 
@@ -53,6 +55,8 @@ app.get("/api/health", (request, response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/activity", activityRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

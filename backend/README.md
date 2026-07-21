@@ -2,7 +2,7 @@
 
 This folder will contain the Node.js, Express, MongoDB, and phone-service backend for the CRM.
 
-Current step: Tasks API is wired.
+Current step: Notifications and Activity APIs are wired.
 
 ## Environment Setup
 
@@ -47,8 +47,9 @@ Planned build order:
 3. Auth API. Done.
 4. Clients API. Done.
 5. Tasks API. Done.
-6. Messenger API.
-7. Phone service integration.
+6. Notifications and Activity APIs. Done.
+7. Messenger API.
+8. Phone service integration.
 
 ## Auth API Test Order
 
@@ -239,5 +240,105 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 ```http
 DELETE http://localhost:5000/api/tasks/TASK_ID
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+## Notifications API Test Order
+
+All notification endpoints require the login token:
+
+```http
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### List notifications
+
+```http
+GET http://localhost:5000/api/notifications
+```
+
+### Create notification
+
+```http
+POST http://localhost:5000/api/notifications
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "message": "New task assigned to James Carter: Follow up with Alpha Group",
+  "taskId": "TASK_ID_OPTIONAL"
+}
+```
+
+### Mark one notification read/selected
+
+```http
+PATCH http://localhost:5000/api/notifications/NOTIFICATION_ID
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "read": true,
+  "selected": true
+}
+```
+
+### Batch actions
+
+```http
+PATCH http://localhost:5000/api/notifications/mark-all-read
+PATCH http://localhost:5000/api/notifications/select-read
+DELETE http://localhost:5000/api/notifications/selected
+DELETE http://localhost:5000/api/notifications/read
+```
+
+## Activity API Test Order
+
+All activity endpoints require the login token:
+
+```http
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+### List activity
+
+```http
+GET http://localhost:5000/api/activity
+```
+
+### Create activity
+
+```http
+POST http://localhost:5000/api/activity
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "type": "task",
+  "icon": "calendar",
+  "title": "Follow up with Alpha Group created",
+  "summary": "Alpha Group - assigned to James Carter",
+  "status": "Created",
+  "relatedLabel": "Alpha Group",
+  "description": "A new task was created from the task board.",
+  "details": [
+    ["Priority", "High"],
+    ["Assignee", "James Carter"]
+  ],
+  "actionHref": "./dashboard.html#tasks",
+  "actionLabel": "Open Task Board"
+}
+```
+
+### Clear activity
+
+```http
+DELETE http://localhost:5000/api/activity
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
