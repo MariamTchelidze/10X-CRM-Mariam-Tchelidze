@@ -1,5 +1,14 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const parsePort = (value) => {
+  const port = Number(value);
+  return Number.isInteger(port) && port > 0 ? port : 5000;
+};
+
 export const env = {
-  port: process.env.PORT || 5000,
+  port: parsePort(process.env.PORT),
   nodeEnv: process.env.NODE_ENV || "development",
   mongoUri: process.env.MONGO_URI || "",
   jwtSecret: process.env.JWT_SECRET || "",
@@ -8,4 +17,5 @@ export const env = {
   twilioAccountSid: process.env.TWILIO_ACCOUNT_SID || "",
   twilioAuthToken: process.env.TWILIO_AUTH_TOKEN || "",
   twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER || "",
+  isDevelopment: (process.env.NODE_ENV || "development") === "development",
 };
