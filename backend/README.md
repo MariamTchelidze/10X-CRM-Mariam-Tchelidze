@@ -2,7 +2,7 @@
 
 This folder will contain the Node.js, Express, MongoDB, and phone-service backend for the CRM.
 
-Current step: Messenger API is wired.
+Current step: Phone settings API is wired.
 
 ## Environment Setup
 
@@ -49,7 +49,8 @@ Planned build order:
 5. Tasks API. Done.
 6. Notifications and Activity APIs. Done.
 7. Messenger API. Done.
-8. Phone service integration.
+8. Phone settings API. Done.
+9. Twilio phone service integration.
 
 ## Auth API Test Order
 
@@ -390,3 +391,52 @@ Authorization: Bearer YOUR_TOKEN_HERE
 DELETE http://localhost:5000/api/messages
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
+
+## Phone Settings API Test Order
+
+The company phone settings endpoint stores the caller number that future Twilio calls will use.
+
+Only users with `owner` or `admin` role can update the company phone number. Other logged-in users can read the current phone settings.
+
+### Read phone settings
+
+```http
+GET http://localhost:5000/api/settings/phone
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+Expected result:
+
+```json
+{
+  "status": "success",
+  "settings": {
+    "workspaceKey": "10x-crm-demo",
+    "companyName": "10X CRM Demo",
+    "canManage": true,
+    "phone": {
+      "companyPhoneNumber": "",
+      "callingEnabled": false,
+      "callerIdStatus": "not_configured"
+    }
+  }
+}
+```
+
+### Update phone settings
+
+```http
+PATCH http://localhost:5000/api/settings/phone
+Content-Type: application/json
+Authorization: Bearer OWNER_OR_ADMIN_TOKEN
+```
+
+```json
+{
+  "companyPhoneNumber": "+995574431557",
+  "callingEnabled": false,
+  "callerIdStatus": "not_configured"
+}
+```
+
+Phone numbers must use E.164 format: `+` plus country code and number, for example `+995574431557`.

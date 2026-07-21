@@ -233,6 +233,21 @@
     return data.conversations || {};
   };
 
+  /* --- Phone Settings API Requests --- */
+  const fetchPhoneSettings = async () => {
+    const data = await requestJson("/settings/phone");
+    return data.settings;
+  };
+
+  const updatePhoneSettings = async (settings) => {
+    const data = await requestJson("/settings/phone", {
+      method: "PATCH",
+      body: JSON.stringify(settings),
+    });
+
+    return data.settings;
+  };
+
   window.crmData = {
     authRequest,
     fetchInitialClients,
@@ -257,6 +272,8 @@
     postMessage,
     clearMessageConversation,
     clearAllMessages,
+    fetchPhoneSettings,
+    updatePhoneSettings,
     getInitials,
     formatStatus,
   };

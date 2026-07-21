@@ -28,17 +28,23 @@ const sendAuthResponse = (response, statusCode, user) => {
 
 export const signup = asyncHandler(async (request, response) => {
   const email = sanitizeString(request.body.email).toLowerCase();
+  const company = sanitizeString(request.body.company);
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
     throw new ApiError(409, "An account with this email already exists.");
   }
 
+  const companyUserExists = company
+    ? await User.exists({ company: { $regex: `^${company.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" } })
+    : await User.exists({});
+
   const user = await User.create({
     fullName: sanitizeString(request.body.fullName),
-    company: sanitizeString(request.body.company),
+    company,
     email,
     password: await hashPassword(request.body.password),
+    role: companyUserExists ? "user" : "owner",
   });
 
   sendAuthResponse(response, 201, user);

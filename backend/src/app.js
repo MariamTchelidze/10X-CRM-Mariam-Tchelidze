@@ -10,6 +10,7 @@ import taskRoutes from "./routes/task.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import activityRoutes from "./routes/activity.routes.js";
 import messageRoutes from "./routes/message.routes.js";
+import settingRoutes from "./routes/setting.routes.js";
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/activity", activityRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/settings", settingRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

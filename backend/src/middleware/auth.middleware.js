@@ -28,3 +28,11 @@ export const protect = asyncHandler(async (request, response, next) => {
   request.user = user;
   next();
 });
+
+export const authorizeRoles = (...roles) => (request, response, next) => {
+  if (!roles.includes(request.user?.role)) {
+    throw new ApiError(403, "You do not have permission to perform this action.");
+  }
+
+  next();
+};
