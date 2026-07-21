@@ -23,6 +23,7 @@
   const TASKS_KEY = "crm_tasks";
   const NOTIFICATIONS_KEY = "crm_task_notifications";
   const FAVOURITES_KEY = "crm_favourites";
+  const SENSAI_INACTIVE_MESSAGE = "This is a prepared UI for future AI integration.";
 
   const escapeHtml = (value) =>
     String(value || "")
@@ -294,37 +295,8 @@
   };
 
 
-  const getSensaiReply = (prompt) => {
-    const context = getCrmContext();
-    const text = prompt.toLowerCase();
-    const csvRequest = getCsvRequest(prompt);
-
-    if (csvRequest) {
-      const { clients, attachment } = createClientsCsvAttachment(context, csvRequest);
-
-      return {
-        text: `I prepared ${clients.length} ${csvRequest.label} record${clients.length === 1 ? "" : "s"} as a CSV file.`,
-        attachment,
-      };
-    }
-
-    if (text.includes("statistic") || text.includes("my statistics")) return { text: getProfileStats(context) };
-    if (text.includes("focus") || text.includes("today")) return { text: getTodayFocus(context) };
-    if (text.includes("overdue")) {
-      if (!context.overdueTasks.length) return { text: "No overdue tasks found. Nice and clean." };
-      return { text: `Overdue tasks: ${context.overdueTasks.map((task) => task.title || "Untitled task").join(", ")}.` };
-    }
-    if (text.includes("country") || text.includes("timezone") || text.includes("time zone")) return { text: getClientsByCountry(context) };
-    if (text.includes("client") || text.includes("pipeline") || text.includes("lead")) return { text: summarizeClients(context) };
-    if (text.includes("notification") || text.includes("unread")) {
-      return { text: `You have ${context.unreadNotifications.length} unread notification${context.unreadNotifications.length === 1 ? "" : "s"}.` };
-    }
-    if (text.includes("activity")) return { text: "Open Dashboard > Activity to see the structured timeline. I can explain any activity card after you expand it." };
-    if (text.includes("task")) {
-      return { text: `You have ${context.openTasks.length} open task${context.openTasks.length === 1 ? "" : "s"}. For creating tasks, I can draft the structure now; real backend AI can create it after confirmation later.` };
-    }
-
-    return { text: "I can help with clients, overdue tasks, pipeline summaries, countries/timezones, unread notifications, and today's CRM focus. You can also ask me to export all, lead, won, lost, or contacted clients as CSV." };
+  const getSensaiReply = () => {
+    return { text: SENSAI_INACTIVE_MESSAGE };
   };
 
   const getTeamRecipients = () => {
@@ -426,7 +398,7 @@
     {
       role: "assistant",
       author: "10X SensAI",
-      text: "SensAI online. Ask me about your clients, tasks, reminders, notifications, or today's focus.",
+      text: SENSAI_INACTIVE_MESSAGE,
       createdAt: new Date().toISOString(),
     },
   ]));
@@ -434,7 +406,7 @@
   const getDefaultAiMessage = () => ({
     role: "assistant",
     author: "10X SensAI",
-    text: "SensAI online. Ask me about your clients, tasks, reminders, notifications, or today's focus.",
+    text: SENSAI_INACTIVE_MESSAGE,
     createdAt: new Date().toISOString(),
   });
 
@@ -535,13 +507,13 @@
     renderMessages(aiMessages, aiHistory, "No SensAI messages yet.");
     setSensaiState("speaking");
     window.setTimeout(() => setSensaiState("idle"), 900);
-    window.crmNotifications?.add("10X SensAI replied with CRM guidance.");
+    window.crmNotifications?.add("10X SensAI is prepared for future AI integration.");
     window.crmActivity?.add({
       type: "communication",
       icon: "chat",
-      title: "10X SensAI replied",
+      title: "10X SensAI demo reply",
       summary: prompt.slice(0, 90),
-      status: "Answered",
+      status: "Prepared UI",
       relatedLabel: "10X SensAI",
       description: reply.text,
       details: [["Prompt", prompt]],
