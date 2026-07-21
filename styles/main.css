@@ -952,6 +952,10 @@ body[data-theme=light] .modal {
   cursor: pointer;
 }
 
+.settings-option--future {
+  opacity: 0.48;
+}
+
 .settings-option__input {
   position: absolute;
   width: 1px;

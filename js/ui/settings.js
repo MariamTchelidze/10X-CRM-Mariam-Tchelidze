@@ -76,6 +76,12 @@
     }
   };
 
+  const markFutureControls = () => {
+    document.querySelectorAll(".js-settings-theme[value='custom'], .js-settings-font, .js-settings-density, .js-settings-language").forEach((input) => {
+      input.closest(".settings-option")?.classList.add("settings-option--future");
+    });
+  };
+
   /* --- Appearance helpers keep settings focused on the exam-safe dark/light theme. --- */
   const applyAccentColor = (color) => {
     document.body.style.setProperty("--color-primary", color);
@@ -104,13 +110,13 @@
   const applySettings = (settings) => {
     document.documentElement.dataset.fontSize = "medium";
     document.body.dataset.density = "comfortable";
-    document.documentElement.lang = settings.language;
+    document.documentElement.lang = "en";
     applyAccentColor(DEFAULT_ACCENT);
 
     setChecked(".js-settings-theme", settings.themeMode);
     setChecked(".js-settings-font", "medium");
     setChecked(".js-settings-density", "comfortable");
-    setChecked(".js-settings-language", settings.language);
+    setChecked(".js-settings-language", "en");
     syncCustomPanel();
 
     const accentInput = document.querySelector(".js-settings-accent");
@@ -148,6 +154,7 @@
 
   /* --- Runtime settings state starts from localStorage and updates through the form. --- */
   let settings = readSettings();
+  markFutureControls();
   applySettings(settings);
   setTheme(settings.themeMode);
 
@@ -219,8 +226,11 @@
     }
 
     if (target.matches(".js-settings-language")) {
-      settings = { ...settings, language: target.value };
+      settings = { ...settings, language: "en" };
       window.crmI18n?.setLanguage(settings.language);
+      applySettings(settings);
+      saveSettings(settings);
+      return;
     }
 
     if (target.matches(".js-settings-accent")) {
