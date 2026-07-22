@@ -2,7 +2,7 @@
 
 ## Topic
 
-Using browser storage, Fetch API, and frontend state management in a vanilla JavaScript CRM.
+Using browser storage, Fetch API, frontend state management, and backend API persistence in a vanilla JavaScript CRM.
 
 ## Sources
 
@@ -10,42 +10,52 @@ Using browser storage, Fetch API, and frontend state management in a vanilla Jav
 - MDN Web Docs - Using the Fetch API: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 - MDN Web Docs - Response: ok property: https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
 - MDN Web Docs - EventTarget: addEventListener(): https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+- Express documentation: https://expressjs.com/
+- Mongoose documentation: https://mongoosejs.com/
 
 ## What I Learned
 
-`localStorage` is browser-based persistent storage. It keeps string data for the current origin even after page refresh or browser restart. Because this CRM is a frontend exam project without a backend, localStorage is used as the temporary data layer for users, sessions, clients, tasks, notifications, theme preferences, settings, communication history, and profile information.
+`localStorage` is browser-based persistent storage. It keeps string data for the current origin even after page refresh or browser restart. In the first frontend stage of this CRM, localStorage was used as the temporary data layer for users, sessions, clients, tasks, notifications, theme preferences, settings, communication history, and profile information.
 
-`fetch()` is the browser API for making HTTP requests. It returns a Promise, so it works well with `async` and `await`. One important detail is that `fetch()` only rejects for network-level problems. HTTP errors such as 404 or 500 still return a response object, so the project should check `response.ok` and manually throw an error when the request failed.
+The project was later upgraded with a Node.js, Express, and MongoDB backend. After that upgrade, secure account data, clients, tasks, notifications, activity records, messenger records, and phone settings are handled through protected backend API endpoints. The frontend still uses localStorage for UI preferences, cached display state, and the active session token.
 
-Event listeners are the connection between user actions and JavaScript behavior. This project uses submit, click, change, input, drag, and storage events. For dynamic lists such as clients, tasks, notifications, and files, event delegation is useful because the buttons are created by JavaScript after the page loads.
+`fetch()` is the browser API for making HTTP requests. It returns a Promise, so it works well with `async` and `await`. One important detail is that `fetch()` only rejects for network-level problems. HTTP errors such as 404 or 500 still return a response object, so the project checks `response.ok` and manually throws an error when the request failed.
+
+Event listeners connect user actions to JavaScript behavior. This project uses submit, click, change, input, drag, and storage events. For dynamic lists such as clients, tasks, notifications, and files, event delegation is useful because the buttons are created by JavaScript after the page loads.
 
 ## How This Applies To The CRM
 
-The CRM stores required PRD data with exact localStorage keys:
+The CRM keeps the PRD localStorage keys for frontend state and learning visibility:
 
-- `crm_users` stores registered users.
-- `crm_session` stores the active logged-in user.
-- `crm_clients` stores API-loaded and locally edited clients.
+- `crm_users` stores a safe frontend copy of user profile details, not passwords.
+- `crm_session` stores the active logged-in user and JWT token.
+- `crm_clients` stores cached client data for fast rendering.
 - `crm_theme` stores the selected visual theme.
 
 The CRM uses `js/core/storage.js` to keep JSON parsing and writing reusable. This prevents repeated `JSON.parse`, `JSON.stringify`, and try/catch code across every page.
 
-The CRM uses `js/data/data.js` to communicate with DummyJSON. Initial clients are loaded with a GET request, new clients use a demo POST request, edited clients use a demo PUT request, and deleted clients use a demo DELETE request. Because DummyJSON is not a real project database, the final trusted CRM state is still saved locally in `crm_clients`.
+The CRM uses `js/data/data.js` as the main API layer. It sends authenticated requests to the Express backend for real CRM records. It also keeps a DummyJSON import helper so the project can still demonstrate the PRD's external API requirement by importing starter client data and saving it into the CRM backend.
+
+## Backend Upgrade
+
+The backend uses Express for routing, Mongoose for MongoDB models, bcrypt for password hashing, JWT for authenticated requests, and CORS configuration so the deployed Vercel frontend can safely call the Render backend.
+
+The backend currently supports:
+
+- Auth: signup, login, current user, account deletion.
+- Clients: create, read, update, delete, filter, and sort.
+- Tasks: board data, task creation, updates, archive/recycle logic, and permanent deletion.
+- Notifications and activity: user-specific CRM updates.
+- Messenger: saved internal conversation history.
+- Settings: company phone settings.
+- Phone: Twilio-based call start endpoint when provider credentials are configured.
 
 ## Exam Explanation
 
-For the exam, I should explain that this is a frontend-first vanilla JavaScript CRM. The project uses localStorage because the PRD focuses on browser APIs, DOM rendering, validation, Fetch API, and responsive UI behavior.
+For the exam, I should explain that this started as a frontend-first vanilla JavaScript CRM, then received a backend upgrade. The PRD focus is still visible in the frontend: DOM rendering, validation, Fetch API, event listeners, localStorage/session state, and responsive UI behavior.
 
-In a real production CRM, private client data and passwords should not be stored in localStorage. A production version would use a backend with secure authentication, password hashing, server-side validation, and a database such as MongoDB.
-
-## Georgian Learning Summary
-
-ამ კვლევიდან გავიგე, რომ `localStorage` არის ბრაუზერის საცავი, რომელიც მონაცემებს ინახავს გვერდის განახლების შემდეგაც. ჩემს CRM-ში ის გამოიყენება იმიტომ, რომ პროექტი ამ ეტაპზე არის frontend-only და მთავარი მიზანია Vanilla JavaScript-ის ცოდნის ჩვენება.
-
-ასევე გავიგე, რომ `fetch()` გამოიყენება API მოთხოვნებისთვის და მუშაობს Promise-ებით. მნიშვნელოვანია, რომ `fetch()` ავტომატურად არ აგდებს შეცდომას HTTP error status-ზე, ამიტომ კოდში საჭიროა `response.ok` შემოწმება.
-
-ამ პროექტში ეს ცოდნა ჩანს `storage.js` და `data.js` ფაილებში. `storage.js` ამარტივებს localStorage-თან მუშაობას, ხოლო `data.js` აკავშირებს CRM-ს DummyJSON API-სთან.
+The production-style version uses a backend with secure authentication, password hashing, server-side validation, protected routes, and MongoDB persistence.
 
 ## Critical Thinking
 
-Using localStorage is correct for this educational frontend project, but it is not secure enough for real CRM production data. The best next technical step after the exam would be moving users, sessions, clients, tasks, notes, reminders, notifications, and communication history to a backend API with MongoDB.
+Using localStorage was correct for the educational frontend stage, but it is not secure enough for real CRM production data. The project now demonstrates the stronger approach too: backend APIs, MongoDB persistence, hashed passwords, JWT authentication, and protected routes.

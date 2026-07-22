@@ -65,3 +65,11 @@ This log follows the PRD requirement: prompt -> tool/help used -> what I used, c
 - Used / Changed / Rejected -> I used the review process to understand the flow between signup, `crm_users`, login, and `crm_session`.
 - Why -> Auth is one of the most important Core flows, so I need to be able to explain it line by line.
 - Critical Thinking -> Asking for explanation before code changes helped me learn the bug instead of only receiving a finished patch.
+
+## Entry 9 - Backend Upgrade and Production Deployment
+
+- Prompt -> I decided to add a backend with MongoDB and later asked for Twilio phone-call support, Vercel frontend deployment, and Render backend deployment guidance.
+- Tool / Help Used -> Codex helped plan and build the Express structure, MongoDB connection, auth API, clients API, tasks API, notifications/activity APIs, messenger API, settings API, and Twilio call endpoint.
+- Used / Changed / Rejected -> I upgraded the project from a frontend/localStorage-first CRM into a frontend plus backend CRM. I kept localStorage for UI preferences and session token handling, but moved secure account and CRM data flow to protected backend APIs.
+- Why -> This makes the project more production-ready and gives me a stronger exam explanation: the PRD frontend concepts are still visible, while the backend demonstrates real-world architecture.
+- Critical Thinking -> I should explain that Twilio requires real provider credentials and verified numbers. The app code can start calls through the backend, but the phone service depends on correct Render environment variables and Twilio account setup.

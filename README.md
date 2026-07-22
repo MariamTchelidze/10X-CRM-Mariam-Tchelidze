@@ -80,7 +80,7 @@ Local backend URL:
 
 Production backend URL planned for Render:
 
-- `https://10-x-crm-mariam-tchelidze-backend.onrender.com/api`
+- `https://one0x-crm-mariam-tchelidze-1.onrender.com/api`
 
 Main API groups:
 
@@ -108,13 +108,22 @@ Required production environment variables:
 - `JWT_SECRET`
 - `CLIENT_URL`
 - `JWT_EXPIRES_IN`
-- optional Twilio variables for future phone calling
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_AUTH_TOKEN`
+- `TWILIO_PHONE_NUMBER`
+- `ALLOWED_CALL_NUMBER`
+
+When the custom Vercel domain is connected, set `CLIENT_URL` in Render to include both frontend origins:
+
+- `https://10-x-crm-mariam-tchelidze.vercel.app,https://10xsensai.xyz`
 
 Never commit the real `.env` file. Use `backend/.env.example` as the safe template.
 
 ## Live Demo
 
 Live demo link: https://10-x-crm-mariam-tchelidze.vercel.app/index.html
+
+Custom domain: https://10xsensai.xyz
 
 ## Test Account
 

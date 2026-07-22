@@ -16,7 +16,7 @@ Client status shows where the client is in the sales process. This project uses 
 
 ## 4. localStorage
 
-`localStorage` is browser storage that keeps data after refreshing or closing the browser. This CRM uses it for users, session, clients, tasks, theme, profile image, notifications, and settings.
+`localStorage` is browser storage that keeps data after refreshing or closing the browser. This CRM uses it for UI preferences, cached frontend state, profile image preview, theme, and session token data. Secure account data is handled by the backend.
 
 ## 5. Session
 
@@ -24,11 +24,11 @@ A session means the currently logged-in user. In this project, the session is sa
 
 ## 6. API
 
-API means Application Programming Interface. This CRM uses the DummyJSON users API to load initial client data. The project transforms API users into CRM client objects.
+API means Application Programming Interface. This CRM uses an Express backend API for real CRM data and keeps a DummyJSON import helper to demonstrate external API usage from the PRD.
 
 ## 7. Fetch
 
-`fetch()` is a JavaScript function used to make HTTP requests. In this project, it loads clients from the API and sends demo add/update/delete requests.
+`fetch()` is a JavaScript function used to make HTTP requests. In this project, it sends login, signup, clients, tasks, notifications, activity, messenger, settings, and phone requests to the backend API.
 
 ## 8. Render
 
@@ -61,3 +61,15 @@ Responsive design means the layout adapts to different screen sizes. This projec
 ## 15. Theme Persistence
 
 Theme persistence means the selected theme remains saved after refresh. This project supports dark theme, light theme, and custom accent color settings saved in browser storage.
+
+## 16. Backend
+
+The backend is the server-side part of the project. This CRM uses Node.js and Express to receive frontend requests, validate data, protect private routes, and communicate with MongoDB.
+
+## 17. MongoDB
+
+MongoDB is the database used by the backend. It stores users, clients, tasks, notifications, activity, messages, and settings as documents.
+
+## 18. JWT
+
+JWT means JSON Web Token. After login, the backend returns a token. The frontend sends this token with protected API requests so the backend knows which user is making the request.

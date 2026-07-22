@@ -40,6 +40,15 @@ When MongoDB is connected, the health response should also include:
 }
 ```
 
+Production frontend origins:
+
+```text
+https://10-x-crm-mariam-tchelidze.vercel.app
+https://10xsensai.xyz
+```
+
+Render should keep both origins in `CLIENT_URL`, separated by a comma, so both the Vercel preview URL and the custom domain can call the backend.
+
 Planned build order:
 
 1. Express server setup. Done.
@@ -50,7 +59,33 @@ Planned build order:
 6. Notifications and Activity APIs. Done.
 7. Messenger API. Done.
 8. Phone settings API. Done.
-9. Twilio phone service integration.
+9. Twilio phone service integration. Done.
+
+## Twilio Call API Test Order
+
+The phone call endpoint requires the login token:
+
+```http
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+The backend only allows one exam-safe destination number through `ALLOWED_CALL_NUMBER`.
+
+### Start a call
+
+```http
+POST http://localhost:5000/api/phone/call
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "phoneNumber": "+995574431557"
+}
+```
+
+Expected result: `200 OK` with a Twilio call id and status when Twilio environment variables are configured.
 
 ## Auth API Test Order
 
