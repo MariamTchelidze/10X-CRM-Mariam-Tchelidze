@@ -335,6 +335,16 @@
     return data.settings;
   };
 
+  const startPhoneCall = async (phoneNumber) => {
+    const data = await requestJson("/phone/call", {
+      method: "POST",
+      timeoutMs: 30000,
+      body: JSON.stringify({ to: phoneNumber }),
+    });
+
+    return data.call;
+  };
+
   window.crmData = {
     hasApiSession,
     warmBackend,
@@ -365,6 +375,7 @@
     clearAllMessages,
     fetchPhoneSettings,
     updatePhoneSettings,
+    startPhoneCall,
     getInitials,
     formatStatus,
   };

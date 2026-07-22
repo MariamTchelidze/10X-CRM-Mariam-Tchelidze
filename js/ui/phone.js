@@ -11,6 +11,7 @@
     callingEnabled: true,
     allowedNumber: "+995574431557",
   };
+  const data = window.crmData;
 
   /* --- Storage keys connect client phone numbers with saved call notes. --- */
   const CLIENTS_KEY = window.crmConstants?.CLIENTS_KEY || "crm_clients";
@@ -75,6 +76,21 @@
   const setStatus = (message, type = "muted") => {
     status.textContent = message;
     status.dataset.state = type;
+  };
+
+  const setCallLoading = (isLoading) => {
+    if (!callButton) return;
+
+    if (isLoading) {
+      if (!callButton.dataset.originalHtml) callButton.dataset.originalHtml = callButton.innerHTML;
+      callButton.disabled = true;
+      callButton.textContent = "Calling...";
+      return;
+    }
+
+    callButton.disabled = false;
+    callButton.innerHTML = callButton.dataset.originalHtml || "Call";
+    delete callButton.dataset.originalHtml;
   };
 
   const getClientsWithPhones = () => readArray(CLIENTS_KEY).filter((client) => normalizeNumber(client.phone));
@@ -162,7 +178,7 @@
     }
   });
 
-  callButton.addEventListener("click", () => {
+  callButton.addEventListener("click", async () => {
     const normalized = normalizeNumber(currentNumber);
 
     if (!normalized) {
@@ -194,21 +210,39 @@
       return;
     }
 
-    const message = "Opening device phone app.";
-    setStatus(message, "success");
-    window.crmNotifications?.add("CRM Phone started a call.");
-    window.crmActivity?.add({
-      type: "phone",
-      icon: "phone",
-      title: "CRM Phone call started",
-      summary: `Calling ${selectedClient?.name || normalized}.`,
-      status: "Started",
-      relatedLabel: selectedClient?.name || normalized,
-      description: "A phone call was started from the CRM application phone.",
-      actionHref: "./dashboard.html",
-      actionLabel: "Open Dashboard",
-    });
-    window.location.href = `tel:${normalized}`;
+    if (!data?.startPhoneCall) {
+      setStatus("CRM phone backend is not available.", "error");
+      return;
+    }
+
+    setCallLoading(true);
+    setStatus("Starting Twilio call...", "muted");
+
+    try {
+      const call = await data.startPhoneCall(normalized);
+      setStatus("Twilio call started successfully.", "success");
+      window.crmNotifications?.add("CRM Phone started a call.");
+      window.crmActivity?.add({
+        type: "phone",
+        icon: "phone",
+        title: "CRM Phone call started",
+        summary: `Calling ${selectedClient?.name || normalized}.`,
+        status: call?.twilioStatus || "Started",
+        relatedLabel: selectedClient?.name || normalized,
+        description: "A phone call was started through the CRM backend and Twilio.",
+        details: [
+          ["Phone", normalized],
+          ["Twilio call id", call?.id || "Pending"],
+        ],
+        actionHref: "./dashboard.html",
+        actionLabel: "Open Dashboard",
+      });
+    } catch (error) {
+      setStatus(error.message || "Twilio call could not be started.", "error");
+      window.crmToast?.show(error.message || "Twilio call could not be started.", "error");
+    } finally {
+      setCallLoading(false);
+    }
   });
 
   noteForm.addEventListener("submit", (event) => {
