@@ -99,6 +99,7 @@
   };
 
   const applySettings = (settings) => {
+    settings.language = "en";
     const isCustom = settings.themeMode === "custom";
     const activeAccent = isCustom ? settings.accentColor : DEFAULT_ACCENT;
 
@@ -201,8 +202,8 @@
     }
 
     if (target.matches(".js-settings-language")) {
-      settings = { ...settings, language: target.value };
-      window.crmI18n?.setLanguage(settings.language);
+      const resolvedLanguage = window.crmI18n?.setLanguage(target.value) || "en";
+      settings = { ...settings, language: resolvedLanguage };
     }
 
     if (target.matches(".js-settings-accent")) {
