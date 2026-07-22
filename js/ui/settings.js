@@ -6,7 +6,6 @@
   const SESSION_KEY = "crm_session";
   const data = window.crmData;
   const DEFAULT_ACCENT = "#ff6b1a";
-  const FUTURE_SETTINGS_MESSAGE = "This setting is prepared for future integration.";
   const ACCOUNT_STORAGE_KEYS = [
     "crm_users",
     "crm_team_members",
@@ -26,6 +25,10 @@
   ];
   const DEFAULTS = {
     themeMode: "dark",
+    customTheme: "dark",
+    fontSize: "medium",
+    density: "comfortable",
+    language: "en",
     accentColor: DEFAULT_ACCENT,
   };
 
@@ -38,15 +41,16 @@
     try {
       const storedSettings = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
       const fallbackTheme = document.body.dataset.theme === "light" ? "light" : "dark";
-      const themeMode = ["dark", "light"].includes(storedSettings.themeMode)
+      const themeMode = ["dark", "light", "custom"].includes(storedSettings.themeMode)
         ? storedSettings.themeMode
         : fallbackTheme;
+      const customTheme = storedSettings.customTheme === "light" ? "light" : "dark";
 
       return {
         ...DEFAULTS,
         ...storedSettings,
         themeMode,
-        accentColor: DEFAULT_ACCENT,
+        customTheme,
       };
     } catch (error) {
       return { ...DEFAULTS };
@@ -69,13 +73,7 @@
     }
   };
 
-  const markFutureControls = () => {
-    document.querySelectorAll(".js-settings-theme[value='custom'], .js-settings-font, .js-settings-density, .js-settings-language").forEach((input) => {
-      input.closest(".settings-option")?.classList.add("settings-option--future");
-    });
-  };
-
-  /* --- Appearance helpers keep settings focused on the exam-safe dark/light theme. --- */
+  /* --- Appearance helpers apply theme, font size, accent, and custom mode. --- */
   const applyAccentColor = (color) => {
     document.body.style.setProperty("--color-primary", color);
   };
@@ -91,33 +89,36 @@
     document.dispatchEvent(new CustomEvent("crm:theme:set", { detail: { theme: nextTheme } }));
   };
 
-  const syncCustomPanel = () => {
+  const syncCustomPanel = (isCustom) => {
     if (!customThemePanel) return;
 
-    customThemePanel.dataset.enabled = "false";
+    customThemePanel.dataset.enabled = String(isCustom);
     customThemePanel.querySelectorAll("input, button").forEach((control) => {
-      control.disabled = true;
+      control.disabled = !isCustom;
     });
   };
 
   const applySettings = (settings) => {
-    document.documentElement.lang = "en";
-    applyAccentColor(DEFAULT_ACCENT);
+    const isCustom = settings.themeMode === "custom";
+    const activeAccent = isCustom ? settings.accentColor : DEFAULT_ACCENT;
+
+    document.documentElement.dataset.fontSize = settings.fontSize;
+    document.body.dataset.density = settings.density;
+    document.documentElement.lang = settings.language;
+    applyAccentColor(activeAccent);
 
     setChecked(".js-settings-theme", settings.themeMode);
-    setChecked(".js-settings-font", "medium");
-    setChecked(".js-settings-density", "comfortable");
-    setChecked(".js-settings-language", "en");
-    syncCustomPanel();
+    setChecked(".js-settings-font", settings.fontSize);
+    setChecked(".js-settings-density", settings.density);
+    setChecked(".js-settings-language", settings.language);
+    syncCustomPanel(isCustom);
 
     const accentInput = document.querySelector(".js-settings-accent");
 
     if (accentInput) {
-      accentInput.value = DEFAULT_ACCENT;
+      accentInput.value = settings.accentColor;
     }
   };
-
-  const showFutureSettingsToast = () => window.crmToast?.show(FUTURE_SETTINGS_MESSAGE, "info");
 
   const setDeleteAccountError = (message) => {
     const error = deleteAccountForm?.querySelector(".js-delete-account-error");
@@ -145,9 +146,8 @@
 
   /* --- Runtime settings state starts from localStorage and updates through the form. --- */
   let settings = readSettings();
-  markFutureControls();
   applySettings(settings);
-  setTheme(settings.themeMode);
+  setTheme(settings.themeMode === "custom" ? settings.customTheme : settings.themeMode);
 
   window.addEventListener("crm:themechange", (event) => {
     const changedTheme = event.detail && event.detail.theme === "light" ? "light" : "dark";
@@ -158,6 +158,7 @@
     settings = {
       ...settings,
       themeMode: changedTheme,
+      customTheme: settings.customTheme,
       accentColor: DEFAULT_ACCENT,
     };
     applySettings(settings);
@@ -171,12 +172,12 @@
       if (target.value === "custom") {
         settings = {
           ...settings,
-          themeMode: document.body.dataset.theme === "light" ? "light" : "dark",
-          accentColor: DEFAULT_ACCENT,
+          themeMode: "custom",
+          customTheme: document.body.dataset.theme === "light" ? "light" : "dark",
         };
         applySettings(settings);
         saveSettings(settings);
-        showFutureSettingsToast();
+        document.querySelector(".js-settings-accent")?.focus({ preventScroll: true });
         return;
       }
 
@@ -192,32 +193,22 @@
     }
 
     if (target.matches(".js-settings-font")) {
-      applySettings(settings);
-      saveSettings(settings);
-      showFutureSettingsToast();
-      return;
+      settings = { ...settings, fontSize: target.value };
     }
 
     if (target.matches(".js-settings-density")) {
-      applySettings(settings);
-      saveSettings(settings);
-      showFutureSettingsToast();
-      return;
+      settings = { ...settings, density: target.value };
     }
 
     if (target.matches(".js-settings-language")) {
-      window.crmI18n?.setLanguage("en");
-      applySettings(settings);
-      saveSettings(settings);
-      return;
+      settings = { ...settings, language: target.value };
+      window.crmI18n?.setLanguage(settings.language);
     }
 
     if (target.matches(".js-settings-accent")) {
-      settings = { ...settings, accentColor: DEFAULT_ACCENT };
-      applySettings(settings);
-      saveSettings(settings);
-      showFutureSettingsToast();
-      return;
+      if (settings.themeMode !== "custom") return;
+
+      settings = { ...settings, accentColor: target.value };
     }
 
     applySettings(settings);
@@ -227,12 +218,11 @@
   document.addEventListener("click", (event) => {
     const swatch = event.target.closest("[data-accent-color]");
 
-    if (!swatch) return;
+    if (!swatch || settings.themeMode !== "custom") return;
 
-    settings = { ...settings, accentColor: DEFAULT_ACCENT };
+    settings = { ...settings, accentColor: swatch.dataset.accentColor || DEFAULT_ACCENT };
     applySettings(settings);
     saveSettings(settings);
-    showFutureSettingsToast();
   });
 
   document.addEventListener("click", (event) => {

@@ -8,14 +8,13 @@
 
   /* --- Call config keeps browser tel links disabled until the user enables calling. --- */
   const PHONE_CONFIG = {
-    callingEnabled: false,
+    callingEnabled: true,
     allowedNumber: "",
   };
-  const PHONE_INACTIVE_MESSAGE = "CRM Phone is prepared for future Twilio integration.";
-  const PHONE_NOTE_INACTIVE_MESSAGE = "Call notes are prepared for future Twilio integration.";
 
-  /* --- Storage key connects the dialer with client phone numbers. --- */
+  /* --- Storage keys connect client phone numbers with saved call notes. --- */
   const CLIENTS_KEY = window.crmConstants?.CLIENTS_KEY || "crm_clients";
+  const CALL_NOTES_KEY = "crm_call_notes";
 
   const display = dialer.querySelector(".js-phone-display");
   const status = dialer.querySelector(".js-phone-status");
@@ -43,6 +42,14 @@
       return Array.isArray(value) ? value : [];
     } catch (error) {
       return [];
+    }
+  };
+
+  const writeArray = (key, value) => {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      // The current page still updates even if storage is unavailable.
     }
   };
 
@@ -134,22 +141,22 @@
     const normalized = normalizeNumber(currentNumber);
 
     if (!normalized) {
-      setStatus(PHONE_INACTIVE_MESSAGE, "warning");
+      setStatus("Enter a number before calling.", "error");
       return;
     }
 
     if (!PHONE_CONFIG.callingEnabled) {
-      const message = PHONE_INACTIVE_MESSAGE;
+      const message = "Calling is disabled from configuration.";
       setStatus(message, "warning");
-      window.crmNotifications?.add("CRM Phone is prepared for future Twilio integration.");
+      window.crmNotifications?.add("Phone call blocked because calling is disabled.");
       window.crmActivity?.add({
         type: "phone",
         icon: "phone",
-        title: "CRM Phone demo opened",
-        summary: `${normalized} was prepared for a future Twilio call.`,
-        status: "Prepared UI",
+        title: "Phone call blocked",
+        summary: `${normalized} could not be called because calling is disabled.`,
+        status: "Blocked",
         relatedLabel: selectedClient?.name || normalized,
-        description: PHONE_INACTIVE_MESSAGE,
+        description: "The application phone prevented a real call because calling is disabled in configuration.",
         actionHref: "./dashboard.html",
         actionLabel: "Open Dashboard",
       });
@@ -183,15 +190,44 @@
     event.preventDefault();
 
     const note = noteInput.value.trim();
+    const normalized = normalizeNumber(currentNumber);
 
     if (!note) {
       setStatus("Write a note before saving.", "error");
       return;
     }
 
+    const notes = readArray(CALL_NOTES_KEY);
+    const nextNote = {
+      id: `call-note-${Date.now()}`,
+      clientId: selectedClient?.id || null,
+      clientName: selectedClient?.name || "Manual number",
+      company: selectedClient?.company || "",
+      phone: normalized,
+      note,
+      createdAt: new Date().toISOString(),
+    };
+
+    writeArray(CALL_NOTES_KEY, [nextNote, ...notes]);
     noteInput.value = "";
-    setStatus(PHONE_NOTE_INACTIVE_MESSAGE, "warning");
-    window.crmToast?.show(PHONE_NOTE_INACTIVE_MESSAGE, "info");
+    setStatus("Call note saved to Profile Call History.", "success");
+    window.dispatchEvent(new CustomEvent("crm:call-note-saved", { detail: nextNote }));
+    window.crmNotifications?.add("New call note saved to Profile Call History.");
+    window.crmActivity?.add({
+      type: "phone",
+      icon: "phone",
+      title: "Call note saved",
+      summary: `${nextNote.company || nextNote.phone} - ${note.slice(0, 70)}`,
+      status: "Saved",
+      relatedLabel: nextNote.company || nextNote.phone,
+      description: note,
+      details: [
+        ["Phone", nextNote.phone],
+        ["Client", nextNote.company || "No selected client"],
+      ],
+      actionHref: "./profile.html",
+      actionLabel: "Open Profile",
+    });
   });
 
   renderQueue();

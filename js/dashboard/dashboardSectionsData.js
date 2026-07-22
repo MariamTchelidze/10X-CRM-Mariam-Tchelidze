@@ -9,6 +9,7 @@
   if (!dashboardPage || !storage || !constants) return;
 
   const TASKS_KEY = "crm_tasks";
+  const FAVOURITES_KEY = "crm_favourites";
   const SALES_SETTINGS_KEY = "crm_sales_settings";
   const MONTHLY_TARGET = 32000;
   const STATUS_LABELS = {
@@ -38,6 +39,10 @@
     return Array.isArray(value) ? value : [];
   };
 
+  const writeArray = (key, value) => {
+    storage.write(key, Array.isArray(value) ? value : []);
+  };
+
   const normalizeStatus = (status) => {
     const normalized = String(status || "lead").toLowerCase();
     return STATUS_LABELS[normalized] ? normalized : "lead";
@@ -57,6 +62,7 @@
     }));
 
   const getTasks = () => readArray(TASKS_KEY);
+  const getFavourites = () => readArray(FAVOURITES_KEY);
   const getActivityLog = () => readArray(constants.ACTIVITY_KEY);
   const getSalesSettings = () => {
     const settings = storage.read(SALES_SETTINGS_KEY, {});
@@ -147,17 +153,27 @@
 
     const metrics = getMetrics();
     const reports = [
-      ["Client Status Summary", `${metrics.total} clients: ${metrics.counts.lead} lead, ${metrics.counts.contacted} contacted, ${metrics.counts.won} won, ${metrics.counts.lost} lost.`],
-      ["Sales Target Overview", `${moneyFormatter.format(metrics.wonRevenue)} won revenue, ${metrics.targetProgress}% of monthly target.`],
+      {
+        title: "Client Status Summary",
+        text: `${metrics.counts.lead} lead, ${metrics.counts.contacted} contacted, ${metrics.counts.won} won, ${metrics.counts.lost} lost.`,
+      },
+      {
+        title: "Sales Target Overview",
+        text: `${moneyFormatter.format(metrics.wonRevenue)} won revenue, ${metrics.targetProgress}% of ${moneyFormatter.format(metrics.monthlyTarget)} target.`,
+      },
+      {
+        title: "Task Workload Summary",
+        text: `${metrics.openTasks.length} open task${metrics.openTasks.length === 1 ? "" : "s"} and ${metrics.dueTasks.length} task${metrics.dueTasks.length === 1 ? "" : "s"} needing attention.`,
+      },
     ];
 
     list.innerHTML = reports
       .map(
-        ([title, text]) => `
+        (report) => `
           <div class="dashboard-list__item">
             ${getIcon("txt-doc")}
-            <strong>${escapeHtml(title)}</strong>
-            <span>${escapeHtml(text)}</span>
+            <strong>${escapeHtml(report.title)}</strong>
+            <span>${escapeHtml(report.text)}</span>
           </div>
         `,
       )
@@ -169,42 +185,66 @@
     const configs = {
       client: {
         source: "Clients",
+        section: "Clients page > Client card",
         badge: "client",
+        actionLabel: "Open Clients",
+        actionHref: "./clients.html",
       },
       reminder: {
         source: "Reminders",
+        section: "Clients page > Client details",
         badge: "reminder",
+        actionLabel: "Open Clients",
+        actionHref: "./clients.html",
       },
       note: {
         source: "Notes",
+        section: "Clients page > Client details modal",
         badge: "note",
+        actionLabel: "Open Clients",
+        actionHref: "./clients.html",
       },
       task: {
         source: "Tasks",
+        section: "Dashboard > Task Board",
         badge: "task",
+        actionLabel: "Open Task Board",
+        actionHref: "./dashboard.html#tasks",
       },
       notification: {
         source: "Notifications",
+        section: "Header > Notifications modal",
         badge: "notification",
+        actionLabel: "Open Notifications",
+        actionHref: "./dashboard.html#activity",
       },
       phone: {
         source: "Phone",
+        section: "Application phone",
         badge: "note",
+        actionLabel: "Open Profile",
+        actionHref: "./profile.html",
       },
       communication: {
         source: "Communication",
+        section: "Messenger / SensAI",
         badge: "notification",
+        actionLabel: "Open Dashboard",
+        actionHref: "./dashboard.html",
       },
       general: {
         source: "CRM",
+        section: "Workspace",
         badge: "client",
+        actionLabel: "Open Activity",
+        actionHref: "./dashboard.html#activity",
       },
     };
 
     return configs[type] || configs.general;
   };
 
-  const createActivity = ({ id, type, icon, title, summary, status, date }) => {
+  const createActivity = ({ id, type, icon, title, summary, status, relatedLabel, date, description, details = [], actionHref, actionLabel }) => {
     const config = getActivityConfig(type);
 
     return {
@@ -214,9 +254,15 @@
       title,
       summary,
       status,
+      relatedLabel,
       date,
       source: config.source,
+      section: config.section,
       badge: config.badge,
+      description,
+      details,
+      actionHref: actionHref || config.actionHref,
+      actionLabel: actionLabel || config.actionLabel,
     };
   };
 
@@ -230,12 +276,46 @@
           title: entry.title || "CRM activity",
           summary: entry.summary || "Account activity was recorded.",
           status: entry.status || "Updated",
+          relatedLabel: entry.relatedLabel || "CRM",
           date: new Date(entry.createdAt || entry.date || Date.now()),
+          description: entry.description || entry.summary || "Account activity was recorded.",
+          details: Array.isArray(entry.details) ? entry.details : [],
+          actionHref: entry.actionHref,
+          actionLabel: entry.actionLabel,
         }),
       )
       .filter((item) => !Number.isNaN(item.date.getTime()))
       .sort((a, b) => b.date - a.date)
       .slice(0, 8);
+  };
+
+  const renderActivityDetails = (activity) => {
+    const details = [
+      ["Source", activity.source],
+      ["Page / Section", activity.section],
+      ["Related item", activity.relatedLabel],
+      ["Status", activity.status],
+      ...activity.details,
+    ];
+
+    return `
+      <div class="activity-card__details" hidden>
+        <p class="activity-card__description">${escapeHtml(activity.description)}</p>
+        <dl class="activity-card__meta-list">
+          ${details
+            .map(
+              ([label, value]) => `
+                <div class="activity-card__meta-item">
+                  <dt>${escapeHtml(label)}</dt>
+                  <dd>${escapeHtml(value)}</dd>
+                </div>
+              `,
+            )
+            .join("")}
+        </dl>
+        <a class="btn btn--ghost btn--sm activity-card__link" href="${escapeHtml(activity.actionHref)}">${escapeHtml(activity.actionLabel)}</a>
+      </div>
+    `;
   };
 
   const renderActivity = () => {
@@ -252,7 +332,7 @@
       .map(
         (activity) => `
           <article class="activity-card activity-card--${escapeHtml(activity.badge)}" data-activity-id="${escapeHtml(activity.id)}">
-            <div class="activity-card__summary">
+            <button class="activity-card__summary js-activity-toggle" type="button" aria-expanded="false">
               <span class="activity-card__icon">${getIcon(activity.icon)}</span>
               <span class="activity-card__content">
                 <span class="activity-card__topline">
@@ -264,13 +344,25 @@
               <span class="activity-card__side">
                 <time>${formatDateTime(activity.date)}</time>
                 <span class="activity-card__status">${escapeHtml(activity.status)}</span>
+                <span class="activity-card__chevron" aria-hidden="true"></span>
               </span>
-            </div>
+            </button>
+            ${renderActivityDetails(activity)}
           </article>
         `,
       )
       .join("");
     updateThemeAssets(list);
+  };
+
+  const isFavourite = (clientId) => getFavourites().some((item) => item.type === "client" && String(item.id) === String(clientId));
+
+  const setFavourite = (clientId, shouldPin) => {
+    const favourites = getFavourites().filter((item) => !(item.type === "client" && String(item.id) === String(clientId)));
+    if (shouldPin) favourites.unshift({ type: "client", id: clientId, createdAt: new Date().toISOString() });
+    writeArray(FAVOURITES_KEY, favourites);
+    renderFavourites();
+    renderActivity();
   };
 
   const renderFavourites = () => {
@@ -279,12 +371,61 @@
     const text = document.querySelector('[data-dashboard-section-text="favouriteCount"]');
     if (!list) return;
 
-    if (count) count.textContent = "Future";
+    const metrics = getMetrics();
+    const favourites = getFavourites();
+    const pinnedClients = favourites
+      .filter((item) => item.type === "client")
+      .map((item) => metrics.clients.find((client) => String(client.id) === String(item.id)))
+      .filter(Boolean);
+    const suggestions = metrics.clients
+      .filter((client) => !isFavourite(client.id))
+      .sort((a, b) => b.dealValue - a.dealValue)
+      .slice(0, pinnedClients.length ? 3 : 5);
+
+    if (count) count.textContent = pinnedClients.length;
     if (text) {
-      text.textContent = "Favourites is prepared for future saved clients and pinned workspace items.";
+      text.textContent = pinnedClients.length
+        ? `${pinnedClients.length} pinned client${pinnedClients.length === 1 ? "" : "s"} saved for quick access.`
+        : "Pin high-value clients from the list below.";
     }
 
-    list.innerHTML = '<p class="task-empty">Favourites is prepared for future saved clients and pinned workspace items.</p>';
+    if (!pinnedClients.length && !suggestions.length) {
+      list.innerHTML = '<p class="task-empty">No clients available to pin yet.</p>';
+      return;
+    }
+
+    const pinnedMarkup = pinnedClients
+      .map(
+        (client) => `
+          <div class="dashboard-list__item dashboard-list__item--with-action">
+            ${getIcon("star")}
+            <strong>${escapeHtml(client.name)}</strong>
+            <span>${escapeHtml(client.company || "No company")} - ${STATUS_LABELS[client.status]} - ${moneyFormatter.format(client.dealValue)}</span>
+            <button class="btn btn--ghost btn--sm js-toggle-favourite" type="button" data-client-id="${escapeHtml(client.id)}" data-favourite-action="remove">Remove</button>
+          </div>
+        `,
+      )
+      .join("");
+
+    const suggestionMarkup = suggestions
+      .map(
+        (client) => `
+          <div class="dashboard-list__item dashboard-list__item--with-action dashboard-list__item--suggested">
+            ${getIcon("star")}
+            <strong>${escapeHtml(client.name)}</strong>
+            <span>${escapeHtml(client.company || "No company")} - suggested from ${moneyFormatter.format(client.dealValue)} value</span>
+            <button class="btn btn--secondary btn--sm js-toggle-favourite" type="button" data-client-id="${escapeHtml(client.id)}" data-favourite-action="add">Pin</button>
+          </div>
+        `,
+      )
+      .join("");
+
+    list.innerHTML = `
+      ${pinnedMarkup}
+      ${suggestions.length ? '<p class="dashboard-list__section-label">Suggested clients</p>' : ""}
+      ${suggestionMarkup}
+    `;
+    updateThemeAssets(list);
   };
 
   const renderAll = () => {
@@ -292,6 +433,25 @@
     renderActivity();
     renderFavourites();
   };
+
+  document.addEventListener("click", (event) => {
+    const activityToggle = event.target.closest(".js-activity-toggle");
+
+    if (activityToggle) {
+      const card = activityToggle.closest(".activity-card");
+      const details = card?.querySelector(".activity-card__details");
+      const isOpen = activityToggle.getAttribute("aria-expanded") === "true";
+
+      activityToggle.setAttribute("aria-expanded", String(!isOpen));
+      card?.classList.toggle("is-open", !isOpen);
+      if (details) details.hidden = isOpen;
+      return;
+    }
+
+    const button = event.target.closest(".js-toggle-favourite");
+    if (!button) return;
+    setFavourite(button.dataset.clientId, button.dataset.favouriteAction === "add");
+  });
 
   window.addEventListener("storage", renderAll);
   window.addEventListener("crm:dashboarddata:update", renderAll);

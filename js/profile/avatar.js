@@ -1,55 +1,129 @@
 "use strict";
 
-/* --- Profile Avatar Prepared UI --- */
+/* --- Profile Avatar Upload Preview --- */
 (function initProfileAvatar() {
-  /* --- Avatar upload is UI-only because real files need backend/cloud storage. --- */
+  /* --- Avatar constants control localStorage key and accepted preview size. --- */
+  const AVATAR_KEY = "crm_profile_avatar";
+  const MAX_FILE_SIZE = 1024 * 1024;
+
+  /* --- DOM references collect upload, preview, initials, remove button, and status text. --- */
   const input = document.querySelector(".js-profile-avatar-input");
   const image = document.querySelector(".js-profile-avatar-image");
   const initials = document.querySelector(".js-profile-avatar-initials");
   const removeButton = document.querySelector(".js-remove-avatar");
   const message = document.querySelector(".js-profile-avatar-message");
-  const FUTURE_UPLOAD_MESSAGE = "Profile image upload is prepared for future file storage integration.";
-  const FUTURE_REMOVE_MESSAGE = "Profile image removal is prepared for future file storage integration.";
   let messageTimerId = null;
 
   if (!input || !image || !initials) return;
 
-  /* --- Message helpers keep the profile card feedback short and readable. --- */
-  const setMessage = (text) => {
+  /* --- Message helpers avoid stacking repeated upload status messages. --- */
+  const clearMessageTimer = () => {
+    if (!messageTimerId) return;
+
+    window.clearTimeout(messageTimerId);
+    messageTimerId = null;
+  };
+
+  const setMessage = (text, type = "info") => {
     if (!message) return;
 
-    if (messageTimerId) {
-      window.clearTimeout(messageTimerId);
-    }
-
+    clearMessageTimer();
     message.textContent = text;
-    message.dataset.type = "info";
-    message.dataset.visible = "true";
-    window.crmToast?.show(text, "info");
+    message.dataset.type = type;
+    message.dataset.visible = text ? "true" : "false";
+
+    if (!text) return;
 
     messageTimerId = window.setTimeout(() => {
       message.dataset.visible = "false";
       messageTimerId = null;
-    }, 2800);
+    }, type === "error" ? 4200 : 2400);
   };
 
-  const keepInitialsAvatar = () => {
-    image.hidden = true;
-    image.removeAttribute("src");
-    initials.hidden = false;
+  /* --- Storage helpers persist or remove the selected image preview. --- */
+  const saveAvatar = (src) => {
+    try {
+      localStorage.setItem(AVATAR_KEY, src);
+    } catch (error) {
+      setMessage("Image preview is visible now, but it could not be saved for reload.", "error");
+    }
   };
 
-  input.addEventListener("change", () => {
-    input.value = "";
-    keepInitialsAvatar();
-    setMessage(FUTURE_UPLOAD_MESSAGE);
-  });
+  const removeSavedAvatar = () => {
+    try {
+      localStorage.removeItem(AVATAR_KEY);
+    } catch (error) {
+      // Nothing else is needed if storage is unavailable.
+    }
+  };
 
-  removeButton?.addEventListener("click", () => {
-    input.value = "";
-    keepInitialsAvatar();
-    setMessage(FUTURE_REMOVE_MESSAGE);
-  });
+  /* --- Preview helper switches between image and initials state. --- */
+  const showAvatar = (src) => {
+    if (!src) {
+      image.hidden = true;
+      image.removeAttribute("src");
+      initials.hidden = false;
+      return;
+    }
 
-  keepInitialsAvatar();
+    image.src = src;
+    image.hidden = false;
+    initials.hidden = true;
+  };
+
+  const getSavedAvatar = () => {
+    try {
+      return localStorage.getItem(AVATAR_KEY);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  /* --- File-change handler validates and previews the uploaded image immediately. --- */
+  const handleAvatarChange = () => {
+    const file = input.files && input.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setMessage("Please choose an image file.", "error");
+      input.value = "";
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setMessage("Please choose an image smaller than 1 MB.", "error");
+      input.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => {
+      const avatarSrc = String(reader.result || "");
+
+      showAvatar(avatarSrc);
+      saveAvatar(avatarSrc);
+      setMessage("Profile image updated.", "success");
+    });
+
+    reader.addEventListener("error", () => {
+      setMessage("Image could not be loaded. Please try another file.", "error");
+    });
+
+    reader.readAsDataURL(file);
+  };
+
+  input.addEventListener("change", handleAvatarChange);
+
+  if (removeButton) {
+    removeButton.addEventListener("click", () => {
+      input.value = "";
+      showAvatar("");
+      removeSavedAvatar();
+      setMessage("Profile image removed.", "info");
+    });
+  }
+
+  showAvatar(getSavedAvatar());
 })();

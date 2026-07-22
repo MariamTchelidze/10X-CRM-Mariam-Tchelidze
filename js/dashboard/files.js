@@ -10,6 +10,8 @@
 
   const TASKS_KEY = "crm_tasks";
   const FILE_LIMIT = 40;
+  let activeSpreadsheetFileId = null;
+
   const escapeHtml = (value) =>
     String(value || "")
       .replaceAll("&", "&amp;")
@@ -264,24 +266,26 @@
       <div class="modal__dialog modal__dialog--wide" role="dialog" aria-modal="true">
         <header class="modal__header">
           <div>
-            <p class="modal__eyebrow">CSV preview</p>
-            <h2 class="modal__title js-spreadsheet-title">Exported file</h2>
-            <p class="modal__description">Preview exported CRM data inside the workspace. Editing is prepared for future backend file tools.</p>
+            <p class="modal__eyebrow">Editable sheet</p>
+            <h2 class="modal__title js-spreadsheet-title">Spreadsheet</h2>
+            <p class="modal__description">Edit cells directly in the CRM viewport, then export the edited CSV.</p>
           </div>
           <button class="icon-btn js-spreadsheet-close" type="button" aria-label="Close spreadsheet">
             <img src="./assets/icons/close.svg" data-theme-src-dark="./assets/icons/close.svg" data-theme-src-light="./assets/icons/close-light-theme.svg" alt="" />
           </button>
         </header>
         <div class="modal__body spreadsheet-shell">
-          <div class="spreadsheet-grid js-spreadsheet-grid" role="grid" aria-label="CRM CSV preview"></div>
+          <div class="spreadsheet-grid js-spreadsheet-grid" role="grid" aria-label="Editable CRM spreadsheet"></div>
         </div>
         <footer class="modal__footer">
           <button class="btn btn--ghost js-spreadsheet-close" type="button">Close</button>
+          <button class="btn btn--primary js-export-sheet" type="button">Export CSV</button>
         </footer>
       </div>
     `;
     document.body.append(modal);
     modal.querySelectorAll(".js-spreadsheet-close").forEach((button) => button.addEventListener("click", () => closeModal(modal)));
+    modal.querySelector(".js-export-sheet")?.addEventListener("click", exportEditedSpreadsheet);
     updateThemeAssets(modal);
     return modal;
   };
@@ -307,6 +311,7 @@
     const rows = normalizeRows(file.rows);
     const columnCount = rows[0]?.length || 1;
 
+    activeSpreadsheetFileId = file.id;
     title.textContent = file.name;
     grid.style.gridTemplateColumns = `repeat(${columnCount}, minmax(14rem, 1fr))`;
     grid.innerHTML = rows
@@ -316,6 +321,7 @@
             (cell, colIndex) => `
               <div
                 class="spreadsheet-cell${rowIndex === 0 ? " spreadsheet-cell--header" : ""}"
+                contenteditable="${rowIndex === 0 ? "false" : "true"}"
                 role="gridcell"
                 data-row="${rowIndex}"
                 data-col="${colIndex}"
@@ -326,6 +332,23 @@
       )
       .join("");
     openModal(modal);
+  };
+
+  const getEditedRows = () => {
+    const cells = Array.from(document.querySelectorAll(".spreadsheet-cell"));
+    const rows = [];
+    cells.forEach((cell) => {
+      const row = Number(cell.dataset.row);
+      rows[row] ||= [];
+      rows[row][Number(cell.dataset.col)] = cell.textContent.trim();
+    });
+    return normalizeRows(rows);
+  };
+
+  const exportEditedSpreadsheet = () => {
+    const file = getFiles().find((item) => item.id === activeSpreadsheetFileId);
+    downloadCsv(file?.name || "crm-export.csv", getEditedRows());
+    window.crmToast?.show("CSV exported successfully.", "success");
   };
 
   const handleExport = () => {

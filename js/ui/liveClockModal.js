@@ -4,8 +4,71 @@
 (function initLiveClockModal() {
   const protectedPage = document.querySelector(".dashboardPage, .clientsPage, .profilePage");
   const clockCards = Array.from(document.querySelectorAll(".date-card"));
+  const storage = window.crmStorage;
+  const constants = window.crmConstants;
 
-  if (!protectedPage || !clockCards.length) return;
+  if (!protectedPage || !clockCards.length || !storage || !constants) return;
+
+  const PHONE_TIMEZONES = [
+    { code: "+995", country: "Georgia", timezone: "Asia/Tbilisi" },
+    { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
+    { code: "+1", country: "United States / Canada", timezone: "America/New_York" },
+    { code: "+44", country: "United Kingdom", timezone: "Europe/London" },
+    { code: "+49", country: "Germany", timezone: "Europe/Berlin" },
+    { code: "+33", country: "France", timezone: "Europe/Paris" },
+    { code: "+39", country: "Italy", timezone: "Europe/Rome" },
+    { code: "+34", country: "Spain", timezone: "Europe/Madrid" },
+    { code: "+31", country: "Netherlands", timezone: "Europe/Amsterdam" },
+    { code: "+48", country: "Poland", timezone: "Europe/Warsaw" },
+    { code: "+90", country: "Turkey", timezone: "Europe/Istanbul" },
+    { code: "+971", country: "United Arab Emirates", timezone: "Asia/Dubai" },
+    { code: "+91", country: "India", timezone: "Asia/Kolkata" },
+    { code: "+81", country: "Japan", timezone: "Asia/Tokyo" },
+    { code: "+82", country: "South Korea", timezone: "Asia/Seoul" },
+    { code: "+86", country: "China", timezone: "Asia/Shanghai" },
+    { code: "+61", country: "Australia", timezone: "Australia/Sydney" },
+    { code: "+55", country: "Brazil", timezone: "America/Sao_Paulo" },
+    { code: "+52", country: "Mexico", timezone: "America/Mexico_City" },
+  ].sort((a, b) => b.code.length - a.code.length);
+
+  const escapeHtml = (value) =>
+    String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const readClients = () => {
+    const clients = storage.read(constants.CLIENTS_KEY, []);
+    return Array.isArray(clients) ? clients : [];
+  };
+
+  const normalizePhone = (phone = "") => String(phone).replace(/[^\d+]/g, "");
+
+  const detectCountry = (phone = "") => {
+    const normalized = normalizePhone(phone);
+    if (!normalized.startsWith("+")) return null;
+    return PHONE_TIMEZONES.find((item) => normalized.startsWith(item.code)) || null;
+  };
+
+  const getClientTimezone = (client) => {
+    if (client?.country && client?.timezone) {
+      return {
+        country: client.country,
+        timezone: client.timezone,
+      };
+    }
+
+    if (client?.timezone) {
+      return {
+        country: client.timezone,
+        timezone: client.timezone,
+      };
+    }
+
+    return detectCountry(client?.phone);
+  };
 
   const formatTime = (date, timezone, includeSeconds = true) =>
     new Intl.DateTimeFormat("en-GB", {
@@ -24,12 +87,59 @@
       month: "short",
     }).format(date);
 
+  const getTimezoneOffset = (timezone, date = new Date()) => {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      timeZoneName: "shortOffset",
+    }).formatToParts(date);
+    return parts.find((part) => part.type === "timeZoneName")?.value || timezone;
+  };
+
   const updateThemeAssets = (container) => {
     const theme = window.crmTheme?.getTheme?.() || document.body.dataset.theme || "dark";
     container.querySelectorAll("[data-theme-src-dark][data-theme-src-light]").forEach((element) => {
       const source = theme === "light" ? element.dataset.themeSrcLight : element.dataset.themeSrcDark;
       if (source) element.setAttribute("src", source);
     });
+  };
+
+  const getCallStatus = (date, timezone) => {
+    const hour = Number(
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: timezone,
+        hour: "2-digit",
+        hour12: false,
+      }).format(date),
+    );
+
+    if (hour >= 9 && hour < 18) return { label: "Good time to call", state: "good" };
+    if ((hour >= 8 && hour < 9) || (hour >= 18 && hour < 20)) return { label: "Maybe acceptable", state: "warning" };
+    return { label: "Late hours", state: "late" };
+  };
+
+  const getCountryGroups = () => {
+    const groups = new Map();
+    let unknownCount = 0;
+
+    readClients().forEach((client) => {
+      const match = getClientTimezone(client);
+      if (!match) {
+        unknownCount += 1;
+        return;
+      }
+
+      const current = groups.get(match.timezone) || {
+        ...match,
+        clients: [],
+      };
+      current.clients.push(client);
+      groups.set(match.timezone, current);
+    });
+
+    return {
+      countries: Array.from(groups.values()).sort((a, b) => a.country.localeCompare(b.country)),
+      unknownCount,
+    };
   };
 
   const ensureModal = () => {
@@ -105,7 +215,8 @@
   };
 
   const closeModal = () => {
-    const modal = document.getElementById("live-clock-modal");
+    /* --- DOM references collect animated clock and country-time list elements. --- */
+  const modal = document.getElementById("live-clock-modal");
     if (!modal) return;
     modal.hidden = true;
     modal.dataset.modalState = "closed";
@@ -113,22 +224,45 @@
     document.body.classList.remove("modal-open");
   };
 
-  const renderClientTimes = () => {
+  const renderClientTimes = (now) => {
     const modal = ensureModal();
     const list = modal.querySelector(".js-client-time-list");
     const count = modal.querySelector(".js-client-time-count");
+    const { countries, unknownCount } = getCountryGroups();
 
     if (count) {
-      count.textContent = "Future API";
+      count.textContent = `${countries.length} countr${countries.length === 1 ? "y" : "ies"}`;
     }
 
-    if (list) {
+    if (!countries.length) {
       list.innerHTML = `
         <p class="task-empty">
-          Client world clock is prepared for future timezone API integration.
+          No client country times detected yet. Choose a client country/timezone or add international phone codes such as +64, +995, +1, +44, +49, or +81.
+          ${unknownCount ? `${unknownCount} client${unknownCount === 1 ? "" : "s"} had no recognized country code.` : ""}
         </p>
       `;
+      return;
     }
+
+    list.innerHTML = countries
+      .map((item) => {
+        const callStatus = getCallStatus(now, item.timezone);
+        return `
+          <article class="client-time-card client-time-card--${callStatus.state}">
+            <div>
+              <h4 class="client-time-card__country">${escapeHtml(item.country)}</h4>
+              <p class="client-time-card__meta">${escapeHtml(item.timezone)} - ${escapeHtml(getTimezoneOffset(item.timezone, now))}</p>
+              <p class="client-time-card__clients">${item.clients.length} client${item.clients.length === 1 ? "" : "s"}</p>
+            </div>
+            <div class="client-time-card__timebox">
+              <strong class="client-time-card__time">${formatTime(now, item.timezone, false)}</strong>
+              <span class="client-time-card__date">${escapeHtml(formatDate(now, item.timezone))}</span>
+              <span class="client-time-card__status">${callStatus.label}</span>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
   };
 
   const renderClock = (event) => {

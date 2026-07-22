@@ -14,11 +14,8 @@ function initTasks() {
 
   /* --- Task constants define storage, statuses, labels, and priorities. --- */
   const TASKS_KEY = "crm_tasks";
+  const data = window.crmData;
   const PENDING_TASK_KEY = "crm_pending_open_task";
-  const TASK_ARCHIVE_DISABLED_MESSAGE = "Archive is disabled in exam-safe mode.";
-  const TASK_DELETE_DISABLED_MESSAGE = "Delete is disabled in exam-safe mode.";
-  const TASK_CHECKLIST_DISABLED_MESSAGE = "Checklist is disabled in exam-safe mode.";
-  const TASK_COMMENTS_DISABLED_MESSAGE = "Task comments are prepared for future team collaboration.";
   const statuses = ["todo", "in-progress", "overdue", "done"];
   const statusLabels = {
     todo: "To Do",
@@ -34,11 +31,12 @@ function initTasks() {
   };
 
   const getPriorityColor = (priority) => priorityColors[priority] || priorityColors.Low;
-  const showExamSafeTaskToast = (message) => window.crmToast?.show(message, "info");
 
-  /* --- Runtime state tracks the open task and current drag item. --- */
+  /* --- Runtime state tracks the open task, drag item, delete target, and edited checklist item. --- */
   let activeTaskId = null;
   let draggedTaskId = null;
+  let pendingDeleteTaskId = null;
+  let editingSubtaskId = null;
 
   /* --- DOM references collect task modals, forms, and board controls. --- */
   const addTaskForm = document.querySelector(".js-add-task-form");
@@ -74,14 +72,35 @@ function initTasks() {
     return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   };
 
-  /* --- Normalizer keeps only the active exam-safe task shape. --- */
+  /* --- Normalizers guarantee every task/checklist item has the expected shape. --- */
+  const normalizeSubtask = (subtask) => {
+    if (typeof subtask === "string") {
+      return { id: createId("subtask"), text: subtask, done: false };
+    }
+
+    return {
+      id: subtask.id || subtask._id || createId("subtask"),
+      text: subtask.text || "",
+      done: Boolean(subtask.done),
+    };
+  };
+
+  const normalizeComment = (comment = {}) => ({
+    ...comment,
+    id: comment.id || comment._id || createId("comment"),
+    author: comment.author || "CRM User",
+    mention: comment.mention || "",
+    message: comment.message || "",
+    createdAt: comment.createdAt || new Date().toISOString(),
+  });
+
   const normalizeTask = (task) => {
     return {
       ...task,
       id: task.id || task._id || createId("task"),
       color: getPriorityColor(task.priority),
-      subtasks: [],
-      comments: [],
+      subtasks: Array.isArray(task.subtasks) ? task.subtasks.map(normalizeSubtask).filter((item) => item.text) : [],
+      comments: Array.isArray(task.comments) ? task.comments.map(normalizeComment).filter((item) => item.message) : [],
       archived: Boolean(task.archived),
       deleted: Boolean(task.deleted),
       deletedAt: task.deletedAt || "",
@@ -94,7 +113,27 @@ function initTasks() {
 
   const saveTasks = () => saveJson(TASKS_KEY, tasks);
 
+  const replaceTaskFromBackend = (taskId, apiTask) => {
+    if (!apiTask) return;
+
+    tasks = tasks.map((task) => (task.id === taskId ? normalizeTask(apiTask) : task));
+    saveTasks();
+    render();
+  };
+
+  const syncTaskToBackend = (task) => {
+    if (!task?.id || !data?.updateTaskRequest) return;
+
+    data.updateTaskRequest(task.id, task)
+      .then((apiTask) => replaceTaskFromBackend(task.id, apiTask))
+      .catch((error) => {
+        window.crmToast?.show(error.message || "Task was saved locally, but backend sync failed.", "error");
+      });
+  };
+
   const getActiveTasks = () => tasks.filter((task) => !task.archived && !task.deleted);
+  const getArchivedTasks = () => tasks.filter((task) => task.archived && !task.deleted);
+  const getDeletedTasks = () => tasks.filter((task) => task.deleted);
   const getTaskById = (taskId) => tasks.find((task) => task.id === taskId);
   const getCurrentUserName = () => window.crmTeam?.getCurrentUserName?.() || "Account Owner";
 
@@ -175,6 +214,19 @@ function initTasks() {
     });
   };
 
+  const formatDateTime = (value) => {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "Just now";
+
+    return date.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   /* --- Notification helper records task events for the notification modal. --- */
   const addNotification = (message, taskId = "") => {
     window.crmNotifications?.add(message, taskId);
@@ -190,7 +242,7 @@ function initTasks() {
     });
   };
 
-  /* --- Summary helpers calculate task totals for board columns. --- */
+  /* --- Summary helpers calculate task totals and checklist progress. --- */
   const getTaskCounts = () => {
     return getActiveTasks().reduce(
       (counts, task) => {
@@ -201,6 +253,20 @@ function initTasks() {
       },
       { todo: 0, "in-progress": 0, overdue: 0, done: 0 },
     );
+  };
+
+  const getChecklistProgress = (task) => {
+    const total = task.subtasks.length;
+    const done = task.subtasks.filter((subtask) => subtask.done).length;
+    return { done, total };
+  };
+
+  const getSubtasksMarkup = (task) => {
+    const { done, total } = getChecklistProgress(task);
+
+    if (!total) return "";
+
+    return `<p class="task-card__meta">${done}/${total} checklist done</p>`;
   };
 
   /* --- Card renderer builds draggable task cards for each board column. --- */
@@ -221,6 +287,7 @@ function initTasks() {
         <span class="task-card__status">${statusLabels[task.status]}</span>
       </header>
       <p class="task-card__description">${escapeHtml(task.description || "No description added.")}</p>
+      ${getSubtasksMarkup(task)}
       <footer class="task-card__footer">
         <div class="task-card__meta-group">
           <span class="task-card__date">${escapeHtml(task.dueDate)}</span>
@@ -254,14 +321,37 @@ function initTasks() {
   const renderArchive = () => {
     const archiveList = document.querySelector(".js-task-archive-list");
     const archiveCount = document.querySelector(".js-task-archive-count");
+    const archivedTasks = getArchivedTasks();
 
     if (archiveCount) {
-      archiveCount.textContent = "Future feature";
+      archiveCount.textContent = `${archivedTasks.length} archived`;
     }
 
     if (!archiveList) return;
 
-    archiveList.innerHTML = '<p class="task-empty">Task archive is prepared for future recovery workflow.</p>';
+    if (!archivedTasks.length) {
+      archiveList.innerHTML = '<p class="task-empty">No archived tasks yet.</p>';
+      return;
+    }
+
+    archiveList.innerHTML = "";
+    archivedTasks.forEach((task) => {
+      const item = document.createElement("article");
+      item.className = "task-archive-item";
+      item.dataset.taskId = task.id;
+      item.innerHTML = `
+        <div>
+          <h4 class="task-archive-item__title">${escapeHtml(task.title)}</h4>
+          <p class="task-archive-item__meta">${escapeHtml(task.client)} | ${statusLabels[task.status]}</p>
+        </div>
+        <div class="task-archive-item__actions">
+          <button class="task-card__button" type="button" data-task-action="open">Open</button>
+          <button class="task-card__button" type="button" data-task-action="restore">Restore</button>
+          <button class="task-card__button task-card__button--danger" type="button" data-task-action="delete">Delete</button>
+        </div>
+      `;
+      archiveList.append(item);
+    });
   };
 
   /* --- Board and Recycle Bin Rendering --- */
@@ -292,37 +382,77 @@ function initTasks() {
   const renderRecycleBin = () => {
     const recycleList = document.querySelector(".js-recycle-bin-list");
     const recycleCount = document.querySelector(".js-recycle-count");
+    const deletedTasks = getDeletedTasks();
 
     if (recycleCount) {
-      recycleCount.textContent = "Future feature";
+      recycleCount.textContent = `${deletedTasks.length} deleted`;
     }
 
     if (!recycleList) return;
 
-    recycleList.innerHTML = `
-      <p class="task-empty">
-        Recycle Bin is prepared for future task recovery. In exam-safe mode, tasks are not moved here.
-      </p>
-    `;
+    if (!deletedTasks.length) {
+      recycleList.innerHTML = '<p class="task-empty">Recycle bin is empty.</p>';
+      return;
+    }
+
+    recycleList.innerHTML = "";
+    deletedTasks.forEach((task) => {
+      const item = document.createElement("article");
+      item.className = "recycle-task-item";
+      item.dataset.taskId = task.id;
+      item.innerHTML = `
+        <div>
+          <h4 class="recycle-task-item__title">${escapeHtml(task.title)}</h4>
+          <p class="recycle-task-item__meta">${escapeHtml(task.client)} | ${escapeHtml(task.priority)} | ${escapeHtml(task.dueDate)}</p>
+        </div>
+        <div class="recycle-task-item__actions">
+          <button class="task-card__button task-card__button--primary" type="button" data-task-action="open">Open</button>
+          <button class="task-card__button" type="button" data-task-action="restore-from-recycle">Restore</button>
+          <button class="task-card__button task-card__button--danger" type="button" data-task-action="delete-permanent">Delete Permanently</button>
+        </div>
+      `;
+      recycleList.append(item);
+    });
   };
 
   const renderChecklist = (task) => {
     const checklist = document.querySelector(".js-task-checklist");
     const progress = document.querySelector(".js-task-checklist-progress");
-    const addChecklistInput = addSubtaskForm?.querySelector(".js-new-subtask");
+    const { done, total } = getChecklistProgress(task);
 
     if (progress) {
-      progress.textContent = "Prepared UI";
+      progress.textContent = `${done}/${total} done`;
     }
 
-    if (addChecklistInput) {
-      addChecklistInput.value = "";
-      addChecklistInput.placeholder = "Checklist is prepared for future task workflow.";
+    if (!checklist) return;
+
+    if (!total) {
+      checklist.innerHTML = '<p class="task-empty">No checklist items yet.</p>';
+      return;
     }
 
-    if (checklist) {
-      checklist.innerHTML = '<p class="task-empty">Checklist is prepared for future task workflow.</p>';
-    }
+    checklist.innerHTML = task.subtasks
+      .map(
+        (subtask) => `
+                    <div class="task-checklist__item" data-subtask-id="${subtask.id}">
+            <input class="task-checklist__checkbox js-subtask-toggle" type="checkbox" ${subtask.done ? "checked" : ""} />
+            ${
+              editingSubtaskId === subtask.id
+                ? `<input class="input task-checklist__edit-input js-subtask-edit-input" type="text" value="${escapeHtml(subtask.text)}" />`
+                : `<span class="task-checklist__text">${escapeHtml(subtask.text)}</span>`
+            }
+            <div class="task-checklist__actions">
+              ${
+                editingSubtaskId === subtask.id
+                  ? `<button class="task-card__button task-card__button--primary js-save-subtask" type="button">Save</button><button class="task-card__button js-cancel-subtask-edit" type="button">Cancel</button>`
+                  : `<button class="task-card__button js-edit-subtask" type="button">Edit</button>`
+              }
+              <button class="task-card__button task-card__button--danger js-remove-subtask" type="button">Remove</button>
+            </div>
+          </div>
+        `,
+      )
+      .join("");
   };
 
   const renderComments = (task) => {
@@ -330,12 +460,30 @@ function initTasks() {
     const commentsCount = document.querySelector(".js-task-comment-count");
 
     if (commentsCount) {
-      commentsCount.textContent = "Prepared UI";
+      commentsCount.textContent = `${task.comments.length} comments`;
     }
 
-    if (commentsList) {
-      commentsList.innerHTML = '<p class="task-empty">Task comments are prepared for future team collaboration.</p>';
+    if (!commentsList) return;
+
+    if (!task.comments.length) {
+      commentsList.innerHTML = '<p class="task-empty">No comments yet.</p>';
+      return;
     }
+
+    commentsList.innerHTML = task.comments
+      .map(
+        (comment) => `
+          <article class="task-comment">
+            <header class="task-comment__header">
+              <strong>${escapeHtml(comment.author)}</strong>
+              <time>${formatDateTime(comment.createdAt)}</time>
+            </header>
+            ${comment.mention ? `<p class="task-comment__mention">@${escapeHtml(comment.mention)}</p>` : ""}
+            <p class="task-comment__message">${escapeHtml(comment.message)}</p>
+          </article>
+        `,
+      )
+      .join("");
   };
 
   const renderTaskDetails = (task) => {
@@ -387,7 +535,7 @@ function initTasks() {
   };
 
   /* --- Task mutation helpers update one task and persist the board. --- */
-  const updateTask = (taskId, updates) => {
+  const updateTask = (taskId, updates, shouldSync = true) => {
     let updatedTask = null;
 
     tasks = tasks.map((task) => {
@@ -398,6 +546,10 @@ function initTasks() {
     });
     saveTasks();
     render();
+
+    if (shouldSync && updatedTask) {
+      syncTaskToBackend(updatedTask);
+    }
   };
 
 
@@ -434,6 +586,53 @@ function initTasks() {
       render();
     }
   };
+
+  /* --- Delete helpers choose recycle-bin or permanent removal behavior. --- */
+  const openDeleteTaskModal = (taskId) => {
+    pendingDeleteTaskId = taskId;
+    document.querySelector(".js-open-delete-task-helper")?.click();
+  };
+
+  const moveTaskToRecycle = (taskId) => {
+    const task = getTaskById(taskId);
+
+    updateTask(taskId, {
+      archived: false,
+      deleted: true,
+      deletedAt: new Date().toISOString(),
+    });
+
+    logTaskActivity({
+      icon: "recycle",
+      title: `${task?.title || "Task"} moved to recycle bin`,
+      summary: task?.client ? `Client: ${task.client}` : "Task moved to recycle bin.",
+      status: "Recycled",
+      relatedLabel: task?.client || "Task",
+      description: "A task was moved to the recycle bin and can still be restored.",
+    });
+  };
+
+  const deleteTaskPermanently = (taskId) => {
+    const task = getTaskById(taskId);
+
+    tasks = tasks.filter((task) => task.id !== taskId);
+    saveTasks();
+    render();
+
+    data?.deleteTaskRequest?.(taskId).catch((error) => {
+      window.crmToast?.show(error.message || "Task was deleted locally, but backend delete failed.", "error");
+    });
+
+    logTaskActivity({
+      icon: "Delete",
+      title: `${task?.title || "Task"} deleted permanently`,
+      summary: "Task removed from everywhere.",
+      status: "Deleted",
+      relatedLabel: task?.client || "Task",
+      description: "A task was permanently deleted from the board.",
+    });
+  };
+
 
   const openTaskDetails = (taskId) => {
     const task = getTaskById(taskId);
@@ -515,19 +714,18 @@ function initTasks() {
     document.querySelector("#add-task-modal [data-modal-close]")?.click();
   };
 
-  const createTaskFromForm = (event) => {
+  const createTaskFromForm = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(addTaskForm);
 
     if (!validateTaskForm(formData)) return;
 
-    const checklistText = String(formData.get("subtasks") || "").trim();
-    const subtasks = [];
-
-    if (checklistText) {
-      showExamSafeTaskToast(TASK_CHECKLIST_DISABLED_MESSAGE);
-    }
+    const subtasks = String(formData.get("subtasks") || "")
+      .split("\n")
+      .map((subtask) => subtask.trim())
+      .filter(Boolean)
+      .map((text) => ({ id: createId("subtask"), text, done: false }));
 
     const nextTask = {
       id: createId("task"),
@@ -547,29 +745,43 @@ function initTasks() {
       deletedAt: "",
     };
 
-    let savedTask = normalizeTask(nextTask);
+    try {
+      const apiTask = await data?.postTask?.(nextTask);
+      const savedTask = normalizeTask(apiTask || nextTask);
 
-    tasks = [savedTask, ...tasks];
-    saveTasks();
-    addNotification(`New task assigned to ${savedTask.assignee}: ${savedTask.title}`, savedTask.id);
-    logTaskActivity({
-      title: `${savedTask.title} created`,
-      summary: `${savedTask.client} - assigned to ${savedTask.assignee}`,
-      status: "Created",
-      relatedLabel: savedTask.client,
-      description: savedTask.description || "A new task was created from the task board.",
-      details: [
-        ["Priority", savedTask.priority],
-        ["Assignee", savedTask.assignee],
-        ["Due date", savedTask.dueDate],
-      ],
-    });
-    render();
-    addTaskForm.reset();
-    closeAddTaskModal();
+      tasks = [savedTask, ...tasks];
+      saveTasks();
+      addNotification(`New task assigned to ${savedTask.assignee}: ${savedTask.title}`, savedTask.id);
+      logTaskActivity({
+        title: `${savedTask.title} created`,
+        summary: `${savedTask.client} - assigned to ${savedTask.assignee}`,
+        status: "Created",
+        relatedLabel: savedTask.client,
+        description: savedTask.description || "A new task was created from the task board.",
+        details: [
+          ["Priority", savedTask.priority],
+          ["Assignee", savedTask.assignee],
+          ["Due date", savedTask.dueDate],
+        ],
+      });
+      render();
+      addTaskForm.reset();
+      closeAddTaskModal();
+    } catch (error) {
+      window.crmToast?.show(error.message || "Task could not be created.", "error");
+    }
   };
 
-  const loadTasks = () => {
+  const loadTasks = async () => {
+    try {
+      if (data?.fetchTasks) {
+        tasks = (await data.fetchTasks()).map(normalizeTask);
+        saveTasks();
+      }
+    } catch (error) {
+      window.crmToast?.show(error.message || "Tasks could not be loaded from backend.", "error");
+    }
+
     moveOverdueTasks(new Date());
     render();
     openPendingTaskFromClientNote();
@@ -640,15 +852,47 @@ function initTasks() {
     }
 
     if (actionButton.dataset.taskAction === "archive") {
-      showExamSafeTaskToast(TASK_ARCHIVE_DISABLED_MESSAGE);
+      const task = getTaskById(taskId);
+      updateTask(taskId, { archived: true });
+      logTaskActivity({
+        title: `${task?.title || "Task"} archived`,
+        summary: task?.client ? `Client: ${task.client}` : "Task archived.",
+        status: "Archived",
+        relatedLabel: task?.client || "Task",
+        description: "A task was archived from the task board.",
+      });
+    }
+
+    if (actionButton.dataset.taskAction === "restore") {
+      const task = getTaskById(taskId);
+      updateTask(taskId, { archived: false });
+      logTaskActivity({
+        title: `${task?.title || "Task"} restored`,
+        summary: task?.client ? `Client: ${task.client}` : "Task restored.",
+        status: "Restored",
+        relatedLabel: task?.client || "Task",
+        description: "A task was restored from the archive.",
+      });
+    }
+
+    if (actionButton.dataset.taskAction === "restore-from-recycle") {
+      const task = getTaskById(taskId);
+      updateTask(taskId, { deleted: false, deletedAt: "" });
+      logTaskActivity({
+        title: `${task?.title || "Task"} restored from recycle bin`,
+        summary: task?.client ? `Client: ${task.client}` : "Task restored.",
+        status: "Restored",
+        relatedLabel: task?.client || "Task",
+        description: "A task was restored from the recycle bin.",
+      });
     }
 
     if (actionButton.dataset.taskAction === "delete") {
-      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
+      openDeleteTaskModal(taskId);
     }
 
     if (actionButton.dataset.taskAction === "delete-permanent") {
-      showExamSafeTaskToast(TASK_DELETE_DISABLED_MESSAGE);
+      deleteTaskPermanently(taskId);
     }
   });
 
@@ -685,8 +929,82 @@ function initTasks() {
     const task = getTaskById(activeTaskId);
 
     if (!text || !task) return;
+
+    updateTask(task.id, {
+      subtasks: [...task.subtasks, { id: createId("subtask"), text, done: false }],
+    });
     input.value = "";
-    showExamSafeTaskToast(TASK_CHECKLIST_DISABLED_MESSAGE);
+  });
+
+  document.addEventListener("change", (event) => {
+    const checkbox = event.target.closest(".js-subtask-toggle");
+
+    if (!checkbox || !activeTaskId) return;
+
+    const subtaskItem = checkbox.closest("[data-subtask-id]");
+    const task = getTaskById(activeTaskId);
+
+    if (!subtaskItem || !task) return;
+
+    updateTask(task.id, {
+      subtasks: task.subtasks.map((subtask) =>
+        subtask.id === subtaskItem.dataset.subtaskId ? { ...subtask, done: checkbox.checked } : subtask,
+      ),
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const removeButton = event.target.closest(".js-remove-subtask");
+
+    if (!removeButton || !activeTaskId) return;
+
+    const subtaskItem = removeButton.closest("[data-subtask-id]");
+    const task = getTaskById(activeTaskId);
+
+    if (!subtaskItem || !task) return;
+
+    updateTask(task.id, {
+      subtasks: task.subtasks.filter((subtask) => subtask.id !== subtaskItem.dataset.subtaskId),
+    });
+  });
+
+
+  document.addEventListener("click", (event) => {
+    const editButton = event.target.closest(".js-edit-subtask");
+    const saveButton = event.target.closest(".js-save-subtask");
+    const cancelButton = event.target.closest(".js-cancel-subtask-edit");
+
+    if (!activeTaskId || (!editButton && !saveButton && !cancelButton)) return;
+
+    const subtaskItem = event.target.closest("[data-subtask-id]");
+    const task = getTaskById(activeTaskId);
+
+    if (!subtaskItem || !task) return;
+
+    if (editButton) {
+      editingSubtaskId = subtaskItem.dataset.subtaskId;
+      renderTaskDetails(task);
+      document.querySelector(".js-subtask-edit-input")?.focus({ preventScroll: true });
+      return;
+    }
+
+    if (cancelButton) {
+      editingSubtaskId = null;
+      renderTaskDetails(task);
+      return;
+    }
+
+    const input = subtaskItem.querySelector(".js-subtask-edit-input");
+    const nextText = input?.value.trim();
+
+    if (!nextText) return;
+
+    editingSubtaskId = null;
+    updateTask(task.id, {
+      subtasks: task.subtasks.map((subtask) =>
+        subtask.id === subtaskItem.dataset.subtaskId ? { ...subtask, text: nextText } : subtask,
+      ),
+    });
   });
   document.querySelector(".js-task-detail-assignee-control")?.addEventListener("change", (event) => {
     const hiddenAssignee = detailsForm?.querySelector(".js-task-detail-assignee");
@@ -709,15 +1027,49 @@ function initTasks() {
   commentsForm?.addEventListener("submit", (event) => {
     event.preventDefault();
 
+    const task = getTaskById(activeTaskId);
+    const messageInput = commentsForm.querySelector(".js-task-comment-message");
+    const mentionInput = commentsForm.querySelector(".js-task-comment-mention");
     const error = commentsForm.querySelector(".js-task-comment-error");
+    const message = messageInput.value.trim();
+    const mention = mentionInput.value;
 
     if (error) {
       error.hidden = true;
       error.textContent = "";
     }
 
+    if (!task || !message) {
+      if (error) {
+        error.textContent = "Please write a comment before submitting.";
+        error.hidden = false;
+      }
+      return;
+    }
+
+    const nextComment = {
+      id: createId("comment"),
+      author: getCurrentUserName(),
+      mention,
+      message,
+      createdAt: new Date().toISOString(),
+    };
+
+    updateTask(task.id, { comments: [nextComment, ...task.comments] });
+    addNotification(`${getCurrentUserName()} commented on ${task.title}${mention ? ` and mentioned ${mention}` : ""}.`, task.id);
+    logTaskActivity({
+      icon: "chat",
+      title: `${getCurrentUserName()} commented on ${task.title}`,
+      summary: mention ? `Mentioned ${mention}` : message.slice(0, 90),
+      status: "Commented",
+      relatedLabel: task.client || "Task",
+      description: message,
+      details: [
+        ["Task", task.title],
+        ["Mention", mention || "No mention"],
+      ],
+    });
     commentsForm.reset();
-    showExamSafeTaskToast(TASK_COMMENTS_DISABLED_MESSAGE);
   });
 
   document.addEventListener("crm:open-task", (event) => {
@@ -725,6 +1077,21 @@ function initTasks() {
     if (taskId) openTaskDetails(taskId);
   });
 
+  document.querySelector(".js-move-task-recycle")?.addEventListener("click", () => {
+    if (!pendingDeleteTaskId) return;
+
+    moveTaskToRecycle(pendingDeleteTaskId);
+    pendingDeleteTaskId = null;
+    document.querySelector("#delete-task-modal [data-modal-close]")?.click();
+  });
+
+  document.querySelector(".js-delete-task-permanently")?.addEventListener("click", () => {
+    if (!pendingDeleteTaskId) return;
+
+    deleteTaskPermanently(pendingDeleteTaskId);
+    pendingDeleteTaskId = null;
+    document.querySelector("#delete-task-modal [data-modal-close]")?.click();
+  });
   addTaskForm?.addEventListener("submit", createTaskFromForm);
   addTaskForm?.addEventListener("input", clearTaskFormErrors);
   window.addEventListener("crm:clocktick", (event) => moveOverdueTasks(event.detail?.now || new Date()));

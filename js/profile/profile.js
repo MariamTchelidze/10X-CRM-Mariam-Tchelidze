@@ -85,8 +85,44 @@ function initProfile() {
     const container = document.querySelector(".js-profile-call-history");
     if (!container) return;
 
-    container.innerHTML =
-      '<p class="profile-call-history__empty">Call history is prepared for future Twilio integration.</p>';
+    const notes = storage.read("crm_call_notes", []);
+
+    if (!notes.length) {
+      container.innerHTML = '<p class="profile-call-history__empty">No call notes saved yet.</p>';
+      return;
+    }
+
+    container.innerHTML = notes
+      .slice(0, 6)
+      .map(
+        (item) => `
+          <article class="profile-call-history__item">
+            <div class="profile-call-history__meta">
+              <div>
+                <strong>${escapeHtml(item.clientName || "Manual number")}</strong>
+                <span>${escapeHtml(item.company || item.phone || "No phone saved")}</span>
+              </div>
+              <button
+                class="icon-btn icon-btn--danger profile-call-history__delete js-delete-call-note"
+                type="button"
+                data-note-id="${escapeHtml(item.id)}"
+                data-skip-delete-confirm
+                aria-label="Delete call note"
+              >
+                <img
+                  src="./assets/icons/Delete.svg"
+                  data-theme-src-dark="./assets/icons/Delete.svg"
+                  data-theme-src-light="./assets/icons/Delete-light-theme.svg"
+                  alt=""
+                />
+              </button>
+            </div>
+            <p>${escapeHtml(item.note)}</p>
+            <time>${formatDate(item.createdAt)}</time>
+          </article>
+        `,
+      )
+      .join("");
   };
 
   /* --- Statistics helper derives private profile KPIs from CRM clients. --- */
