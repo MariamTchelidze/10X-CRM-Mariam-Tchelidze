@@ -19,6 +19,8 @@ const normalizeOrigin = (origin = "") => origin.replace(/\/$/, "");
 
 const allowedOrigins = [
   ...env.clientUrl.split(","),
+  "https://10xsensai.xyz",
+  "https://www.10xsensai.xyz",
   "http://localhost:5500",
   "http://127.0.0.1:5500",
   "http://localhost:5173",
