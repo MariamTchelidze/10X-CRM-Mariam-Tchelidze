@@ -28,6 +28,7 @@ import "./components/pageSwap.js";
 
 /* --- Authentication Pages --- */
 import "./auth/validation.js";
+import "./auth/googleAuthPlaceholder.js";
 import "./auth/forgotPassword.js";
 import "./auth/logout.js";
 import "./auth/login.js";
