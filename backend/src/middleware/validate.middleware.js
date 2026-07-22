@@ -45,6 +45,32 @@ export const validateLogin = (request, response, next) => {
   next();
 };
 
+export const validateChangePassword = (request, response, next) => {
+  const { currentPassword, newPassword, confirmPassword } = request.body;
+
+  if (!currentPassword) {
+    throw new ApiError(400, "Current password is required.");
+  }
+
+  if (!newPassword || String(newPassword).length < 8) {
+    throw new ApiError(400, "New password must contain at least 8 characters.");
+  }
+
+  if (!latinPasswordPattern.test(String(newPassword))) {
+    throw new ApiError(400, "New password can contain only Latin letters, numbers, and common symbols.");
+  }
+
+  if (newPassword === currentPassword) {
+    throw new ApiError(400, "New password must be different from the current one.");
+  }
+
+  if (confirmPassword !== newPassword) {
+    throw new ApiError(400, "Passwords do not match.");
+  }
+
+  next();
+};
+
 export const validateClient = (request, response, next) => {
   const { name, company, email, phone, status, dealValue } = request.body;
   const isCreateRequest = request.method === "POST";

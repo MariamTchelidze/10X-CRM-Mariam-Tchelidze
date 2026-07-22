@@ -89,6 +89,13 @@
     });
   };
 
+  const changePasswordRequest = async ({ currentPassword, newPassword, confirmPassword }) => {
+    return requestJson("/auth/password", {
+      method: "PATCH",
+      body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+    });
+  };
+
   /* --- Small display helpers keep API cards readable. --- */
   const getInitials = (name = "") =>
     name
@@ -350,6 +357,7 @@
     warmBackend,
     authRequest,
     deleteAccountRequest,
+    changePasswordRequest,
     fetchInitialClients,
     fetchDemoClients,
     postClient,

@@ -80,6 +80,29 @@ export const getMe = asyncHandler(async (request, response) => {
   });
 });
 
+export const changePassword = asyncHandler(async (request, response) => {
+  const { currentPassword, newPassword } = request.body;
+  const user = await User.findById(request.user._id).select("+password");
+
+  if (!user) {
+    throw new ApiError(401, "The user connected to this session no longer exists.");
+  }
+
+  const passwordIsCorrect = await comparePasswords(currentPassword, user.password);
+
+  if (!passwordIsCorrect) {
+    throw new ApiError(401, "Current password is incorrect.");
+  }
+
+  user.password = await hashPassword(newPassword);
+  await user.save();
+
+  response.status(200).json({
+    status: "success",
+    message: "Password changed successfully.",
+  });
+});
+
 export const deleteAccount = asyncHandler(async (request, response) => {
   const password = request.body.password;
   const user = await User.findById(request.user._id).select("+password");

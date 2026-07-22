@@ -21,7 +21,7 @@ function initProfile() {
   const callNoteDeleteCancelButtons = document.querySelectorAll(".js-cancel-call-note-delete");
   let pendingCallNoteId = null;
 
-  if (!constants || !storage || !validation || !passwordForm) return;
+  if (!constants || !storage || !validation || !data || !passwordForm) return;
 
   /* --- Form references collect editable profile and password fields. --- */
   const profileNameInput = profileForm?.querySelector("#profile-name");
@@ -34,6 +34,22 @@ function initProfile() {
   const currentPasswordInput = passwordForm.querySelector("#current-password");
   const newPasswordInput = passwordForm.querySelector("#new-password");
   const confirmPasswordInput = passwordForm.querySelector("#confirm-new-password");
+
+  const setPasswordLoading = (isLoading) => {
+    const submitButton = passwordForm.querySelector("[type='submit']");
+    if (!submitButton) return;
+
+    if (isLoading) {
+      if (!submitButton.dataset.originalText) submitButton.dataset.originalText = submitButton.textContent;
+      submitButton.textContent = "Updating...";
+      submitButton.disabled = true;
+      return;
+    }
+
+    submitButton.textContent = submitButton.dataset.originalText || "Update Password";
+    submitButton.disabled = false;
+    delete submitButton.dataset.originalText;
+  };
 
   /* --- Account helpers read the active session and matching stored user. --- */
   const getUsers = () => storage.read(constants.USERS_KEY, []);
@@ -249,20 +265,24 @@ function initProfile() {
     window.crmToast?.show("Profile updated", "success");
   });
 
-  passwordForm.addEventListener("submit", (event) => {
+  passwordForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     validation.clearFormErrors(passwordForm);
 
     const currentUser = getCurrentUser();
-    const users = getUsers();
     const currentPassword = currentPasswordInput.value;
     const newPassword = newPasswordInput.value;
     const confirmPassword = confirmPasswordInput.value;
     let isValid = true;
 
-    if (!currentUser || currentPassword !== currentUser.password) {
-      validation.setFieldError(currentPasswordInput, "Current password is incorrect");
+    if (!currentUser) {
+      validation.setFieldError(currentPasswordInput, "Please log in again before changing your password");
+      isValid = false;
+    }
+
+    if (!currentPassword) {
+      validation.setFieldError(currentPasswordInput, "Current password is required");
       isValid = false;
     }
 
@@ -284,18 +304,27 @@ function initProfile() {
 
     if (!isValid) return;
 
-    const updatedUsers = users.map((user) =>
-      user.id === currentUser.id ? { ...user, password: newPassword } : user,
-    );
+    try {
+      setPasswordLoading(true);
 
-    storage.write(constants.USERS_KEY, updatedUsers);
-    storage.remove(constants.SESSION_KEY);
-    passwordForm.reset();
-    window.crmToast?.show("Password changed. Please log in again.", "success");
+      await data.changePasswordRequest({
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      });
 
-    window.setTimeout(() => {
-      window.location.href = constants.PAGES.login;
-    }, 1200);
+      storage.remove(constants.SESSION_KEY);
+      passwordForm.reset();
+      window.crmToast?.show("Password changed. Please log in again.", "success");
+
+      window.setTimeout(() => {
+        window.location.href = constants.PAGES.login;
+      }, 1200);
+    } catch (error) {
+      validation.setFieldError(currentPasswordInput, error.message || "Password could not be changed");
+    } finally {
+      setPasswordLoading(false);
+    }
   });
 
   resetButton?.addEventListener("click", async () => {
