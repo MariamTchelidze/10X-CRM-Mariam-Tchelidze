@@ -11,7 +11,6 @@
     callingEnabled: true,
     allowedNumber: "+995574431557",
   };
-  const data = window.crmData;
 
   /* --- Storage keys connect client phone numbers with saved call notes. --- */
   const CLIENTS_KEY = window.crmConstants?.CLIENTS_KEY || "crm_clients";
@@ -24,7 +23,6 @@
   const queueList = dialer.querySelector(".js-phone-queue");
   const noteForm = dialer.querySelector(".js-phone-note-form");
   const noteInput = dialer.querySelector(".js-phone-note");
-  const phoneModal = dialer.closest(".modal");
   /* --- Runtime phone state tracks the dialed number and selected client. --- */
   let currentNumber = "";
   let selectedClient = null;
@@ -78,31 +76,7 @@
     status.dataset.state = type;
   };
 
-  const setCallLoading = (isLoading) => {
-    if (!callButton) return;
-
-    if (isLoading) {
-      if (!callButton.dataset.originalHtml) callButton.dataset.originalHtml = callButton.innerHTML;
-      callButton.disabled = true;
-      callButton.textContent = "Calling...";
-      return;
-    }
-
-    callButton.disabled = false;
-    callButton.innerHTML = callButton.dataset.originalHtml || "Call";
-    delete callButton.dataset.originalHtml;
-  };
-
   const getClientsWithPhones = () => readArray(CLIENTS_KEY).filter((client) => normalizeNumber(client.phone));
-
-  const isPhoneModalOpen = () => {
-    return Boolean(phoneModal && !phoneModal.hidden && phoneModal.getAttribute("aria-hidden") !== "true");
-  };
-
-  const isTypingInField = (target) => {
-    const editableSelector = "input, textarea, select, [contenteditable='true']";
-    return Boolean(target?.closest?.(editableSelector));
-  };
 
   /* --- Call Queue Rendering --- */
   const renderQueue = () => {
@@ -163,22 +137,7 @@
     updateDisplay();
   });
 
-  document.addEventListener("keydown", (event) => {
-    if (!isPhoneModalOpen() || isTypingInField(event.target)) return;
-
-    if (/^\d$/.test(event.key) || event.key === "+") {
-      event.preventDefault();
-      addKey(event.key);
-      return;
-    }
-
-    if (event.key === "Backspace") {
-      event.preventDefault();
-      deleteButton.click();
-    }
-  });
-
-  callButton.addEventListener("click", async () => {
+  callButton.addEventListener("click", () => {
     const normalized = normalizeNumber(currentNumber);
 
     if (!normalized) {
@@ -210,39 +169,21 @@
       return;
     }
 
-    if (!data?.startPhoneCall) {
-      setStatus("CRM phone backend is not available.", "error");
-      return;
-    }
-
-    setCallLoading(true);
-    setStatus("Starting Twilio call...", "muted");
-
-    try {
-      const call = await data.startPhoneCall(normalized);
-      setStatus("Twilio call started successfully.", "success");
-      window.crmNotifications?.add("CRM Phone started a call.");
-      window.crmActivity?.add({
-        type: "phone",
-        icon: "phone",
-        title: "CRM Phone call started",
-        summary: `Calling ${selectedClient?.name || normalized}.`,
-        status: call?.twilioStatus || "Started",
-        relatedLabel: selectedClient?.name || normalized,
-        description: "A phone call was started through the CRM backend and Twilio.",
-        details: [
-          ["Phone", normalized],
-          ["Twilio call id", call?.id || "Pending"],
-        ],
-        actionHref: "./dashboard.html",
-        actionLabel: "Open Dashboard",
-      });
-    } catch (error) {
-      setStatus(error.message || "Twilio call could not be started.", "error");
-      window.crmToast?.show(error.message || "Twilio call could not be started.", "error");
-    } finally {
-      setCallLoading(false);
-    }
+    const message = "Opening device phone app.";
+    setStatus(message, "success");
+    window.crmNotifications?.add("CRM Phone started a call.");
+    window.crmActivity?.add({
+      type: "phone",
+      icon: "phone",
+      title: "CRM Phone call started",
+      summary: `Calling ${selectedClient?.name || normalized}.`,
+      status: "Started",
+      relatedLabel: selectedClient?.name || normalized,
+      description: "A phone call was started from the CRM application phone.",
+      actionHref: "./dashboard.html",
+      actionLabel: "Open Dashboard",
+    });
+    window.location.href = `tel:${normalized}`;
   });
 
   noteForm.addEventListener("submit", (event) => {
