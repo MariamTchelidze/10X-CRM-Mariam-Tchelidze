@@ -704,6 +704,8 @@
   .stats-grid,
   .client-summary {
     grid-template-columns: 1fr;
+    gap: $space-md;
+    margin-bottom: $space-lg;
   }
 
   .recent-client {
@@ -713,6 +715,23 @@
   .recent-client .status-badge {
     grid-column: 1 / -1;
     justify-self: start;
+  }
+
+  .welcome-panel,
+  .dashboard-panel-card,
+  .stats-card,
+  .task-column {
+    padding: $space-lg;
+  }
+
+  .dashboard-default-view,
+  .dashboard-section,
+  .task-board-section {
+    gap: $space-lg;
+  }
+
+  .dashboard-section__title {
+    font-size: 2.4rem;
   }
 }
 .dashboard-section__text {
@@ -1027,8 +1046,21 @@
 
 @include media(mobile) {
   .task-column__tools {
-    justify-content: flex-start;
+    justify-content: stretch;
     width: 100%;
+  }
+
+  .task-column__tools .btn {
+    width: 100%;
+  }
+
+  .task-column__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .task-column__title {
+    font-size: 1.7rem;
   }
 }
 

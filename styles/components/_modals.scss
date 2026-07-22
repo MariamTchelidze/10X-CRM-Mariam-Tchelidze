@@ -360,9 +360,57 @@ body[data-theme="light"] .modal {
     gap: $space-lg;
   }
 
+  .modal__header,
+  .modal__body,
+  .modal__footer {
+    padding: $space-md;
+  }
+
+  .modal__dialog--settings {
+    max-height: calc(100dvh - 2.4rem);
+  }
+
+  .modal__dialog--settings .modal__body {
+    padding-block: $space-md;
+  }
+
+  .modal__dialog--settings .settings-grid {
+    gap: $space-md;
+  }
+
+  .modal__dialog--settings .settings-group {
+    padding: $space-md;
+  }
+
+  .modal__dialog--settings .settings-options {
+    gap: $space-sm;
+    margin-top: $space-sm;
+  }
+
+  .modal__dialog--settings .settings-option__content {
+    min-height: auto;
+    padding: $space-sm $space-md;
+  }
+
+  .modal__dialog--settings .settings-option__text,
+  .modal__dialog--settings .settings-group__hint,
+  .modal__dialog--settings .settings-danger__text {
+    font-size: 1.2rem;
+  }
+
   .settings-color-row {
     align-items: stretch;
     flex-direction: column;
+    gap: $space-md;
+    margin-top: $space-sm;
+  }
+
+  .settings-danger {
+    gap: $space-md;
+  }
+
+  .settings-danger .btn {
+    min-height: 4.2rem;
   }
 }
 

@@ -221,10 +221,11 @@
 }
 
 .sidebar-dropdown__summary {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
+  gap: $space-md;
   cursor: pointer;
   list-style: none;
 }
@@ -236,6 +237,7 @@
 .sidebar-dropdown__label {
   display: inline-flex;
   align-items: center;
+  flex: 1 1 auto;
   min-width: 0;
   gap: $space-md;
 }
@@ -379,6 +381,11 @@
     backdrop-filter: blur(1.2rem);
   }
 
+  body.modal-open .sidebar-toggle {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .sidebar-toggle__icon {
     width: 2rem;
     height: 2rem;
@@ -475,7 +482,7 @@
   }
 
   .sidebar-dropdown__summary {
-    justify-content: initial;
+    justify-content: space-between;
   }
 
   .sidebar__link span {
@@ -536,19 +543,40 @@
 
 @include media(mobile) {
   .app-main {
-    padding: $space-lg;
+    padding: $space-md;
   }
 
   .app-header__content {
-    padding-left: 4.8rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: $space-sm;
+    padding-left: 5.2rem;
   }
 
   .app-header__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     gap: $space-sm;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .app-header__eyebrow {
+    display: none;
+  }
+
+  .app-header__title {
+    font-size: clamp(2.6rem, 8vw, 3.2rem);
+    line-height: 1.08;
+    overflow-wrap: normal;
   }
 
   .date-card {
-    min-width: 0;
+    flex: 1 1 13.6rem;
+    min-width: 12.8rem;
+    max-width: 15.2rem;
     padding: 0.7rem 0.9rem;
   }
 
@@ -558,10 +586,33 @@
   }
 
   .date-card__value {
-    font-size: 1.2rem;
+    overflow: hidden;
+    font-size: 1.1rem;
+    text-overflow: ellipsis;
   }
 
   .date-card__clock {
-    font-size: 1.1rem;
+    font-size: 1rem;
+  }
+
+  .notification-button {
+    flex: 0 0 4rem;
+    width: 4rem;
+    height: 4rem;
+    min-height: 4rem;
+  }
+
+  .sidebar {
+    width: min(28.8rem, calc(100vw - 3.2rem));
+    padding: 6.8rem $space-lg $space-lg;
+  }
+
+  .sidebar-dropdown__summary,
+  .sidebar-dropdown__label {
+    flex-direction: row;
+  }
+
+  .sidebar-dropdown__label span {
+    display: inline-block;
   }
 }

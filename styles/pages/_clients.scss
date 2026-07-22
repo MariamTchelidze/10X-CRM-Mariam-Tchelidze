@@ -158,7 +158,7 @@
 
 @include media(tablet) {
   .clients-page .app-header__content .btn {
-    width: 100%;
+    width: auto;
   }
 
   .client-toolbar,
@@ -173,14 +173,113 @@
 }
 
 @include media(mobile) {
+  .clients-page .app-header__content .btn {
+    flex: 1 1 100%;
+    min-height: 4.2rem;
+    padding-inline: 1.2rem;
+  }
+
+  .clients-page .app-header__actions {
+    flex-wrap: wrap;
+  }
+
+  .client-workspace {
+    overflow-x: hidden;
+  }
+
+  .client-toolbar {
+    gap: $space-lg;
+  }
+
+  .client-toolbar__actions {
+    gap: $space-md;
+  }
+
+  .client-toolbar__actions > * {
+    flex-basis: auto;
+  }
+
+  .client-toolbar__actions .search-field,
+  .client-toolbar__actions .select-field {
+    position: relative;
+    display: block;
+    min-width: 0;
+  }
+
+  .client-toolbar__actions .search-field__icon,
+  .client-toolbar__actions .select-field__icon-preview {
+    position: absolute;
+    top: 50%;
+    left: 1.4rem;
+    transform: translateY(-50%);
+  }
+
+  .client-toolbar__actions .search-field__input,
+  .client-toolbar__actions .select-field__control {
+    display: block;
+    min-height: 4.8rem;
+  }
+
+  .client-filters {
+    padding: $space-md $space-lg;
+  }
+
   .client-list {
+    gap: $space-md;
     padding: $space-lg;
+  }
+
+  .client-card {
+    gap: $space-lg;
+    padding: $space-lg;
+  }
+
+  .client-card__main {
+    align-items: flex-start;
+  }
+
+  .client-card__avatar {
+    width: 4.8rem;
+    height: 4.8rem;
+  }
+
+  .client-card__name,
+  .client-card__company,
+  .client-card__meta dd {
+    white-space: normal;
+  }
+
+  .client-card__meta {
+    gap: $space-md;
+  }
+
+  .client-card__meta dd {
+    margin-top: $space-xs;
   }
 
   .client-card__footer,
   .client-card__actions {
-    align-items: stretch;
-    flex-direction: column;
+    align-items: center;
+  }
+
+  .client-card__footer {
+    gap: $space-md;
+  }
+
+  .client-card__footer .status-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .client-card__actions {
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .client-card__actions .icon-btn {
+    width: 4.2rem;
+    height: 4.2rem;
   }
 }
 .select-field--icon {
