@@ -7,6 +7,8 @@
   const storage = window.crmStorage;
   const API_URL = constants?.API_BASE_URL || "http://localhost:5000/api";
   const statuses = ["lead", "contacted", "won", "lost"];
+  const DEFAULT_TIMEOUT_MS = 20000;
+  const AUTH_TIMEOUT_MS = 45000;
 
   /* --- Adds response status to errors so UI can show better feedback. --- */
   const createApiError = (message, response) => {
@@ -31,30 +33,53 @@
       throw new Error("Login is required before calling this API.");
     }
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...getAuthHeaders(),
-        ...(options.headers || {}),
-      },
-    });
+    const controller = new AbortController();
+    const timeoutMs = options.timeoutMs || DEFAULT_TIMEOUT_MS;
+    const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
 
-    const payload = response.status === 204 ? null : await response.json().catch(() => null);
+    try {
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        ...options,
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+          ...(options.headers || {}),
+        },
+      });
 
-    if (!response.ok) {
-      throw createApiError(payload?.message || "Request failed.", response);
+      const payload = response.status === 204 ? null : await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw createApiError(payload?.message || "Request failed.", response);
+      }
+
+      return payload;
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error("The server is taking longer than expected. Please try again in a few seconds.");
+      }
+
+      throw error;
+    } finally {
+      window.clearTimeout(timeoutId);
     }
-
-    return payload;
   };
 
   const authRequest = async (endpoint, body) => {
     return requestJson(endpoint, {
       method: "POST",
       requireAuth: false,
+      timeoutMs: AUTH_TIMEOUT_MS,
       body: JSON.stringify(body),
     });
+  };
+
+  const warmBackend = () => {
+    return requestJson("/health", {
+      requireAuth: false,
+      timeoutMs: 12000,
+    }).catch(() => null);
   };
 
   const deleteAccountRequest = async (password) => {
@@ -100,6 +125,54 @@
   const fetchInitialClients = async () => {
     const data = await requestJson("/clients");
     return data.clients || [];
+  };
+
+  const fetchDemoClients = async () => {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+
+    try {
+      const response = await fetch("https://dummyjson.com/users?limit=8", {
+        signal: controller.signal,
+      });
+      const data = await response.json();
+      return (data.users || []).map(mapApiUserToClient);
+    } catch (error) {
+      return [
+        {
+          name: "Emily Johnson",
+          email: "emily.johnson@example.com",
+          phone: "+81 965-431-3024",
+          company: "Dooley, Kozey and Cronin",
+          status: "lead",
+          dealValue: 2500,
+          notes: [],
+          createdAt: new Date().toISOString(),
+        },
+        {
+          name: "Michael Williams",
+          email: "michael.williams@example.com",
+          phone: "+49 258-627-6644",
+          company: "Spinka - Dickinson",
+          status: "contacted",
+          dealValue: 3250,
+          notes: [],
+          createdAt: new Date(Date.now() - 86400000).toISOString(),
+        },
+        {
+          name: "Sophia Brown",
+          email: "sophia.brown@example.com",
+          phone: "+81 210-652-2785",
+          company: "Schiller - Zieme",
+          status: "won",
+          dealValue: 4000,
+          notes: [],
+          createdAt: new Date(Date.now() - 172800000).toISOString(),
+        },
+      ];
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
   };
 
   /* --- POST creates a client in MongoDB for the active account. --- */
@@ -264,9 +337,11 @@
 
   window.crmData = {
     hasApiSession,
+    warmBackend,
     authRequest,
     deleteAccountRequest,
     fetchInitialClients,
+    fetchDemoClients,
     postClient,
     updateClientRequest,
     deleteClientRequest,
@@ -293,4 +368,6 @@
     getInitials,
     formatStatus,
   };
+
+  warmBackend();
 })();

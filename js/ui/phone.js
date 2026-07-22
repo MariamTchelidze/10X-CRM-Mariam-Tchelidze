@@ -9,7 +9,7 @@
   /* --- Call config keeps browser tel links disabled until the user enables calling. --- */
   const PHONE_CONFIG = {
     callingEnabled: true,
-    allowedNumber: "",
+    allowedNumber: "+995574431557",
   };
 
   /* --- Storage keys connect client phone numbers with saved call notes. --- */
@@ -23,6 +23,7 @@
   const queueList = dialer.querySelector(".js-phone-queue");
   const noteForm = dialer.querySelector(".js-phone-note-form");
   const noteInput = dialer.querySelector(".js-phone-note");
+  const phoneModal = dialer.closest(".modal");
   /* --- Runtime phone state tracks the dialed number and selected client. --- */
   let currentNumber = "";
   let selectedClient = null;
@@ -77,6 +78,15 @@
   };
 
   const getClientsWithPhones = () => readArray(CLIENTS_KEY).filter((client) => normalizeNumber(client.phone));
+
+  const isPhoneModalOpen = () => {
+    return Boolean(phoneModal && !phoneModal.hidden && phoneModal.getAttribute("aria-hidden") !== "true");
+  };
+
+  const isTypingInField = (target) => {
+    const editableSelector = "input, textarea, select, [contenteditable='true']";
+    return Boolean(target?.closest?.(editableSelector));
+  };
 
   /* --- Call Queue Rendering --- */
   const renderQueue = () => {
@@ -135,6 +145,21 @@
     selectedClient = null;
     setStatus(currentNumber ? "Last digit removed." : "Number cleared.", "muted");
     updateDisplay();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!isPhoneModalOpen() || isTypingInField(event.target)) return;
+
+    if (/^\d$/.test(event.key) || event.key === "+") {
+      event.preventDefault();
+      addKey(event.key);
+      return;
+    }
+
+    if (event.key === "Backspace") {
+      event.preventDefault();
+      deleteButton.click();
+    }
   });
 
   callButton.addEventListener("click", () => {

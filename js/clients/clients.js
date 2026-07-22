@@ -23,6 +23,7 @@ function initClients() {
   const error = document.getElementById("clients-error");
   const errorMessage = document.querySelector(".js-clients-error-message");
   const empty = document.getElementById("clients-empty");
+  const importClientsButton = document.querySelector(".js-import-clients");
   const form = document.querySelector(".js-client-form");
   const openClientModalButton = document.querySelector(".js-open-client-modal");
   const clientModalTitle = document.getElementById("client-modal-title");
@@ -88,6 +89,7 @@ function initClients() {
 
   const getAsyncErrorMessage = (error, fallback = DEFAULT_CLIENTS_ERROR) => {
     if (!navigator.onLine) return "You appear to be offline. Check your connection and try again.";
+    if (error?.message && !error.status) return error.message;
     return error?.status ? `${fallback} Status: ${error.status}.` : fallback;
   };
 
@@ -641,6 +643,40 @@ function initClients() {
       window.crmToast?.show(message, "error");
     } finally {
       setButtonLoading(retryButton, false);
+    }
+  };
+
+  const importStarterClients = async () => {
+    if (!data.fetchDemoClients || !data.postClient) return;
+
+    setButtonLoading(importClientsButton, true, "Importing...");
+
+    try {
+      const starterClients = await data.fetchDemoClients();
+      const existingEmails = new Set(clients.map((client) => client.email));
+      const clientsToImport = starterClients.filter((client) => !existingEmails.has(String(client.email || "").toLowerCase()));
+
+      if (!clientsToImport.length) {
+        window.crmToast?.show("Starter clients are already imported.", "info");
+        return;
+      }
+
+      const importedClients = await Promise.all(clientsToImport.map((client) => data.postClient(client)));
+      setClients([...importedClients, ...clients]);
+      renderClients();
+      logClientActivity({
+        title: "Starter clients imported",
+        summary: `${importedClients.length} clients were imported into this account.`,
+        status: "Imported",
+        relatedLabel: "Clients",
+        description: "Starter clients were fetched and saved through the backend clients API.",
+        details: [["Imported clients", String(importedClients.length)]],
+      });
+      window.crmToast?.show(`${importedClients.length} starter clients imported.`, "success");
+    } catch (importError) {
+      window.crmToast?.show(getAsyncErrorMessage(importError, "Starter clients could not be imported."), "error");
+    } finally {
+      setButtonLoading(importClientsButton, false);
     }
   };
 
@@ -1205,6 +1241,7 @@ function initClients() {
   });
 
   retryButton?.addEventListener("click", loadClients);
+  importClientsButton?.addEventListener("click", importStarterClients);
   searchInput?.addEventListener("input", renderClients);
   sortSelect?.addEventListener("change", renderClients);
   statusFilters.forEach((button) => {
