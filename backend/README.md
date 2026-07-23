@@ -1,10 +1,10 @@
-# 10X CRM Backend
+# 10X CRM Backend ⚙️
 
 This folder will contain the Node.js, Express, MongoDB, and phone-service backend for the CRM.
 
 Current step: Phone settings API is wired.
 
-## Environment Setup
+## Environment Setup 🔐
 
 Create a private `.env` file from `.env.example`:
 
@@ -16,7 +16,7 @@ Then replace the placeholder `MONGO_URI` with your MongoDB Atlas connection stri
 
 Important: `.env` is ignored by Git and must not be pushed.
 
-## Local Test
+## Local Test 🧪
 
 ```bash
 cd backend
@@ -43,7 +43,6 @@ When MongoDB is connected, the health response should also include:
 Production frontend origins:
 
 ```text
-https://10-x-crm-mariam-tchelidze.vercel.app
 https://10xsensai.xyz
 ```
 
@@ -61,7 +60,7 @@ Planned build order:
 8. Phone settings API. Done.
 9. Twilio phone service integration. Done.
 
-## Twilio Call API Test Order
+## Twilio Call API Test Order ☎️
 
 The phone call endpoint requires the login token:
 
@@ -71,7 +70,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 The backend only allows one exam-safe destination number through `ALLOWED_CALL_NUMBER`.
 
-### Start a call
+### Start a call 📞
 
 ```http
 POST http://localhost:5000/api/phone/call
@@ -87,11 +86,11 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 Expected result: `200 OK` with a Twilio call id and status when Twilio environment variables are configured.
 
-## Auth API Test Order
+## Auth API Test Order 🔑
 
 Use Thunder Client, Postman, or another API client while `npm run dev` is running.
 
-### Sign up
+### Sign up 📝
 
 ```http
 POST http://localhost:5000/api/auth/signup
@@ -110,7 +109,7 @@ Content-Type: application/json
 
 Expected result: `201 Created`, a `token`, and a safe `user` object without the password.
 
-### Log in
+### Log in 🔓
 
 ```http
 POST http://localhost:5000/api/auth/login
@@ -126,7 +125,7 @@ Content-Type: application/json
 
 Expected result: `200 OK`, a `token`, and the same safe `user` object.
 
-### Get current user
+### Get current user 👤
 
 ```http
 GET http://localhost:5000/api/auth/me
@@ -135,7 +134,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 Expected result: `200 OK` with the logged-in user's account data.
 
-## Clients API Test Order
+## Clients API Test Order 👥
 
 All clients endpoints require the login token:
 
@@ -143,7 +142,7 @@ All clients endpoints require the login token:
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-### List clients
+### List clients 📋
 
 ```http
 GET http://localhost:5000/api/clients
@@ -155,7 +154,7 @@ Optional filters:
 ?status=lead&search=alpha&sort=value-desc
 ```
 
-### Create client
+### Create client ➕
 
 ```http
 POST http://localhost:5000/api/clients
@@ -176,14 +175,14 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Get one client
+### Get one client 🔎
 
 ```http
 GET http://localhost:5000/api/clients/CLIENT_ID
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-### Update client
+### Update client ✏️
 
 ```http
 PATCH http://localhost:5000/api/clients/CLIENT_ID
@@ -198,14 +197,14 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Delete client
+### Delete client 🗑️
 
 ```http
 DELETE http://localhost:5000/api/clients/CLIENT_ID
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-## Tasks API Test Order
+## Tasks API Test Order 🗒️
 
 All task endpoints require the login token:
 
@@ -213,7 +212,7 @@ All task endpoints require the login token:
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-### List tasks
+### List tasks 📋
 
 ```http
 GET http://localhost:5000/api/tasks
@@ -225,7 +224,7 @@ Optional filters:
 ?status=todo&archived=false&deleted=false
 ```
 
-### Create task
+### Create task ➕
 
 ```http
 POST http://localhost:5000/api/tasks
@@ -251,7 +250,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Update task
+### Update task ✏️
 
 ```http
 PATCH http://localhost:5000/api/tasks/TASK_ID
@@ -272,14 +271,14 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Delete task permanently
+### Delete task permanently 🗑️
 
 ```http
 DELETE http://localhost:5000/api/tasks/TASK_ID
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-## Notifications API Test Order
+## Notifications API Test Order 🔔
 
 All notification endpoints require the login token:
 
@@ -287,13 +286,13 @@ All notification endpoints require the login token:
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-### List notifications
+### List notifications 📋
 
 ```http
 GET http://localhost:5000/api/notifications
 ```
 
-### Create notification
+### Create notification ➕
 
 ```http
 POST http://localhost:5000/api/notifications
@@ -308,7 +307,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Mark one notification read/selected
+### Mark one notification read/selected ✅
 
 ```http
 PATCH http://localhost:5000/api/notifications/NOTIFICATION_ID
@@ -323,7 +322,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Batch actions
+### Batch actions ⚡
 
 ```http
 PATCH http://localhost:5000/api/notifications/mark-all-read
@@ -332,7 +331,7 @@ DELETE http://localhost:5000/api/notifications/selected
 DELETE http://localhost:5000/api/notifications/read
 ```
 
-## Activity API Test Order
+## Activity API Test Order 🕒
 
 All activity endpoints require the login token:
 
@@ -340,13 +339,13 @@ All activity endpoints require the login token:
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-### List activity
+### List activity 📋
 
 ```http
 GET http://localhost:5000/api/activity
 ```
 
-### Create activity
+### Create activity ➕
 
 ```http
 POST http://localhost:5000/api/activity
@@ -372,14 +371,14 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Clear activity
+### Clear activity 🧹
 
 ```http
 DELETE http://localhost:5000/api/activity
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-## Messenger API Test Order
+## Messenger API Test Order 💬
 
 All messenger endpoints require the login token:
 
@@ -387,7 +386,7 @@ All messenger endpoints require the login token:
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-### List conversations
+### List conversations 📋
 
 ```http
 GET http://localhost:5000/api/messages
@@ -395,7 +394,7 @@ GET http://localhost:5000/api/messages
 
 Expected result: a `conversations` object where each key is a teammate or department name.
 
-### Send message
+### Send message ✉️
 
 ```http
 POST http://localhost:5000/api/messages
@@ -413,27 +412,27 @@ Authorization: Bearer YOUR_TOKEN_HERE
 }
 ```
 
-### Clear one conversation
+### Clear one conversation 🧹
 
 ```http
 DELETE http://localhost:5000/api/messages/Sales%20Team
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-### Clear all messenger history
+### Clear all messenger history 🧹
 
 ```http
 DELETE http://localhost:5000/api/messages
 Authorization: Bearer YOUR_TOKEN_HERE
 ```
 
-## Phone Settings API Test Order
+## Phone Settings API Test Order ☎️
 
 The company phone settings endpoint stores the caller number that future Twilio calls will use.
 
 Only users with `owner` or `admin` role can update the company phone number. Other logged-in users can read the current phone settings.
 
-### Read phone settings
+### Read phone settings 🔎
 
 ```http
 GET http://localhost:5000/api/settings/phone
@@ -458,7 +457,7 @@ Expected result:
 }
 ```
 
-### Update phone settings
+### Update phone settings ✏️
 
 ```http
 PATCH http://localhost:5000/api/settings/phone
