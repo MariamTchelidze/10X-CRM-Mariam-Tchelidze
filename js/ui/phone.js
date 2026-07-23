@@ -23,6 +23,7 @@
   const queueList = dialer.querySelector(".js-phone-queue");
   const noteForm = dialer.querySelector(".js-phone-note-form");
   const noteInput = dialer.querySelector(".js-phone-note");
+  const phoneModal = dialer.closest(".modal");
   /* --- Runtime phone state tracks the dialed number and selected client. --- */
   let currentNumber = "";
   let selectedClient = null;
@@ -78,6 +79,14 @@
 
   const getClientsWithPhones = () => readArray(CLIENTS_KEY).filter((client) => normalizeNumber(client.phone));
 
+  const phoneModalIsOpen = () => {
+    return Boolean(phoneModal && !phoneModal.hidden && phoneModal.getAttribute("aria-hidden") !== "true");
+  };
+
+  const userIsTypingInFormField = (target) => {
+    return Boolean(target?.closest?.("input, textarea, select, [contenteditable='true']"));
+  };
+
   /* --- Call Queue Rendering --- */
   const renderQueue = () => {
     const clients = getClientsWithPhones().slice(0, 6);
@@ -130,10 +139,47 @@
     }
   });
 
-  deleteButton.addEventListener("click", () => {
+  const removeLastCharacter = () => {
     currentNumber = normalizeNumber(currentNumber).slice(0, -1);
     selectedClient = null;
     setStatus(currentNumber ? "Last digit removed." : "Number cleared.", "muted");
+    updateDisplay();
+  };
+
+  deleteButton.addEventListener("click", () => {
+    currentNumber = "";
+    selectedClient = null;
+    setStatus("Number cleared.", "muted");
+    updateDisplay();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!phoneModalIsOpen() || userIsTypingInFormField(event.target)) return;
+
+    if (/^\d$/.test(event.key) || event.key === "+") {
+      event.preventDefault();
+      addKey(event.key);
+      return;
+    }
+
+    if (event.key === "Backspace") {
+      event.preventDefault();
+      removeLastCharacter();
+    }
+  });
+
+  document.addEventListener("paste", (event) => {
+    if (!phoneModalIsOpen() || userIsTypingInFormField(event.target)) return;
+
+    const pastedText = event.clipboardData?.getData("text") || "";
+    const pastedNumber = normalizeNumber(pastedText);
+
+    if (!pastedNumber) return;
+
+    event.preventDefault();
+    currentNumber = pastedNumber;
+    selectedClient = null;
+    setStatus("Number pasted.", "muted");
     updateDisplay();
   });
 
