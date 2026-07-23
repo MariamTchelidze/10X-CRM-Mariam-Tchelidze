@@ -9,7 +9,7 @@
   /* --- Call config keeps browser tel links disabled until the user enables calling. --- */
   const PHONE_CONFIG = {
     callingEnabled: true,
-    allowedNumber: "+995574431557",
+    allowedNumber: "+916 0729 5644 8",
   };
   const data = window.crmData;
 
