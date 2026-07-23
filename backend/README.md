@@ -81,7 +81,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
 
 ```json
 {
-  "phoneNumber": "+995574431557"
+  "phoneNumber": "+995551128078"
 }
 ```
 
@@ -168,7 +168,7 @@ Authorization: Bearer YOUR_TOKEN_HERE
   "name": "Alpha Group",
   "company": "Alpha Group LLC",
   "email": "alpha@example.com",
-  "phone": "+995 574 431 557",
+  "phone": "+995 551 128 078",
   "country": "Georgia",
   "timezone": "Asia/Tbilisi",
   "status": "lead",
@@ -468,10 +468,10 @@ Authorization: Bearer OWNER_OR_ADMIN_TOKEN
 
 ```json
 {
-  "companyPhoneNumber": "+995574431557",
+  "companyPhoneNumber": "+995551128078",
   "callingEnabled": false,
   "callerIdStatus": "not_configured"
 }
 ```
 
-Phone numbers must use E.164 format: `+` plus country code and number, for example `+995574431557`.
+Phone numbers must use E.164 format: `+` plus country code and number, for example `+995551128078`.
