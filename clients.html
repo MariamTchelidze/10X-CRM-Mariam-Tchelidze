@@ -502,23 +502,35 @@
                 <span class="date-card__timezone js-live-timezone">Local time</span>
               </div>
             </div>
-            <button
-              class="btn btn--primary js-open-client-modal"
-              id="add-client-btn"
-              type="button"
-              data-modal-target="#client-modal"
-              aria-haspopup="dialog"
-              aria-controls="client-modal"
-            >
-              <img
-                src="./assets/icons/add.svg"
-                data-theme-src-dark="./assets/icons/add.svg"
-                data-theme-src-light="./assets/icons/add-light-theme.svg"
-                alt=""
-                class="btn__icon"
-              />
-              <span>Add Client</span>
-            </button>
+            <div class="clients-page__header-actions">
+              <button class="btn btn--secondary js-import-clients" type="button">
+                <img
+                  src="./assets/icons/upload.svg"
+                  data-theme-src-dark="./assets/icons/upload.svg"
+                  data-theme-src-light="./assets/icons/upload-light-theme.svg"
+                  alt=""
+                  class="btn__icon"
+                />
+                <span>Import Clients</span>
+              </button>
+              <button
+                class="btn btn--primary js-open-client-modal"
+                id="add-client-btn"
+                type="button"
+                data-modal-target="#client-modal"
+                aria-haspopup="dialog"
+                aria-controls="client-modal"
+              >
+                <img
+                  src="./assets/icons/add.svg"
+                  data-theme-src-dark="./assets/icons/add.svg"
+                  data-theme-src-light="./assets/icons/add-light-theme.svg"
+                  alt=""
+                  class="btn__icon"
+                />
+                <span>Add Client</span>
+              </button>
+            </div>
           </div>
         </header>
 

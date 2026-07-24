@@ -114,7 +114,7 @@
   };
 
   /* --- API Data Mapping --- */
-  const STARTER_CLIENT_LIMIT = 30;
+  const STARTER_CLIENT_LIMIT = 50;
 
   const mapApiUserToClient = (user, index = 0) => {
     const status = statuses[index % statuses.length];

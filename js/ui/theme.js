@@ -30,7 +30,7 @@
     if (storedTheme === THEMES.dark || storedTheme === THEMES.light) {
       return storedTheme;
     }
-
+    // default theme:
     return THEMES.dark;
   };
 

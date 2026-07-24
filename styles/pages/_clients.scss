@@ -137,6 +137,18 @@
   gap: $space-sm;
 }
 
+.clients-page__header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: $space-sm;
+}
+
+.clients-page__header-actions .btn {
+  min-height: 4.8rem;
+  white-space: nowrap;
+}
+
 @include media(laptop) {
   .client-list {
     min-width: 0;
@@ -157,8 +169,12 @@
 }
 
 @include media(tablet) {
-  .clients-page .app-header__content .btn {
-    width: auto;
+  .clients-page__header-actions {
+    width: 100%;
+  }
+
+  .clients-page__header-actions .btn {
+    flex: 1 1 16rem;
   }
 
   .client-toolbar,
@@ -173,8 +189,12 @@
 }
 
 @include media(mobile) {
-  .clients-page .app-header__content .btn {
-    flex: 1 1 100%;
+  .clients-page__header-actions {
+    gap: $space-xs;
+  }
+
+  .clients-page__header-actions .btn {
+    flex: 1 1 13rem;
     min-height: 4.2rem;
     padding-inline: 1.2rem;
   }

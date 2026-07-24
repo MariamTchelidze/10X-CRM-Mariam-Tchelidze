@@ -23,7 +23,7 @@ function initClients() {
   const error = document.getElementById("clients-error");
   const errorMessage = document.querySelector(".js-clients-error-message");
   const empty = document.getElementById("clients-empty");
-  const importClientsButton = document.querySelector(".js-import-clients");
+  const importClientsButtons = document.querySelectorAll(".js-import-clients");
   const form = document.querySelector(".js-client-form");
   const openClientModalButton = document.querySelector(".js-open-client-modal");
   const clientModalTitle = document.getElementById("client-modal-title");
@@ -724,7 +724,7 @@ function initClients() {
   const importStarterClients = async () => {
     if (!data.fetchDemoClients || !data.postClient) return;
 
-    setButtonLoading(importClientsButton, true, "Importing...");
+    importClientsButtons.forEach((button) => setButtonLoading(button, true, "Importing..."));
 
     try {
       const starterClients = await data.fetchDemoClients();
@@ -757,7 +757,7 @@ function initClients() {
     } catch (importError) {
       window.crmToast?.show(getAsyncErrorMessage(importError, "Starter clients could not be imported."), "error");
     } finally {
-      setButtonLoading(importClientsButton, false);
+      importClientsButtons.forEach((button) => setButtonLoading(button, false));
     }
   };
 
@@ -1333,7 +1333,7 @@ function initClients() {
   });
 
   retryButton?.addEventListener("click", loadClients);
-  importClientsButton?.addEventListener("click", importStarterClients);
+  importClientsButtons.forEach((button) => button.addEventListener("click", importStarterClients));
   searchInput?.addEventListener("input", renderClients);
   sortSelect?.addEventListener("change", renderClients);
   statusFilters.forEach((button) => {
