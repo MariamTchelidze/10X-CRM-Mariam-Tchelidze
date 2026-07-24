@@ -114,6 +114,8 @@
   };
 
   /* --- API Data Mapping --- */
+  const STARTER_CLIENT_LIMIT = 30;
+
   const mapApiUserToClient = (user, index = 0) => {
     const status = statuses[index % statuses.length];
     const name = `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.username || "Unnamed Client";
@@ -143,44 +145,25 @@
     const timeoutId = window.setTimeout(() => controller.abort(), 12000);
 
     try {
-      const response = await fetch("https://dummyjson.com/users?limit=8", {
+      const response = await fetch(`https://dummyjson.com/users?limit=${STARTER_CLIENT_LIMIT}`, {
         signal: controller.signal,
       });
       const data = await response.json();
-      return (data.users || []).map(mapApiUserToClient);
+      return (data.users || []).slice(0, STARTER_CLIENT_LIMIT).map(mapApiUserToClient);
     } catch (error) {
-      return [
-        {
-          name: "Emily Johnson",
-          email: "emily.johnson@example.com",
-          phone: "+81 965-431-3024",
-          company: "Dooley, Kozey and Cronin",
-          status: "lead",
-          dealValue: 2500,
-          notes: [],
-          createdAt: new Date().toISOString(),
-        },
-        {
-          name: "Michael Williams",
-          email: "michael.williams@example.com",
-          phone: "+49 258-627-6644",
-          company: "Spinka - Dickinson",
-          status: "contacted",
-          dealValue: 3250,
-          notes: [],
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-        },
-        {
-          name: "Sophia Brown",
-          email: "sophia.brown@example.com",
-          phone: "+81 210-652-2785",
-          company: "Schiller - Zieme",
-          status: "won",
-          dealValue: 4000,
-          notes: [],
-          createdAt: new Date(Date.now() - 172800000).toISOString(),
-        },
-      ];
+      return Array.from({ length: STARTER_CLIENT_LIMIT }, (_, index) =>
+        mapApiUserToClient(
+          {
+            id: `starter-${index + 1}`,
+            firstName: `Starter`,
+            lastName: `Client ${index + 1}`,
+            email: `starter.client${index + 1}@example.com`,
+            phone: `+995555${String(index + 1).padStart(4, "0")}`,
+            company: { name: `Demo Company ${index + 1}` },
+          },
+          index,
+        ),
+      );
     } finally {
       window.clearTimeout(timeoutId);
     }
