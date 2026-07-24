@@ -12,6 +12,7 @@ import activityRoutes from "./routes/activity.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import settingRoutes from "./routes/setting.routes.js";
 import phoneRoutes from "./routes/phone.routes.js";
+import teamRoutes from "./routes/team.routes.js";
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use("/api/activity", activityRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/phone", phoneRoutes);
+app.use("/api/team", teamRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -66,6 +66,7 @@ const clientSchema = new mongoose.Schema(
     phone: {
       type: String,
       trim: true,
+      match: [/^\+?\d+$/, "Phone can contain only + and numbers."],
       maxlength: [40, "Phone number must be shorter than 40 characters."],
       default: "",
     },

@@ -8,12 +8,16 @@
     const notesText = String(formData.get("notes") || "").trim();
     const timezoneSelect = form.querySelector("#client-timezone");
     const selectedTimezone = timezoneSelect?.selectedOptions?.[0];
+    const phone = String(formData.get("phone") || "")
+      .trim()
+      .replace(/[^\d+]/g, "")
+      .replace(/(?!^)\+/g, "");
 
     return {
       name: String(formData.get("name") || "").trim(),
       company: String(formData.get("company") || "").trim(),
       email: String(formData.get("email") || "").trim().toLowerCase(),
-      phone: String(formData.get("phone") || "").trim(),
+      phone,
       country: String(selectedTimezone?.dataset.country || "").trim(),
       timezone: String(formData.get("timezone") || "").trim(),
       status: String(formData.get("status") || "lead"),
@@ -46,7 +50,10 @@
       isValid = false;
     }
 
-    if (client.phone && client.phone.length < 6) {
+    if (client.phone && !/^\+?\d+$/.test(client.phone)) {
+      validation.setFieldError(form.querySelector("#client-phone"), "Phone can contain only + and numbers");
+      isValid = false;
+    } else if (client.phone && client.phone.length < 6) {
       validation.setFieldError(form.querySelector("#client-phone"), "Phone number looks too short");
       isValid = false;
     }

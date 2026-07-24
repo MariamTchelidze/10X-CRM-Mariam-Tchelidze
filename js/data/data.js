@@ -327,6 +327,21 @@
     return data.conversations || {};
   };
 
+  /* --- Team API Requests --- */
+  const fetchTeam = async () => {
+    const data = await requestJson("/team");
+    return data;
+  };
+
+  const postTeamMember = async (member) => {
+    const data = await requestJson("/team/members", {
+      method: "POST",
+      body: JSON.stringify(member),
+    });
+
+    return data.member;
+  };
+
   /* --- Phone Settings API Requests --- */
   const fetchPhoneSettings = async () => {
     const data = await requestJson("/settings/phone");
@@ -381,6 +396,8 @@
     postMessage,
     clearMessageConversation,
     clearAllMessages,
+    fetchTeam,
+    postTeamMember,
     fetchPhoneSettings,
     updatePhoneSettings,
     startPhoneCall,

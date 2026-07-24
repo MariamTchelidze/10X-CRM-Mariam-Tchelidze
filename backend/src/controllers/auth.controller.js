@@ -5,6 +5,7 @@ import { Message } from "../models/Message.js";
 import { Notification } from "../models/Notification.js";
 import { Setting } from "../models/Setting.js";
 import { Task } from "../models/Task.js";
+import { TeamMember } from "../models/TeamMember.js";
 import { hashPassword, comparePasswords } from "../services/auth.service.js";
 import { createAccessToken } from "../services/token.service.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -124,6 +125,7 @@ export const deleteAccount = asyncHandler(async (request, response) => {
     Activity.deleteMany({ owner: user._id }),
     Message.deleteMany({ owner: user._id }),
     Setting.deleteMany({ owner: user._id }),
+    TeamMember.deleteMany({ owner: user._id }),
   ]);
 
   await user.deleteOne();

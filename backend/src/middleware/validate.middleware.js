@@ -4,6 +4,7 @@ import { TASK_STATUSES } from "../constants/taskStatuses.js";
 
 const emailPattern = /^\S+@\S+\.(com|net|org)$/i;
 const latinPasswordPattern = /^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/;
+const phonePattern = /^\+?\d+$/;
 
 export const validateSignup = (request, response, next) => {
   const { fullName, email, password, confirmPassword } = request.body;
@@ -87,8 +88,16 @@ export const validateClient = (request, response, next) => {
     throw new ApiError(400, "Client email must be valid and end with .com, .net, or .org.");
   }
 
-  if (phone !== undefined && String(phone).trim() && String(phone).trim().length < 6) {
-    throw new ApiError(400, "Phone number looks too short.");
+  if (phone !== undefined && String(phone).trim()) {
+    const normalizedPhone = String(phone).trim();
+
+    if (!phonePattern.test(normalizedPhone)) {
+      throw new ApiError(400, "Phone can contain only + and numbers.");
+    }
+
+    if (normalizedPhone.length < 6) {
+      throw new ApiError(400, "Phone number looks too short.");
+    }
   }
 
   if (status !== undefined && !CLIENT_STATUSES.includes(status)) {
@@ -101,6 +110,30 @@ export const validateClient = (request, response, next) => {
     if (!Number.isFinite(parsedValue) || parsedValue < 0) {
       throw new ApiError(400, "Deal value must be a positive number.");
     }
+  }
+
+  next();
+};
+
+export const validateTeamMember = (request, response, next) => {
+  const { fullName, email, role, department } = request.body;
+  const allowedRoles = ["Manager", "Sales", "Support"];
+  const allowedDepartments = ["Management", "Sales Team", "Support Team"];
+
+  if (!String(fullName || "").trim() || String(fullName).trim().length < 2) {
+    throw new ApiError(400, "Team member name must contain at least 2 characters.");
+  }
+
+  if (!emailPattern.test(String(email || "").trim())) {
+    throw new ApiError(400, "Team member email must be valid and end with .com, .net, or .org.");
+  }
+
+  if (!allowedRoles.includes(role)) {
+    throw new ApiError(400, "Team member role must be Manager, Sales, or Support.");
+  }
+
+  if (!allowedDepartments.includes(department)) {
+    throw new ApiError(400, "Team member department must be Management, Sales Team, or Support Team.");
   }
 
   next();
