@@ -16,7 +16,9 @@
     return {
       name: String(formData.get("name") || "").trim(),
       company: String(formData.get("company") || "").trim(),
-      email: String(formData.get("email") || "").trim().toLowerCase(),
+      email: String(formData.get("email") || "")
+        .trim()
+        .toLowerCase(),
       phone,
       country: String(selectedTimezone?.dataset.country || "").trim(),
       timezone: String(formData.get("timezone") || "").trim(),
@@ -24,6 +26,22 @@
       dealValue: Number(formData.get("value")),
       notes: notesText ? [{ text: notesText, date: new Date().toLocaleString() }] : [],
     };
+  };
+
+  /* --- Restricts phone typing and pasted values to + at the start and digits only. --- */
+  const bindPhoneInputFilter = (form) => {
+    const phoneInput = form?.querySelector("#client-phone");
+
+    if (!phoneInput || phoneInput.dataset.phoneFilterBound === "true") return;
+
+    phoneInput.dataset.phoneFilterBound = "true";
+    phoneInput.addEventListener("input", () => {
+      const value = phoneInput.value.trim();
+      const startsWithPlus = value.startsWith("+");
+      const digitsOnly = value.replace(/[^0-9]/g, "");
+
+      phoneInput.value = `${startsWithPlus ? "+" : ""}${digitsOnly}`;
+    });
   };
 
   /* --- Validates required client fields and prevents duplicate emails. --- */
@@ -42,9 +60,7 @@
       validation.setFieldError(form.querySelector("#client-email"), "Please enter a valid email address");
       isValid = false;
     } else if (
-      clients.some((item) =>
-        item.email.toLowerCase() === client.email && String(item.id) !== String(ignoredClientId),
-      )
+      clients.some((item) => item.email.toLowerCase() === client.email && String(item.id) !== String(ignoredClientId))
     ) {
       validation.setFieldError(form.querySelector("#client-email"), "A client with this email already exists");
       isValid = false;
@@ -69,5 +85,6 @@
   window.crmClientForm = {
     getFormClient,
     validateClient,
+    bindPhoneInputFilter,
   };
 })();

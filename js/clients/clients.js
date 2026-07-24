@@ -58,6 +58,8 @@ function initClients() {
 
   if (!list) return;
 
+  formHelpers.bindPhoneInputFilter?.(form);
+
   /* --- Page State --- */
   let clients = [];
   let activeStatus = "all";
