@@ -10,27 +10,65 @@
   if (!protectedPage || !clockCards.length || !storage || !constants) return;
 
   const PHONE_TIMEZONES = [
+    /* 🇬🇪 Georgia & neighborhood*/
     { code: "+995", country: "Georgia", timezone: "Asia/Tbilisi" },
-    { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
+    { code: "+90", country: "Turkey", timezone: "Europe/Istanbul" },
+    { code: "+374", country: "Armenia", timezone: "Asia/Yerevan" },
+    { code: "+994", country: "Azerbaijan", timezone: "Asia/Baku" },
+
+    /* 🌍 G7 countries */
     { code: "+1", country: "United States / Canada", timezone: "America/New_York" },
     { code: "+44", country: "United Kingdom", timezone: "Europe/London" },
     { code: "+49", country: "Germany", timezone: "Europe/Berlin" },
     { code: "+33", country: "France", timezone: "Europe/Paris" },
     { code: "+39", country: "Italy", timezone: "Europe/Rome" },
+    { code: "+81", country: "Japan", timezone: "Asia/Tokyo" },
+
+    /*🇪🇺 Main European countries*/
     { code: "+34", country: "Spain", timezone: "Europe/Madrid" },
     { code: "+31", country: "Netherlands", timezone: "Europe/Amsterdam" },
     { code: "+48", country: "Poland", timezone: "Europe/Warsaw" },
-    { code: "+90", country: "Turkey", timezone: "Europe/Istanbul" },
-    { code: "+971", country: "United Arab Emirates", timezone: "Asia/Dubai" },
-    { code: "+91", country: "India", timezone: "Asia/Kolkata" },
-    { code: "+81", country: "Japan", timezone: "Asia/Tokyo" },
+    { code: "+41", country: "Switzerland", timezone: "Europe/Zurich" },
+    { code: "+43", country: "Austria", timezone: "Europe/Vienna" },
+    { code: "+32", country: "Belgium", timezone: "Europe/Brussels" },
+    { code: "+45", country: "Denmark", timezone: "Europe/Copenhagen" },
+    { code: "+46", country: "Sweden", timezone: "Europe/Stockholm" },
+    { code: "+47", country: "Norway", timezone: "Europe/Oslo" },
+    { code: "+358", country: "Finland", timezone: "Europe/Helsinki" },
+    { code: "+351", country: "Portugal", timezone: "Europe/Lisbon" },
+    { code: "+353", country: "Ireland", timezone: "Europe/Dublin" },
+    { code: "+420", country: "Czech Republic", timezone: "Europe/Prague" },
+    { code: "+380", country: "Ukraine", timezone: "Europe/Kyiv" },
+
+    /*💻 Asia's main Techno hubs*/
     { code: "+82", country: "South Korea", timezone: "Asia/Seoul" },
     { code: "+86", country: "China", timezone: "Asia/Shanghai" },
-    { code: "+61", country: "Australia", timezone: "Australia/Sydney" },
-    { code: "+55", country: "Brazil", timezone: "America/Sao_Paulo" },
-    { code: "+52", country: "Mexico", timezone: "America/Mexico_City" },
-  ].sort((a, b) => b.code.length - a.code.length);
+    { code: "+91", country: "India", timezone: "Asia/Kolkata" },
+    { code: "+65", country: "Singapore", timezone: "Asia/Singapore" },
 
+    /*🌏 Main Asian countries */
+    { code: "+971", country: "United Arab Emirates", timezone: "Asia/Dubai" },
+    { code: "+966", country: "Saudi Arabia", timezone: "Asia/Riyadh" },
+    { code: "+66", country: "Thailand", timezone: "Asia/Bangkok" },
+    { code: "+60", country: "Malaysia", timezone: "Asia/Kuala_Lumpur" },
+    { code: "+84", country: "Vietnam", timezone: "Asia/Ho_Chi_Minh" },
+
+    /*🌎 USA*/
+    { code: "+52", country: "Mexico", timezone: "America/Mexico_City" },
+    { code: "+55", country: "Brazil", timezone: "America/Sao_Paulo" },
+    { code: "+54", country: "Argentina", timezone: "America/Argentina/Buenos_Aires" },
+    { code: "+56", country: "Chile", timezone: "America/Santiago" },
+
+    /*🌍  Africa*/
+    { code: "+27", country: "South Africa", timezone: "Africa/Johannesburg" },
+    { code: "+20", country: "Egypt", timezone: "Africa/Cairo" },
+    { code: "+234", country: "Nigeria", timezone: "Africa/Lagos" },
+
+    /*🦘 Countries of Oceania*/
+    { code: "+61", country: "Australia", timezone: "Australia/Sydney" },
+    { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
+  ].sort((a, b) => b.code.length - a.code.length);
+  /* --- Escape HTML characters to prevent unsafe rendering. --- */
   const escapeHtml = (value) =>
     String(value || "")
       .replaceAll("&", "&amp;")
@@ -38,19 +76,21 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
-
+  /* --- Read and validate the stored clients list. --- */
   const readClients = () => {
     const clients = storage.read(constants.CLIENTS_KEY, []);
     return Array.isArray(clients) ? clients : [];
   };
-
+  /* --- Normalize phone numbers for country code matching. --- */
   const normalizePhone = (phone = "") => String(phone).replace(/[^\d+]/g, "");
+  /* --- Detect the client's country from the phone prefix. --- */
 
   const detectCountry = (phone = "") => {
     const normalized = normalizePhone(phone);
     if (!normalized.startsWith("+")) return null;
     return PHONE_TIMEZONES.find((item) => normalized.startsWith(item.code)) || null;
   };
+  /* --- Resolve the client's country and timezone information. --- */
 
   const getClientTimezone = (client) => {
     if (client?.country && client?.timezone) {
@@ -69,6 +109,7 @@
 
     return detectCountry(client?.phone);
   };
+  /* --- Format a time value for the selected timezone. --- */
 
   const formatTime = (date, timezone, includeSeconds = true) =>
     new Intl.DateTimeFormat("en-GB", {
@@ -78,6 +119,7 @@
       second: includeSeconds ? "2-digit" : undefined,
       hour12: false,
     }).format(date);
+  /* --- Format a date value for the selected timezone. --- */
 
   const formatDate = (date, timezone) =>
     new Intl.DateTimeFormat("en-GB", {
@@ -86,6 +128,7 @@
       day: "2-digit",
       month: "short",
     }).format(date);
+  /* --- Get the GMT offset of a timezone. --- */
 
   const getTimezoneOffset = (timezone, date = new Date()) => {
     const parts = new Intl.DateTimeFormat("en-US", {
@@ -94,6 +137,7 @@
     }).formatToParts(date);
     return parts.find((part) => part.type === "timeZoneName")?.value || timezone;
   };
+  /* --- Update modal icons based on the active theme. --- */
 
   const updateThemeAssets = (container) => {
     const theme = window.crmTheme?.getTheme?.() || document.body.dataset.theme || "dark";
@@ -102,6 +146,7 @@
       if (source) element.setAttribute("src", source);
     });
   };
+  /* --- Determine whether it is a suitable time to contact the client. --- */
 
   const getCallStatus = (date, timezone) => {
     const hour = Number(
@@ -116,6 +161,7 @@
     if ((hour >= 8 && hour < 9) || (hour >= 18 && hour < 20)) return { label: "Maybe acceptable", state: "warning" };
     return { label: "Late hours", state: "late" };
   };
+  /* --- Group clients by their detected country and timezone. --- */
 
   const getCountryGroups = () => {
     const groups = new Map();
@@ -141,6 +187,7 @@
       unknownCount,
     };
   };
+  /* --- Create the Live Clock modal when it does not already exist. --- */
 
   const ensureModal = () => {
     let modal = document.getElementById("live-clock-modal");
@@ -189,9 +236,13 @@
     `;
     document.body.append(modal);
     updateThemeAssets(modal);
+    /* --- Generate the animated clock ring. --- */
 
     const ring = modal.querySelector(".js-live-clock-ring");
-    ring.innerHTML = Array.from({ length: 60 }, (_, index) => `<span class="live-clock-ring__tick" style="--tick-index: ${index}"></span>`).join("");
+    ring.innerHTML = Array.from(
+      { length: 60 },
+      (_, index) => `<span class="live-clock-ring__tick" style="--tick-index: ${index}"></span>`,
+    ).join("");
 
     modal.querySelectorAll(".js-live-clock-close").forEach((button) => button.addEventListener("click", closeModal));
     modal.addEventListener("click", (event) => {
@@ -216,7 +267,7 @@
 
   const closeModal = () => {
     /* --- DOM references collect animated clock and country-time list elements. --- */
-  const modal = document.getElementById("live-clock-modal");
+    const modal = document.getElementById("live-clock-modal");
     if (!modal) return;
     modal.hidden = true;
     modal.dataset.modalState = "closed";
@@ -276,7 +327,7 @@
     const hours = now.getHours() % 12;
     const secondIndex = seconds;
     const minuteIndex = minutes;
-    const hourIndex = Math.round(((hours * 5) + minutes / 12)) % 60;
+    const hourIndex = Math.round(hours * 5 + minutes / 12) % 60;
 
     modal.querySelector(".js-live-clock-modal-time").textContent = formatTime(now, timezone);
     modal.querySelector(".js-live-clock-modal-date").textContent = formatDate(now, timezone);

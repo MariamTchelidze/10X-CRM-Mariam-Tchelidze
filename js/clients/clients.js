@@ -76,7 +76,7 @@ function initClients() {
 
   /* --- Small Formatting and Safety Helpers --- */
   const getSummaryElement = (id) => document.getElementById(id);
-
+  /* --- Escape HTML Characters to prevent unsafe rendering --- */
   const escapeHtml = (value = "") =>
     String(value)
       .replaceAll("&", "&amp;")
@@ -87,11 +87,14 @@ function initClients() {
 
   const createId = (prefix) => `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
+  /* --- Generate a user-friendly error message for asynchronous operations. --- */
+
   const getAsyncErrorMessage = (error, fallback = DEFAULT_CLIENTS_ERROR) => {
     if (!navigator.onLine) return "You appear to be offline. Check your connection and try again.";
     if (error?.message && !error.status) return error.message;
     return error?.status ? `${fallback} Status: ${error.status}.` : fallback;
   };
+  /* --- Toggle a button's loading state during asynchronous actions. --- */
 
   const setButtonLoading = (button, isLoading, loadingText = "Loading...") => {
     if (!button) return;
@@ -120,35 +123,75 @@ function initClients() {
 
   /* --- Phone-code timezone map supports client country clocks and manual clients. --- */
   const CLIENT_TIMEZONES = [
+    /* 🇬🇪 Georgia & neighborhood*/
     { code: "+995", country: "Georgia", timezone: "Asia/Tbilisi" },
-    { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
+    { code: "+90", country: "Turkey", timezone: "Europe/Istanbul" },
+    { code: "+374", country: "Armenia", timezone: "Asia/Yerevan" },
+    { code: "+994", country: "Azerbaijan", timezone: "Asia/Baku" },
+
+    /* 🌍 G7 countries */
     { code: "+1", country: "United States / Canada", timezone: "America/New_York" },
     { code: "+44", country: "United Kingdom", timezone: "Europe/London" },
     { code: "+49", country: "Germany", timezone: "Europe/Berlin" },
     { code: "+33", country: "France", timezone: "Europe/Paris" },
     { code: "+39", country: "Italy", timezone: "Europe/Rome" },
+    { code: "+81", country: "Japan", timezone: "Asia/Tokyo" },
+
+    /*🇪🇺 Main European countries*/
     { code: "+34", country: "Spain", timezone: "Europe/Madrid" },
     { code: "+31", country: "Netherlands", timezone: "Europe/Amsterdam" },
     { code: "+48", country: "Poland", timezone: "Europe/Warsaw" },
-    { code: "+90", country: "Turkey", timezone: "Europe/Istanbul" },
-    { code: "+971", country: "United Arab Emirates", timezone: "Asia/Dubai" },
-    { code: "+91", country: "India", timezone: "Asia/Kolkata" },
-    { code: "+81", country: "Japan", timezone: "Asia/Tokyo" },
+    { code: "+41", country: "Switzerland", timezone: "Europe/Zurich" },
+    { code: "+43", country: "Austria", timezone: "Europe/Vienna" },
+    { code: "+32", country: "Belgium", timezone: "Europe/Brussels" },
+    { code: "+45", country: "Denmark", timezone: "Europe/Copenhagen" },
+    { code: "+46", country: "Sweden", timezone: "Europe/Stockholm" },
+    { code: "+47", country: "Norway", timezone: "Europe/Oslo" },
+    { code: "+358", country: "Finland", timezone: "Europe/Helsinki" },
+    { code: "+351", country: "Portugal", timezone: "Europe/Lisbon" },
+    { code: "+353", country: "Ireland", timezone: "Europe/Dublin" },
+    { code: "+420", country: "Czech Republic", timezone: "Europe/Prague" },
+    { code: "+380", country: "Ukraine", timezone: "Europe/Kyiv" },
+
+    /*💻 Asia's main Techno hubs*/
     { code: "+82", country: "South Korea", timezone: "Asia/Seoul" },
     { code: "+86", country: "China", timezone: "Asia/Shanghai" },
-    { code: "+61", country: "Australia", timezone: "Australia/Sydney" },
-    { code: "+55", country: "Brazil", timezone: "America/Sao_Paulo" },
+    { code: "+91", country: "India", timezone: "Asia/Kolkata" },
+    { code: "+65", country: "Singapore", timezone: "Asia/Singapore" },
+
+    /*🌏 Main Asian countries */
+    { code: "+971", country: "United Arab Emirates", timezone: "Asia/Dubai" },
+    { code: "+966", country: "Saudi Arabia", timezone: "Asia/Riyadh" },
+    { code: "+66", country: "Thailand", timezone: "Asia/Bangkok" },
+    { code: "+60", country: "Malaysia", timezone: "Asia/Kuala_Lumpur" },
+    { code: "+84", country: "Vietnam", timezone: "Asia/Ho_Chi_Minh" },
+
+    /*🌎 USA*/
     { code: "+52", country: "Mexico", timezone: "America/Mexico_City" },
+    { code: "+55", country: "Brazil", timezone: "America/Sao_Paulo" },
+    { code: "+54", country: "Argentina", timezone: "America/Argentina/Buenos_Aires" },
+    { code: "+56", country: "Chile", timezone: "America/Santiago" },
+
+    /*🌍  Africa*/
+    { code: "+27", country: "South Africa", timezone: "Africa/Johannesburg" },
+    { code: "+20", country: "Egypt", timezone: "Africa/Cairo" },
+    { code: "+234", country: "Nigeria", timezone: "Africa/Lagos" },
+
+    /*🦘 Countries of Oceania*/
+    { code: "+61", country: "Australia", timezone: "Australia/Sydney" },
+    { code: "+64", country: "New Zealand", timezone: "Pacific/Auckland" },
   ].sort((a, b) => b.code.length - a.code.length);
 
   /* --- Timezone helpers infer country data from international phone numbers. --- */
   const normalizePhone = (phone = "") => String(phone).replace(/[^\d+]/g, "");
+  /* --- Detect a client's timezone from their international phone number. --- */
 
   const detectClientTimezone = (phone = "") => {
     const normalized = normalizePhone(phone);
     if (!normalized.startsWith("+")) return null;
     return CLIENT_TIMEZONES.find((item) => normalized.startsWith(item.code)) || null;
   };
+  /* --- Generate a readable timezone label for a client. --- */
 
   const getTimezoneLabel = (client) => {
     const country = client?.country || "";
@@ -177,13 +220,12 @@ function initClients() {
       taskTitle: note.taskTitle || "",
     };
   };
+  /* --- Normalize and sanitize client data before storing or using it. --- */
 
   const normalizeClient = (client = {}, index = 0) => {
     const id = client.id || client._id || createId(`client-${index}`);
     const status = CLIENT_STATUSES.includes(client.status) ? client.status : "lead";
-    const notes = Array.isArray(client.notes)
-      ? client.notes.map(normalizeNote).filter((note) => note.text)
-      : [];
+    const notes = Array.isArray(client.notes) ? client.notes.map(normalizeNote).filter((note) => note.text) : [];
     const dealValue = Number(client.dealValue ?? client.value ?? 0);
 
     return {
@@ -191,7 +233,9 @@ function initClients() {
       id,
       name: String(client.name || "Unnamed Client").trim(),
       company: String(client.company || "No company").trim(),
-      email: String(client.email || "").trim().toLowerCase(),
+      email: String(client.email || "")
+        .trim()
+        .toLowerCase(),
       phone: String(client.phone || "").trim(),
       country: String(client.country || detectClientTimezone(client.phone)?.country || "").trim(),
       timezone: String(client.timezone || detectClientTimezone(client.phone)?.timezone || "").trim(),
@@ -203,10 +247,12 @@ function initClients() {
       reminderNotified: Boolean(client.reminderNotified),
     };
   };
+  /* --- Normalize an array of client objects. --- */
 
   const normalizeClients = (items = []) => {
     return (Array.isArray(items) ? items : []).map(normalizeClient);
   };
+  /* --- Update the client collection and optionally save it to storage. --- */
 
   const setClients = (items, shouldSave = true) => {
     clients = normalizeClients(items);
@@ -218,6 +264,7 @@ function initClients() {
     const element = detailsModal?.querySelector(selector);
     if (element) element.textContent = value;
   };
+  /* --- Format a client date for display. --- */
 
   const formatClientDate = (value) => {
     if (!value) return "Unknown";
@@ -240,6 +287,7 @@ function initClients() {
 
     return currentUser?.fullName || session?.email || "CRM User";
   };
+  /* --- Record a client-related activity in the activity log. --- */
 
   const logClientActivity = (entry) => {
     window.crmActivity?.add({
@@ -311,6 +359,8 @@ function initClients() {
     });
   };
 
+  /* --- Convert a date value to a datetime-local input format. --- */
+
   const getDateTimeLocalValue = (value) => {
     if (!value) return "";
 
@@ -320,6 +370,8 @@ function initClients() {
     const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
     return offsetDate.toISOString().slice(0, 16);
   };
+
+  /* --- Update the reminder input and status for the selected client. --- */
 
   const renderReminderState = (client) => {
     if (!reminderInput || !reminderStatus) return;
@@ -335,9 +387,10 @@ function initClients() {
     const reminderTime = new Date(client.reminderAt).getTime();
     const isDue = reminderTime <= Date.now();
 
-    reminderStatus.textContent = client.reminderNotified || isDue
-      ? `Reminder sent: follow up with ${client.name}.`
-      : `Reminder set for ${formatReminderDate(client.reminderAt)}.`;
+    reminderStatus.textContent =
+      client.reminderNotified || isDue
+        ? `Reminder sent: follow up with ${client.name}.`
+        : `Reminder set for ${formatReminderDate(client.reminderAt)}.`;
     reminderStatus.dataset.state = client.reminderNotified || isDue ? "sent" : "scheduled";
   };
 
@@ -349,16 +402,15 @@ function initClients() {
     return notes.find((note) => String(note.id) === String(noteId)) || null;
   };
 
+  /* --- Open the note deletion confirmation modal. --- */
+
   const openNoteDeleteModal = (note) => {
     if (!noteDeleteModal || !noteDeleteMessage || !note) return;
 
-    const attachedTask = note.taskId
-      ? getStoredTasks().find((task) => String(task.id) === String(note.taskId))
-      : null;
+    const attachedTask = note.taskId ? getStoredTasks().find((task) => String(task.id) === String(note.taskId)) : null;
     const noteStatus = note.status || "";
-    const processedStatus = noteStatus === "processed" || attachedTask?.status === "done"
-      ? noteStatus || "done"
-      : noteStatus;
+    const processedStatus =
+      noteStatus === "processed" || attachedTask?.status === "done" ? noteStatus || "done" : noteStatus;
     const statusLabel = processedStatus ? data.formatStatus(processedStatus) : "No status";
     const isProcessed = noteStatus === "processed" || attachedTask?.status === "done";
 
@@ -382,6 +434,8 @@ function initClients() {
     pendingNoteDeleteId = null;
   };
 
+  /* --- Generate note status options for the status dropdown. --- */
+
   const renderNoteStatusOptions = (selectedStatus = "") => {
     return NOTE_STATUSES.map((status) => {
       const selected = status.value === selectedStatus ? " selected" : "";
@@ -389,6 +443,8 @@ function initClients() {
       return `<option value="${escapeHtml(status.value)}"${selected}>${escapeHtml(status.label)}</option>`;
     }).join("");
   };
+
+  /* --- Update the status of a specific client note. --- */
 
   const updateNoteStatus = (clientId, noteId, nextStatus) => {
     updateClient(clientId, (client) => ({
@@ -398,6 +454,8 @@ function initClients() {
       ),
     }));
   };
+
+  /* --- Render all notes for the selected client. --- */
 
   const renderClientNotes = (notes = []) => {
     if (!notesList) return;
@@ -467,7 +525,10 @@ function initClients() {
     if (!client?.id || !data.updateClientRequest) return;
 
     data.updateClientRequest(client.id, client).catch((error) => {
-      window.crmToast?.show(getAsyncErrorMessage(error, "Client change was saved locally, but backend sync failed."), "error");
+      window.crmToast?.show(
+        getAsyncErrorMessage(error, "Client change was saved locally, but backend sync failed."),
+        "error",
+      );
     });
   };
 
@@ -525,7 +586,6 @@ function initClients() {
     openDetailsHelper?.click();
   };
 
-
   /* --- Loading and Error UI State --- */
   const setLoading = (isLoading) => {
     if (loading) loading.hidden = !isLoading;
@@ -549,18 +609,24 @@ function initClients() {
   const updateSummary = () => {
     getSummaryElement("clients-count-total").textContent = clients.length;
     getSummaryElement("clients-count-lead").textContent = clients.filter((client) => client.status === "lead").length;
-    getSummaryElement("clients-count-contacted").textContent = clients.filter((client) => client.status === "contacted").length;
+    getSummaryElement("clients-count-contacted").textContent = clients.filter(
+      (client) => client.status === "contacted",
+    ).length;
     getSummaryElement("clients-count-won").textContent = clients.filter((client) => client.status === "won").length;
   };
 
   /* --- Filter pipeline combines status, search text, and sort order. --- */
   const getFilteredClients = () => {
-    const query = String(searchInput?.value || "").trim().toLowerCase();
+    const query = String(searchInput?.value || "")
+      .trim()
+      .toLowerCase();
     const sortValue = sortSelect?.value || "created-desc";
 
     const filteredClients = clients.filter((client) => {
       const matchesStatus = activeStatus === "all" || client.status === activeStatus;
-      const searchableText = [client.name, client.company, client.email, client.phone, client.country, client.timezone].join(" ").toLowerCase();
+      const searchableText = [client.name, client.company, client.email, client.phone, client.country, client.timezone]
+        .join(" ")
+        .toLowerCase();
       const matchesSearch = !query || searchableText.includes(query);
 
       return matchesStatus && matchesSearch;
@@ -654,7 +720,9 @@ function initClients() {
     try {
       const starterClients = await data.fetchDemoClients();
       const existingEmails = new Set(clients.map((client) => client.email));
-      const clientsToImport = starterClients.filter((client) => !existingEmails.has(String(client.email || "").toLowerCase()));
+      const clientsToImport = starterClients.filter(
+        (client) => !existingEmails.has(String(client.email || "").toLowerCase()),
+      );
 
       if (!clientsToImport.length) {
         window.crmToast?.show("Starter clients are already imported.", "info");
@@ -705,7 +773,8 @@ function initClients() {
       fillClientForm(client);
       if (clientModalTitle) clientModalTitle.textContent = "Edit Client";
       if (clientModalDescription) {
-        clientModalDescription.textContent = "Update the selected client's main CRM details. Notes stay managed inside client details.";
+        clientModalDescription.textContent =
+          "Update the selected client's main CRM details. Notes stay managed inside client details.";
       }
       if (saveClientButton) saveClientButton.textContent = "Save Changes";
       if (clientNotesField) clientNotesField.hidden = true;
@@ -717,7 +786,8 @@ function initClients() {
     form.elements.status.dispatchEvent(new Event("change", { bubbles: true }));
     if (clientModalTitle) clientModalTitle.textContent = "Add Client";
     if (clientModalDescription) {
-      clientModalDescription.textContent = "Add the main client details now. Notes can be added here or managed later from client details.";
+      clientModalDescription.textContent =
+        "Add the main client details now. Notes can be added here or managed later from client details.";
     }
     if (saveClientButton) saveClientButton.textContent = "Save Client";
     if (clientNotesField) clientNotesField.hidden = false;
@@ -756,7 +826,7 @@ function initClients() {
 
   const setActiveStatusFilter = (selectedButton) => {
     /* --- Final listeners connect filters, retry, reminders, and initial page load. --- */
-  statusFilters.forEach((button) => {
+    statusFilters.forEach((button) => {
       button.classList.toggle("filter-chip--active", button === selectedButton);
     });
 
@@ -786,18 +856,23 @@ function initClients() {
 
       try {
         const apiClient = await data.updateClientRequest?.(editingClientId, draft);
-        updateClient(editingClientId, (client) => normalizeClient({
-          ...client,
-          ...(apiClient || {}),
-          name: draft.name,
-          company: draft.company,
-          email: draft.email,
-          phone: draft.phone,
-          country: draft.country,
-          timezone: draft.timezone,
-          status: draft.status,
-          dealValue: draft.dealValue,
-        }), false);
+        updateClient(
+          editingClientId,
+          (client) =>
+            normalizeClient({
+              ...client,
+              ...(apiClient || {}),
+              name: draft.name,
+              company: draft.company,
+              email: draft.email,
+              phone: draft.phone,
+              country: draft.country,
+              timezone: draft.timezone,
+              status: draft.status,
+              dealValue: draft.dealValue,
+            }),
+          false,
+        );
 
         const updatedClient = getClientById(editingClientId);
         if (detailsContent?.dataset.activeClientId === String(editingClientId)) {
@@ -1027,6 +1102,8 @@ function initClients() {
     window.crmToast?.show(`Client status changed to ${data.formatStatus(nextStatus)}.`, "success");
   });
 
+  /* --- Validate and save a follow-up reminder for the selected client. --- */
+
   setReminderButton?.addEventListener("click", () => {
     const activeClientId = detailsContent?.dataset.activeClientId;
     const selectedValue = reminderInput?.value || "";
@@ -1182,7 +1259,9 @@ function initClients() {
       type: "note",
       icon: "chat",
       title: `Note deleted for ${updatedClient?.name || "client"}`,
-      summary: deletedNote?.status ? `Deleted note had ${data.formatStatus(deletedNote.status)} status.` : "Client note deleted.",
+      summary: deletedNote?.status
+        ? `Deleted note had ${data.formatStatus(deletedNote.status)} status.`
+        : "Client note deleted.",
       status: "Deleted",
       relatedLabel: updatedClient?.name || "Client",
       description: deletedNote?.text || "A client note was deleted.",

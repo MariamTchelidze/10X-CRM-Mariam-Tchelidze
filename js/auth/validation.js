@@ -21,12 +21,8 @@
   /* --- Passwords are limited to Latin letters, numbers, and safe symbols. --- */
   const passwordIsValid = (password) => {
     const allowedCharacters = /^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/;
-
     return (
-      password.length >= 8 &&
-      allowedCharacters.test(password) &&
-      /[A-Za-z]/.test(password) &&
-      /[0-9]/.test(password)
+      password.length >= 8 && allowedCharacters.test(password) && /[A-Za-z]/.test(password) && /[0-9]/.test(password)
     );
   };
 
