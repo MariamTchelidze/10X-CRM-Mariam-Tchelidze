@@ -702,7 +702,7 @@ function initClients() {
   const renderClients = () => {
     const visibleClients = getFilteredClients();
 
-    list.innerHTML = "";
+    list.innerHTML = ""; //changeable place add texts if needed
     visibleClients.forEach((client) => list.append(cards.renderClientCard(client)));
     syncSelectedCards();
 

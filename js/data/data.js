@@ -114,10 +114,11 @@
   };
 
   /* --- API Data Mapping and count limit --- */
-  const STARTER_CLIENT_LIMIT = 20;
+  const STARTER_CLIENT_LIMIT = 30;
 
+  // client statuses:
   const mapApiUserToClient = (user, index = 0) => {
-    const status = statuses[index % statuses.length];
+    const status = statuses[index % statuses.length]; //status division (default status)
     const name = `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.username || "Unnamed Client";
 
     return {
@@ -128,7 +129,7 @@
       company: user.company?.name || "Unknown Company",
       image: user.image || "",
       status,
-      dealValue: 2500 + index * 750,
+      dealValue: 2500 + index * 750, //dealValue formula
       notes: [],
       createdAt: new Date(Date.now() - index * 86400000).toISOString(),
     };
