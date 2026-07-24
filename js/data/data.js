@@ -60,6 +60,10 @@
         throw new Error("The server is taking longer than expected. Please try again in a few seconds.");
       }
 
+      if (error instanceof TypeError) {
+        throw new Error("Backend is not reachable. Start the backend server or check the production API URL.");
+      }
+
       throw error;
     } finally {
       window.clearTimeout(timeoutId);

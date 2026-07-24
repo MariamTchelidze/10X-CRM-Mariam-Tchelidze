@@ -6,10 +6,9 @@
   const dialer = document.querySelector(".js-phone-dialer");
   if (!dialer) return;
 
-  /* --- Call config keeps browser tel links disabled until the user enables calling. --- */
+  /* --- Backend owns call permissions, provider credentials, and allowed-number rules. --- */
   const PHONE_CONFIG = {
     callingEnabled: true,
-    allowedNumber: "+995574431557",
   };
   const data = window.crmData;
 
@@ -222,12 +221,6 @@
         actionHref: "./dashboard.html",
         actionLabel: "Open Dashboard",
       });
-      return;
-    }
-
-    if (PHONE_CONFIG.allowedNumber && normalized !== PHONE_CONFIG.allowedNumber) {
-      const message = "Calling is available only for the configured number.";
-      setStatus(message, "error");
       return;
     }
 

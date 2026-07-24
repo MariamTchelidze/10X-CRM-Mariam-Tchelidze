@@ -31,5 +31,6 @@ export const connectDatabase = async () => {
 
   await mongoose.connect(env.mongoUri, {
     dbName: "10x-crm",
+    serverSelectionTimeoutMS: 10000,
   });
 };

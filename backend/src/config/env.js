@@ -25,6 +25,6 @@ export const env = {
   twilioAccountSid: cleanEnvValue(process.env.TWILIO_ACCOUNT_SID),
   twilioAuthToken: cleanEnvValue(process.env.TWILIO_AUTH_TOKEN),
   twilioPhoneNumber: cleanEnvValue(process.env.TWILIO_PHONE_NUMBER),
-  allowedCallNumber: cleanEnvValue(process.env.ALLOWED_CALL_NUMBER) || "+995551128078",
+  allowedCallNumber: cleanEnvValue(process.env.ALLOWED_CALL_NUMBER),
   isDevelopment: (cleanEnvValue(process.env.NODE_ENV) || "development") === "development",
 };

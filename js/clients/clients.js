@@ -94,6 +94,13 @@ function initClients() {
     if (error?.message && !error.status) return error.message;
     return error?.status ? `${fallback} Status: ${error.status}.` : fallback;
   };
+
+  const normalizeClientPhone = (value = "") => {
+    const text = String(value || "").trim();
+    const prefix = text.startsWith("+") ? "+" : "";
+    return `${prefix}${text.replace(/[^0-9]/g, "")}`;
+  };
+
   /* --- Toggle a button's loading state during asynchronous actions. --- */
 
   const setButtonLoading = (button, isLoading, loadingText = "Loading...") => {
@@ -729,7 +736,11 @@ function initClients() {
         return;
       }
 
-      const importedClients = await Promise.all(clientsToImport.map((client) => data.postClient(client)));
+      const normalizedClients = clientsToImport.map((client) => ({
+        ...client,
+        phone: normalizeClientPhone(client.phone),
+      }));
+      const importedClients = await Promise.all(normalizedClients.map((client) => data.postClient(client)));
       setClients([...importedClients, ...clients]);
       renderClients();
       logClientActivity({
