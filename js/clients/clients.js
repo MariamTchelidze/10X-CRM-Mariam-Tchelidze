@@ -57,6 +57,7 @@ function initClients() {
   const clientStatusSelect = document.querySelector(".js-client-status-select");
   const selectionBar = document.querySelector(".js-client-selection-bar");
   const selectedClientsCount = document.querySelector(".js-selected-clients-count");
+  const selectVisibleButton = document.querySelector(".js-select-visible-clients");
   const clearSelectionButton = document.querySelector(".js-clear-client-selection");
   const deleteSelectedButton = document.querySelector(".js-delete-selected-clients");
 
@@ -682,6 +683,20 @@ function initClients() {
     selectedClientIds.clear();
     syncSelectedCards();
     renderSelectionBar();
+  };
+
+  const selectVisibleClients = () => {
+    const visibleClients = getFilteredClients();
+
+    if (!visibleClients.length) {
+      window.crmToast?.show("No visible clients to select.", "info");
+      return;
+    }
+
+    visibleClients.forEach((client) => selectedClientIds.add(String(client.id)));
+    syncSelectedCards();
+    renderSelectionBar();
+    window.crmToast?.show(`${visibleClients.length} visible clients selected.`, "info");
   };
 
   const renderClients = () => {
@@ -1416,6 +1431,7 @@ function initClients() {
 
   retryButton?.addEventListener("click", loadClients);
   importClientsButtons.forEach((button) => button.addEventListener("click", importStarterClients));
+  selectVisibleButton?.addEventListener("click", selectVisibleClients);
   clearSelectionButton?.addEventListener("click", clearClientSelection);
   searchInput?.addEventListener("input", renderClients);
   sortSelect?.addEventListener("change", renderClients);

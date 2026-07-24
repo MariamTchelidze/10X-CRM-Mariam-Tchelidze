@@ -5263,6 +5263,12 @@ body.is-auth-page-exiting .auth {
   border-bottom: 0.1rem solid var(--color-divider);
 }
 
+.client-filters .filter-chip--action {
+  margin-left: auto;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
 .client-selection-bar {
   display: flex;
   align-items: center;
