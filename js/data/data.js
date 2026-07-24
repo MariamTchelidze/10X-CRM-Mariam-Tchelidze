@@ -113,8 +113,8 @@
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
-  /* --- API Data Mapping --- */
-  const STARTER_CLIENT_LIMIT = 50;
+  /* --- API Data Mapping and count limit --- */
+  const STARTER_CLIENT_LIMIT = 30;
 
   const mapApiUserToClient = (user, index = 0) => {
     const status = statuses[index % statuses.length];

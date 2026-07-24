@@ -23,7 +23,7 @@
     button.addEventListener("click", () => {
       button.disabled = true;
       clearSession();
-      window.location.href = loginPage;
+      window.location.href = loginPage; // page where we are addressed after log out
     });
   });
 })();

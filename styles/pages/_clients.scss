@@ -51,6 +51,29 @@
   border-bottom: 0.1rem solid var(--color-divider);
 }
 
+.client-selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-md;
+  padding: $space-md $space-xl;
+  border-bottom: 0.1rem solid var(--color-divider);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.client-selection-bar__text {
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+  font-weight: $fw-semibold;
+}
+
+.client-selection-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: $space-sm;
+}
+
 .client-list {
   display: grid;
   gap: $space-lg;
@@ -60,13 +83,25 @@
 
 .client-card {
   display: grid;
-  grid-template-columns: minmax(32rem, 1.15fr) minmax(52rem, 1.6fr) minmax(20rem, auto);
+  grid-template-columns: auto minmax(32rem, 1.15fr) minmax(52rem, 1.6fr) minmax(20rem, auto);
   align-items: center;
   gap: $space-xl;
   padding: $space-lg;
   border: 0.1rem solid var(--color-border);
   border-radius: $radius-md;
   background: var(--color-elevated);
+}
+
+.client-card__select {
+  display: grid;
+  place-items: center;
+}
+
+.client-card__checkbox {
+  width: 1.8rem;
+  height: 1.8rem;
+  accent-color: var(--color-primary);
+  cursor: pointer;
 }
 
 .client-card__main {
@@ -155,8 +190,19 @@
   }
 
   .client-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto 1fr;
     align-items: stretch;
+  }
+
+  .client-card__select {
+    align-items: flex-start;
+    padding-top: 0.4rem;
+  }
+
+  .client-card__main,
+  .client-card__meta,
+  .client-card__footer {
+    grid-column: 2;
   }
 
   .client-card__meta {
@@ -197,6 +243,16 @@
     flex: 1 1 13rem;
     min-height: 4.2rem;
     padding-inline: 1.2rem;
+  }
+
+  .client-selection-bar,
+  .client-selection-bar__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .client-selection-bar__actions .btn {
+    width: 100%;
   }
 
   .clients-page .app-header__actions {

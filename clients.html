@@ -635,6 +635,17 @@
             <button class="filter-chip js-status-filter" type="button" data-status-filter="lost">Lost</button>
           </div>
 
+          <div class="client-selection-bar js-client-selection-bar" hidden>
+            <p class="client-selection-bar__text">
+              <strong class="js-selected-clients-count">0</strong>
+              selected
+            </p>
+            <div class="client-selection-bar__actions">
+              <button class="btn btn--ghost js-clear-client-selection" type="button">Clear selection</button>
+              <button class="btn btn--danger js-delete-selected-clients" type="button">Delete selected</button>
+            </div>
+          </div>
+
           <div class="state-panel" id="clients-loading" aria-live="polite" hidden>
             <span class="loader" aria-hidden="true"></span>
             <p>Loading clients...</p>
@@ -1005,6 +1016,10 @@
 
     <template id="client-card-template">
       <article class="client-card" data-client-id="" data-status="">
+        <label class="client-card__select">
+          <input class="client-card__checkbox js-client-select" type="checkbox" />
+          <span class="visually-hidden">Select client</span>
+        </label>
         <div class="client-card__main">
           <div class="client-card__avatar" data-client-initials aria-hidden="true"></div>
           <div>

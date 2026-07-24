@@ -55,6 +55,10 @@ function initClients() {
   const reminderStatus = document.querySelector(".js-client-reminder-status");
   const clientStatusForm = document.querySelector(".js-client-status-form");
   const clientStatusSelect = document.querySelector(".js-client-status-select");
+  const selectionBar = document.querySelector(".js-client-selection-bar");
+  const selectedClientsCount = document.querySelector(".js-selected-clients-count");
+  const clearSelectionButton = document.querySelector(".js-clear-client-selection");
+  const deleteSelectedButton = document.querySelector(".js-delete-selected-clients");
 
   if (!list) return;
 
@@ -66,6 +70,7 @@ function initClients() {
   let pendingDeleteId = null;
   let pendingNoteDeleteId = null;
   let editingClientId = null;
+  const selectedClientIds = new Set();
   /* --- Storage keys and UI messages connect client notes with task-board data. --- */
   const TASKS_KEY = "crm_tasks";
   const DEFAULT_CLIENTS_ERROR = "Could not load clients. Check your connection and try again.";
@@ -658,17 +663,40 @@ function initClients() {
     });
   };
 
+  /* --- Bulk selection helpers keep selected client cards and toolbar in sync. --- */
+  const syncSelectedCards = () => {
+    list.querySelectorAll(".js-client-select").forEach((checkbox) => {
+      checkbox.checked = selectedClientIds.has(String(checkbox.value));
+    });
+  };
+
+  const renderSelectionBar = () => {
+    const selectedCount = selectedClientIds.size;
+
+    if (selectedClientsCount) selectedClientsCount.textContent = String(selectedCount);
+    if (selectionBar) selectionBar.hidden = selectedCount === 0;
+    if (deleteSelectedButton) deleteSelectedButton.disabled = selectedCount === 0;
+  };
+
+  const clearClientSelection = () => {
+    selectedClientIds.clear();
+    syncSelectedCards();
+    renderSelectionBar();
+  };
+
   const renderClients = () => {
     const visibleClients = getFilteredClients();
 
     list.innerHTML = "";
     visibleClients.forEach((client) => list.append(cards.renderClientCard(client)));
+    syncSelectedCards();
 
     if (empty) {
       empty.hidden = visibleClients.length > 0;
     }
 
     updateSummary();
+    renderSelectionBar();
   };
 
   /* --- Reminder automation creates notifications when follow-up time arrives. --- */
@@ -962,7 +990,25 @@ function initClients() {
   });
 
   /* --- Client List Event Delegation --- */
+  list.addEventListener("change", (event) => {
+    const checkbox = event.target.closest(".js-client-select");
+
+    if (!checkbox) return;
+
+    const clientId = String(checkbox.value);
+
+    if (checkbox.checked) {
+      selectedClientIds.add(clientId);
+    } else {
+      selectedClientIds.delete(clientId);
+    }
+
+    renderSelectionBar();
+  });
+
   list.addEventListener("click", (event) => {
+    if (event.target.closest(".js-client-select")) return;
+
     const deleteButton = event.target.closest(".js-delete-client");
     const actionButton = event.target.closest("[data-client-action]");
     const card = event.target.closest(".client-card");
@@ -1297,6 +1343,7 @@ function initClients() {
       await data.deleteClientRequest(pendingDeleteId);
       const deletedClient = getClientById(pendingDeleteId);
       clients = clients.filter((client) => String(client.id) !== String(pendingDeleteId));
+      selectedClientIds.delete(String(pendingDeleteId));
       saveClients();
       renderClients();
       closeDeleteModal();
@@ -1317,6 +1364,41 @@ function initClients() {
     }
   });
 
+  deleteSelectedButton?.addEventListener("click", async () => {
+    const selectedIds = Array.from(selectedClientIds);
+
+    if (!selectedIds.length) {
+      window.crmToast?.show("Choose at least one client to delete.", "info");
+      return;
+    }
+
+    setButtonLoading(deleteSelectedButton, true, "Deleting...");
+
+    try {
+      const deletedClients = selectedIds.map((clientId) => getClientById(clientId)).filter(Boolean);
+
+      await Promise.all(selectedIds.map((clientId) => data.deleteClientRequest(clientId)));
+
+      clients = clients.filter((client) => !selectedClientIds.has(String(client.id)));
+      clearClientSelection();
+      saveClients();
+      renderClients();
+      logClientActivity({
+        title: "Selected clients deleted",
+        summary: `${deletedClients.length} clients were removed from the clients list.`,
+        status: "Deleted",
+        relatedLabel: "Clients",
+        description: "Bulk selection was used to delete multiple client records.",
+        details: [["Deleted clients", String(deletedClients.length)]],
+      });
+      window.crmToast?.show(`${deletedClients.length} selected clients deleted.`, "success");
+    } catch (bulkDeleteError) {
+      window.crmToast?.show(getAsyncErrorMessage(bulkDeleteError, "Selected clients could not be deleted."), "error");
+    } finally {
+      setButtonLoading(deleteSelectedButton, false);
+    }
+  });
+
   deleteModal?.querySelectorAll("[data-modal-close]").forEach((button) => {
     button.addEventListener("click", () => {
       pendingDeleteId = null;
@@ -1334,6 +1416,7 @@ function initClients() {
 
   retryButton?.addEventListener("click", loadClients);
   importClientsButtons.forEach((button) => button.addEventListener("click", importStarterClients));
+  clearSelectionButton?.addEventListener("click", clearClientSelection);
   searchInput?.addEventListener("input", renderClients);
   sortSelect?.addEventListener("change", renderClients);
   statusFilters.forEach((button) => {

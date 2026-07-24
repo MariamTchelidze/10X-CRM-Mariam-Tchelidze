@@ -48,12 +48,12 @@ function initLogin() {
     let isValid = true;
 
     if (!email) {
-      validation.setFieldError(emailInput, "Email is required");
+      validation.setFieldError(emailInput, "Email is required"); //email error msg
       isValid = false;
     }
 
     if (!password) {
-      validation.setFieldError(passwordInput, "Password is required");
+      validation.setFieldError(passwordInput, "Password is required"); //psw error msg
       isValid = false;
     }
 
@@ -96,7 +96,7 @@ function initLogin() {
         return;
       }
 
-      window.location.href = constants.PAGES.dashboard;
+      window.location.href = constants.PAGES.dashboard; // address page where do we go after login
     } catch (error) {
       validation.setFieldError(passwordInput, error.message || "Invalid email or password");
     } finally {

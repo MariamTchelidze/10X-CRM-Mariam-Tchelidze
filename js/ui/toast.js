@@ -35,7 +35,7 @@
 
     toast.querySelector(".toast__close").addEventListener("click", close);
     container.append(toast);
-    window.setTimeout(close, 3000);
+    window.setTimeout(close, 3000); //toast timer
   };
 
   /* ---  to secure js storage after page reload --- */

@@ -5263,6 +5263,29 @@ body.is-auth-page-exiting .auth {
   border-bottom: 0.1rem solid var(--color-divider);
 }
 
+.client-selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  padding: 1.2rem 2.4rem;
+  border-bottom: 0.1rem solid var(--color-divider);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.client-selection-bar__text {
+  color: var(--color-text-secondary);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.client-selection-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
 .client-list {
   display: grid;
   gap: 1.6rem;
@@ -5272,13 +5295,25 @@ body.is-auth-page-exiting .auth {
 
 .client-card {
   display: grid;
-  grid-template-columns: minmax(32rem, 1.15fr) minmax(52rem, 1.6fr) minmax(20rem, auto);
+  grid-template-columns: auto minmax(32rem, 1.15fr) minmax(52rem, 1.6fr) minmax(20rem, auto);
   align-items: center;
   gap: 2.4rem;
   padding: 1.6rem;
   border: 0.1rem solid var(--color-border);
   border-radius: 0.8rem;
   background: var(--color-elevated);
+}
+
+.client-card__select {
+  display: grid;
+  place-items: center;
+}
+
+.client-card__checkbox {
+  width: 1.8rem;
+  height: 1.8rem;
+  accent-color: var(--color-primary);
+  cursor: pointer;
 }
 
 .client-card__main {
@@ -5366,8 +5401,17 @@ body.is-auth-page-exiting .auth {
     min-width: 0;
   }
   .client-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto 1fr;
     align-items: stretch;
+  }
+  .client-card__select {
+    align-items: flex-start;
+    padding-top: 0.4rem;
+  }
+  .client-card__main,
+  .client-card__meta,
+  .client-card__footer {
+    grid-column: 2;
   }
   .client-card__meta {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -5400,6 +5444,14 @@ body.is-auth-page-exiting .auth {
     flex: 1 1 13rem;
     min-height: 4.2rem;
     padding-inline: 1.2rem;
+  }
+  .client-selection-bar,
+  .client-selection-bar__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .client-selection-bar__actions .btn {
+    width: 100%;
   }
   .clients-page .app-header__actions {
     flex-wrap: wrap;

@@ -21,6 +21,7 @@
     const card = template.content.firstElementChild.cloneNode(true);
     const status = client.status || "lead";
     const badge = card.querySelector("[data-client-status]");
+    const checkbox = card.querySelector(".js-client-select");
 
     card.dataset.clientId = client.id;
     card.dataset.status = status;
@@ -35,6 +36,11 @@
     if (badge) {
       badge.textContent = window.crmData.formatStatus(status);
       badge.className = `status-badge status-badge--${status}`;
+    }
+
+    if (checkbox) {
+      checkbox.value = client.id;
+      checkbox.setAttribute("aria-label", `Select ${client.name}`);
     }
 
     return card;
